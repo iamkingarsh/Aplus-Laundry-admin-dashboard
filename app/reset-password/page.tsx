@@ -56,7 +56,7 @@ export default function AuthenticationPage() {
                     <div className="relative z-20 mt-auto">
                         <blockquote className="space-y-2">
                             <p className="text-lg">
-                                &ldquo;Oops! Looks like you forgot your Password, Don't worry we got you!&rdquo;
+                                &ldquo;Oops! Looks like you forgot your Password, Don&apos;t worry we got you!&rdquo;
                             </p>
 
                         </blockquote>
@@ -79,7 +79,7 @@ export default function AuthenticationPage() {
                                 href="/terms"
                                 className="underline underline-offset-4 hover:text-primary"
                             >
-                                I don't remember my email
+                                I don&apos;t remember my email
                             </Link>{" "}
 
 

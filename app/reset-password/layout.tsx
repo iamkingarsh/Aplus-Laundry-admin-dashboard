@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
-import { Sidebar } from '@/components/sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: 'Admin Dashboard| APLus Laundry',
-    description: 'Admin dashboard for APlus Laundry',
+    title: 'Reset Password | APLus Laundry',
+    description: 'Reset Your Password',
 }
 
 export default function RootLayout({
@@ -17,9 +16,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={`${inter.className} flex `}>
-                <Sidebar />
-                {children}</body>
+            <body className={inter.className}>{children}</body>
         </html>
     )
 }
