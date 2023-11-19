@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
 import { LucideLayoutDashboard } from "lucide-react"
+import LogoComponent from "./logo"
 
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,11 +12,15 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Sidebar({ className }: SidebarProps) {
     return (
         <div className={cn("pb-12 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
-            <div className="space-y-4 py-4">
+            <div className="space-y-4 pb-4">
                 <div className="px-3 py-2">
-                    <h2 className="mb-2 px-4 text-xl font-bold tracking-tight">
-                        APlus Laundry
-                    </h2>
+                    <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
+                        <LogoComponent width={10} height={10} className="w-9 h-9" />
+                        <h2 className=" text-xl font-bold tracking-tight">
+                            APlus Laundry
+                        </h2>
+                    </div>
+
                     <div className="space-y-1">
                         <Button variant="secondary" className="w-full justify-start">
                             {/* <svg
@@ -50,7 +55,7 @@ export function Sidebar({ className }: SidebarProps) {
                                 <rect width="7" height="7" x="14" y="14" rx="1" />
                                 <rect width="7" height="7" x="3" y="14" rx="1" />
                             </svg>
-                            Browse
+                            Orders
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
                             <svg
@@ -75,7 +80,7 @@ export function Sidebar({ className }: SidebarProps) {
                 </div>
                 <div className="px-3 py-2">
                     <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                        Library
+                        Create
                     </h2>
                     <div className="space-y-1">
                         <Button variant="ghost" className="w-full justify-start">
@@ -95,7 +100,7 @@ export function Sidebar({ className }: SidebarProps) {
                                 <path d="M16 6H3" />
                                 <path d="M12 18H3" />
                             </svg>
-                            Playlists
+                            New Order
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
                             <svg
@@ -111,7 +116,7 @@ export function Sidebar({ className }: SidebarProps) {
                                 <circle cx="8" cy="18" r="4" />
                                 <path d="M12 18V2l7 4" />
                             </svg>
-                            Songs
+                            New Category
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
                             <svg

@@ -7,8 +7,8 @@ import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/user-auth-form"
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
+  title: 'Login to Admin Dashboard | APLus Laundry',
+  description: 'Login to Admin Dashboard | APLus Laundry',
 }
 
 export default function AuthenticationPage() {
