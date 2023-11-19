@@ -1,14 +1,16 @@
-import { Sidebar } from '@/components/sidebar'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/heading'
-import React from 'react'
+
 
 export default function page() {
 
     return (
         <div className='w-full h-full flex p-6 flex-row'>
-            <div>
+            <div className="topbar w-full flex justify-between">
                 <Heading title='Dashboard' />
+                <Button variant='default'>Create New Order</Button>
             </div>
+
         </div>
     )
 }
