@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
+import { LucideLayoutDashboard } from "lucide-react"
 
-// import { Playlist } from "../data/playlists"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
     // playlists: Playlist[]
@@ -13,12 +13,12 @@ export function Sidebar({ className }: SidebarProps) {
         <div className={cn("pb-12 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
             <div className="space-y-4 py-4">
                 <div className="px-3 py-2">
-                    <h2 className="mb-2 px-4 text-2xl font-bold tracking-tight">
+                    <h2 className="mb-2 px-4 text-xl font-bold tracking-tight">
                         APlus Laundry
                     </h2>
                     <div className="space-y-1">
                         <Button variant="secondary" className="w-full justify-start">
-                            <svg
+                            {/* <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="none"
@@ -30,7 +30,8 @@ export function Sidebar({ className }: SidebarProps) {
                             >
                                 <circle cx="12" cy="12" r="10" />
                                 <polygon points="10 8 16 12 10 16 10 8" />
-                            </svg>
+                            </svg> */}
+                            <LucideLayoutDashboard className="mr-2 h-4 w-4" />
                             Dashboard
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
