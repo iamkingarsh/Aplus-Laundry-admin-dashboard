@@ -1,5 +1,7 @@
+import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
 import { Button } from '@/components/ui/button'
+import { Card, CardHeader } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { DollarSignIcon, IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
 
@@ -48,6 +50,15 @@ export default function page() {
                         <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} desc={data.desc} />
                     )
                 })}
+            </div>
+            <div className='space-y-4'>
+                <Card>
+                    <CardHeader>
+
+                        <Heading title='Revenue Graph' />
+                    </CardHeader>
+                    <RevenueGraph />
+                </Card>
             </div>
         </div>
     )

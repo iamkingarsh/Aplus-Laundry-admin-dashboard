@@ -10,7 +10,7 @@ import { Button } from './ui/button'
 
 function TopBar() {
     return (
-        <div className='py-3 px-6 border-b-2 flex justify-between'>
+        <div className='py-3 sticky top-0 overflow-hidden px-6 border-b-2 flex justify-between'>
             <div>
                 <ComboboxDemo />
             </div>

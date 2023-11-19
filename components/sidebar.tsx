@@ -11,7 +11,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className }: SidebarProps) {
     return (
-        <div className={cn("pb-12 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
+        <div className={cn("pb-12 sticky top-0 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
             <div className="space-y-4 pb-4">
                 <div className="px-3 py-2">
                     <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">

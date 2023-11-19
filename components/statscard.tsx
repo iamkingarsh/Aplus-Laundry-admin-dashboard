@@ -31,8 +31,6 @@ const StatsCard: React.FC<StatsCardProps> = ({
                 <p className='opacity-80 text-sm py-1'>{desc}</p>
                 <Button variant='secondary'>View All <ArrowRight className='w-4 ml-3' /></Button>
             </CardHeader>
-
-
             <div className='absolute top-5 right-5'>
                 {icon}
             </div>
