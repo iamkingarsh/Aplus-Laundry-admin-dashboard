@@ -8,7 +8,7 @@ type HeadingProps = {
 };
 
 const Heading: React.FC<HeadingProps> = ({ title, className }) => {
-    return <h1 className={cn(' font-bold text-2xl mb-2  tracking-tight', className)}>{title}</h1>;
+    return <h1 className={cn(' font-bold text-2xl  tracking-tight', className)}>{title}</h1>;
 };
 
 export default Heading;

@@ -10,7 +10,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className }: SidebarProps) {
     return (
-        <div className={cn("pb-12 bg-primary text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
+        <div className={cn("pb-12 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
             <div className="space-y-4 py-4">
                 <div className="px-3 py-2">
                     <h2 className="mb-2 px-4 text-2xl font-bold tracking-tight">
@@ -31,7 +31,7 @@ export function Sidebar({ className }: SidebarProps) {
                                 <circle cx="12" cy="12" r="10" />
                                 <polygon points="10 8 16 12 10 16 10 8" />
                             </svg>
-                            Overview
+                            Dashboard
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
                             <svg

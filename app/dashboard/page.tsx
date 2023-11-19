@@ -10,7 +10,6 @@ export default function page() {
                 <Heading title='Dashboard' />
                 <Button variant='default'>Create New Order</Button>
             </div>
-
         </div>
     )
 }
