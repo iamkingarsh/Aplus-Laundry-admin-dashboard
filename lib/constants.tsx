@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon } from "lucide-react"
+import { BarChartIcon, BarcodeIcon, BikeIcon, BoxIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TruckIcon, UserCog, Users } from "lucide-react"
 
 
 const sidebarTabs = [
@@ -10,32 +10,32 @@ const sidebarTabs = [
     {
         title: 'Orders',
         path: '/dashboard/orders',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <ShoppingBagIcon className="w-4 mr-2" />
     },
     {
         title: 'Revenue',
         path: '/dashboard/revenue',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <IndianRupeeIcon className="w-4 mr-2" />
     },
     {
         title: 'Products',
         path: '/dashboard/products',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <BoxIcon className="w-4 mr-2" />
     },
     {
         title: 'Services',
         path: '/dashboard/categories',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <ServerIcon className="w-4 mr-2" />
     },
     {
         title: 'Customers',
         path: '/dashboard/customers',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <Users className="w-4 mr-2" />
     },
     {
         title: 'Delivery Partners',
         path: '/dashboard/delivery-partners',
-        icon: <LayoutDashboardIcon className="w-4 mr-2" />
+        icon: <UserCog className="w-4 mr-2" />
     },
 ]
 
