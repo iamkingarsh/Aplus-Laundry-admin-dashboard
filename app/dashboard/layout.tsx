@@ -23,7 +23,9 @@ export default function RootLayout({
                 <div className='flex flex-row'>
                     <Sidebar />
                     <div className='flex w-full flex-col'>
-                        <TopBar />
+                        <div className='sticky top-0 z-50'>
+                            <TopBar />
+                        </div>
                         {children}
                     </div>
                 </div>

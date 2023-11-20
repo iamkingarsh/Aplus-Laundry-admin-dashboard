@@ -19,20 +19,21 @@ export function Sidebar({ className }: SidebarProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false)
     console.log(collapsed)
     return (
-        <div className={cn(collapsed ? `sticky top-0 text-black dark:text-white w-[5dvw] h-[100dvh] overflow-hidden border-r-2` : ` sticky top-0 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2`, className)}>
+        <div className={cn(collapsed ? `sticky top-0 text-black dark:text-white w-[5dvw] transition-all transit h-[100dvh] duration-500 overflow-hidden border-r-2` : ` sticky top-0 transition-all duration-500 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2`, className)}>
             <div className="space-y-4 h-full pb-4">
                 <div className="px-3 flex flex-col h-full justify-between  py-2">
                     <div>
                         {collapsed ? <div className="flex py-2 border-b-2 px-3 mb-4 gap-2 items-center">
 
                             <LogoComponent width={10} height={10} className="w-9 h-9" />
+
                         </div> :
                             <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
 
 
 
                                 <LogoComponent width={10} height={10} className="w-9 h-9" />
-                                <h2 className=" text-xl font-bold tracking-tight">
+                                <h2 className="text-xl font-bold tracking-tight">
                                     APlus Laundry
                                 </h2>
 
