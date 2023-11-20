@@ -1,4 +1,4 @@
-import { BarChartIcon, BarcodeIcon, BikeIcon, BoxIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TruckIcon, UserCog, Users } from "lucide-react"
+import { BarChartIcon, BarcodeIcon, BikeIcon, BoxIcon, CogIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, TruckIcon, UserCog, Users } from "lucide-react"
 
 
 const sidebarTabs = [
@@ -36,6 +36,16 @@ const sidebarTabs = [
         title: 'Delivery Partners',
         path: '/dashboard/delivery-partners',
         icon: <UserCog className="w-4 mr-2" />
+    },
+    {
+        title: 'Coupons',
+        path: '/dashboard/coupons',
+        icon: <TagIcon className="w-4 mr-2" />
+    },
+    {
+        title: 'Settings',
+        path: '/dashboard/settings',
+        icon: <CogIcon className="w-4 mr-2" />
     },
 ]
 

@@ -2,11 +2,12 @@
 import { cn } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
-import { LucideLayoutDashboard } from "lucide-react"
+import { ArrowLeftFromLine, ArrowRightFromLine, LucideLayoutDashboard } from "lucide-react"
 import LogoComponent from "./logo"
 import sidebarTabs from "@/lib/constants"
 import { useEffect, useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,85 +16,82 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Sidebar({ className }: SidebarProps) {
     const pathname = usePathname()
     const router = useRouter()
-
+    const [collapsed, setCollapsed] = useState<boolean>(false)
+    console.log(collapsed)
     return (
-        <div className={cn("pb-12 sticky top-0 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2", className)}>
-            <div className="space-y-4 pb-4">
-                <div className="px-3 py-2">
-                    <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
-                        <LogoComponent width={10} height={10} className="w-9 h-9" />
-                        <h2 className=" text-xl font-bold tracking-tight">
-                            APlus Laundry
-                        </h2>
+        <div className={cn(collapsed ? `sticky top-0 text-black dark:text-white w-[5dvw] h-[100dvh] overflow-hidden border-r-2` : ` sticky top-0 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2`, className)}>
+            <div className="space-y-4 h-full pb-4">
+                <div className="px-3 flex flex-col h-full justify-between  py-2">
+                    <div>
+                        {collapsed ? <div className="flex py-2 border-b-2 px-3 mb-4 gap-2 items-center">
+
+                            <LogoComponent width={10} height={10} className="w-9 h-9" />
+                        </div> :
+                            <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
+
+
+
+                                <LogoComponent width={10} height={10} className="w-9 h-9" />
+                                <h2 className=" text-xl font-bold tracking-tight">
+                                    APlus Laundry
+                                </h2>
+
+                            </div>
+                        }
+
+                        <div className="space-y-2">
+                            {sidebarTabs.map((tab: any, i: any) => (
+                                <TooltipProvider key={i}>
+                                    <Tooltip>
+                                        <TooltipTrigger className=" w-full items-center justify-start ">
+                                            <Button onClick={() => router.push(tab?.path)} key={i} variant={
+                                                tab.path == pathname ? 'secondary' : 'ghost'
+
+                                            } className="w-full justify-start flex items-center">
+                                                {collapsed ? <div>
+                                                    {tab.icon}
+                                                </div> : <div className="flex items-center">
+                                                    {tab.icon}
+                                                    {tab.title}
+                                                </div>}
+
+                                            </Button></TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>{tab.title}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+
+                            ))}
+
+
+                        </div>
                     </div>
+                    <div>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger className="w-full">
+                                    <Button onClick={() => setCollapsed(!collapsed)} variant="secondary" className="w-full justify-start">
+                                        {collapsed ? <div>
 
-                    <div className="space-y-1">
-                        {sidebarTabs.map((tab: any, i: any) => (
-                            <Button onClick={() => router.push(tab?.path)} key={i} variant={
-                                tab.path == pathname ? 'secondary' : 'ghost'
+                                            <ArrowRightFromLine className="mr-2 h-4 w-4" />
+                                        </div> :
+                                            <div className="flex items-center">
+                                                <ArrowLeftFromLine className="mr-2 h-4 w-4" />
 
-                            } className="w-full justify-start">
-                                {tab.icon}
-                                {tab.title}
-                            </Button>
-                        ))}
-                        <Button variant="secondary" className="w-full justify-start">
-                            {/* <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="mr-2 h-4 w-4"
-                            >
-                                <circle cx="12" cy="12" r="10" />
-                                <polygon points="10 8 16 12 10 16 10 8" />
-                            </svg> */}
-                            <LucideLayoutDashboard className="mr-2 h-4 w-4" />
-                            Dashboard
-                        </Button>
-                        {/* <Button variant="ghost" className="w-full justify-start">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="mr-2 h-4 w-4"
-                            >
-                                <rect width="7" height="7" x="3" y="3" rx="1" />
-                                <rect width="7" height="7" x="14" y="3" rx="1" />
-                                <rect width="7" height="7" x="14" y="14" rx="1" />
-                                <rect width="7" height="7" x="3" y="14" rx="1" />
-                            </svg>
-                            Orders
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="mr-2 h-4 w-4"
-                            >
-                                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
-                                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
-                                <circle cx="12" cy="12" r="2" />
-                                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
-                                <path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" />
-                            </svg>
-                            Radio
-                        </Button> */}
+                                                Collapse
+                                            </div>}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>  {collapsed ? 'Expand' : 'Collapse'}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+
                     </div>
                 </div>
-                <div className="px-3 py-2">
+                {/* <div className="px-3 py-2">
                     <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
                         Create
                     </h2>
@@ -184,14 +182,14 @@ export function Sidebar({ className }: SidebarProps) {
                             Albums
                         </Button>
                     </div>
-                </div>
-                <div className="py-2">
+                </div> */}
+                {/* <div className="py-2">
                     <h2 className="relative px-7 text-lg font-semibold tracking-tight">
                         Playlists
                     </h2>
                     <ScrollArea className="h-[300px] px-1">
                         <div className="space-y-1 p-2">
-                            {/* {playlists?.map((playlist, i) => (
+                          {playlists?.map((playlist, i) => (
                 <Button
                   key={`${playlist}-${i}`}
                   variant="ghost"
@@ -215,10 +213,10 @@ export function Sidebar({ className }: SidebarProps) {
                   </svg>
                   {playlist}
                 </Button>
-              ))} */}
+              ))}
                         </div>
                     </ScrollArea>
-                </div>
+                </div> */}
             </div>
         </div>
     )

@@ -47,24 +47,24 @@ export default function page() {
                     <DropdownMenuTrigger asChild>
                         <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className='w-48'>
                         <DropdownMenuLabel>Create</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
                             <span>New Order</span>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
                             <span>New Product</span>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
                             <span>New Category</span>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
                             <span>New Coupon</span>
