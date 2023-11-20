@@ -41,7 +41,7 @@ export default function AuthenticationPage() {
                 >
                     Log in
                 </Link>
-                <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+                <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:text-black dark:border-r lg:flex">
                     <div className="absolute inset-0 bg-primary" />
                     <div className="relative font-bold z-20 flex items-center text-lg ">
                         <Image
@@ -49,7 +49,7 @@ export default function AuthenticationPage() {
                             width={35}
                             height={35}
                             alt="Logo"
-                            className="mr-2"
+                            className="mr-2 dark:invert"
                         />
                         APLus Laundry
                     </div>

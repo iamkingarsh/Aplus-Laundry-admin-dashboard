@@ -23,7 +23,7 @@ export default function AuthenticationPage() {
           className="block dark:hidden"
         />
         <Image
-          src="/examples/authentication-dark.png"
+          src="/assets/logos/PrimarySVG.svg"
           width={1280}
           height={843}
           alt="Authentication"
@@ -40,7 +40,7 @@ export default function AuthenticationPage() {
         >
           Reset Password
         </Link>
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:text-black dark:border-r lg:flex">
           <div className="absolute inset-0 bg-primary" />
           <div className="relative z-20 flex items-center text-lg font-bold">
             <Image
@@ -48,7 +48,7 @@ export default function AuthenticationPage() {
               width={35}
               height={35}
               alt="Logo"
-              className="mr-2"
+              className="mr-2 dark:invert"
             />
             APLus Laundry
           </div>

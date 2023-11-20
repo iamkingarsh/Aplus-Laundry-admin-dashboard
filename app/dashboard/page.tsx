@@ -2,6 +2,7 @@ import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import Heading from '@/components/ui/heading'
 import { DollarSignIcon, IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
 
@@ -42,7 +43,37 @@ export default function page() {
         <div className='w-full space-y-4 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <Heading title='Dashboard' />
-                <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+                <DropdownMenu  >
+                    <DropdownMenuTrigger asChild>
+                        <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>Create</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <LucidePlusCircle className='w-4 mr-2' />
+                            <span>New Order</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <LucidePlusCircle className='w-4 mr-2' />
+                            <span>New Product</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <LucidePlusCircle className='w-4 mr-2' />
+                            <span>New Category</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <LucidePlusCircle className='w-4 mr-2' />
+                            <span>New Coupon</span>
+
+                        </DropdownMenuItem>
+
+
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
             <div className='w-full flex gap-2'>
                 {StatsData.map((data, index) => {
