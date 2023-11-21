@@ -1,10 +1,10 @@
 "use client"
 
-import { Modal } from '@/components/modal'
+import { Modal } from '@/components/ui/modal'
 import { useEffect, useState } from 'react'
-import { CreateNewOrderModal } from '../modals/create-new-orderModal'
+import { Modals } from '../modals/CreateOrderModal'
 
-export const ModalProvider = () => {
+export const NewOrderModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
@@ -16,6 +16,6 @@ export const ModalProvider = () => {
     }
 
     return (
-        <CreateNewOrderModal />
+        <Modals />
     )
 }

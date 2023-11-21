@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./dialog"
 
 interface ModalProps {
     title: string
@@ -29,7 +29,7 @@ export const Modal: React.FC<ModalProps> = ({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
+                    <DialogDescription className="text-sm ">{description}</DialogDescription>
                 </DialogHeader>
                 <div>
                     {children}

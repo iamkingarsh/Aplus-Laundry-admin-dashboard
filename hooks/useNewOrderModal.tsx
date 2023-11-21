@@ -1,13 +1,16 @@
 import { create } from 'zustand'
 
-interface useStoreModalProps {
+interface createNewOrderModalProps {
+
     isOpen: boolean
     onOpen: () => void
     onClose: () => void
+
 }
 
-export const useStoreModal = create<useStoreModalProps>((set) => ({
+export const useNewOrderModal = create<createNewOrderModalProps>((set) => ({
     isOpen: false,
     onOpen: () => set({ isOpen: true }),
     onClose: () => set({ isOpen: false }),
+
 }))  
