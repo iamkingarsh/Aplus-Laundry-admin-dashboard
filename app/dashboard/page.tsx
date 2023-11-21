@@ -43,7 +43,7 @@ export default function page() {
     return (
         <div className='w-full space-y-4 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
-                <Heading title='Dashboard' />
+                <Heading className='leading-tight' title='Dashboard' />
                 <DropdownMenu  >
                     <DropdownMenuTrigger asChild>
                         <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>

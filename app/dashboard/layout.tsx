@@ -25,9 +25,7 @@ export default function DashboardLayout({
             <div className='flex flex-row'>
                 <Sidebar />
                 <div className='flex w-full flex-col'>
-
                     <TopBar />
-
                     {children}
                 </div>
             </div>

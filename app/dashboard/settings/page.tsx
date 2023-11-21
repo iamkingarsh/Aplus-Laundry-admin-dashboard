@@ -1,4 +1,3 @@
-
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
 import React from 'react'
@@ -8,8 +7,8 @@ export default function page() {
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
-                    <Heading className='leading-tight' title='Services' />
-                    <p className='text-muted-foreground text-sm'>Manage Your Services</p>
+                    <Heading className='leading-tight' title='Settings' />
+                    <p className='text-muted-foreground text-sm'>Manage Your Account Settings and Preferences</p>
                 </div>
             </div>
             <Separator orientation='horizontal' />
