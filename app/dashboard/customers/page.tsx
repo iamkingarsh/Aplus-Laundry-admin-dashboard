@@ -5,6 +5,13 @@ import React from 'react'
 import { columns } from './components/columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Customers | APLus Laundry',
+    description: 'Manage your customers | APLus Laundry',
+}
+
 
 export default function page() {
     const Subscribeddata = [
