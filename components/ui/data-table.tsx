@@ -27,13 +27,16 @@ import { Search } from "lucide-react"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    searchKey: string
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    searchKey,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
+    const [rowSelection, setRowSelection] = React.useState({})
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
     )
@@ -46,9 +49,11 @@ export function DataTable<TData, TValue>({
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
             columnFilters,
+            rowSelection,
         },
     })
 
@@ -58,10 +63,10 @@ export function DataTable<TData, TValue>({
                 <div className="relative max-w-sm w-full flex items-center">
                     <Search className="h-4 absolute right-2 text-gray-500" />
                     <Input
-                        placeholder="Search Emails..."
-                        value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                        placeholder={`Search ${searchKey}...`}
+                        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
-                            table.getColumn("email")?.setFilterValue(event.target.value)
+                            table.getColumn(searchKey)?.setFilterValue(event.target.value)
                         }
                         className="max-w-sm"
                     />

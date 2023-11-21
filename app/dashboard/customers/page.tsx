@@ -109,13 +109,13 @@ export default function page() {
                         <TabsTrigger className='gap-2' value="non-subscribed">Non-subscribed <Badge className='text-bg-primary-foreground' variant="outline">{NonSubscribeddata?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
-                        <DataTable columns={columns} data={AllData} />
+                        <DataTable searchKey='email' columns={columns} data={AllData} />
                     </TabsContent>
                     <TabsContent value="subscribed">
-                        <DataTable columns={columns} data={Subscribeddata} />
+                        <DataTable searchKey='email' columns={columns} data={Subscribeddata} />
                     </TabsContent>
                     <TabsContent value="non-subscribed">
-                        <DataTable columns={columns} data={NonSubscribeddata} />
+                        <DataTable searchKey='email' columns={columns} data={NonSubscribeddata} />
 
                     </TabsContent>
                 </Tabs>
