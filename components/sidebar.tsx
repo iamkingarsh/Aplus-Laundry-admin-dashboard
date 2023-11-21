@@ -40,7 +40,7 @@ export function Sidebar({ className }: SidebarProps) {
                             {sidebarTabs.map((tab: any, i: any) => (
                                 <Button onClick={() => router.push(tab?.path)} key={i}
                                     variant={
-                                        tab.path == pathname ? 'secondary' : 'ghost'
+                                        pathname.includes(tab.path) ? 'secondary' : 'ghost'
                                     }
                                     className="w-full justify-start flex items-center">
                                     {collapsed ?
