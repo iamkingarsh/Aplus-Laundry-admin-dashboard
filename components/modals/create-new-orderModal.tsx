@@ -8,11 +8,11 @@ export const CreateNewOrderModal = () => {
 
     return (
         <Modal
-            title='Test'
-            description='test'
+            title='Create New Order'
+            description='Create a new order for a customer.'
             isOpen={storeModal.isOpen}
             onClose={storeModal.onClose}>
-            New Order
+            Future Create New Order Form
         </Modal>
     )
 } 
