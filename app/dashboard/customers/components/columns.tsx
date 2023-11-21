@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type CustomersColumns = {
@@ -13,6 +14,7 @@ export type CustomersColumns = {
     mobile: string
     status: "active" | "inactive"
     email: string
+    profilepic: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -37,6 +39,19 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         ),
         enableSorting: false,
         enableHiding: false,
+    },
+    {
+        accessorKey: "profilepic",
+        header: "Profile",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <Avatar className='w-8 h-8'>
+                    <AvatarImage src={row.original.profilepic} alt="@shadcn" />
+                    <AvatarFallback> {row.original.fullname[0]} </AvatarFallback>
+                </Avatar>
+
+            </div>
+        ),
     },
     {
         accessorKey: "id",
@@ -76,7 +91,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
     },
     {
         accessorKey: "address",
-        header: "Amount",
+        header: "Address",
     },
     {
         accessorKey: "status",
