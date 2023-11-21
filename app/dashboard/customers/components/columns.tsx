@@ -7,16 +7,31 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 // You can use a Zod schema here if you want.
 export type CustomersColumns = {
     id: string
-    label: string
-    amount: number
-    status: "pending" | "processing" | "success" | "failed"
+    fullname: string
+    address: string
+    mobile: string
+    status: "active" | "inactive"
     email: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "id",
+        header: "User id",
+    },
+    {
+        accessorKey: "fullname",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Full Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "email",
@@ -33,7 +48,16 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "amount",
+        accessorKey: "mobile",
+        header: "Mobile No.",
+    },
+    {
+        accessorKey: "address",
         header: "Amount",
     },
+    {
+        accessorKey: "status",
+        header: "Status",
+    },
+
 ]
