@@ -104,9 +104,9 @@ export default function page() {
             <div className="container mx-auto py-10">
                 <Tabs defaultValue="account" className="w-full">
                     <TabsList className='gap-3'>
-                        <TabsTrigger className='gap-2' value="all">All <Badge variant="default">{AllData?.length}</Badge> </TabsTrigger>
-                        <TabsTrigger className='gap-2' value="account">Subscribed <Badge variant="default"> {Subscribeddata?.length}</Badge></TabsTrigger>
-                        <TabsTrigger className='gap-2' value="password">Non-subscribed <Badge variant="default">{NonSubscribeddata?.length}</Badge> </TabsTrigger>
+                        <TabsTrigger className='gap-2' value="all">All <Badge variant="outline">{AllData?.length}</Badge> </TabsTrigger>
+                        <TabsTrigger className='gap-2' value="account">Subscribed <Badge variant="outline"> {Subscribeddata?.length}</Badge></TabsTrigger>
+                        <TabsTrigger className='gap-2' value="password">Non-subscribed <Badge variant="outline">{NonSubscribeddata?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
                         <DataTable columns={columns} data={AllData} />
