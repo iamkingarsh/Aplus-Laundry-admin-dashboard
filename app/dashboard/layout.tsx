@@ -18,14 +18,14 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
+        <html lang="en" >
             <body className={` ${inter.className}  `}>
                 <div className='flex flex-row'>
                     <Sidebar />
                     <div className='flex w-full flex-col'>
-                        <div className='sticky top-0 z-50'>
-                            <TopBar />
-                        </div>
+
+                        <TopBar />
+
                         {children}
                     </div>
                 </div>

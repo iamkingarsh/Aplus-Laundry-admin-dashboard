@@ -1,10 +1,11 @@
+"use client"
 import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import Heading from '@/components/ui/heading'
-import { DollarSignIcon, IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
+import { IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
 
 
 export default function page() {
@@ -52,22 +53,22 @@ export default function page() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
-                            <span>New Order</span>
+                            New Order
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
-                            <span>New Product</span>
+                            New Product
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
-                            <span>New Category</span>
+                            New Category
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
-                            <span>New Coupon</span>
+                            New Coupon
 
                         </DropdownMenuItem>
 
@@ -85,7 +86,6 @@ export default function page() {
             <div className='space-y-4'>
                 <Card>
                     <CardHeader>
-
                         <Heading title='Revenue Graph' />
                     </CardHeader>
                     <RevenueGraph />
