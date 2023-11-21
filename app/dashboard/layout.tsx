@@ -12,24 +12,25 @@ export const metadata: Metadata = {
     description: 'Admin dashboard for APlus Laundry',
 }
 
-export default function RootLayout({
-    children,
-}: {
+interface DashboardLayoutProps {
     children: React.ReactNode
-}) {
+}
+
+
+export default function DashboardLayout({
+    children
+}: DashboardLayoutProps) {
     return (
-        <html lang="en" >
-            <body className={` ${inter.className}  `}>
-                <div className='flex flex-row'>
-                    <Sidebar />
-                    <div className='flex w-full flex-col'>
+        <>
+            <div className='flex flex-row'>
+                <Sidebar />
+                <div className='flex w-full flex-col'>
 
-                        <TopBar />
+                    <TopBar />
 
-                        {children}
-                    </div>
+                    {children}
                 </div>
-            </body>
-        </html>
+            </div>
+        </>
     )
 }
