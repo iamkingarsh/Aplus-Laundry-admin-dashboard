@@ -1,4 +1,5 @@
 "use client"
+import { Modal } from '@/components/modal'
 import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
 import { Button } from '@/components/ui/button'
@@ -53,7 +54,9 @@ export default function page() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LucidePlusCircle className='w-4 mr-2' />
-                            New Order
+                            <Modal title='Test' description='test' isOpen={true} onClose={() => { }}>
+                                New Order
+                            </Modal>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem>
