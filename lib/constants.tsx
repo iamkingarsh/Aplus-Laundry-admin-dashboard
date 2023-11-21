@@ -10,17 +10,17 @@ const sidebarTabs = [
     },
     {
         title: 'Orders',
-        path: '/orders',
+        path: '/dashboard/orders',
         icon: <ShoppingBagIcon className="w-4 mr-2" />
     },
     {
         title: 'Revenue',
-        path: '/revenue',
+        path: '/dashboard/revenue',
         icon: <IndianRupeeIcon className="w-4 mr-2" />
     },
     {
         title: 'Products',
-        path: '/products',
+        path: '/dashboard/products',
         icon: <BoxIcon className="w-4 mr-2" />
     },
     {
@@ -30,22 +30,22 @@ const sidebarTabs = [
     },
     {
         title: 'Customers',
-        path: '/customers',
+        path: '/dashboard/customers',
         icon: <Users className="w-4 mr-2" />
     },
     {
         title: 'Delivery Partners',
-        path: '/delivery-partners',
+        path: '/dashboard/delivery-partners',
         icon: <UserCog className="w-4 mr-2" />
     },
     {
         title: 'Coupons',
-        path: '/coupons',
+        path: '/dashboard/coupons',
         icon: <TagIcon className="w-4 mr-2" />
     },
     {
         title: 'Settings',
-        path: '/settings',
+        path: '/dashboard/settings',
         icon: <CogIcon className="w-4 mr-2" />
     },
 ]
