@@ -1,6 +1,7 @@
 "use client"
 import { BoxIcon, CogIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
 
+const BrandName = "APlus Laundry"
 
 const sidebarTabs = [
     {
@@ -51,3 +52,4 @@ const sidebarTabs = [
 ]
 
 export default sidebarTabs;
+export { BrandName }

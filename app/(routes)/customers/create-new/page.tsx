@@ -2,7 +2,13 @@ import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import Heading from '@/components/ui/heading';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
+
+export const metadata: Metadata = {
+    title: 'Create New Customer | APLus Laundry',
+    description: 'Create a New customer | APLus Laundry',
+}
 
 interface Props {
     params: {

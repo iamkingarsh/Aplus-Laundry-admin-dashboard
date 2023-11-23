@@ -5,6 +5,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/forms/user-auth-form"
+import { BrandName } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: 'Login to Admin Dashboard | APLus Laundry',
@@ -50,7 +51,7 @@ export default function AuthenticationPage() {
               alt="Logo"
               className="mr-2 dark:invert"
             />
-            APLus Laundry
+            {BrandName}
           </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">

@@ -4,7 +4,7 @@ import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
 import { ArrowLeftFromLine, ArrowRightFromLine, LucideLayoutDashboard } from "lucide-react"
 import LogoComponent from "./logo"
-import sidebarTabs from "@/lib/constants"
+import sidebarTabs, { BrandName } from "@/lib/constants"
 import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -30,7 +30,7 @@ export function Sidebar({ className }: SidebarProps) {
                             <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
                                 <LogoComponent width={10} height={10} className="w-9 h-9" />
                                 <h2 className="text-xl font-bold tracking-tight">
-                                    APlus Laundry
+                                    {BrandName}
                                 </h2>
 
                             </div>

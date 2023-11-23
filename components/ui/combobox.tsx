@@ -17,11 +17,12 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { BrandName } from "@/lib/constants"
 
 const frameworks = [
     {
-        value: "APlus Laundry",
-        label: "APlus Laundry",
+        value: BrandName,
+        label: BrandName,
     },
 
 ]
