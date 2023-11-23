@@ -23,7 +23,7 @@ export default function CustomerPage({ params }: Props) {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-
+                <NewCustomerForm />
             </div>
 
 
