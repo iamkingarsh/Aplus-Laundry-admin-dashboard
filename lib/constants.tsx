@@ -51,5 +51,51 @@ const sidebarTabs = [
     },
 ]
 
+const Services = [
+    {
+        title: 'Dry Cleaning',
+        path: '/services/wash-iron',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+    {
+        title: 'Premium Laundry',
+        path: '/services/premium-Laundry',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+    {
+        title: 'Laundry',
+        path: '/services/laundry',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+    {
+        title: 'Steam Ironing',
+        path: '/services/iron',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+
+
+]
+
+const OrdersStatuses = [
+    {
+        title: 'onhold',
+    },
+    {
+        title: 'processing',
+    },
+    {
+        title: 'picked',
+    },
+    {
+        title: 'On Way',
+    },
+    {
+        title: 'delivered',
+    },
+    {
+        title: 'cancelled',
+    },
+]
+
 export default sidebarTabs;
-export { BrandName }
+export { BrandName, Services, OrdersStatuses }

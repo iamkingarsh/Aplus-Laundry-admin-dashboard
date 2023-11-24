@@ -30,7 +30,7 @@ export default function CustomerPage({ params }: Props) {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <NewOrderForm />
+                <NewOrderForm gap={3} />
             </div>
 
 
