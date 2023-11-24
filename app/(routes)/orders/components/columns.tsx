@@ -75,7 +75,17 @@ export const columns: ColumnDef<OrdersColumns>[] = [
     },
     {
         accessorKey: "order_date",
-        header: "Order Date",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Order Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "status",
@@ -175,6 +185,9 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                         <DropdownMenuItem>
                             <Eye className="mr-2 h-4 w-4" />
                             View Order Details</DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Order Photos</DropdownMenuItem>
                         <DropdownMenuItem>
                             <Edit2 className="mr-2 h-4 w-4" />
                             Edit Order Details</DropdownMenuItem>
