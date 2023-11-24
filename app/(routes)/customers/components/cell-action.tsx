@@ -6,6 +6,7 @@ import { Edit2, Eye, MoreHorizontal, Trash, User } from 'lucide-react'
 import React from 'react'
 import { CustomersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
+import toast from 'react-hot-toast';
 
 interface Props {
     data: CustomersColumns
@@ -16,6 +17,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
     const deleteOrder = () => {
         console.log('delete Customer')
         GlobalModal.onClose()
+        toast.success('Customer deleted successfully')
     }
     return (
         <DropdownMenu>
