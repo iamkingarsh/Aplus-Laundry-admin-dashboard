@@ -82,7 +82,7 @@ export default function page() {
                     <Heading className='leading-tight' title='All Orders' />
                     <p className='text-muted-foreground text-sm'>Manage Your Orders</p>
                 </div>
-                <Link href={'/customers/create-new'}>
+                <Link href={'/orders/create-new'}>
                     <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
                 </Link>
             </div>
