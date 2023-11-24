@@ -35,8 +35,14 @@ export const ToastProvider = () => {
         //     }}
         // />
         <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
             toastOptions={{
                 success: {
+                    duration: 4000,
                     style: {
                         background: 'green',
                         color: 'white',
@@ -49,6 +55,7 @@ export const ToastProvider = () => {
                     },
                 },
                 error: {
+                    duration: 4000,
                     style: {
                         background: 'red',
                         color: 'white',

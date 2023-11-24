@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
+import toast from "react-hot-toast"
 
 
 interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -48,18 +49,30 @@ export function NewCustomerForm({ className, ...props }: NewCustomerFormProps) {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>, event: React.SyntheticEvent) {
+    // function onSubmit(values: z.infer<typeof formSchema>) {
+    //     // Do something with the form values.
+    //     // ✅ This will be type-safe and validated.
+    //     console.log(values)
+    //     setIsLoading(true)
+
+
+    //     setTimeout(() => {
+    //         setIsLoading(false)
+    //         toast.success('Customer created successfully')
+    //     }, 3000)
+    // }
+    function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
-        event.preventDefault()
         setIsLoading(true)
+
 
         setTimeout(() => {
             setIsLoading(false)
+            toast.success('Customer created successfully')
         }, 3000)
+        console.log(values)
     }
-
 
 
     return (
@@ -68,7 +81,7 @@ export function NewCustomerForm({ className, ...props }: NewCustomerFormProps) {
 
             <Form {...form} >
 
-                <form onSubmit={form.handleSubmit(() => onSubmit)} className=" grid grid-cols-3 gap-3">
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" grid grid-cols-3 gap-3">
                     <FormField
                         name="fullname"
                         control={form.control}
@@ -294,14 +307,15 @@ export function NewCustomerForm({ className, ...props }: NewCustomerFormProps) {
                             </FormItem>
                         )}
                     />
-                    <div>
-                        <Button className="w-full" disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
-                            )}
-                            Create <Plus className="ml-2 w-4" />
-                        </Button>
-                    </div>
+                    {/* <Button type="submit">Submit</Button> */}
+
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading && (
+                            <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                        )}
+                        Create
+                    </Button>
+
                 </form>
             </Form>
 
