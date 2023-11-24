@@ -1,7 +1,7 @@
 "use client"
 import CreateNew from '@/components/create-new'
 import { Modal } from '@/components/ui/modal'
-import { Modals } from '@/components/modals/CreateOrderModal'
+import { Modals } from '@/components/modals/GlobalModal'
 import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
 import { Card, CardHeader } from '@/components/ui/card'

@@ -6,6 +6,10 @@ import { columns } from './components/columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
+import { Button } from '@/components/ui/button'
+import { PlusIcon } from 'lucide-react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
     title: 'Customers | APLus Laundry',
@@ -116,6 +120,8 @@ export default function page() {
         ...NonSubscribeddata
     ]
 
+
+
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
@@ -123,6 +129,10 @@ export default function page() {
                     <Heading className='leading-tight' title='Customers' />
                     <p className='text-muted-foreground text-sm'>Manage Your Customers</p>
                 </div>
+                <Link href={'/customers/create-new'}>
+                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+                </Link>
+
             </div>
             <Separator orientation='horizontal' />
             <div>
