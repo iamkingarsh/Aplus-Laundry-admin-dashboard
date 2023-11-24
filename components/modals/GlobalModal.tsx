@@ -4,7 +4,7 @@ import { Modal } from '@/components/ui/modal'
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { HeartIcon } from 'lucide-react';
 import { Button } from '../ui/button';
-import { UserAuthForm } from '../forms/user-auth-form';
+import { UserAuthForm } from '../forms/userAuthForm';
 import { NewOrderForm } from '../forms/newOrderForm';
 
 export const Modals = () => {

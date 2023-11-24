@@ -24,53 +24,7 @@ export function NewOrderForm({ className, ...props }: newOrderFormProps) {
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            <form onSubmit={onSubmit}>
-                <div className="grid gap-2">
-                    <div className="grid gap-1">
-                        <Label htmlFor="email">
-                            Email
-                        </Label>
-                        <Input
-                            id="email"
-                            placeholder="name@example.com"
-                            type="email"
-                            autoCapitalize="none"
-                            autoComplete="email"
-                            autoCorrect="off"
-                            disabled={isLoading}
-                        />
-                    </div>
-                    <div className="grid gap-1">
-                        <Label htmlFor="email">
-                            Password
-                        </Label>
-                        <Input
-                            id="Password"
-                            placeholder="*******"
-                            type="Password"
-                            autoCapitalize="none"
-                            autoComplete="Password"
-                            autoCorrect="off"
-                            disabled={isLoading}
-                        />
-                    </div>
-                    <Button disabled={isLoading}>
-                        {isLoading && (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Log In with Email
-                    </Button>
-                </div>
-            </form>
 
-            <Button variant="outline" type="button" disabled={isLoading}>
-                {isLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Icons.google className="mr-2 h-4 w-4" />
-                )}{" "}
-                Google
-            </Button>
         </div>
     )
 }

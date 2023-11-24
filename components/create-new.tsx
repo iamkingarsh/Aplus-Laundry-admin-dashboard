@@ -31,7 +31,7 @@ function CreateNew() {
                 <DropdownMenuItem onSelect={() => {
                     GlobalModal.title = "Create New Customer"
                     GlobalModal.description = "Create a new Customer"
-                    GlobalModal.children = <NewCustomerForm />
+                    GlobalModal.children = <NewCustomerForm gap={2} />
                     GlobalModal.onOpen()
                 }}>
                     <LucidePlusCircle className='w-4 mr-2' />
