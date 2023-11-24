@@ -135,6 +135,7 @@ export default function page() {
 
             </div>
             <Separator orientation='horizontal' />
+
             <div className="container mx-auto py-10">
                 <Tabs defaultValue="all" className="w-full">
                     <TabsList className='gap-3'>
