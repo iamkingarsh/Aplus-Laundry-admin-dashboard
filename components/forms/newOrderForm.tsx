@@ -15,24 +15,46 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon, Plus, ServerIcon } from "lucide-react"
 import toast from "react-hot-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { OrdersStatuses, Services } from "@/lib/constants"
+import { LaundrtProducts, OrdersStatuses, Services } from "@/lib/constants"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { AllData } from "@/app/(routes)/customers/page"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import { NewCustomerForm } from "./newCustomerForm"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import { ScrollArea } from "../ui/scroll-area"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
+
+
 const formSchema = z.object({
     order_type: z.string()
     ,
     service: z.string(),
-    products: z.string(),
+    products: z.object({
+        Shirts: z.number().optional(),
+        TShirts: z.number().optional(),
+        Trousers: z.number().optional(),
+        Jeans: z.number().optional(),
+        Shorts: z.number().optional(),
+        Kurtas: z.number().optional(),
+        Kurtis: z.number().optional(),
+        Sarees: z.number().optional(),
+        Bedsheets: z.number().optional(),
+        Blankets: z.number().optional(),
+        Curtains: z.number().optional(),
+        CushionCovers: z.number().optional(),
+        PillowCovers: z.number().optional(),
+        Towels: z.number().optional(),
+        Masks: z.number().optional(),
+        Others: z.number().optional(),
+    }).optional(), //find a way to make this schema dynamic @mujahed
     customer: z.string(),
     status: z.string(),
     payment: z.string(),
@@ -48,7 +70,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         defaultValues: {
             order_type: '',
             service: '',
-            products: '',
+
             customer: '',
             status: 'onhold',
             payment: 'Via Store (Cash/Card/UPI)',
@@ -77,11 +99,68 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     }
 
-    const paymentOptions = [
-        {
-            title: 'Via Store (Cash/Card)',
+
+    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: number }>({});
+    const [productQuantity, setProductQuantity] = React.useState<number>(1);
+    // const handleSelectChange = (value: string) => {
+    //     if (!selectedItems.includes(value)) {
+    //         setSelectedItems((prev) => [...prev, value]);
+    //         form.setValue("products", selectedItems)
+    //     } else {
+    //         const referencedArray = [...selectedItems];
+    //         const indexOfItemToBeRemoved = referencedArray.indexOf(value);
+    //         referencedArray.splice(indexOfItemToBeRemoved, 1);
+    //         setSelectedItems(referencedArray);
+    //     }
+    // };
+
+    // const isOptionSelected = (value: string): boolean => {
+    //     return selectedItems.includes(value) ? true : false;
+    // };
+
+
+    const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
+        setProductQuantity((prev) => prev + 1);
+        setSelectedItems((prev) => ({ ...prev, [value]: (prev[value] || 0) + 1 }));
+
+    };
+
+    const handleSelectChange = (value: string) => {
+        if (!selectedItems[value]) {
+            setSelectedItems((prev) => ({ ...prev, [value]: 1 }));
+
+        } else if (selectedItems[value] === 1) {
+            const updatedSelectedItems = { ...selectedItems };
+            delete updatedSelectedItems[value];
+            setSelectedItems(updatedSelectedItems);
+
         }
-    ]
+    };
+
+    const isOptionSelected = (value: string): boolean => {
+        return selectedItems[value] !== undefined;
+    };
+
+
+    const RemoveProductQunatity = (value: string) => {
+        if (selectedItems[value] === 1) {
+            setProductQuantity(1);
+            const updatedSelectedItems = { ...selectedItems };
+            delete updatedSelectedItems[value];
+            setSelectedItems(updatedSelectedItems);
+
+        } else if (productQuantity > 1) {
+            setProductQuantity((prev) => prev - 1);
+            setSelectedItems((prev) => ({ ...prev, [value]: (prev[value] || 0) - 1 }));
+
+        } else {
+            setProductQuantity(1);
+
+        }
+    };
+
+
 
 
 
@@ -326,6 +405,93 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             <SelectItem value="Mujahed">Mujahed</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                    <FormMessage />
+
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="products"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="delivery_agent"> Select Products</FormLabel>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                className={cn(
+                                                    "w-full justify-between",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                            >
+
+                                                Select Products
+                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-full" onCloseAutoFocus={(e) => e.preventDefault()}>
+                                            <DropdownMenuLabel>Select Products</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <Sheet>
+                                                <SheetTrigger asChild>
+                                                    <Button variant="outline">Open Products Catalogue</Button>
+                                                </SheetTrigger>
+                                                <SheetContent>
+                                                    <SheetHeader>
+                                                        <SheetTitle>Select Products</SheetTitle>
+                                                        <SheetDescription>
+                                                            Please select the products
+                                                        </SheetDescription>
+                                                    </SheetHeader>
+                                                    <ScrollArea className="h-[85%] my-2 px-2 rounded-md ">
+
+
+                                                        <div className="grid gap-4 py-4">
+                                                            {LaundrtProducts.map((value, index: number) => {
+                                                                return (
+                                                                    <DropdownMenuCheckboxItem
+                                                                        onSelect={(e) => e.preventDefault()}
+                                                                        key={index}
+                                                                        checked={isOptionSelected(value.title)}
+                                                                        // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
+                                                                        onCheckedChange={() => handleSelectChange(value.title)}
+                                                                        className="flex gap-2 justify-between items-center"
+                                                                    >
+
+                                                                        <div>
+                                                                            {value.title}
+                                                                        </div>
+                                                                        <div className="flex gap-2 items-center justify-end">
+                                                                            <Button onClick={() => RemoveProductQunatity(value.title)} variant="outline">-</Button>
+
+                                                                            {selectedItems[value.title] || 0}
+                                                                            <Button onClick={(e) => AddProductQunatity(value.title, e)} variant="outline">+</Button>
+                                                                        </div>
+
+                                                                    </DropdownMenuCheckboxItem>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </ScrollArea>
+                                                    <SheetFooter>
+                                                        <SheetClose asChild>
+                                                            {/* <Button onClick={() => { form.setValue("products", { ...selectedItems }); console.log(form.setValue("products", selectedItems), { ...selectedItems }) }} type="submit">Save changes</Button> */}
+                                                            <Button onClick={() => {
+
+                                                                form.setValue("products", selectedItems);
+
+
+
+                                                            }} type="submit">Save changes</Button>
+                                                        </SheetClose>
+                                                    </SheetFooter>
+                                                </SheetContent>
+                                            </Sheet>
+
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                     <FormMessage />
 
                                 </FormItem>
