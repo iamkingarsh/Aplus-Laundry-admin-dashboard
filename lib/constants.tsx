@@ -87,7 +87,7 @@ const OrdersStatuses = [
         title: 'picked',
     },
     {
-        title: 'On Way',
+        title: 'on way',
     },
     {
         title: 'delivered',

@@ -174,7 +174,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 </Button>
                                             </FormControl>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-full p-0">
+                                        <PopoverContent side="right" className="w-full p-0">
                                             <Command >
                                                 <CommandInput
                                                     placeholder="Search Customers..."

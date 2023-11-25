@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/popover"
 import { BrandName } from "@/lib/constants"
 
-const frameworks = [
+const stores = [
     {
         value: BrandName,
         label: BrandName,
@@ -29,7 +29,7 @@ const frameworks = [
 
 export function ComboboxDemo() {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("APlus Laundry")
+    const [value, setValue] = React.useState(BrandName)
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -42,7 +42,7 @@ export function ComboboxDemo() {
                 >
                     <Store className="w-4" />
                     {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
+                        ? stores.find((store) => store.value === value)?.label
                         : "Select Stores"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -52,22 +52,22 @@ export function ComboboxDemo() {
                     <CommandInput placeholder="Search Stores..." />
                     <CommandEmpty>No Stores found.</CommandEmpty>
                     <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {stores.map((store) => (
                             <CommandItem
-                                key={framework.value}
-                                value={framework.value}
+                                key={store.value}
+                                value={store.value}
                                 onSelect={(currentValue: any) => {
-                                    setValue(currentValue === value ? "" : currentValue)
+                                    setValue(currentValue === value ? "" : store.value)
                                     setOpen(false)
                                 }}
                             >
                                 <Check
                                     className={cn(
                                         "mr-2 h-4 w-4",
-                                        value === framework.value ? "opacity-100" : "opacity-0"
+                                        value === store.value ? "opacity-100" : "opacity-0"
                                     )}
                                 />
-                                {framework.label}
+                                {store.label}
                             </CommandItem>
                         ))}
                     </CommandGroup>
