@@ -34,31 +34,31 @@ interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 
 const formSchema = z.object({
-    order_type: z.string()
+    order_type: z.string().min(1, { message: "Please select an order type" })
     ,
-    service: z.string(),
+    service: z.string().min(1, { message: "Please select a service" }),
     products: z.object({
-        Shirts: z.number().optional(),
-        TShirts: z.number().optional(),
-        Trousers: z.number().optional(),
-        Jeans: z.number().optional(),
-        Shorts: z.number().optional(),
-        Kurtas: z.number().optional(),
-        Kurtis: z.number().optional(),
-        Sarees: z.number().optional(),
-        Bedsheets: z.number().optional(),
-        Blankets: z.number().optional(),
-        Curtains: z.number().optional(),
-        CushionCovers: z.number().optional(),
-        PillowCovers: z.number().optional(),
-        Towels: z.number().optional(),
-        Masks: z.number().optional(),
-        Others: z.number().optional(),
-    }).optional(), //find a way to make this schema dynamic @mujahed
-    customer: z.string(),
-    status: z.string(),
+        Shirts: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        TShirts: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Trousers: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Jeans: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Shorts: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Kurtas: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Kurtis: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Sarees: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Bedsheets: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Blankets: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Curtains: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        CushionCovers: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        PillowCovers: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Towels: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Masks: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Others: z.number().min(1, { message: "Please select a quantity" }).optional(),
+    }), //find a way to make this schema dynamic @mujahed
+    customer: z.string().min(1, { message: "Please select a customer" }),
+    status: z.string().min(1, { message: "Please select a status" }),
     payment: z.string(),
-    delivery_agent: z.string(),
+    delivery_agent: z.string().optional(),
 
 })
 
