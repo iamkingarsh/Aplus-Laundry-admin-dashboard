@@ -50,28 +50,28 @@ const AllOrdersData = [
     { "order_id": "cec0f43a-7ac1-4668-a1c0-cd89e48e08dc", "customer_name": "Pet Course", "customer_id": "698b7283-2a9b-4c7e-a4a2-a73e2d0d44d3", "mobile": "213-391-1068", "status": "picked", "order_date": "11/12/2023", "payment_method": "payment gateway", "channel": "manual" },
     { "order_id": "3913b664-da97-4ee8-9f64-10cb91dc2a93", "customer_name": "Tamera Vassbender", "customer_id": "a5544370-6a9f-407b-bfea-7a2e16ab44ba", "mobile": "713-155-4496", "status": "picked", "order_date": "10/15/2023", "payment_method": "payment gateway", "channel": "Mobile App" },
     { "order_id": "cdd60d61-8584-426c-b62a-92627ff1aa2e", "customer_name": "Susette Maybery", "customer_id": "82de2bab-1b63-4653-bb96-7445a6ae76ca", "mobile": "336-101-8286", "status": "pending", "order_date": "1/2/2023", "payment_method": "cod", "channel": "Mobile App" },
-];
+] as any[];
 export default function page() {
 
 
     const OnHoldOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'onhold')
-    ]
+    ] as any[]
     const PendingOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'pending')
-    ]
+    ] as any[]
     const PickedOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'picked')
-    ]
+    ] as any[]
     const DeliveredOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'delivered')
-    ]
+    ] as any[]
     const CancelledOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'cancelled')
-    ]
+    ] as any[]
     const OnWayOrderData = [
         ...AllOrdersData.filter((item) => item.status === 'onway')
-    ]
+    ] as any[]
 
 
 

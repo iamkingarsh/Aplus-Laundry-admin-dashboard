@@ -66,7 +66,7 @@ const Subscribeddata = [
     { "id": 46, "fullname": "Juieta Kings", "email": "jkings19@github.com", "mobile": "170-694-5198", "status": "active", "address": "048 Pawling Place", "profilepic": "https://robohash.org/quidemnatuscorporis.png?size=50x50&set=set1" },
     { "id": 47, "fullname": "Deane Downse", "email": "ddownse1a@elegantthemes.com", "mobile": "603-277-4942", "status": "inactive", "address": "15600 Lake View Circle", "profilepic": "https://robohash.org/situtquia.png?size=50x50&set=set1" },
     { "id": 48, "fullname": "Lyndsey Dusey", "email": "ldusey1b@cargocollective.com", "mobile": "949-667-4234", "status": "active", "address": "6618 Walton Lane", "profilepic": "https://robohash.org/providentmodirerum.png?size=50x50&set=set1" },
-];
+] as any[];
 
 const NonSubscribeddata = [
     { "id": 49, "fullname": "Ermanno Cardoso", "email": "ecardoso1c@indiatimes.com", "mobile": "913-560-2749", "status": "inactive", "address": "1152 Cardinal Center", "profilepic": "https://robohash.org/delenitipariaturaliquam.png?size=50x50&set=set1" },
@@ -112,12 +112,12 @@ const NonSubscribeddata = [
     { "id": 89, "fullname": "Galvan Cannop", "email": "gcannop2g@comsenz.com", "mobile": "625-981-9916", "status": "active", "address": "9 Elmside Junction", "profilepic": "https://robohash.org/suntipsumet.png?size=50x50&set=set1" },
     { "id": 90, "fullname": "Zaneta Ranklin", "email": "zranklin2h@cdbaby.com", "mobile": "332-154-1439", "status": "active", "address": "71 Manitowish Place", "profilepic": "https://robohash.org/ipsumducimusquas.png?size=50x50&set=set1" },
     { "id": 91, "fullname": "Ernie Large", "email": "elarge2i@mlb.com", "mobile": "201-760-8904", "status": "active", "address": "5 Rigney Parkway", "profilepic": "https://robohash.org/quisvoluptatemqui.png?size=50x50&set=set1" },
-]
+] as any[];
 
 const AllData = [
     ...Subscribeddata,
     ...NonSubscribeddata
-]
+] as any[];
 export default function page() {
 
 
