@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
+import { DatePickerWithRange } from '@/components/date-range'
 
 
 export default function page() {
@@ -52,7 +53,10 @@ export default function page() {
             <div className='w-full space-y-4 h-full flex p-6 flex-col'>
                 <div className="topbar w-full flex justify-between">
                     <Heading className='leading-tight' title='Dashboard' />
-                    <CreateNew />
+                    <div className='flex gap-2'>
+                        <DatePickerWithRange />
+                        <CreateNew />
+                    </div>
                 </div>
                 <div className='w-full flex gap-2'>
                     {StatsData.map((data, index) => {
