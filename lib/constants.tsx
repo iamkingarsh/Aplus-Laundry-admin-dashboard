@@ -1,7 +1,17 @@
 "use client"
-import { BoxIcon, CogIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
+import { BoxIcon, CogIcon, FrameIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
 
 const BrandName = "APlus Laundry"
+
+const brandColors = {
+    pending: 'bg-yellow-500 text-white',
+    processing: 'bg-blue-500 text-white',
+    delivered: 'bg-green-500 text-white',
+    cancelled: 'bg-red-500 text-white',
+    onway: 'bg-purple-500 text-white',
+    default: 'bg-primary dark:bg-primary-dark  text-white dark:text-black',
+
+}
 
 const sidebarTabs = [
     {
@@ -38,6 +48,11 @@ const sidebarTabs = [
         title: 'Delivery Partners',
         path: '/delivery-partners',
         icon: <UserCog className="w-4 mr-2" />
+    },
+    {
+        title: 'App Banners',
+        path: '/app-banners',
+        icon: <FrameIcon className="w-4 mr-2" />
     },
     {
         title: 'Coupons',
@@ -197,4 +212,4 @@ const LaundrtProducts = [
 ]
 
 export default sidebarTabs;
-export { BrandName, Services, OrdersStatuses, LaundrtProducts }
+export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors }

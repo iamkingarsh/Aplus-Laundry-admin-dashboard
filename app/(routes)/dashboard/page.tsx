@@ -18,28 +18,32 @@ export default function page() {
             stat: 2300,
             statPrefix: '$',
             icon: <IndianRupeeIcon />,
-            desc: '+180.1% from last month'
+            desc: '+180.1% from last month',
+            href: '/revenue'
         },
         {
             title: 'Total Orders',
             stat: 30,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month'
+            desc: '+180.1% from last month',
+            href: '/orders'
         },
         {
             title: 'Total Subscribers',
             stat: 350,
             statPrefix: '+',
             icon: <Users />,
-            desc: '+180.1% from last month'
+            desc: '+180.1% from last month',
+            href: '/customers'
         },
         {
             title: 'Total Subscriber Orders',
             stat: 230,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month'
+            desc: '+180.1% from last month',
+            href: '/customers'
         },
     ]
 
@@ -53,7 +57,7 @@ export default function page() {
                 <div className='w-full flex gap-2'>
                     {StatsData.map((data, index) => {
                         return (
-                            <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} desc={data.desc} />
+                            <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} href={data.href} desc={data.desc} />
                         )
                     })}
                 </div>
