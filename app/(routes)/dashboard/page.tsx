@@ -1,12 +1,13 @@
-"use client"
+// "use client"
 import CreateNew from '@/components/create-new'
 import { Modal } from '@/components/ui/modal'
 import { Modals } from '@/components/modals/GlobalModal'
 import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
-import { Card, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, LucidePlusCircle, PlusIcon, ShoppingBagIcon, Users } from 'lucide-react'
+import RecentOrders from '@/components/recent-orders'
 
 
 export default function page() {
@@ -56,12 +57,24 @@ export default function page() {
                         )
                     })}
                 </div>
-                <div className='space-y-4'>
-                    <Card>
+                <div className='space-x-2 flex'>
+                    <Card className='w-full'>
                         <CardHeader>
-                            <Heading title='Revenue Graph' />
+                            <Heading title='Sales Overview' />
                         </CardHeader>
-                        <RevenueGraph />
+                        <CardContent>
+                            <RevenueGraph />
+
+                        </CardContent>
+                    </Card>
+                    <Card className='w-full'>
+                        <CardHeader>
+                            <Heading title='Recent Orders' />
+                        </CardHeader>
+                        <CardContent>
+                            <RecentOrders />
+
+                        </CardContent>
                     </Card>
                 </div>
             </div>

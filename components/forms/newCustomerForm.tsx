@@ -73,6 +73,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
 
                 <form onSubmit={form.handleSubmit(onSubmit)} className=" grid grid-cols-1 gap-3">
                     <div className={`grid grid-cols-${gap} gap-3`}>
+                        {/* <div className={`grid grid-cols-2 gap-3`}> */}
                         <FormField
                             name="fullname"
                             control={form.control}
