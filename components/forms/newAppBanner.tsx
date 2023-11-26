@@ -56,11 +56,11 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     }
 
-    const [bannerImage, setBannerImage] = React.useState<string>("")
+    const [bannerImage, setBannerImage] = React.useState("" as any) // @ mujahed Replace this by creating a cloudinary image upload component
 
 
     const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+        const file = e.target.files?.[0] as any;
 
         if (file) {
             const reader = new FileReader();
@@ -92,17 +92,7 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
                                 <FormItem>
                                     <FormLabel htmlFor="banner_image">Upload Image</FormLabel>
                                     <FormControl>
-                                        {/* <Input
-                                            id="banner_image"
-                                            placeholder="eg.  Get 10% off on your first order"
-                                            type="file"
-                                            autoCapitalize="none"
 
-                                            autoComplete="fullname"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        /> */}
                                         <Input
                                             id="banner_image"
                                             type="file"
@@ -113,6 +103,7 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
                                             }}
                                             disabled={isLoading}
                                         />
+                                        {/* @ mujahed Replace this by creating a cloudinary image upload component */}
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
