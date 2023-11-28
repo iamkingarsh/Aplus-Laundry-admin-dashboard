@@ -170,7 +170,7 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
             <div className="">
                 {bannerImage ?
-                    <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex  items-center">
+                    <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
 
                         <Image src={bannerImage} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
                         <div className="absolute text-white text-left p-4 ">
@@ -179,13 +179,12 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
                         </div>
                     </Card>
                     :
-                    <Card className="w-[400px] flex-col relative m-auto h-48 overflow-hidden flex  items-center justify-center">
+                    <Card className="w-[400px] flex-col relative m-auto h-48 overflow-hidden flex  border-2 items-center justify-center">
                         <h1 className="text-2xl font-bold">Preview</h1>
 
                         <p className="text-xs">Select an image to see preview</p>
                     </Card>
                 }
-
             </div>
 
 

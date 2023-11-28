@@ -1,9 +1,22 @@
 import { Button } from '@/components/ui/button'
+import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
 import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { columns } from './components/columns'
+
+const BannersData = [
+    {
+        title: "Flat 10% Off",
+        desc: "Get 10% off use code 'Wel10' "
+    },
+    {
+        title: "Flat 20% Off",
+        desc: "Get 20% off use code 'Wel20' "
+    }
+] as any;
 
 export default function page() {
     return (
@@ -18,7 +31,10 @@ export default function page() {
                 </Link>
             </div>
             <Separator orientation='horizontal' />
+            <div className="container mx-auto py-10">
+                <DataTable searchKey='title' columns={columns} data={BannersData} />
 
+            </div>
 
         </div>
     )

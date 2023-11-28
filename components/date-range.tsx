@@ -17,10 +17,13 @@ import {
 export function DatePickerWithRange({
     className,
 }: React.HTMLAttributes<HTMLDivElement>) {
+    const today = new Date();
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
-    })
+        from: addDays(today, -7),
+        to: today,
+    });
+
+    const isFutureDate = (day: Date) => day > today;
 
     return (
         <div className={cn("grid gap-2", className)}>
@@ -57,9 +60,10 @@ export function DatePickerWithRange({
                         selected={date}
                         onSelect={setDate}
                         numberOfMonths={2}
+                        disabled={(day) => isFutureDate(day)}
                     />
                 </PopoverContent>
             </Popover>
         </div>
-    )
+    );
 }
