@@ -31,14 +31,11 @@ interface NewCouponsFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const formSchema = z.object({
     discount_type: z.enum(["percentage", "fixed"]),
-    discount_value: z.number().min(2, { message: "Discount value is required" }),
-    disconnt_title: z.string().min(2, { message: "Discount title is required" }),
-    discount_description: z.string().min(2, { message: "Discount description is required" }),
+    discount_value: z.string().min(2, { message: "Discount value is required" }),
     discount_code: z.string().toUpperCase().min(2, { message: "Discount code is required" }),
     discount_expiry_date: z.date(),
-    discount_usage_limit: z.number().min(2, { message: "Discount usage limit is required" }),
-
-    discount_minimum_purchase_amount: z.number().optional()
+    discount_usage_limit: z.string(),
+    discount_minimum_purchase_amount: z.string().optional()
 })
 
 
@@ -59,15 +56,15 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
         resolver: zodResolver(formSchema),
         defaultValues: {
             discount_type: "percentage",
-            discount_value: 0,
+            discount_value: "0",
             discount_expiry_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-            discount_usage_limit: 0,
-            discount_minimum_purchase_amount: 0,
+            discount_usage_limit: "0",
+            discount_minimum_purchase_amount: "0",
             discount_code: couponCode,
         },
 
     })
-    const [discountCode, setDiscountCode] = React.useState<string>(form.watch("discount_code"))
+
 
 
 
@@ -80,7 +77,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
         setTimeout(() => {
             setIsLoading(false)
 
-            toast.success('Customer created successfully')
+            toast.success('Coupon created successfully')
         }, 3000) // remove this timeout and add submit logic
 
     }
@@ -127,7 +124,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                             </FormItem>
                         )}
                     />
-                    <div className={`grid grid-cols-${gap} gap-3`}>
+                    <div className={`grid grid-cols-${gap} gap-4 `}>
                         {/* <div className={`grid grid-cols-2 gap-3`}> */}
                         <FormField
                             name="discount_type"
@@ -165,6 +162,33 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                             )}
                         />
                         <FormField
+                            name="discount_value"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="discount_value">Discount Value</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
+                                            <Input
+                                                id="discount_value"
+                                                type="number"
+                                                placeholder={form.watch("discount_type") === "percentage" ? "eg. 10" : "eg. 50"}
+                                                autoCapitalize="none"
+
+                                                className=""
+
+                                                autoCorrect="off"
+                                                disabled={isLoading}
+                                                {...field}
+                                            />
+                                            {form.watch("discount_type") === "percentage" ? <Percent className="absolute right-4 top-3 h-4 w-4 opacity-50" /> : <IndianRupee className="absolute right-4 top-3 h-4 w-4 opacity-50" />}
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
                             name="discount_expiry_date"
                             control={form.control}
                             render={({ field }) => (
@@ -178,7 +202,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                                                     <Button
                                                         variant={"outline"}
                                                         className={cn(
-                                                            "w-[240px] pl-3 text-left font-normal",
+                                                            "w-full pl-3 text-left font-normal",
                                                             !field.value && "text-muted-foreground"
                                                         )}
                                                     >
@@ -210,18 +234,18 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                             )}
                         />
                         <FormField
-                            name="discount_value"
+                            name="discount_minimum_purchase_amount"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="discount_value">Discount Value</FormLabel>
+                                    <FormLabel htmlFor="discount_minimum_purchase_amount">Min. Purchase Amount</FormLabel>
                                     <FormControl>
                                         <div className="relative">
 
                                             <Input
-                                                id="discount_value"
+                                                id="discount_minimum_purchase_amount"
                                                 type="text"
-                                                placeholder={form.watch("discount_type") === "percentage" ? "eg. 10" : "eg. 500"}
+                                                placeholder="eg. 500"
                                                 autoCapitalize="none"
 
                                                 className=""
@@ -230,14 +254,45 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                                                 disabled={isLoading}
                                                 {...field}
                                             />
-                                            {form.watch("discount_type") === "percentage" ? <Percent className="absolute right-2 top-3 h-4 w-4 opacity-50" /> : <IndianRupee className="absolute right-2 top-3 h-4 w-4 opacity-50" />}
+                                            <IndianRupee className="absolute right-4 top-3 h-4 w-4 opacity-50" />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            name="discount_usage_limit"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="discount_usage_limit">Usage Limit</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
 
+                                            <Input
+                                                id="discount_usage_limit"
+                                                type="number"
+                                                placeholder="eg. 1"
+                                                autoCapitalize="none"
+
+                                                className=""
+
+                                                autoCorrect="off"
+                                                disabled={isLoading}
+                                                {...field}
+                                            />
+                                            {/* <IndianRupee className="absolute right-4 top-3 h-4 w-4 opacity-50" /> */}
+
+                                        </div>
+                                    </FormControl>
+                                    <FormDescription>
+                                        Enter Number of times this coupon can be used, leave blank or enter 0 for unlimited usage
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                     </div>
                     <div className='' >
@@ -269,9 +324,11 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                                         <Clipboard className='h-4 w-4 cursor-pointer' onClick={() => { navigator.clipboard.writeText(form.watch("discount_code").toUpperCase()); toast.success("Copied to Clipboard") }} />
                                     </div>
                                     <div>
-                                        <li className='text-sm opacity-70'>{form.watch("discount_type")} discount</li>
-                                        {form.watch("discount_value") > 0 && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
+                                        <li className='text-sm opacity-70'>{form.watch("discount_type") == 'percentage' ? 'Percentage' : 'Fixed'} discount</li>
+                                        {form.watch("discount_value") > "0" && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
                                         {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date").toDateString()}</li>}
+                                        <li className='text-sm opacity-70 '>{form.watch("discount_minimum_purchase_amount") != "0" && 'Rs. '}{form.watch("discount_minimum_purchase_amount") != "0" && form.watch("discount_minimum_purchase_amount")} {form.watch("discount_minimum_purchase_amount") == "0" && "No "} Min purchase amount is required to avail this discount</li>
+                                        <li className='text-sm opacity-70 '>{form.watch("discount_usage_limit") != "0" && form.watch("discount_usage_limit")} {form.watch("discount_usage_limit") != "0" && "Time(s)"} {form.watch("discount_usage_limit") != "0" && "Unlimited"} usage limit</li>
 
 
                                     </div>
