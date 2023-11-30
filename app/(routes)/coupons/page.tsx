@@ -11,8 +11,8 @@ import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
 
 export const metadata: Metadata = {
-    title: 'Create New Customer | APLus Laundry',
-    description: 'Create a New customer | APLus Laundry',
+    title: 'Coupon Codes | APLus Laundry',
+    description: ' Manage your coupons here! ',
 }
 
 interface Props {
