@@ -1,0 +1,292 @@
+"use client"
+
+import * as React from "react"
+import * as z from "zod"
+
+import { cn } from "@/lib/utils"
+import { Icons } from "../ui/icons"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { useForm } from "react-hook-form"
+import { Form } from "../ui/form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CalendarIcon, Clipboard, Copy, Dot, IndianRupee, Percent, Plus } from "lucide-react"
+import toast from "react-hot-toast"
+import { Textarea } from "../ui/textarea"
+import { Card, CardHeader } from "../ui/card"
+import Image from "next/image"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { format } from "date-fns"
+import { Calendar } from "../ui/calendar"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
+import { Separator } from "../ui/separator"
+import Heading from "../ui/heading"
+var voucher_codes = require('voucher-code-generator');
+
+interface NewCouponsFormProps extends React.HTMLAttributes<HTMLDivElement> {
+    gap: number
+}
+
+const formSchema = z.object({
+    discount_type: z.enum(["percentage", "fixed"]),
+    discount_value: z.number().min(2, { message: "Discount value is required" }),
+    disconnt_title: z.string().min(2, { message: "Discount title is required" }),
+    discount_description: z.string().min(2, { message: "Discount description is required" }),
+    discount_code: z.string().toUpperCase().min(2, { message: "Discount code is required" }),
+    discount_expiry_date: z.date(),
+    discount_usage_limit: z.number().min(2, { message: "Discount usage limit is required" }),
+
+    discount_minimum_purchase_amount: z.number().optional()
+})
+
+
+export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps) {
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [couponCode, setCouponCode] = React.useState<string>("")
+
+    const generateCouponCode = () => {
+
+        setCouponCode(voucher_codes.generate({
+            length: 8,
+            count: 5
+        }))
+        console.log(couponCode)
+        console.log('function_executing')
+    }
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            discount_type: "percentage",
+            discount_value: 0,
+            discount_expiry_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+            discount_usage_limit: 0,
+            discount_minimum_purchase_amount: 0,
+            discount_code: couponCode,
+        },
+
+    })
+    const [discountCode, setDiscountCode] = React.useState<string>(form.watch("discount_code"))
+
+
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        // Add submit logic here
+
+        setIsLoading(true)
+
+
+        setTimeout(() => {
+            setIsLoading(false)
+
+            toast.success('Customer created successfully')
+        }, 3000) // remove this timeout and add submit logic
+
+    }
+
+
+
+
+
+    return (
+        <div className={cn("grid grid-cols-2 gap-3 ", className)} {...props}>
+
+
+            <Form {...form} >
+
+                <form onSubmit={form.handleSubmit(onSubmit)} className=" grid grid-cols-1 place-content-start gap-3">
+                    <FormField
+                        name="discount_code"
+                        control={form.control}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="discount_code">Coupon Code</FormLabel>
+                                <FormControl>
+                                    <div className="w-full flex gap-2">
+
+                                        <Input
+                                            id="discount_code"
+                                            type="text"
+                                            placeholder="eg. Welcome50"
+                                            autoCapitalize="none"
+                                            defaultValue={couponCode}
+                                            className="uppercase"
+
+                                            autoCorrect="off"
+                                            disabled={isLoading}
+                                            {...field || couponCode}
+                                        />
+                                        {/* <div>
+
+                                            <span className="cursor-pointer" onClick={() => generateCouponCode}>Generate</span>
+                                        </div> */}
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className={`grid grid-cols-${gap} gap-3`}>
+                        {/* <div className={`grid grid-cols-2 gap-3`}> */}
+                        <FormField
+                            name="discount_type"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="discount_type">Coupon Type</FormLabel>
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="percentage" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Percentage discount
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="fixed" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Fixed amount discount
+                                                </FormLabel>
+                                            </FormItem>
+
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="discount_expiry_date"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="discount_expiry_date">Expiry Date</FormLabel>
+                                    <FormControl>
+
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant={"outline"}
+                                                        className={cn(
+                                                            "w-[240px] pl-3 text-left font-normal",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value ? (
+                                                            format(field.value, "PPP")
+                                                        ) : (
+                                                            <span>Pick a date</span>
+                                                        )}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+                                                    disabled={(date) =>
+                                                        date < new Date() || date < new Date("1900-01-01")
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        {/* @ mujahed Replace this by creating a cloudinary image upload component */}
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="discount_value"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="discount_value">Discount Value</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
+
+                                            <Input
+                                                id="discount_value"
+                                                type="text"
+                                                placeholder={form.watch("discount_type") === "percentage" ? "eg. 10" : "eg. 500"}
+                                                autoCapitalize="none"
+
+                                                className=""
+
+                                                autoCorrect="off"
+                                                disabled={isLoading}
+                                                {...field}
+                                            />
+                                            {form.watch("discount_type") === "percentage" ? <Percent className="absolute right-2 top-3 h-4 w-4 opacity-50" /> : <IndianRupee className="absolute right-2 top-3 h-4 w-4 opacity-50" />}
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+
+                    </div>
+                    <div className='' >
+                        <Button type="submit" className="w-fit" disabled={isLoading}>
+                            {isLoading && (
+                                <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                            )}
+                            Create
+                        </Button>
+                    </div>
+
+                </form>
+            </Form>
+
+            <div className=' flex items-start gap-3'>
+                <Separator orientation='vertical' />
+                <div className='flex flex-col gap-3 w-full'>
+                    <Heading className='leading-tight text-2xl' title='Summary' />
+                    <Separator orientation='horizontal' />
+                    <div>
+                        <Card>
+                            <CardHeader>
+                                <Heading className='leading-tight text-xl' title='Discount Details' />
+                                <Separator orientation='horizontal' />
+                                {form.watch("discount_code") ? <div className='flex flex-col gap-3'>
+                                    <div className="flex gap-3 items-center w-fit border-2 rounded-md bg-slate-100 dark:bg-slate-950 p-2 border-dashed">
+
+                                        <p className='text-xl font-semibold'>{form.watch("discount_code").toUpperCase()}</p>
+                                        <Clipboard className='h-4 w-4 cursor-pointer' onClick={() => { navigator.clipboard.writeText(form.watch("discount_code").toUpperCase()); toast.success("Copied to Clipboard") }} />
+                                    </div>
+                                    <div>
+                                        <li className='text-sm opacity-70'>{form.watch("discount_type")} discount</li>
+                                        {form.watch("discount_value") > 0 && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
+                                        {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date").toDateString()}</li>}
+
+
+                                    </div>
+                                </div> : <p className='text-base font-semibold'>No Summary Availabale</p>}
+                            </CardHeader>
+                        </Card>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div >
+    )
+}
+
+

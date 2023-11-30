@@ -29,7 +29,7 @@ export function Sidebar({ className }: SidebarProps) {
                         </div> :
                             <div className="flex py-2 border-b-2 px-4 mb-4 gap-2 items-center">
                                 <LogoComponent width={10} height={10} className="w-9 h-9" />
-                                <h2 className="text-xl font-bold tracking-tight">
+                                <h2 className="text-xl font-bold tracking-tight leading-tight">
                                     {BrandName}
                                 </h2>
 

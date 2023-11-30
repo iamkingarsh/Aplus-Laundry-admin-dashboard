@@ -3,6 +3,9 @@ import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
 import React from 'react'
 import { columns } from './components/columns'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { PlusIcon } from 'lucide-react'
 
 const DeliveryAgentsData = [
     { "id": 1, "fullname": "Stacy Sokale", "email": "ssokale0@unicef.org", "mobile": "931-110-1570", "status": "active", "address": "3606 Tony Crossing", "profilepic": "https://robohash.org/nihilperferendisid.png?size=50x50&set=set1" },
@@ -58,12 +61,16 @@ const DeliveryAgentsData = [
 export default function page() {
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
-            <div className="topbar w-full flex justify-between">
+            <div className="topbar w-full flex justify-between items-center">
                 <div>
                     <Heading className='leading-tight' title='Your Delivery Agents' />
                     <p className='text-muted-foreground text-sm'>Manage Your Delivery Agents</p>
                 </div>
+                <Link href={'/delivery-partners/create-new'}>
+                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+                </Link>
             </div>
+
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
                 <DataTable searchKey='email' columns={columns} data={DeliveryAgentsData} />
