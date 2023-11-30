@@ -6,6 +6,7 @@ import { HomeIcon, LucidePlusCircle, PlusIcon } from 'lucide-react'
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { NewOrderForm } from './forms/newOrderForm';
 import { NewCustomerForm } from './forms/newCustomerForm';
+import { NewCouponsForm } from './forms/newCouponForm'
 
 function CreateNew() {
 
@@ -49,7 +50,12 @@ function CreateNew() {
                     New Category
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => {
+                    GlobalModal.title = "Create New Coupon"
+                    GlobalModal.description = "Create a new Coupon Code "
+                    GlobalModal.children = <NewCouponsForm gap={1} />
+                    GlobalModal.onOpen()
+                }}>
                     <LucidePlusCircle className='w-4 mr-2' />
                     New Coupon
 
