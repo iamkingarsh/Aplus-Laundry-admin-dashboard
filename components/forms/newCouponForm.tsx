@@ -249,6 +249,8 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                                                 autoCapitalize="none"
 
                                                 className=""
+                                                defaultValue="0"
+                                                datatype="number"
 
                                                 autoCorrect="off"
                                                 disabled={isLoading}
@@ -280,6 +282,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
 
                                                 autoCorrect="off"
                                                 disabled={isLoading}
+
                                                 {...field}
                                             />
                                             {/* <IndianRupee className="absolute right-4 top-3 h-4 w-4 opacity-50" /> */}
@@ -328,7 +331,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
                                         {form.watch("discount_value") > "0" && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
                                         {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date").toDateString()}</li>}
                                         <li className='text-sm opacity-70 '>{form.watch("discount_minimum_purchase_amount") != "0" && 'Rs. '}{form.watch("discount_minimum_purchase_amount") != "0" && form.watch("discount_minimum_purchase_amount")} {form.watch("discount_minimum_purchase_amount") == "0" && "No "} Min purchase amount is required to avail this discount</li>
-                                        <li className='text-sm opacity-70 '>{form.watch("discount_usage_limit") != "0" && form.watch("discount_usage_limit")} {form.watch("discount_usage_limit") != "0" && "Time(s)"} {form.watch("discount_usage_limit") != "0" && "Unlimited"} usage limit</li>
+                                        <li className='text-sm opacity-70 '>{form.watch("discount_usage_limit") != "0" && form.watch("discount_usage_limit")} {form.watch("discount_usage_limit") != "0" && "Time(s)"} {form.watch("discount_usage_limit") == "0" && "Unlimited"} usage limit</li>
 
 
                                     </div>
