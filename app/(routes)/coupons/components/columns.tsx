@@ -18,6 +18,8 @@ import { MobileIcon } from "@radix-ui/react-icons"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import CellAction from "./cell-action"
 import toast from "react-hot-toast"
+import { useState } from "react"
+import SwitchComponent from "./switch"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type CouponsColumns = {
@@ -29,9 +31,6 @@ export type CouponsColumns = {
     status: string
     expiry_date: string
 }
-
-
-
 
 
 export const columns: ColumnDef<CouponsColumns>[] = [
@@ -150,12 +149,8 @@ export const columns: ColumnDef<CouponsColumns>[] = [
     {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <Switch checked={row.original.status === 'Active'} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => { }} />
-
-            </div>
-        ),
+        cell: ({ row }) => <SwitchComponent data={row.original} />
+        ,
     },
     {
         accessorKey: "expiry_date",
