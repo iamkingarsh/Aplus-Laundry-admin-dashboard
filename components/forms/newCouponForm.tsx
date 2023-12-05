@@ -14,16 +14,13 @@ import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon, Clipboard, Copy, Dot, IndianRupee, Percent, Plus } from "lucide-react"
 import toast from "react-hot-toast"
-import { Textarea } from "../ui/textarea"
 import { Card, CardHeader } from "../ui/card"
-import Image from "next/image"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { format } from "date-fns"
 import { Calendar } from "../ui/calendar"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 import { Separator } from "../ui/separator"
 import Heading from "../ui/heading"
-var voucher_codes = require('voucher-code-generator');
 
 interface NewCouponsFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -63,15 +60,7 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [couponCode, setCouponCode] = React.useState<string>("")
 
-    const generateCouponCode = () => {
 
-        setCouponCode(voucher_codes.generate({
-            length: 8,
-            count: 5
-        }))
-        console.log(couponCode)
-        console.log('function_executing')
-    }
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {

@@ -7,8 +7,8 @@ import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 
 export const metadata: Metadata = {
-    title: 'Create New Coupon | APLus Laundry',
-    description: 'Create a New Coupon | APLus Laundry',
+    title: 'Edit Coupon Discounts | APLus Laundry',
+    description: 'Edit your coupon discounts | APLus Laundry',
 }
 
 interface Props {
@@ -18,13 +18,13 @@ interface Props {
 }
 
 
-export default function CouponsPage({ params }: Props) {
+export default function EditCouponsPage({ params }: Props) {
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
-                    <Heading className='leading-tight' title='Create New Coupon' />
-                    <p className='text-muted-foreground text-sm'>Fill in the form below to create a new coupon code</p>
+                    <Heading className='leading-tight' title='Edit Coupon Discounts' />
+                    <p className='text-muted-foreground text-sm'>Edit your coupon discounts</p>
                 </div>
 
             </div>
