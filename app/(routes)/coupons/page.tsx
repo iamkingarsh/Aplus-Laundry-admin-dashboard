@@ -29,7 +29,8 @@ const CouponsData = [
         discount_value: '10',
         min_order_value: '100',
         status: 'Active',
-        expiry_date: '2021-10-10'
+        expiry_date: '2021-10-10',
+        couponid: 'sdggggesg'
     },
     {
         coupon_code: 'WELCOME10',
@@ -37,7 +38,8 @@ const CouponsData = [
         discount_value: '10',
         min_order_value: '199',
         status: 'Deactive',
-        expiry_date: '2022-10-10'
+        expiry_date: '2022-10-10',
+        couponid: 'hsdhhhsdh'
     },
 
 ] as any

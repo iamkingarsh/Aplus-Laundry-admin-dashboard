@@ -30,6 +30,7 @@ export type CouponsColumns = {
     min_order_value: string
     status: string
     expiry_date: string
+    couponid: string
 }
 
 

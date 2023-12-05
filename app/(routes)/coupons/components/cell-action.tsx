@@ -6,6 +6,7 @@ import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
 import { CouponsColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     data: CouponsColumns
@@ -17,6 +18,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
         console.log('delete')
         GlobalModal.onClose()
     }
+    const router = useRouter()
     return (
         <div>
             <DropdownMenu>
@@ -29,10 +31,21 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                 <DropdownMenuContent className="gap-2" align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={
+                            () => {
+                                router.push(`/coupons/${data.couponid}`)
+                            }
+                        }
+                    >
                         <Eye className="mr-2 h-4 w-4" />
                         View Coupon Details</DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={
+                            () => {
+                                router.push(`/coupons/edit/${data.couponid}`)
+                            }
+                        }>
                         <Edit2 className="mr-2 h-4 w-4" />
                         Edit Coupon Details</DropdownMenuItem>
                     <DropdownMenuItem
