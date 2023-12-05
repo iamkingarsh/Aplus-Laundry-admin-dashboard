@@ -38,6 +38,26 @@ const formSchema = z.object({
     discount_minimum_purchase_amount: z.string().optional()
 })
 
+const CustomInput = (disabledKeys: any, field: any, ...props: any[]) => {
+    const [value, setValue] = React.useState<string | number | readonly string[] | undefined>(field);
+
+    const handleKeyDown = (event: any) => {
+        // Check if the pressed key is in the disabledKeys array
+        if (disabledKeys.includes(event.keyCode)) {
+            // Prevent the default action for the disabled keys
+            event.preventDefault();
+        }
+    };
+
+    return (
+        <Input
+            {...props}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+        />
+    );
+};
 
 export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
