@@ -9,7 +9,7 @@ export default function page() {
             <div>
                 <h3 className="text-lg font-medium">Profile</h3>
                 <p className="text-sm text-muted-foreground">
-                    Edit your profile details below.
+                    Edit your profile  information. Your profile is never shown publicly.
                 </p>
             </div>
             <Separator />
