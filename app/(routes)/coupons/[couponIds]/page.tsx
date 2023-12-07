@@ -27,7 +27,8 @@ const CouponCodeData = [
         discount_value: '10',
         min_order_value: '100',
         status: 'Active',
-        expiry_date: '2021-10-10'
+        expiry_date: '2021-10-10',
+        couponid: 'sdggggesg'
 
     }
 ] as any
@@ -43,7 +44,7 @@ export default function CouponPage({ params }: Props) {
                     <Heading className='leading-tight' title={CouponCodeData[0].coupon_code} />
                     {/* <p className='text-muted-foreground text-sm'>Fill in the form below to create a new customer</p> */}
                 </div>
-                <Link href={'/coupons/create-new'}>
+                <Link href={`/coupons/edit/${CouponCodeData[0].couponid}`}>
                     <Button variant='default'>Edit Coupon <Pencil className='w-4 ml-2' /></Button>
                 </Link>
             </div>
