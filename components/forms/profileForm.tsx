@@ -28,6 +28,7 @@ import { Textarea } from "../ui/textarea"
 import toast, { Toast } from "react-hot-toast"
 
 const profileFormSchema = z.object({
+    profilepic: z.string(),
     FullName: z
         .string()
         .min(2, {
@@ -49,7 +50,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-
+    profilepic: "https://avatars.githubusercontent.com/u/1503206?v=4",
     FullName: "Shadcn",
     email: "contact@mohammedarshad.com",
 }
@@ -71,6 +72,20 @@ export function ProfileForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                    control={form.control}
+                    name="profilepic"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Profile Picture</FormLabel>
+                            <FormControl>
+                                <Input type="file" {...field} />
+                            </FormControl>
+
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="FullName"
