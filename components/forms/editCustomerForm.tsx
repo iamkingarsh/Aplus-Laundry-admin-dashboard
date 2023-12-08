@@ -283,12 +283,19 @@ export function EditCustomerForm({ className, gap, customerData, ...props }: Edi
                         />
                     </div>
                     <div className={`${gap === 2 ? 'w-full' : 'grid gap-3 grid-cols-3'}`} >
-                        <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
-                            )}
-                            Update
-                        </Button>
+                        {
+                            form.watch().fullname === customerData.fullname && form.watch().email === customerData.email && form.watch().phoneno === customerData.mobile && form.watch().address === customerData.address && form.watch().city === customerData.city && form.watch().state === customerData.state && form.watch().pincode === customerData.pincode && form.watch().country === 'India'
+                                ? <Button type="submit" className="w-full" disabled>
+                                    Update
+                                </Button>
+                                :
+
+                                <Button type="submit" className="w-full" disabled={isLoading}>
+                                    {isLoading && (
+                                        <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                                    )}
+                                    Update
+                                </Button>}
                     </div>
 
                 </form>
