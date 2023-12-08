@@ -16,7 +16,7 @@ export default function CustomerPage({ params }: Props) {
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
-                    <Heading className='leading-tight' title='Create New Customer' />
+                    <Heading className='leading-tight' title='Customer Details - ' />
                     <p className='text-muted-foreground text-sm'>Fill in the form below to create a new customer</p>
                 </div>
 
