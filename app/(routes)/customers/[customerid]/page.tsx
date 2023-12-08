@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 interface Props {
     params: {
@@ -134,7 +135,11 @@ export default function CustomerPage({ params }: Props) {
                     </Card>
                     <Card >
                         <CardHeader>
-                            <Heading className='text-lg' title='Live Orders' />
+                            <div className='flex items-center justify-between'>
+
+                                <Heading className='text-lg' title='Recent Orders' />
+                                <Button variant='link'>View All</Button>
+                            </div>
                         </CardHeader>
                         <Separator className='mb-2' orientation='horizontal' />
                         <CardContent>
