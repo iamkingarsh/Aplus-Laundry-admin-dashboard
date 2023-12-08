@@ -18,6 +18,7 @@ interface Props {
 
 const customerDetails = [
 
+    AllData[0].status = 'Active',
     AllData[0].emailVerified = true,
     AllData[0].mobileVerified = true,
     AllData[0].city = 'Hyderabad',
@@ -160,5 +161,6 @@ export default function CustomerPage({ params }: Props) {
     )
 }
 
+export { customerData }
 
 
