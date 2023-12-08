@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Delete, Edit, Edit2, MoreHorizontal, ToggleLeft, Trash, User } from "lucide-react"
+import { ArrowUpDown, Delete, Edit, Edit2, Eye, MoreHorizontal, ToggleLeft, Trash, User } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,10 +14,12 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import CellAction from "./cell-action"
+import ImageModal from "./imageModal"
 
 export type CustomersColumns = {
     title: string
     desc: string
+    background: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -70,6 +72,12 @@ export const columns: ColumnDef<CustomersColumns>[] = [
                 </Button>
             )
         },
+    },
+    {
+        accessorKey: "background",
+        header: " Background Image",
+        cell: ({ row }) => <ImageModal data={row.original} />,
+
     },
     {
         id: "actions",

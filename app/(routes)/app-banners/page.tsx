@@ -10,11 +10,13 @@ import { columns } from './components/columns'
 const BannersData = [
     {
         title: "Flat 10% Off",
-        desc: "Get 10% off use code 'Wel10' "
+        desc: "Get 10% off use code 'Wel10' ",
+        background: "/assets/bg.png"
     },
     {
         title: "Flat 20% Off",
-        desc: "Get 20% off use code 'Wel20' "
+        desc: "Get 20% off use code 'Wel20' ",
+        background: "/assets/bg.png "
     }
 ] as any;
 

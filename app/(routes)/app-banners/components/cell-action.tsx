@@ -7,6 +7,8 @@ import React from 'react'
 import { CustomersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
+import { Card } from '@/components/ui/card';
 
 interface Props {
     data: CustomersColumns
@@ -30,9 +32,24 @@ export const CellAction: React.FC<Props> = ({ data }) => {
             <DropdownMenuContent className="gap-2" align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onSelect={() => {
+                        GlobalModal.title = 'Banner Preview'
+                        GlobalModal.description = '  '
+                        GlobalModal.children = <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
+
+                            <Image src={data.background} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
+                            <div className="absolute text-white text-left p-4 ">
+                                <h1 className="text-2xl font-bold">{data.title}</h1>
+                                <p className="text-sm">{data.desc}</p>
+                            </div>
+                        </Card>
+                        GlobalModal.onOpen()
+                    }
+                    }
+                >
                     <User className="mr-2 h-4 w-4" />
-                    View Banner Details</DropdownMenuItem>
+                    Banner Preview</DropdownMenuItem>
                 <DropdownMenuItem>
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit Banner Details</DropdownMenuItem>
