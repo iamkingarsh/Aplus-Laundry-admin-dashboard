@@ -1,7 +1,7 @@
 import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { AllData } from '../page';
-import { Mail, MapPin, Phone, Pin, User } from 'lucide-react';
+import { Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +35,9 @@ export default function CustomerPage({ params }: Props) {
                     <Heading className='leading-tight' title={`Customer Details - ${customerData.fullname}`} />
                     <p className='text-muted-foreground text-sm'>Customer ID: {params.customerid}</p>
                 </div>
-
+                <Link href={`/customers/edit/${params.customerid}`}>
+                    <Button variant='default'>Edit Customer Details <Pencil className='w-4 ml-2' /></Button>
+                </Link>
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto grid  grid-cols-2 gap-4 py-10">
