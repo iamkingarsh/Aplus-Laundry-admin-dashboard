@@ -17,6 +17,7 @@ import CellAction from "./cell-action"
 import ImageModal from "./imageModal"
 
 export type CustomersColumns = {
+    id: string
     title: string
     desc: string
     background: string

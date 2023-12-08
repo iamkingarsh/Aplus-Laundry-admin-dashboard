@@ -9,6 +9,7 @@ import { Alert } from '@/components/forms/Alert';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     data: CustomersColumns
@@ -16,6 +17,7 @@ interface Props {
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
+    const router = useRouter()
     const deleteOrder = () => {
         console.log('delete banner')
         GlobalModal.onClose()
@@ -50,7 +52,12 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                 >
                     <User className="mr-2 h-4 w-4" />
                     Banner Preview</DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onSelect={() => {
+                        router.push(`/app-banners/edit/${data.id}`)
+                    }
+                    }
+                >
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit Banner Details</DropdownMenuItem>
                 <DropdownMenuItem

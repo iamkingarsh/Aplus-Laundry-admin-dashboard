@@ -33,7 +33,6 @@ const bannerdata = [
 
 
 export default function EditAppBannerPage({ params }: Props) {
-    const [checked, setChecked] = React.useState(bannerdata[0].status === 'Active' ? true : false)
     const useModal = useGlobalModal()
     const router = useRouter()
 
@@ -52,7 +51,7 @@ export default function EditAppBannerPage({ params }: Props) {
                     <p className='text-muted-foreground text-sm'>Edit or update app banner</p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!checked)} />
+
                     <Button
                         onClick={() => {
 
