@@ -27,6 +27,8 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { ScrollArea } from "../ui/scroll-area"
 import Heading from "../ui/heading"
 import { set } from "date-fns"
+import { Separator } from "../ui/separator"
+import { Card, CardContent, CardHeader } from "../ui/card"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -727,7 +729,38 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                 </form>
             </Form>
+            <Separator orientation="horizontal" />
+            <div>
+                <div className="flex flex-row items-center gap-2">
+                    {form.watch("order_type") === 'Laundry per pair' &&
+                        Object.keys(selectedItems).length > 0 && <Card className="w-full">
+                            <CardHeader>
+                                Selected Items for Order
+                            </CardHeader>
+                            <CardContent>
 
+                                <div className="flex flex-col gap-2">
+                                    {Object.keys(selectedItems).map((key, index) => (
+                                        <div className="flex flex-row justify-between items-center" key={index}>
+                                            <div className="flex flex-row items-center gap-2">
+                                                <div>{key}</div>
+                                                <div className="flex flex-row items-center gap-2">
+                                                    <Button onClick={() => RemoveProductQunatity(key, selectedItems[key].price)} variant="outline">-</Button>
+
+                                                    {selectedItems[key].quantity}
+                                                    <Button onClick={(e) => AddProductQunatity(key, e, selectedItems[key].price)} variant="outline">+</Button>
+                                                </div>
+                                            </div>
+                                            <div>₹{selectedItems[key].price * selectedItems[key].quantity}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+
+
+                        </Card>}
+                </div>
+            </div>
 
 
 
