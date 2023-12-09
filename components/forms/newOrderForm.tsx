@@ -12,7 +12,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CheckIcon, Plus, ServerIcon } from "lucide-react"
+import { CheckIcon, Plus, ServerIcon, Trash } from "lucide-react"
 import toast from "react-hot-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { LaundrtProducts, OrdersStatuses, Services } from "@/lib/constants"
@@ -29,6 +29,7 @@ import Heading from "../ui/heading"
 import { set } from "date-fns"
 import { Separator } from "../ui/separator"
 import { Card, CardContent, CardHeader } from "../ui/card"
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -731,7 +732,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             </Form>
             <Separator orientation="horizontal" />
             <div>
-                <div className="flex flex-row items-center gap-2">
+                <div className={`grid grid-cols-${gap === 3 ? '2' : '1'}  gap-2`}>
                     {form.watch("order_type") === 'Laundry per pair' &&
                         Object.keys(selectedItems).length > 0 && <Card className="w-full">
                             <CardHeader>
@@ -739,21 +740,54 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                             </CardHeader>
                             <CardContent>
 
-                                <div className="flex flex-col gap-2">
-                                    {Object.keys(selectedItems).map((key, index) => (
-                                        <div className="flex flex-row justify-between items-center" key={index}>
-                                            <div className="flex flex-row items-center gap-2">
-                                                <div>{key}</div>
-                                                <div className="flex flex-row items-center gap-2">
-                                                    <Button onClick={() => RemoveProductQunatity(key, selectedItems[key].price)} variant="outline">-</Button>
+                                <div className="flex flex-col w-full gap-2">
+                                    {/* // <div className="flex flex-row justify-between items-center" key={index}>
+                                        //     <div className="flex flex-row items-center gap-2">
+                                        //         <div>{key}</div>
+                                        //         <div className="flex flex-row items-center gap-2">
+                                        //             <Button onClick={() => RemoveProductQunatity(key, selectedItems[key].price)} variant="outline">-</Button>
 
-                                                    {selectedItems[key].quantity}
-                                                    <Button onClick={(e) => AddProductQunatity(key, e, selectedItems[key].price)} variant="outline">+</Button>
-                                                </div>
-                                            </div>
-                                            <div>₹{selectedItems[key].price * selectedItems[key].quantity}</div>
+                                        //             {selectedItems[key].quantity}
+                                        //             <Button onClick={(e) => AddProductQunatity(key, e, selectedItems[key].price)} variant="outline">+</Button>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div>₹{selectedItems[key].price * selectedItems[key].quantity}</div>
+                                        // </div> */}
+                                    <div>
+                                        <Table className="w-full">
+
+                                            <TableHeader>
+                                                <TableRow>
+
+                                                    <TableHead className="text-left">Item Name</TableHead>
+                                                    <TableHead className="text-left">Price</TableHead>
+                                                    <TableHead className="text-left">Quantity</TableHead>
+                                                    <TableHead className="text-left">Total Amount</TableHead>
+                                                    <TableHead className="text-left">Action</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {Object.keys(selectedItems).map((key, index) => (
+                                                    <TableRow key={index}>
+
+                                                        <TableCell>{key}</TableCell>
+
+                                                        <TableCell className="text-left">₹{selectedItems[key].price}</TableCell>
+                                                        <TableCell className="text-left">{selectedItems[key].quantity}</TableCell>
+                                                        <TableCell className="text-left">₹{selectedItems[key].price * selectedItems[key].quantity}</TableCell>
+                                                        <TableCell className="text-left"><Button onClick={() => RemoveProductQunatity(key, selectedItems[key].price)} variant="outline"><Trash className="h-4 w-4" /></Button></TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                        <Separator orientation="horizontal" />
+                                        <div className="flex my-2 flex-row justify-between items-center">
+                                            <div className="font-semibold">Total Amount</div>
+                                            <div className="font-semibold">₹{cartTotal}</div>
+
+
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
                             </CardContent>
 

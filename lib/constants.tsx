@@ -118,7 +118,7 @@ const LaundrtProducts = [
         title: 'Shirts',
         value: 'shirts',
         path: '/products/shirts',
-        price: 50,
+        price: 20,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -126,7 +126,7 @@ const LaundrtProducts = [
         title: 'TShirts',
         value: 'tshirts',
         path: '/products/tshirts',
-        price: 50,
+        price: 45,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -134,7 +134,7 @@ const LaundrtProducts = [
         title: 'Trousers',
         value: 'trousers',
         path: '/products/trousers',
-        price: 50,
+        price: 23,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -142,7 +142,7 @@ const LaundrtProducts = [
         title: 'Jeans',
         value: 'jeans',
         path: '/products/jeans',
-        price: 50,
+        price: 78,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -150,7 +150,7 @@ const LaundrtProducts = [
         title: 'Shorts',
         value: 'shorts',
         path: '/products/shorts',
-        price: 50,
+        price: 10,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -158,7 +158,7 @@ const LaundrtProducts = [
         title: 'Kurtas',
         value: 'kurtas',
         path: '/products/kurtas',
-        price: 50,
+        price: 20,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -166,7 +166,7 @@ const LaundrtProducts = [
         title: 'Kurtis',
         value: 'kurtis',
         path: '/products/kurtis',
-        price: 50,
+        price: 20,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -174,7 +174,7 @@ const LaundrtProducts = [
         title: 'Sarees',
         value: 'sarees',
         path: '/products/sarees',
-        price: 50,
+        price: 60,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -190,7 +190,7 @@ const LaundrtProducts = [
         title: 'Blankets',
         value: 'blankets',
         path: '/products/blankets',
-        price: 50,
+        price: 15,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -198,7 +198,7 @@ const LaundrtProducts = [
         title: 'Curtains',
         value: 'curtains',
         path: '/products/curtains',
-        price: 50,
+        price: 85,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -206,14 +206,14 @@ const LaundrtProducts = [
         title: 'CushionCovers',
         value: 'cushioncovers',
         path: '/products/cushion-covers',
-        price: 50,
+        price: 20,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'PillowCovers',
         value: 'pillowcovers',
-        price: 50,
+        price: 20,
 
         path: '/products/pillow-covers',
         icon: <ServerIcon className="w-3 mr-2" />
@@ -222,7 +222,7 @@ const LaundrtProducts = [
         title: 'Towels',
         value: 'towels',
         path: '/products/towels',
-        price: 50,
+        price: 55,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
@@ -230,15 +230,7 @@ const LaundrtProducts = [
         title: 'Masks',
         value: 'masks',
         path: '/products/masks',
-        price: 50,
-
-        icon: <ServerIcon className="w-3 mr-2" />
-    },
-    {
-        title: 'Others',
-        value: 'others',
-        path: '/products/others',
-        price: 50,
+        price: 15,
 
         icon: <ServerIcon className="w-3 mr-2" />
     },
