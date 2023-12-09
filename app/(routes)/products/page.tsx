@@ -85,7 +85,6 @@ const LaundrtProducts = [
     {
         title: 'CushionCovers',
         value: 'cushioncovers',
-
         icon: <ServerIcon className="w-3 mr-2" />,
         price: 50,
         status: 'Active'
@@ -93,7 +92,6 @@ const LaundrtProducts = [
     {
         title: 'PillowCovers',
         value: 'pillowcovers',
-
         icon: <ServerIcon className="w-3 mr-2" />,
         price: 50,
         status: 'Active'

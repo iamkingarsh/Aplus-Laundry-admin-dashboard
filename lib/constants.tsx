@@ -213,6 +213,8 @@ const LaundrtProducts = [
     {
         title: 'PillowCovers',
         value: 'pillowcovers',
+        price: 50,
+
         path: '/products/pillow-covers',
         icon: <ServerIcon className="w-3 mr-2" />
     },

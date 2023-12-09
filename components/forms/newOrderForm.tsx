@@ -25,6 +25,7 @@ import { NewCustomerForm } from "./newCustomerForm"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
+import Heading from "../ui/heading"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -213,7 +214,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         };
 
         updateCartTotal();
-    }, [selectedItems])
+    }, [selectedItems, cartTotal])
 
 
 
@@ -516,7 +517,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                     >
 
                                                                         <div>
-                                                                            {value.title} - ₹{value.price}
+                                                                            {value.title} - ₹{value.price * selectedItems[value.title]?.quantity || value.price}
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
                                                                             <Button onClick={() => RemoveProductQunatity(value.title, value.price)} variant="outline">-</Button>
@@ -530,7 +531,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                             })}
                                                         </div>
                                                     </ScrollArea>
-                                                    <SheetFooter>
+                                                    <SheetFooter className="flex w-full items-center md:justify-between">
                                                         <span> Cart Total: ₹{cartTotal}</span>
                                                         <SheetClose asChild>
                                                             {/* <Button onClick={() => { form.setValue("products", { ...selectedItems }); console.log(form.setValue("products", selectedItems), { ...selectedItems }) }} type="submit">Save changes</Button> */}
@@ -550,6 +551,20 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                                         </DropdownMenuContent>
                                     </DropdownMenu>
+                                    <FormMessage />
+
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="cartTotal"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="delivery_agent"> Total Amount to be collected</FormLabel>
+                                    <div>
+                                        <Heading className='leading-tight' title={`₹${cartTotal}`} />
+                                    </div>
                                     <FormMessage />
 
                                 </FormItem>
