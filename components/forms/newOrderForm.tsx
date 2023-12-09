@@ -26,12 +26,14 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import Heading from "../ui/heading"
+import { set } from "date-fns"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
+const baseFee = 50;
 
 
 const formSchema = z.object({
@@ -39,67 +41,101 @@ const formSchema = z.object({
     ,
     service: z.string().min(1, { message: "Please select a service" }),
     products: z.object({
-        Shirts: z.object({
+        key: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
-
         TShirts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Trousers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Jeans: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Shorts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
-        Kurtas: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Kurtas: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+        }).optional(),
         Kurtis: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Sarees: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Bedsheets: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Blankets: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Curtains: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         CushionCovers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         PillowCovers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Towels: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Masks: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         Others: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
+            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
+            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
     }), //find a way to make this schema dynamic @mujahed
     customer: z.string().min(1, { message: "Please select a customer" }),
@@ -108,13 +144,20 @@ const formSchema = z.object({
     delivery_agent: z.string().optional(),
     cartTotal: z.number().optional(),
 
+
 })
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
-    const GlobalModal = useGlobalModal()
+    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number, } }>({});
+    const [productQuantity, setProductQuantity] = React.useState<number>(1);
+    const [weight, setWeight] = React.useState<number>(0);
+    const [weightBy, setWeightBy] = React.useState<string>('kg');
 
+
+
+    const GlobalModal = useGlobalModal()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -151,8 +194,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
 
-    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number } }>({});
-    const [productQuantity, setProductQuantity] = React.useState<number>(1);
 
 
 
@@ -168,15 +209,42 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     };
 
+    const calculatePriceByWeight = () => {
+        //logic to calculate price by weight
+        if (weightBy === 'kg') {
+            const priceperkg = 50;
+            const price = weight * priceperkg;
+            setCartTotal(price);
+        } else {
+            const priceperkg = 0.05;
+            const price = weight * priceperkg;
+            setCartTotal(price);
+        }
+
+
+    }
+
     const handleSelectChange = (value: string, rate: any) => {
-        if (!selectedItems[value]) {
-            setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
+        if (form.watch("order_type") === 'Laundry per pair') {
+            if (!selectedItems[value]) {
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
 
-        } else if (selectedItems[value]?.quantity === 1) {
-            const updatedSelectedItems = { ...selectedItems };
-            delete updatedSelectedItems[value];
-            setSelectedItems(updatedSelectedItems);
+            } else if (selectedItems[value]?.quantity === 1) {
+                const updatedSelectedItems = { ...selectedItems };
+                delete updatedSelectedItems[value];
+                setSelectedItems(updatedSelectedItems);
 
+            }
+        } else {
+            if (!selectedItems[value]) {
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 } }));
+
+            } else if (selectedItems[value]?.quantity === 1) {
+                const updatedSelectedItems = { ...selectedItems };
+                delete updatedSelectedItems[value];
+                setSelectedItems(updatedSelectedItems);
+
+            }
         }
     };
 
@@ -184,37 +252,74 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         return selectedItems[value] !== undefined;
     };
 
+    const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setWeight(Number(e.target.value));
+    };
+
 
     const RemoveProductQunatity = (value: string, rate: any) => {
-        if (selectedItems[value]?.quantity === 1) {
-            setProductQuantity(1);
-            const updatedSelectedItems = { ...selectedItems };
-            delete updatedSelectedItems[value];
-            setSelectedItems(updatedSelectedItems);
+        if (form.watch("order_type") === 'Laundry per pair') {
 
-        } else if (productQuantity > 1) {
-            setProductQuantity((prev) => prev - 1);
-            setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: rate || 0 } }));
+            if (selectedItems[value]?.quantity === 1) {
+                setProductQuantity(1);
+                const updatedSelectedItems = { ...selectedItems };
+                delete updatedSelectedItems[value];
+                setSelectedItems(updatedSelectedItems);
+
+            } else if (productQuantity > 1) {
+                setProductQuantity((prev) => prev - 1);
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: rate || 0 } }));
+
+            } else {
+                setProductQuantity(1);
+
+            }
 
         } else {
-            setProductQuantity(1);
+            if (selectedItems[value]?.quantity === 1) {
+                setProductQuantity(1);
+                const updatedSelectedItems = { ...selectedItems };
+                delete updatedSelectedItems[value];
+                setSelectedItems(updatedSelectedItems);
 
-        }
+            } else if (selectedItems[value]?.quantity > 1) {
+                setProductQuantity((prev) => prev - 1);
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: 0 } }));
 
-    };
-    React.useEffect(() => {
+            } else {
+                setProductQuantity(1);
 
-
-        const updateCartTotal = () => {
-            let total = 0;
-            for (const item in selectedItems) {
-                total += selectedItems[item].quantity * selectedItems[item].price;
             }
-            setCartTotal(total);
-        };
+        }
+    };
 
-        updateCartTotal();
-    }, [selectedItems, cartTotal])
+    const handleWeightByChange = (value: string) => {
+        setWeightBy(value);
+        if (value === 'kg') {
+            setWeight(weight / 1000);
+        }
+        else {
+            setWeight(weight * 1000);
+        }
+    };
+
+    React.useEffect(() => {
+        if (form.watch("order_type") === 'Laundry per pair') {
+
+
+            const updateCartTotal = () => {
+                let total = 0;
+                for (const item in selectedItems) {
+                    total += selectedItems[item].quantity * selectedItems[item].price;
+                }
+                setCartTotal(total);
+            };
+
+            updateCartTotal();
+        } else {
+            calculatePriceByWeight()
+        }
+    }, [selectedItems, cartTotal, weight, weightBy])
 
 
 
@@ -505,7 +610,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
                                                         <div className="grid gap-4 py-4">
-                                                            {LaundrtProducts.map((value, index: number) => {
+                                                            {form.watch("order_type") === 'Laundry per pair' && LaundrtProducts.map((value, index: number) => {
                                                                 return (
                                                                     <DropdownMenuCheckboxItem
                                                                         onSelect={(e) => e.preventDefault()}
@@ -517,7 +622,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                     >
 
                                                                         <div>
-                                                                            {value.title} - ₹{value.price * selectedItems[value.title]?.quantity || value.price}
+                                                                            {value.title} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.price * selectedItems[value.title]?.quantity || value.price}`}
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
                                                                             <Button onClick={() => RemoveProductQunatity(value.title, value.price)} variant="outline">-</Button>
@@ -529,6 +634,46 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                     </DropdownMenuCheckboxItem>
                                                                 );
                                                             })}
+                                                            {form.watch("order_type") !== 'Laundry per pair' &&
+                                                                <div>
+                                                                    <div className="flex flex-col gap-2 p-2 ">
+                                                                        <FormLabel htmlFor="weightInput"> Total Calculated Weight</FormLabel>
+                                                                        <div className="flex gap-2 items-center">
+
+                                                                            <Input id="weightInput" value={weight} onChange={(e) => { handleWeightChange(e); calculatePriceByWeight() }} placeholder="Enter Total Weight" type="number"
+
+                                                                                min={1} max={100} />
+                                                                            <Select defaultValue="kg" onValueChange={(value) => handleWeightByChange(value)}>
+                                                                                <FormControl>
+                                                                                    <SelectTrigger>
+                                                                                        <SelectValue placeholder="Select Weight" />
+                                                                                    </SelectTrigger>
+                                                                                </FormControl>
+                                                                                <SelectContent>
+                                                                                    <SelectItem value="kg">kg</SelectItem>
+                                                                                    <SelectItem value="grams">grams</SelectItem>
+                                                                                </SelectContent>
+                                                                            </Select>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    {LaundrtProducts.map((value, index: number) => {
+                                                                        return (
+                                                                            <div className="flex items-center justify-between" key={index}>
+
+
+                                                                                <div>
+                                                                                    {value.title} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.price * selectedItems[value.title]?.quantity || value.price}`}
+                                                                                </div>
+
+
+                                                                            </div>
+
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            }
+
                                                         </div>
                                                     </ScrollArea>
                                                     <SheetFooter className="flex w-full items-center md:justify-between">
