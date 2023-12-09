@@ -30,6 +30,7 @@ import { set } from "date-fns"
 import { Separator } from "../ui/separator"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
+import { Checkbox } from "../ui/checkbox"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -229,6 +230,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     const handleSelectChange = (value: string, rate: any) => {
         if (form.watch("order_type") === 'Laundry per pair') {
+
+
+
             if (!selectedItems[value]) {
                 setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
 
@@ -239,6 +243,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             }
         } else {
+
             if (!selectedItems[value]) {
                 setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 } }));
 
@@ -579,7 +584,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="delivery_agent"> Select Products</FormLabel>
+                                    <FormLabel htmlFor="products"> Select Products</FormLabel>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button
@@ -660,20 +665,34 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         </div>
 
                                                                     </div>
-                                                                    {LaundrtProducts.map((value, index: number) => {
-                                                                        return (
-                                                                            <div className="flex items-center justify-between" key={index}>
+                                                                    <div className="flex flex-col">
+                                                                        <Separator className="my-2" orientation="horizontal" />
+                                                                        <div>
+                                                                            <Heading className=" text-xl" title="Select Items" />
+                                                                            {LaundrtProducts.map((value, index: number) => {
+                                                                                return (
+                                                                                    <div className="flex my-2 justify-center flex-col " key={index}>
+
+                                                                                        <div className="flex items-center  gap-2">
+                                                                                            <Checkbox
+                                                                                                checked={isOptionSelected(value.title)}
+                                                                                                onCheckedChange={(checked) => {
+                                                                                                    return field.onChange(() => handleSelectChange(value.title, value.price))
+
+                                                                                                }}
+                                                                                            />
+                                                                                            {value.title} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.price * selectedItems[value.title]?.quantity || value.price}`}
+                                                                                        </div>
 
 
-                                                                                <div>
-                                                                                    {value.title} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.price * selectedItems[value.title]?.quantity || value.price}`}
-                                                                                </div>
+                                                                                    </div>
 
+                                                                                );
+                                                                            })}
+                                                                        </div>
 
-                                                                            </div>
+                                                                    </div>
 
-                                                                        );
-                                                                    })}
                                                                 </div>
                                                             }
 
