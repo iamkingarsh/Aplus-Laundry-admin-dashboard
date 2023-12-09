@@ -38,33 +38,82 @@ const formSchema = z.object({
     ,
     service: z.string().min(1, { message: "Please select a service" }),
     products: z.object({
-        Shirts: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        TShirts: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Trousers: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Jeans: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Shorts: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Shirts: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+
+        TShirts: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Trousers: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Jeans: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Shorts: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
         Kurtas: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Kurtis: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Sarees: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Bedsheets: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Blankets: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Curtains: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        CushionCovers: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        PillowCovers: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Towels: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Masks: z.number().min(1, { message: "Please select a quantity" }).optional(),
-        Others: z.number().min(1, { message: "Please select a quantity" }).optional(),
+        Kurtis: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Sarees: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Bedsheets: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Blankets: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Curtains: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        CushionCovers: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        PillowCovers: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Towels: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Masks: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
+        Others: z.object({
+            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
+            price: z.number().min(1, { message: "Please select a price" }).optional(),
+        }).optional(),
     }), //find a way to make this schema dynamic @mujahed
     customer: z.string().min(1, { message: "Please select a customer" }),
     status: z.string().min(1, { message: "Please select a status" }),
     payment: z.string(),
     delivery_agent: z.string().optional(),
+    cartTotal: z.number().optional(),
 
 })
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [cartTotal, setCartTotal] = React.useState<number>(0)
     const GlobalModal = useGlobalModal()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -75,6 +124,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             status: 'onhold',
             payment: 'Via Store (Cash/Card/UPI)',
             delivery_agent: '',
+            cartTotal: 0,
         },
 
     })
@@ -100,37 +150,28 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
 
-    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: number }>({});
+    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number } }>({});
     const [productQuantity, setProductQuantity] = React.useState<number>(1);
-    // const handleSelectChange = (value: string) => {
-    //     if (!selectedItems.includes(value)) {
-    //         setSelectedItems((prev) => [...prev, value]);
-    //         form.setValue("products", selectedItems)
-    //     } else {
-    //         const referencedArray = [...selectedItems];
-    //         const indexOfItemToBeRemoved = referencedArray.indexOf(value);
-    //         referencedArray.splice(indexOfItemToBeRemoved, 1);
-    //         setSelectedItems(referencedArray);
-    //     }
-    // };
-
-    // const isOptionSelected = (value: string): boolean => {
-    //     return selectedItems.includes(value) ? true : false;
-    // };
 
 
-    const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>) => {
+
+    const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
         setProductQuantity((prev) => prev + 1);
-        setSelectedItems((prev) => ({ ...prev, [value]: (prev[value] || 0) + 1 }));
+        setSelectedItems((prev) => ({
+            ...prev, [value]: {
+                quantity: (prev[value]?.quantity || 0) + 1,
+                price: price || 0,
+            }
+        }));
 
     };
 
-    const handleSelectChange = (value: string) => {
+    const handleSelectChange = (value: string, rate: any) => {
         if (!selectedItems[value]) {
-            setSelectedItems((prev) => ({ ...prev, [value]: 1 }));
+            setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
 
-        } else if (selectedItems[value] === 1) {
+        } else if (selectedItems[value]?.quantity === 1) {
             const updatedSelectedItems = { ...selectedItems };
             delete updatedSelectedItems[value];
             setSelectedItems(updatedSelectedItems);
@@ -143,8 +184,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     };
 
 
-    const RemoveProductQunatity = (value: string) => {
-        if (selectedItems[value] === 1) {
+    const RemoveProductQunatity = (value: string, rate: any) => {
+        if (selectedItems[value]?.quantity === 1) {
             setProductQuantity(1);
             const updatedSelectedItems = { ...selectedItems };
             delete updatedSelectedItems[value];
@@ -152,13 +193,27 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
         } else if (productQuantity > 1) {
             setProductQuantity((prev) => prev - 1);
-            setSelectedItems((prev) => ({ ...prev, [value]: (prev[value] || 0) - 1 }));
+            setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: rate || 0 } }));
 
         } else {
             setProductQuantity(1);
 
         }
+
     };
+    React.useEffect(() => {
+
+
+        const updateCartTotal = () => {
+            let total = 0;
+            for (const item in selectedItems) {
+                total += selectedItems[item].quantity * selectedItems[item].price;
+            }
+            setCartTotal(total);
+        };
+
+        updateCartTotal();
+    }, [selectedItems])
 
 
 
@@ -456,18 +511,18 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         key={index}
                                                                         checked={isOptionSelected(value.title)}
                                                                         // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
-                                                                        onCheckedChange={() => handleSelectChange(value.title)}
+                                                                        onCheckedChange={() => handleSelectChange(value.title, value.price)}
                                                                         className="flex gap-2 justify-between items-center"
                                                                     >
 
                                                                         <div>
-                                                                            {value.title}
+                                                                            {value.title} - ₹{value.price}
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
-                                                                            <Button onClick={() => RemoveProductQunatity(value.title)} variant="outline">-</Button>
+                                                                            <Button onClick={() => RemoveProductQunatity(value.title, value.price)} variant="outline">-</Button>
 
-                                                                            {selectedItems[value.title] || 0}
-                                                                            <Button onClick={(e) => AddProductQunatity(value.title, e)} variant="outline">+</Button>
+                                                                            {selectedItems[value.title]?.quantity || 0}
+                                                                            <Button onClick={(e) => AddProductQunatity(value.title, e, value.price)} variant="outline">+</Button>
                                                                         </div>
 
                                                                     </DropdownMenuCheckboxItem>
@@ -476,15 +531,18 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                         </div>
                                                     </ScrollArea>
                                                     <SheetFooter>
+                                                        <span> Cart Total: ₹{cartTotal}</span>
                                                         <SheetClose asChild>
                                                             {/* <Button onClick={() => { form.setValue("products", { ...selectedItems }); console.log(form.setValue("products", selectedItems), { ...selectedItems }) }} type="submit">Save changes</Button> */}
+
                                                             <Button onClick={() => {
 
-                                                                form.setValue("products", selectedItems);
-
+                                                                form.setValue("products", { ...selectedItems });
+                                                                form.setValue("cartTotal", cartTotal);
 
 
                                                             }} type="submit">Save changes</Button>
+
                                                         </SheetClose>
                                                     </SheetFooter>
                                                 </SheetContent>

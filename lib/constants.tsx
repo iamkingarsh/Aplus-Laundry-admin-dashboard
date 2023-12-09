@@ -118,72 +118,96 @@ const LaundrtProducts = [
         title: 'Shirts',
         value: 'shirts',
         path: '/products/shirts',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'TShirts',
         value: 'tshirts',
         path: '/products/tshirts',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Trousers',
         value: 'trousers',
         path: '/products/trousers',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Jeans',
         value: 'jeans',
         path: '/products/jeans',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Shorts',
         value: 'shorts',
         path: '/products/shorts',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Kurtas',
         value: 'kurtas',
         path: '/products/kurtas',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Kurtis',
         value: 'kurtis',
         path: '/products/kurtis',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Sarees',
         value: 'sarees',
         path: '/products/sarees',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Bedsheets',
         value: 'bedsheets',
         path: '/products/bedsheets',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Blankets',
         value: 'blankets',
         path: '/products/blankets',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Curtains',
         value: 'curtains',
         path: '/products/curtains',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'CushionCovers',
         value: 'cushioncovers',
         path: '/products/cushion-covers',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
@@ -196,18 +220,24 @@ const LaundrtProducts = [
         title: 'Towels',
         value: 'towels',
         path: '/products/towels',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Masks',
         value: 'masks',
         path: '/products/masks',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
         title: 'Others',
         value: 'others',
         path: '/products/others',
+        price: 50,
+
         icon: <ServerIcon className="w-3 mr-2" />
     },
 ]
