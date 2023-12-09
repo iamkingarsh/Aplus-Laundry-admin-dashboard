@@ -36,7 +36,7 @@ interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
-const baseFee = 50;
+
 
 
 const formSchema = z.object({
