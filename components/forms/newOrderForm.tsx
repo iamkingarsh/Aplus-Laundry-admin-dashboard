@@ -141,7 +141,7 @@ const formSchema = z.object({
             weight: z.number().min(1, { message: "Please add the weight" }).optional(),
             weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
-    }), //find a way to make this schema dynamic @mujahed
+    }).partial(), //find a way to make this schema dynamic @mujahed
     customer: z.string().min(1, { message: "Please select a customer" }),
     status: z.string().min(1, { message: "Please select a status" }),
     payment: z.string(),
@@ -169,7 +169,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         defaultValues: {
             order_type: 'Laundry per pair',
             service: '',
-
             customer: '',
             status: 'onhold',
             payment: 'Via Store (Cash/Card/UPI)',
@@ -222,11 +221,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         if (weightBy === 'kg') {
 
             const priceperkg = 50;
-            const price = weight * priceperkg;
+            const price = form.watch("cartWeight") * priceperkg;
             setCartTotal(price);
         } else {
             const priceperkg = 0.05;
-            const price = weight * priceperkg;
+            const price = form.watch("cartWeight") * priceperkg;
             setCartTotal(price);
         }
 
@@ -251,7 +250,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         } else {
 
             if (!selectedItems[value]) {
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 || rate } }));
 
             } else if (selectedItems[value]?.quantity === 1) {
                 const updatedSelectedItems = { ...selectedItems };
@@ -299,7 +298,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             } else if (selectedItems[value]?.quantity > 1) {
                 setProductQuantity((prev) => prev - 1);
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: 0 } }));
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: 0 || rate } }));
 
             } else {
                 setProductQuantity(1);
@@ -312,9 +311,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         setWeightBy(value);
         if (value === 'kg') {
             setWeight(weight / 1000);
+            form.setValue("cartWeight", weight / 1000);
         }
         else {
             setWeight(weight * 1000);
+            form.setValue("cartWeight", weight * 1000);
         }
     };
 
@@ -333,10 +334,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             updateCartTotal();
         } else {
-
+            console.log("products", form.watch("products"))
+            console.log("selectedItems", selectedItems)
             calculatePriceByWeight()
         }
-    }, [selectedItems, cartTotal, weight, weightBy])
+    }, [selectedItems, cartTotal, weight, weightBy, form.watch("products")])
 
 
     React.useEffect(() => {
@@ -702,10 +704,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                                         <div className="flex items-center  gap-2">
                                                                                             <Checkbox
                                                                                                 checked={isOptionSelected(value.title)}
-                                                                                                onCheckedChange={(checked) => {
-                                                                                                    return field.onChange(() => handleSelectChange(value.title, value.price))
-
-                                                                                                }}
+                                                                                                onCheckedChange={() => handleSelectChange(value.title, value.price)}
                                                                                             />
                                                                                             {value.title} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.price * selectedItems[value.title]?.quantity || value.price}`}
                                                                                         </div>
