@@ -17,12 +17,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const userSignedIn = false
   return (
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem={true}
           disableTransitionOnChange
         >
