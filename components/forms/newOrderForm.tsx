@@ -45,7 +45,7 @@ const formSchema = z.object({
     ,
     service: z.string().min(1, { message: "Please select a service" }),
     products: z.object({
-        key: z.object({
+        Shirts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
             weight: z.number().min(1, { message: "Please add the weight" }).optional(),
@@ -147,6 +147,8 @@ const formSchema = z.object({
     payment: z.string(),
     delivery_agent: z.string().optional(),
     cartTotal: z.number().optional(),
+    cartWeight: z.number().optional(),
+    cartWeightBy: z.string().optional(),
 
 
 })
@@ -165,7 +167,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            order_type: '',
+            order_type: 'Laundry per pair',
             service: '',
 
             customer: '',
@@ -173,6 +175,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             payment: 'Via Store (Cash/Card/UPI)',
             delivery_agent: '',
             cartTotal: 0,
+            cartWeight: weight,
+            cartWeightBy: 'kg',
         },
 
     })
@@ -216,6 +220,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const calculatePriceByWeight = () => {
         //logic to calculate price by weight
         if (weightBy === 'kg') {
+
             const priceperkg = 50;
             const price = weight * priceperkg;
             setCartTotal(price);
@@ -246,7 +251,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         } else {
 
             if (!selectedItems[value]) {
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 } }));
+                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
 
             } else if (selectedItems[value]?.quantity === 1) {
                 const updatedSelectedItems = { ...selectedItems };
@@ -263,6 +268,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWeight(Number(e.target.value));
+        form.setValue("cartWeight", Number(e.target.value));
     };
 
 
@@ -656,24 +662,33 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                             {form.watch("order_type") !== 'Laundry per pair' &&
                                                                 <div>
                                                                     <div className="flex flex-col gap-2 p-2 ">
-                                                                        <FormLabel htmlFor="weightInput"> Total Calculated Weight</FormLabel>
                                                                         <div className="flex gap-2 items-center">
+                                                                            <FormField
+                                                                                name="cartWeight"
+                                                                                control={form.control}
+                                                                                render={({ field }) => (
+                                                                                    <FormItem>
 
-                                                                            <Input id="weightInput" value={weight} onChange={(e) => { handleWeightChange(e); calculatePriceByWeight() }} placeholder="Enter Total Weight" type="number"
+                                                                                        <FormLabel htmlFor="weightInput"> Total Calculated Weight</FormLabel>
 
-                                                                                min={1} max={100} />
-                                                                            <Select defaultValue="kg" onValueChange={(value) => handleWeightByChange(value)}>
-                                                                                <FormControl>
-                                                                                    <SelectTrigger>
-                                                                                        <SelectValue placeholder="Select Weight" />
-                                                                                    </SelectTrigger>
-                                                                                </FormControl>
-                                                                                <SelectContent>
-                                                                                    <SelectItem value="kg">kg</SelectItem>
-                                                                                    <SelectItem value="grams">grams</SelectItem>
-                                                                                </SelectContent>
-                                                                            </Select>
+                                                                                        <Input {...field} id="weightInput" value={field.value} onChange={(e) => { handleWeightChange(e); calculatePriceByWeight() }} placeholder="Enter Total Weight" type="number"
+
+                                                                                            min={1} max={100} />
+                                                                                        <Select defaultValue="kg" onValueChange={(value) => handleWeightByChange(value)}>
+                                                                                            <FormControl>
+                                                                                                <SelectTrigger>
+                                                                                                    <SelectValue placeholder="Select Weight" />
+                                                                                                </SelectTrigger>
+                                                                                            </FormControl>
+                                                                                            <SelectContent>
+                                                                                                <SelectItem value="kg">kg</SelectItem>
+                                                                                                <SelectItem value="grams">grams</SelectItem>
+                                                                                            </SelectContent>
+                                                                                        </Select>
+                                                                                    </FormItem>)}
+                                                                            />
                                                                         </div>
+
 
                                                                     </div>
                                                                     <div className="flex flex-col">
