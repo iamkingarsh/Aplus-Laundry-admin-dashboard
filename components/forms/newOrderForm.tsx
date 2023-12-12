@@ -230,6 +230,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     const handleSelectChange = (value: string, rate: any) => {
         if (form.watch("order_type") === 'Laundry per pair') {
+            //reset the cart to empty if the order type is changed
 
 
 
@@ -314,8 +315,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     React.useEffect(() => {
         if (form.watch("order_type") === 'Laundry per pair') {
 
-
             const updateCartTotal = () => {
+
                 let total = 0;
                 for (const item in selectedItems) {
                     total += selectedItems[item].quantity * selectedItems[item].price;
@@ -323,12 +324,22 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                 setCartTotal(total);
             };
 
+
             updateCartTotal();
         } else {
+
             calculatePriceByWeight()
         }
     }, [selectedItems, cartTotal, weight, weightBy])
 
+
+    React.useEffect(() => {
+        if (form.watch("order_type")) {
+            setSelectedItems({});
+            setWeight(0);
+            setCartTotal(0);
+        }
+    }, [form.watch("order_type")])
 
 
 
