@@ -28,6 +28,8 @@ const customerDetails = [
 const customerData = { ...AllData[0], ...customerDetails };
 
 
+
+
 export default function CustomerPage({ params }: Props) {
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>

@@ -12,7 +12,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CheckIcon, Plus, ServerIcon, Trash } from "lucide-react"
+import { CheckIcon, Mail, MapPin, Phone, Plus, ServerIcon, Trash, User } from "lucide-react"
 import toast from "react-hot-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { LaundrtProducts, OrdersStatuses, Services } from "@/lib/constants"
@@ -31,6 +31,9 @@ import { Separator } from "../ui/separator"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { Checkbox } from "../ui/checkbox"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import Link from "next/link"
+import { Badge } from "../ui/badge"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -136,7 +139,9 @@ const formSchema = z.object({
     cartWeightBy: z.string().optional(),
 
 
+
 })
+const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
@@ -145,7 +150,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [productQuantity, setProductQuantity] = React.useState<number>(1);
     const [weight, setWeight] = React.useState<number>(0);
     const [weightBy, setWeightBy] = React.useState<string>('kg');
-
 
 
     const GlobalModal = useGlobalModal()
@@ -206,11 +210,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         if (weightBy === 'kg') {
 
             const priceperkg = 50;
-            const price = form.watch("cartWeight") * priceperkg;
+            const price = (form.watch("cartWeight") ?? 0) * priceperkg;
             setCartTotal(price);
         } else {
             const priceperkg = 0.05;
-            const price = form.watch("cartWeight") * priceperkg;
+            const price = (form.watch("cartWeight") ?? 0) * priceperkg;
             setCartTotal(price);
         }
 
@@ -294,6 +298,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     const handleWeightByChange = (value: string) => {
         setWeightBy(value);
+        form.setValue("cartWeightBy", value);
         if (value === 'kg') {
             setWeight(weight / 1000);
             form.setValue("cartWeight", weight / 1000);
@@ -325,12 +330,17 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         }
     }, [selectedItems, cartTotal, weight, weightBy, form.watch("products")])
 
+    const CustomerData = AllData.find((data) => data.email === form.watch("customer"))
+
 
     React.useEffect(() => {
         if (form.watch("order_type")) {
             setSelectedItems({});
             setWeight(0);
             setCartTotal(0);
+            form.setValue("cartWeight", 0);
+
+            form.setValue("products", {});
         }
     }, [form.watch("order_type")])
 
@@ -822,6 +832,182 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
                         </Card>}
+                    {form.watch("order_type") === 'Laundry by kg' &&
+                        Object.keys(selectedItems).length > 0 && <Card className="w-full">
+                            <CardHeader>
+                                Selected Items for Order
+                            </CardHeader>
+                            <CardContent>
+
+                                <div className="flex flex-col w-full gap-2">
+                                    {/* // <div className="flex flex-row justify-between items-center" key={index}>
+                                        //     <div className="flex flex-row items-center gap-2">
+                                        //         <div>{key}</div>
+                                        //         <div className="flex flex-row items-center gap-2">
+                                        //             <Button onClick={() => RemoveProductQunatity(key, selectedItems[key].price)} variant="outline">-</Button>
+
+                                        //             {selectedItems[key].quantity}
+                                        //             <Button onClick={(e) => AddProductQunatity(key, e, selectedItems[key].price)} variant="outline">+</Button>
+                                        //         </div>
+                                        //     </div>
+                                        //     <div>₹{selectedItems[key].price * selectedItems[key].quantity}</div>
+                                        // </div> */}
+                                    <div>
+                                        <Table className="w-full">
+
+                                            <TableHeader>
+                                                <TableRow>
+
+                                                    <TableHead className="text-left">Total Weight</TableHead>
+                                                    <TableHead className="text-left">Price per kg</TableHead>
+                                                    <TableHead className="text-left">Total</TableHead>
+                                                    <TableHead className="text-left">Action</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+
+                                                <TableRow >
+
+                                                    <TableCell>{form.watch("cartWeight")} {form.watch("cartWeightBy") === 'kg' ? 'kg' : 'grams'}</TableCell>
+
+                                                    <TableCell className="text-left">₹{priceperkg}</TableCell>
+                                                    <TableCell className="text-left">₹{cartTotal}</TableCell>
+
+                                                    <TableCell className="text-left"><Button onClick={() => {
+                                                        setSelectedItems({});
+                                                        form.setValue("products", selectedItems);
+                                                        setCartTotal(0);
+                                                        form.setValue("cartTotal", 0);
+                                                        setWeight(0);
+                                                        form.setValue("cartWeight", 0);
+                                                        setWeightBy('kg');
+                                                        form.setValue("cartWeightBy", 'kg');
+                                                        toast.success('Cart cleared successfully')
+
+
+                                                    }} variant="outline"><Trash className="h-4 w-4" /></Button></TableCell>
+                                                </TableRow>
+
+                                            </TableBody>
+                                        </Table>
+                                        <Separator orientation="horizontal" />
+                                        <Heading className=" text-xl my-2" title="Items in Cart" />
+                                        <Table className="w-full">
+
+                                            <TableHeader>
+                                                <TableRow>
+
+                                                    <TableHead className="text-left">Item Name</TableHead>
+
+                                                    <TableHead className="text-left">Action</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {Object.keys(selectedItems).map((key, index) => (
+                                                    <TableRow key={index}>
+
+
+
+                                                        <TableCell className="text-left">{key}</TableCell>
+
+
+                                                        <TableCell className="text-left"><Button onClick={() => {
+                                                            const updatedSelectedItems = { ...selectedItems };
+                                                            delete updatedSelectedItems[key];
+                                                            setSelectedItems(updatedSelectedItems);
+                                                            form.setValue("products", updatedSelectedItems);
+                                                            toast.success('Item removed from cart successfully')
+
+
+                                                        }} variant="ghost">Remove</Button></TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                        <Separator orientation="horizontal" />
+                                        <div className="flex my-2 flex-row justify-between items-center">
+                                            <div className="font-semibold">Total Amount</div>
+                                            <div className="font-semibold">₹{cartTotal}</div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+
+
+                        </Card>}
+                    {form.watch("customer") &&
+                        <Card >
+                            <CardHeader>
+                                <Heading className='text-lg' title='Customer Information' />
+                            </CardHeader>
+                            <Separator className='mb-2' orientation='horizontal' />
+                            <CardContent>
+
+
+
+                                <div className="flex flex-col gap-3">
+                                    <div className='flex justify-between items-center'>
+                                        <div className='flex items-center'>
+                                            <User className='w-6 h-6 mr-3' />
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground  text-sm">Name</span>
+                                                <span className="text-md">{CustomerData.fullname}</span>
+                                            </div>
+                                        </div>
+                                        <Avatar className='w-8  border-muted border-2 h-8 mr-2'>
+                                            <AvatarImage src={CustomerData.profilepic} alt="@shadcn" />
+                                            <AvatarFallback>{CustomerData.fullname[0]}</AvatarFallback>
+                                        </Avatar>
+                                    </div>
+                                    <Separator orientation='horizontal' />
+
+                                    <div className='flex items-center'>
+                                        <Mail className='w-6 h-6 mr-3' />
+                                        <div className="flex flex-col">
+                                            <span className="text-muted-foreground  text-sm">Email</span>
+                                            <div className='flex gap-2'>
+
+                                                <Link href={`mailto:${CustomerData.email}`} className="text-md">{CustomerData.email}</Link>
+                                                {CustomerData.email === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Separator orientation='horizontal' />
+
+                                    <div className='flex items-center'>
+                                        <Phone className='w-6 h-6 mr-3' />
+                                        <div className="flex flex-col">
+                                            <span className=" text-muted-foreground  text-sm">Mobile</span>
+                                            <div className='flex gap-2'>
+
+                                                <Link href={`tel:${CustomerData.mobile}`} className="text-md">{CustomerData.mobile}</Link>
+                                                {CustomerData.mobile === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Separator orientation='horizontal' />
+
+                                    <div className='flex items-start'>
+                                        <MapPin className='w-6 h-6 mr-3' />
+                                        <div className='flex flex-col gap-2'>
+                                            <div className="flex flex-col">
+                                                <span className=" text-muted-foreground  text-sm">Address</span>
+                                                <Link href={``} className="text-md">{CustomerData.address}</Link>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </CardContent>
+
+                        </Card>}
+
                 </div>
             </div>
 
