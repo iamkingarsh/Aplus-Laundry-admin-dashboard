@@ -48,63 +48,52 @@ const formSchema = z.object({
         Shirts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
         }).optional(),
         TShirts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Trousers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Jeans: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Shorts: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Kurtas: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Kurtis: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Sarees: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Bedsheets: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Blankets: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
-        }).optional(),
+
+        }),
         Curtains: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
@@ -114,26 +103,22 @@ const formSchema = z.object({
         CushionCovers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         PillowCovers: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Towels: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Masks: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
             price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
+
         }).optional(),
         Others: z.object({
             quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
