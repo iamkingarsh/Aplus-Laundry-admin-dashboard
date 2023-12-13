@@ -2,12 +2,14 @@
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-import { ServerIcon } from 'lucide-react'
+import { PlusIcon, ServerIcon } from 'lucide-react'
 import React from 'react'
 import { columns } from './components/columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { categories } from '@/lib/constants'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 const LaundrtProducts = [
     {
@@ -170,6 +172,9 @@ export default function page() {
                     <Heading className='leading-tight' title='Laundry Items' />
                     <p className='text-muted-foreground text-sm'>Manage Laundry Items</p>
                 </div>
+                <Link href={'/products/create-new'}>
+                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+                </Link>
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
