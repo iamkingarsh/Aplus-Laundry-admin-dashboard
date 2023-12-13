@@ -1,5 +1,5 @@
 "use client"
-import { BoxIcon, CogIcon, FrameIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
+import { BoxIcon, CogIcon, FrameIcon, GroupIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
 
 const BrandName = "APlus Laundry"
 
@@ -33,6 +33,11 @@ const sidebarTabs = [
         title: 'Laundry Items',
         path: '/products',
         icon: <BoxIcon className="w-4 mr-2" />
+    },
+    {
+        title: 'Categories',
+        path: '/categories',
+        icon: <GroupIcon className="w-4 mr-2" />
     },
     {
         title: 'Services',
