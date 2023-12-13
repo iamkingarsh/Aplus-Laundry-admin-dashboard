@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 
 interface Props {
     data: CouponsColumns
+
 }
 
 export const CellAction: React.FC<Props> = ({ data }) => {
@@ -34,20 +35,11 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     <DropdownMenuItem
                         onSelect={
                             () => {
-                                router.push(`/coupons/${data.couponid}`)
-                            }
-                        }
-                    >
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Coupon Details</DropdownMenuItem>
-                    <DropdownMenuItem
-                        onSelect={
-                            () => {
-                                router.push(`/coupons/edit/${data.couponid}`)
+                                router.push(`/categories/edit/${data.category_id}`)
                             }
                         }>
                         <Edit2 className="mr-2 h-4 w-4" />
-                        Edit Coupon Details</DropdownMenuItem>
+                        Edit Category</DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
                             GlobalModal.title = `Delete ${data.title}`

@@ -258,7 +258,6 @@ const categories = [
         category_id: '456872',
         title: 'Household'
     },
-
     {
         category_id: '463486',
         title: 'Accessories'
