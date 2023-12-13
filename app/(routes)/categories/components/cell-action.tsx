@@ -50,14 +50,14 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                         Edit Coupon Details</DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
-                            GlobalModal.title = "Delete Coupon"
-                            GlobalModal.description = "Are you sure you want to delete this Coupon?"
+                            GlobalModal.title = `Delete ${data.title}`
+                            GlobalModal.description = "Are you sure you want to delete this Category?"
                             GlobalModal.children = <Alert onConfirm={deleteOrder} />
                             GlobalModal.onOpen()
                         }}
                         className="focus:bg-destructive focus:text-destructive-foreground">
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete Coupon</DropdownMenuItem>
+                        Delete Category</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

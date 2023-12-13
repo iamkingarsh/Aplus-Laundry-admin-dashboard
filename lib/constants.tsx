@@ -243,19 +243,24 @@ const LaundrtProducts = [
 
 const categories = [
     {
+        category_id: '148652',
         title: 'Men'
     },
     {
+        category_id: '456456',
         title: 'Women'
     },
     {
+        category_id: '453785',
         title: 'Kids'
     },
     {
+        category_id: '456872',
         title: 'Household'
     },
 
     {
+        category_id: '463486',
         title: 'Accessories'
 
     }
