@@ -173,14 +173,20 @@ export default function page() {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <Tabs defaultValue="all" className="w-full">
+                <Tabs defaultValue="All" className="w-full">
                     <TabsList className='gap-3'>
+                        <TabsTrigger className='gap-2' value="All">All <Badge className='text-bg-primary-foreground ' variant="outline">{LaundrtProducts.length}</Badge> </TabsTrigger>
                         {categories.map((category, index) => (
                             <TabsTrigger key={index} className='gap-2' value={category.title}>{category.title} <Badge className='text-bg-primary-foreground ' variant="outline">{LaundrtProducts.filter((product: any) => product.category === category.title)
                                 ?.length}</Badge> </TabsTrigger>
                         ))}
 
                     </TabsList>
+                    <TabsContent value="All">
+
+                        <DataTable searchKey='product_name' columns={columns} data={LaundrtProducts} />
+                    </TabsContent>
+
                     {categories.map((category, index) => (
                         <TabsContent key={index} value={category.title}>
                             <DataTable searchKey='product_name' columns={columns} data={

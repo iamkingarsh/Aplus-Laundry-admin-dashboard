@@ -30,7 +30,7 @@ const sidebarTabs = [
         icon: <IndianRupeeIcon className="w-4 mr-2" />
     },
     {
-        title: 'Products',
+        title: 'Laundry Items',
         path: '/products',
         icon: <BoxIcon className="w-4 mr-2" />
     },
