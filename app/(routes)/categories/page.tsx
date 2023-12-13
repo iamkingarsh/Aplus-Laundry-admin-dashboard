@@ -16,15 +16,11 @@ export const metadata: Metadata = {
     description: ' Manage your coupons here! ',
 }
 
-interface Props {
-    params: {
-        customerid: string;
-    }
-}
 
 
 
-export default function CategoriesPage({ params }: Props) {
+
+export default function CategoriesPage() {
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between items-center">
@@ -32,7 +28,7 @@ export default function CategoriesPage({ params }: Props) {
                     <Heading className='leading-tight ' title='Categories' />
                     <p className='text-muted-foreground text-sm'>Manage your laundry item categories here! </p>
                 </div>
-                <Link href={'/coupons/create-new'}>
+                <Link href={'/categories/create-new'}>
                     <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
                 </Link>
             </div>
