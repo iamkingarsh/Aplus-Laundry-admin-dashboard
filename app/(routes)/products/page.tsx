@@ -16,29 +16,24 @@ const LaundrtProducts = [
         product_id: '1',
         product_name: 'Shirts',
         value: 'shirts',
-        icon: <ServerIcon className="w-3 mr-2" />,
-        priceperpair: 50,
         category: 'Women',
-
+        priceperpair: 50,
         status: 'Active'
     },
     {
         product_id: '2',
         product_name: 'TShirts',
         value: 'tshirts',
-        icon: <ServerIcon className="w-3 mr-2" />,
-        priceperpair: 50,
         category: 'Men',
-
+        priceperpair: 50,
         status: 'Active'
     },
     {
         product_id: '3',
         product_name: 'Trousers',
         value: 'trousers',
-        icon: <ServerIcon className="w-3 mr-2" />,
-        priceperpair: 50,
         category: 'Men',
+        priceperpair: 50,
         status: 'Active'
     },
     {
@@ -46,8 +41,6 @@ const LaundrtProducts = [
         product_name: 'Jeans',
         value: 'jeans',
         category: 'Men',
-
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         status: 'Active'
     },
@@ -56,8 +49,6 @@ const LaundrtProducts = [
         product_name: 'Shorts',
         value: 'shorts',
         category: 'Men',
-
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         status: 'Active'
     },
@@ -65,68 +56,54 @@ const LaundrtProducts = [
         product_id: '6',
         product_name: 'Kurtas',
         value: 'kurtas',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '7',
         product_name: 'Kurtis',
         value: 'kurtis',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '8',
         product_name: 'Sarees',
         value: 'sarees',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '9',
         product_name: 'Bedsheets',
         value: 'bedsheets',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '9',
-
         product_name: 'Blankets',
         value: 'blankets',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '10',
         product_name: 'Curtains',
         value: 'curtains',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
-
         status: 'Active'
     },
     {
         product_id: '11',
         product_name: 'CushionCovers',
         value: 'cushioncovers',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
         status: 'Active'
@@ -135,7 +112,6 @@ const LaundrtProducts = [
         product_id: '12',
         product_name: 'PillowCovers',
         value: 'pillowcovers',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
         status: 'Active'
@@ -144,7 +120,6 @@ const LaundrtProducts = [
         product_id: '13',
         product_name: 'Towels',
         value: 'towels',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
         status: 'Active'
@@ -153,7 +128,6 @@ const LaundrtProducts = [
         product_id: '14',
         product_name: 'Masks',
         value: 'masks',
-        icon: <ServerIcon className="w-3 mr-2" />,
         priceperpair: 50,
         category: 'Men',
         status: 'Active'
