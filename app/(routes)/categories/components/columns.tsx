@@ -19,18 +19,12 @@ import { useGlobalModal } from "@/hooks/GlobalModal"
 import CellAction from "./cell-action"
 import toast from "react-hot-toast"
 import { useState } from "react"
-import SwitchComponent from "./switch"
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type CouponsColumns = {
 
-    coupon_code: string
-    discount_type: string
-    discount_value: string
-    min_order_value: string
-    status: string
-    expiry_date: string
-    couponid: string
+    title: string
 }
 
 
@@ -58,116 +52,23 @@ export const columns: ColumnDef<CouponsColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "coupon_code",
+        accessorKey: "title",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Coupon Code
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.coupon_code} <Clipboard onClick={() => { navigator.clipboard.writeText(row.original.coupon_code); toast.success("Copied to clipboard") }} className='ml-2 w-4 h-4 cursor-pointer' />
-            </div>
-        ),
-
-    },
-    {
-        accessorKey: "discount_type",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Discount Type
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.discount_type} {row.original.discount_type == 'percentage' ? <Percent className='ml-2 w-4 h-4' /> : <IndianRupee className='ml-2 w-4 h-4' />}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "min_order_value",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Min Order Value
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.min_order_value}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "discount_value",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Discount Value
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.discount_value} {row.original.discount_type == 'percentage' ? <Percent className='ml-2 w-4 h-4' /> : <IndianRupee className='ml-2 w-4 h-4' />}
-
-            </div>
-        ),
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => <SwitchComponent data={row.original} />
-        ,
-    },
-    {
-        accessorKey: "expiry_date",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Expiry Date
+                    Title
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
 
+
     },
+
+
 
     {
         id: "actions",

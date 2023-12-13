@@ -12,11 +12,9 @@ import { columns } from './components/columns';
 import { categories } from '@/lib/constants';
 
 export const metadata: Metadata = {
-    title: 'Coupon Codes | APLus Laundry',
-    description: ' Manage your coupons here! ',
+    title: 'Categories | APLus Laundry',
+    description: ' Manage your categories here! ',
 }
-
-
 
 
 
@@ -34,7 +32,7 @@ export default function CategoriesPage() {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable searchKey='coupon_code' columns={columns} data={categories as any} />
+                <DataTable searchKey='title' columns={columns} data={categories as any} />
             </div>
 
 
