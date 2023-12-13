@@ -7,11 +7,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 
 import { MobileIcon } from "@radix-ui/react-icons"
 import CellAction from "./cell-action"
+import SwitchComponent from "./switch"
 
 export type ProductsColumns = {
     product_id: string
     product_name: string
-    status: boolean
+    status: string
     priceperpair: number
     category: string
 
@@ -96,20 +97,7 @@ export const columns: ColumnDef<ProductsColumns>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "onhold" && "bg-yellow-500"
-                        } ${row.original.status === "pending" && "bg-blue-500"
-                        } ${row.original.status === "picked" && "bg-green-500"
-                        } ${row.original.status === "onway" && "bg-purple-500"
-                        } ${row.original.status === "delivered" && "bg-green-500"
-                        } ${row.original.status === "cancelled" && "bg-red-500"
-                        }`}
-                />
-                {row.original.status}
-            </div>
-        ),
+        cell: ({ row }) => <SwitchComponent data={row.original} />
     },
 
 
