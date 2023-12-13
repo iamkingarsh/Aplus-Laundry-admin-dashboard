@@ -7,6 +7,7 @@ import React from 'react'
 import { CouponsColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface Props {
     data: CouponsColumns
@@ -17,6 +18,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const deleteOrder = () => {
         console.log('delete')
+        toast.success('Category Deleted Successfully')
         GlobalModal.onClose()
     }
     const router = useRouter()
@@ -42,7 +44,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                         Edit Category</DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
-                            GlobalModal.title = `Delete ${data.title}`
+                            GlobalModal.title = `Delete Category - ${data.title}`
                             GlobalModal.description = "Are you sure you want to delete this Category?"
                             GlobalModal.children = <Alert onConfirm={deleteOrder} />
                             GlobalModal.onOpen()
