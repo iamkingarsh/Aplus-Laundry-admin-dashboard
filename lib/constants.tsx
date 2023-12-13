@@ -236,5 +236,25 @@ const LaundrtProducts = [
     },
 ]
 
+const categories = [
+    {
+        title: 'Men'
+    },
+    {
+        title: 'Women'
+    },
+    {
+        title: 'Kids'
+    },
+    {
+        title: 'Household'
+    },
+
+    {
+        title: 'Accessories'
+
+    }
+]
+
 export default sidebarTabs;
-export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors }
+export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors, categories }

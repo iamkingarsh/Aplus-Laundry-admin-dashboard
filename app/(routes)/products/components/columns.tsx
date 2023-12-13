@@ -11,16 +11,9 @@ import CellAction from "./cell-action"
 export type ProductsColumns = {
     product_id: string
     product_name: string
-    active: boolean
-    pricing: {
-        price: number
-        discount: number
-        discounted_price: number
-    }
+    status: boolean
+    priceperpair: number
     category: string
-    sub_category: string
-    description: string
-    image: string
 
 
 }
@@ -51,10 +44,6 @@ export const columns: ColumnDef<ProductsColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "product_id",
-        header: "Product ID",
-    },
-    {
         accessorKey: "product_name",
         header: ({ column }) => {
             return (
@@ -69,18 +58,26 @@ export const columns: ColumnDef<ProductsColumns>[] = [
         },
     },
     {
-        accessorKey: "mobile",
-        header: "Mobile No.",
+        accessorKey: "priceperpair",
+        header: "Price Per Pair",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <div
+                    className={`w-2 h-2 rounded-full mr-2 `}
+                />
+                {row.original.priceperpair}
+            </div>
+        ),
     },
     {
-        accessorKey: "order_date",
+        accessorKey: "category",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Order Date
+                    Category
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
@@ -114,54 +111,8 @@ export const columns: ColumnDef<ProductsColumns>[] = [
             </div>
         ),
     },
-    {
-        accessorKey: "payment_method",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Payment Method
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.payment_method === "cod" && <Banknote className="mr-2 text-green-500 h-4 w-4" />}
-                {row.original.payment_method === "payment gateway" && <CreditCard className="mr-2 text-purple-800 dark:text-purple-400 h-4 w-4" />}
-                {row.original.payment_method}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "channel",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Channel
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.channel === "manual" && <UserCheck className="mr-2 text-yellow-500 h-4 w-4" />}
-                {row.original.channel === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
-                {row.original.channel}
-            </div>
-        ),
-    },
+
+
     {
         id: "actions",
         cell: ({ row }) => <CellAction data={row.original} />
