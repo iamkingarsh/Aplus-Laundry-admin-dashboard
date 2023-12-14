@@ -6,13 +6,10 @@ import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
 import { ServicesColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
-import { useRouter } from 'next/navigation';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
-import { Switch } from '@/components/ui/switch';
-import { Card, CardHeader } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { ScrollAreaScrollbar, ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 import SwitchComponent from './Switch';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import { categories } from '@/lib/constants';
@@ -39,13 +36,6 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
     ) as any;
 
 
-    const GlobalModal = useGlobalModal();
-    const [checked, setChecked] = React.useState(data.laundrybykg === 'Active' ? true : false)
-    const deleteOrder = () => {
-        console.log('delete')
-        GlobalModal.onClose()
-    }
-    const router = useRouter()
     return (
         <Sheet>
             <SheetTrigger>View Items

@@ -23,7 +23,7 @@ export default function page() {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable searchKey='coupon_code' columns={columns} data={Services as any} />
+                <DataTable searchKey='title' columns={columns} data={Services as any} />
             </div>
         </div>
     )
