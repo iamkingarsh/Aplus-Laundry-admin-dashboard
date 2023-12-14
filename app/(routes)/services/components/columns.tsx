@@ -16,7 +16,7 @@ export type ServicesColumns = {
 
     service_id: string
     title: string
-    laundry_items: Array<Object>
+    laundry_items: Array<Object> //@mujahed create seperate laundry items for both laundry by kg and laundry per pair in data model
     laundrybykg: string
     laundrybykgprice: string
     laundryperpair: string
