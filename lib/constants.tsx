@@ -1,5 +1,6 @@
 "use client"
 import { BoxIcon, CogIcon, FrameIcon, GroupIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
+import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
 
 const BrandName = "APlus Laundry"
 
@@ -72,51 +73,6 @@ const sidebarTabs = [
 ]
 
 
-const Services = [
-    {
-        title: 'Dry Cleaning',
-        path: '/services/wash-iron',
-        icon: <ServerIcon className="w-3 mr-2" />
-    },
-    {
-        title: 'Premium Laundry',
-        path: '/services/premium-Laundry',
-        icon: <ServerIcon className="w-3 mr-2" />
-    },
-    {
-        title: 'Laundry',
-        path: '/services/laundry',
-        icon: <ServerIcon className="w-3 mr-2" />
-    },
-    {
-        title: 'Steam Ironing',
-        path: '/services/iron',
-        icon: <ServerIcon className="w-3 mr-2" />
-    },
-
-
-]
-
-const OrdersStatuses = [
-    {
-        title: 'onhold',
-    },
-    {
-        title: 'processing',
-    },
-    {
-        title: 'picked',
-    },
-    {
-        title: 'on way',
-    },
-    {
-        title: 'delivered',
-    },
-    {
-        title: 'cancelled',
-    },
-]
 
 const LaundrtProducts = [
     {
@@ -240,6 +196,88 @@ const LaundrtProducts = [
         icon: <ServerIcon className="w-3 mr-2" />
     },
 ]
+
+const Services = [
+    {
+        service_id: '#AL1469',
+        title: 'Dry Cleaning',
+        servicestatus: 'Active',
+        laundry_items: {
+            ...Items,
+        },
+        laundrybykg: 'Active',
+        laundrybykgprice: 50,
+        laundryperpair: 'Active',
+        icon: <ServerIcon className="w-3 mr-2" />
+
+    },
+    {
+        service_id: '#AL1479',
+        title: 'Premium Laundry',
+        servicestatus: 'Active',
+        laundry_items: [
+
+            ...Items,
+        ]
+        ,
+        laundrybykg: 'Active',
+        laundrybykgprice: 50,
+        laundryperpair: 'Active',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+    {
+        service_id: '#AL1489',
+        title: 'Laundry',
+        servicestatus: 'Active',
+        laundry_items: [
+
+            ...Items,
+        ]
+        ,
+        laundrybykg: 'Active',
+        laundrybykgprice: 50,
+        laundryperpair: 'Active',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+    {
+        service_id: '#AL1499',
+        title: 'Steam Ironing',
+        servicestatus: 'Active',
+        laundry_items: [
+            ...Items,
+        ]
+        ,
+        laundrybykg: 'Active',
+        laundrybykgprice: 50,
+        laundryperpair: 'Active',
+        icon: <ServerIcon className="w-3 mr-2" />
+    },
+
+
+]
+
+const OrdersStatuses = [
+    {
+        title: 'onhold',
+    },
+    {
+        title: 'processing',
+    },
+    {
+        title: 'picked',
+    },
+    {
+        title: 'on way',
+    },
+    {
+        title: 'delivered',
+    },
+    {
+        title: 'cancelled',
+    },
+]
+
+
 
 const categories = [
     {
