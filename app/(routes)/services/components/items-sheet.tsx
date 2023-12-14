@@ -15,13 +15,30 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { ScrollAreaScrollbar, ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 import SwitchComponent from './Switch';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+import { categories } from '@/lib/constants';
 
 
 interface Props {
     data: ServicesColumns | any
 }
 
+
 export const ItemsSheet: React.FC<Props> = ({ data }) => {
+    const Items = Object.keys(data.laundry_items as any).filter((item: any) => item.category === item.title).map((item: any, index) => {
+        return data.laundry_items[item]
+    }) as any
+
+    // Get categories that have the same category as the title
+    const Categories = categories.filter((category: any) =>
+        Items.map((item: any) => item.category).includes(category.title)
+    ) as any;
+
+    // Get items that have the same category as the title
+    const ItemsByCategory = Items.filter((item: any) =>
+        Categories.map((category: any) => category.title).includes(item.category)
+    ) as any;
+
+
     const GlobalModal = useGlobalModal();
     const [checked, setChecked] = React.useState(data.laundrybykg === 'Active' ? true : false)
     const deleteOrder = () => {
@@ -47,34 +64,69 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                         <TabsContent value='laundrybykg' className='w-full'>
                             <ScrollArea>
                                 <div
-                                    className='grid gap-4  h-[85vh] py-4 pr-4 '
+                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
                                 >
 
 
                                     {
 
 
-                                        Object.keys(data.laundry_items as any).map((item: any, index) => {
+
+
+
+                                        Categories.map((item: any, index: any) => {
                                             return (
-                                                // <div key={index} className='flex justify-between items-center'>
-                                                //     <p className='text-sm font-semibold'>{data.laundry_items[item].product_name}</p>
-                                                //     <Switch />
-                                                // </div>
-                                                <Card key={index}
-                                                    className='flex w-full p-3 justify-between '
+                                                <>
+                                                    <Card key={index}
+                                                        className='flex flex-col w-full p-3 justify-between '
 
-                                                >
+                                                    >
+                                                        {item.title}
+                                                        {/* {Object.keys(data.laundry_items as any).filter((item: any) => data.laundry_items[item].category !== item.title).map((item: any, index) => {
+                                                            return (
+                                                                <>
+                                                                    <div key={index}
+                                                                        className='flex w-full p-3 justify-between '
+
+                                                                    >
 
 
+                                                                        {data.laundry_items[item].product_name}
 
-                                                    {data.laundry_items[item].product_name}
-
-                                                    <SwitchComponent data={data.laundry_items[item].status} />
+                                                                        <SwitchComponent data={data.laundry_items[item].status} />
 
 
-                                                </Card>
+                                                                    </div>
+                                                                </>
+
+                                                            )
+                                                        })} */}
+                                                        {ItemsByCategory.map((item: any, index: any) => {
+                                                            return (
+                                                                <>
+                                                                    <div key={index}
+                                                                        className='flex w-full p-3 justify-between '
+
+                                                                    >
+
+
+                                                                        {item.product_name}
+
+                                                                        <SwitchComponent data={item.status} />
+
+
+                                                                    </div>
+                                                                </>
+
+                                                            )
+                                                        })}
+
+                                                    </Card>
+                                                </>
                                             )
                                         })
+
+
 
 
                                     }
@@ -85,34 +137,69 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                         <TabsContent value='laundryperpair' className='w-full'>
                             <ScrollArea>
                                 <div
-                                    className='grid gap-4  h-[85vh] py-4 pr-4 '
+                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
                                 >
 
 
                                     {
 
 
-                                        Object.keys(data.laundry_items as any).map((item: any, index) => {
+
+
+
+                                        Categories.map((item: any, index: any) => {
                                             return (
-                                                // <div key={index} className='flex justify-between items-center'>
-                                                //     <p className='text-sm font-semibold'>{data.laundry_items[item].product_name}</p>
-                                                //     <Switch />
-                                                // </div>
-                                                <Card key={index}
-                                                    className='flex w-full p-3 justify-between '
+                                                <>
+                                                    <Card key={index}
+                                                        className='flex flex-col w-full p-3 justify-between '
 
-                                                >
+                                                    >
+                                                        {item.title}
+                                                        {/* {Object.keys(data.laundry_items as any).filter((item: any) => data.laundry_items[item].category !== item.title).map((item: any, index) => {
+                                                            return (
+                                                                <>
+                                                                    <div key={index}
+                                                                        className='flex w-full p-3 justify-between '
+
+                                                                    >
 
 
+                                                                        {data.laundry_items[item].product_name}
 
-                                                    {data.laundry_items[item].product_name}
-
-                                                    <SwitchComponent data={data.laundry_items[item].status} />
+                                                                        <SwitchComponent data={data.laundry_items[item].status} />
 
 
-                                                </Card>
+                                                                    </div>
+                                                                </>
+
+                                                            )
+                                                        })} */}
+                                                        {ItemsByCategory.map((item: any, index: any) => {
+                                                            return (
+                                                                <>
+                                                                    <div key={index}
+                                                                        className='flex w-full p-3 justify-between '
+
+                                                                    >
+
+
+                                                                        {item.product_name}
+
+                                                                        <SwitchComponent data={item.status} />
+
+
+                                                                    </div>
+                                                                </>
+
+                                                            )
+                                                        })}
+
+                                                    </Card>
+                                                </>
                                             )
                                         })
+
+
 
 
                                     }
@@ -121,10 +208,6 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                             </ScrollArea>
                         </TabsContent>
                     </Tabs>
-
-
-
-
 
 
 
