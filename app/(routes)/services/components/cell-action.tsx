@@ -7,6 +7,7 @@ import React from 'react'
 import { ServicesColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface Props {
     data: ServicesColumns
@@ -16,6 +17,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const deleteOrder = () => {
         console.log('delete')
+        toast.success('Service Deleted Successfully')
         GlobalModal.onClose()
     }
     const router = useRouter()
@@ -34,30 +36,21 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     <DropdownMenuItem
                         onSelect={
                             () => {
-                                router.push(`/coupons/${data.couponid}`)
-                            }
-                        }
-                    >
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Coupon Details</DropdownMenuItem>
-                    <DropdownMenuItem
-                        onSelect={
-                            () => {
-                                router.push(`/coupons/edit/${data.couponid}`)
+                                router.push(`/services/edit/${data.service_id}`)
                             }
                         }>
                         <Edit2 className="mr-2 h-4 w-4" />
-                        Edit Coupon Details</DropdownMenuItem>
+                        Edit Service Details</DropdownMenuItem>
                     <DropdownMenuItem
                         onSelect={() => {
-                            GlobalModal.title = "Delete Coupon"
-                            GlobalModal.description = "Are you sure you want to delete this Coupon?"
+                            GlobalModal.title = `Delete ${data.title} `
+                            GlobalModal.description = "Are you sure you want to delete this Service?"
                             GlobalModal.children = <Alert onConfirm={deleteOrder} />
                             GlobalModal.onOpen()
                         }}
                         className="focus:bg-destructive focus:text-destructive-foreground">
                         <Trash className="mr-2 h-4 w-4" />
-                        Delete Coupon</DropdownMenuItem>
+                        Delete Service</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
