@@ -38,7 +38,15 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
 
     return (
         <Sheet>
-            <SheetTrigger>View Items
+            <SheetTrigger>
+                <div
+
+                >
+                    <Button variant='ghost' className='w-full'>
+
+                        View Items
+                    </Button>
+                </div>
             </SheetTrigger>
             <SheetContent className='h-full'>
                 <SheetHeader>
@@ -56,14 +64,7 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                 <div
                                     className='grid gap-4  h-[80vh] py-4 pr-4 '
                                 >
-
-
                                     {
-
-
-
-
-
                                         Categories.map((item: any, index: any) => {
                                             return (
                                                 <>
@@ -71,26 +72,10 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                                         className='flex flex-col w-full p-3 justify-between '
 
                                                     >
-                                                        {item.title}
-                                                        {/* {Object.keys(data.laundry_items as any).filter((item: any) => data.laundry_items[item].category !== item.title).map((item: any, index) => {
-                                                            return (
-                                                                <>
-                                                                    <div key={index}
-                                                                        className='flex w-full p-3 justify-between '
-
-                                                                    >
-
-
-                                                                        {data.laundry_items[item].product_name}
-
-                                                                        <SwitchComponent data={data.laundry_items[item].status} />
-
-
-                                                                    </div>
-                                                                </>
-
-                                                            )
-                                                        })} */}
+                                                        <span className='text-lg font-bold mb-2'>
+                                                            Category - {item.title}
+                                                        </span>
+                                                        <Separator orientation='horizontal' />
                                                         {ItemsByCategory.map((item: any, index: any) => {
                                                             return (
                                                                 <>
@@ -98,13 +83,12 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                                                         className='flex w-full p-3 justify-between '
 
                                                                     >
+                                                                        <span className='text-md'>
 
-
-                                                                        {item.product_name}
+                                                                            {item.product_name}
+                                                                        </span>
 
                                                                         <SwitchComponent data={item.status} />
-
-
                                                                     </div>
                                                                 </>
 
@@ -129,14 +113,7 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                 <div
                                     className='grid gap-4  h-[80vh] py-4 pr-4 '
                                 >
-
-
                                     {
-
-
-
-
-
                                         Categories.map((item: any, index: any) => {
                                             return (
                                                 <>
@@ -144,26 +121,10 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                                         className='flex flex-col w-full p-3 justify-between '
 
                                                     >
-                                                        {item.title}
-                                                        {/* {Object.keys(data.laundry_items as any).filter((item: any) => data.laundry_items[item].category !== item.title).map((item: any, index) => {
-                                                            return (
-                                                                <>
-                                                                    <div key={index}
-                                                                        className='flex w-full p-3 justify-between '
-
-                                                                    >
-
-
-                                                                        {data.laundry_items[item].product_name}
-
-                                                                        <SwitchComponent data={data.laundry_items[item].status} />
-
-
-                                                                    </div>
-                                                                </>
-
-                                                            )
-                                                        })} */}
+                                                        <span className='text-lg font-bold mb-2'>
+                                                            Category - {item.title}
+                                                        </span>
+                                                        <Separator orientation='horizontal' />
                                                         {ItemsByCategory.map((item: any, index: any) => {
                                                             return (
                                                                 <>
@@ -171,13 +132,12 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                                                         className='flex w-full p-3 justify-between '
 
                                                                     >
+                                                                        <span className='text-md'>
 
-
-                                                                        {item.product_name}
+                                                                            {item.product_name}
+                                                                        </span>
 
                                                                         <SwitchComponent data={item.status} />
-
-
                                                                     </div>
                                                                 </>
 
