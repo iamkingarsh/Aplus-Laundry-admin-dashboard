@@ -39,10 +39,8 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
     return (
         <Sheet>
             <SheetTrigger>
-                <div>
-                    <Button variant='ghost' className='w-full'>
-                        View Items
-                    </Button>
+                <div className='hover:bg-accent p-2 px-4 hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50'>
+                    View Items
                 </div>
             </SheetTrigger>
             <SheetContent className='h-full'>

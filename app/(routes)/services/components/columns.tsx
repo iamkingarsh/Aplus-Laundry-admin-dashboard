@@ -13,15 +13,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type ServicesColumns = {
-
     service_id: string
     title: string
     laundry_items: Array<Object> //@mujahed create seperate laundry items for both laundry by kg and laundry per pair in data model
     laundrybykg: string
     laundrybykgprice: string
     laundryperpair: string
-
-
 }
 
 
