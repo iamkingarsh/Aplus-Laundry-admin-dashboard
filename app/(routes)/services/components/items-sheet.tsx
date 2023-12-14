@@ -39,11 +39,8 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
     return (
         <Sheet>
             <SheetTrigger>
-                <div
-
-                >
+                <div>
                     <Button variant='ghost' className='w-full'>
-
                         View Items
                     </Button>
                 </div>
