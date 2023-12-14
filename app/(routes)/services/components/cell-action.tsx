@@ -4,12 +4,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
-import { CouponsColumns } from './columns'
+import { ServicesColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { useRouter } from 'next/navigation';
 
 interface Props {
-    data: CouponsColumns
+    data: ServicesColumns
 }
 
 export const CellAction: React.FC<Props> = ({ data }) => {
