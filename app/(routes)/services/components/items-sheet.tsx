@@ -14,6 +14,8 @@ import { Card, CardHeader } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { ScrollAreaScrollbar, ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 import SwitchComponent from './Switch';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+
 
 interface Props {
     data: ServicesColumns | any
@@ -36,46 +38,92 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                     <SheetTitle>Laundry Items of <br /> {data.title} service</SheetTitle>
                     <Separator orientation='horizontal' />
 
+                    <Tabs className='w-full'>
+                        <TabsList className='flex w-full gap-2'>
+
+                            <TabsTrigger className='w-full' value='laundrybykg'  >Laundry By KG</TabsTrigger>
+                            <TabsTrigger className='w-full' value='laundryperpair'  >Laundry Per Pair</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value='laundrybykg' className='w-full'>
+                            <ScrollArea>
+                                <div
+                                    className='grid gap-4  h-[85vh] py-4 pr-4 '
+                                >
+
+
+                                    {
+
+
+                                        Object.keys(data.laundry_items as any).map((item: any, index) => {
+                                            return (
+                                                // <div key={index} className='flex justify-between items-center'>
+                                                //     <p className='text-sm font-semibold'>{data.laundry_items[item].product_name}</p>
+                                                //     <Switch />
+                                                // </div>
+                                                <Card key={index}
+                                                    className='flex w-full p-3 justify-between '
+
+                                                >
 
 
 
+                                                    {data.laundry_items[item].product_name}
 
-                    <ScrollArea>
-                        <div
-                            className='grid gap-4  h-[85vh] py-4 pr-4 '
-                        >
+                                                    <SwitchComponent data={data.laundry_items[item].status} />
 
 
-                            {
+                                                </Card>
+                                            )
+                                        })
 
 
-                                Object.keys(data.laundry_items as any).map((item: any, index) => {
-                                    return (
-                                        // <div key={index} className='flex justify-between items-center'>
-                                        //     <p className='text-sm font-semibold'>{data.laundry_items[item].product_name}</p>
-                                        //     <Switch />
-                                        // </div>
-                                        <Card key={index}
-                                            className='flex w-full p-3  text-left'
+                                    }
 
-                                        >
-
-
-
-                                            {data.laundry_items[item].product_name}
-
-                                            <SwitchComponent data={data.laundry_items[item].status} />
+                                </div>
+                            </ScrollArea>
+                        </TabsContent>
+                        <TabsContent value='laundryperpair' className='w-full'>
+                            <ScrollArea>
+                                <div
+                                    className='grid gap-4  h-[85vh] py-4 pr-4 '
+                                >
 
 
-                                        </Card>
-                                    )
-                                })
+                                    {
 
 
-                            }
+                                        Object.keys(data.laundry_items as any).map((item: any, index) => {
+                                            return (
+                                                // <div key={index} className='flex justify-between items-center'>
+                                                //     <p className='text-sm font-semibold'>{data.laundry_items[item].product_name}</p>
+                                                //     <Switch />
+                                                // </div>
+                                                <Card key={index}
+                                                    className='flex w-full p-3 justify-between '
 
-                        </div>
-                    </ScrollArea>
+                                                >
+
+
+
+                                                    {data.laundry_items[item].product_name}
+
+                                                    <SwitchComponent data={data.laundry_items[item].status} />
+
+
+                                                </Card>
+                                            )
+                                        })
+
+
+                                    }
+
+                                </div>
+                            </ScrollArea>
+                        </TabsContent>
+                    </Tabs>
+
+
+
 
 
 
