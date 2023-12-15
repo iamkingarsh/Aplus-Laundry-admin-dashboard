@@ -24,7 +24,7 @@ const LaundrtProducts = [
         product_id: '2',
         product_name: 'TShirts',
         value: 'tshirts',
-        category: 'Men',
+        category: 'Household',
         priceperpair: 50,
         status: 'Active'
     },

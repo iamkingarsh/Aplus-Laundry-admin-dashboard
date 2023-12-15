@@ -30,17 +30,12 @@ function TopBar() {
                             <DropdownMenuItem>
                                 <User className="mr-2 h-4 w-4" />
                                 <span>Profile</span>
-                                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Settings className="mr-2 h-4 w-4" />
                                 <span>Settings</span>
-                                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Keyboard className="mr-2 h-4 w-4" />
-                                <span>Keyboard shortcuts</span>
-                                <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
@@ -51,15 +46,14 @@ function TopBar() {
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Plus className="mr-2 h-4 w-4" />
-                                <span>New Team</span>
-                                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                                <span>New Team Member</span>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LogOutIcon className="mr-2 h-4 w-4" />
                             <span>Log out</span>
-                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

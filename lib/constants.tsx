@@ -197,13 +197,15 @@ const LaundrtProducts = [
     },
 ]
 
+const fewItems = Items.slice(0, 5)
+
 const Services = [
     {
         service_id: '#AL1469',
         title: 'Dry Cleaning',
         servicestatus: 'Active',
         laundry_items: {
-            ...Items,
+            ...fewItems,
         },
         laundrybykg: 'Active',
         laundrybykgprice: 50,
