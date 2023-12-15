@@ -197,7 +197,130 @@ const LaundrtProducts = [
     },
 ]
 
-const fewItems = Items.slice(0, 5)
+const LaundryProducts = [
+    {
+        product_id: 'lp12359asd',
+        product_name: 'Shirts',
+        value: 'shirts',
+        category: 'Women',
+        priceperpair: 50,
+        status: 'Active'
+    },
+    {
+        product_id: 'lp45678adb',
+        product_name: 'TShirts',
+        value: 'tshirts',
+        category: 'Household',
+        priceperpair: 50,
+        status: 'Active'
+    },
+    {
+        product_id: 'lp45378asv',
+        product_name: 'Trousers',
+        value: 'trousers',
+        category: 'Men',
+        priceperpair: 50,
+        status: 'Active'
+    },
+    {
+        product_id: 'lp45325sfe',
+        product_name: 'Jeans',
+        value: 'jeans',
+        category: 'Men',
+        priceperpair: 50,
+        status: 'Active'
+    },
+    {
+        product_id: 'lp41478adr',
+        product_name: 'Shorts',
+        value: 'shorts',
+        category: 'Men',
+        priceperpair: 50,
+        status: 'Active'
+    },
+    {
+        product_id: 'lp4238dar',
+        product_name: 'Kurtas',
+        value: 'kurtas',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp4381ndr',
+        product_name: 'Kurtis',
+        value: 'kurtis',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2381nxr',
+        product_name: 'Sarees',
+        value: 'sarees',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2881xzr',
+        product_name: 'Bedsheets',
+        value: 'bedsheets',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2801xcr',
+        product_name: 'Blankets',
+        value: 'blankets',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2841xtr',
+        product_name: 'Curtains',
+        value: 'curtains',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2081xsr',
+        product_name: 'CushionCovers',
+        value: 'cushioncovers',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2981xzr',
+        product_name: 'PillowCovers',
+        value: 'pillowcovers',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2080srx',
+        product_name: 'Towels',
+        value: 'towels',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+    {
+        product_id: 'lp2880srq',
+        product_name: 'Masks',
+        value: 'masks',
+        priceperpair: 50,
+        category: 'Men',
+        status: 'Active'
+    },
+
+
+] as any
 
 const Services = [
     {
@@ -205,7 +328,7 @@ const Services = [
         title: 'Dry Cleaning',
         servicestatus: 'Active',
         laundry_items: {
-            ...fewItems,
+            ...LaundryProducts,
         },
         laundrybykg: 'Active',
         laundrybykgprice: 50,
@@ -219,7 +342,7 @@ const Services = [
         servicestatus: 'Active',
         laundry_items: [
 
-            ...Items,
+            ...LaundryProducts,
         ]
         ,
         laundrybykg: 'Active',
@@ -233,7 +356,7 @@ const Services = [
         servicestatus: 'Active',
         laundry_items: [
 
-            ...Items,
+            ...LaundryProducts,
         ]
         ,
         laundrybykg: 'Active',
@@ -246,7 +369,7 @@ const Services = [
         title: 'Steam Ironing',
         servicestatus: 'Active',
         laundry_items: [
-            ...Items,
+            ...LaundryProducts,
         ]
         ,
         laundrybykg: 'Active',

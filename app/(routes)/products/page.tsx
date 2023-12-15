@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 
 const LaundrtProducts = [
     {
-        product_id: '1',
+        product_id: 'lp12359asd',
         product_name: 'Shirts',
         value: 'shirts',
         category: 'Women',
@@ -21,7 +21,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '2',
+        product_id: 'lp45678adb',
         product_name: 'TShirts',
         value: 'tshirts',
         category: 'Household',
@@ -29,7 +29,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '3',
+        product_id: 'lp45378asv',
         product_name: 'Trousers',
         value: 'trousers',
         category: 'Men',
@@ -37,7 +37,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '4',
+        product_id: 'lp45325sfe',
         product_name: 'Jeans',
         value: 'jeans',
         category: 'Men',
@@ -45,7 +45,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '5',
+        product_id: 'lp41478adr',
         product_name: 'Shorts',
         value: 'shorts',
         category: 'Men',
@@ -53,7 +53,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '6',
+        product_id: 'lp4238dar',
         product_name: 'Kurtas',
         value: 'kurtas',
         priceperpair: 50,
@@ -61,7 +61,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '7',
+        product_id: 'lp4381ndr',
         product_name: 'Kurtis',
         value: 'kurtis',
         priceperpair: 50,
@@ -69,7 +69,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '8',
+        product_id: 'lp2381nxr',
         product_name: 'Sarees',
         value: 'sarees',
         priceperpair: 50,
@@ -77,7 +77,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '9',
+        product_id: 'lp2881xzr',
         product_name: 'Bedsheets',
         value: 'bedsheets',
         priceperpair: 50,
@@ -85,7 +85,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '9',
+        product_id: 'lp2801xcr',
         product_name: 'Blankets',
         value: 'blankets',
         priceperpair: 50,
@@ -93,7 +93,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '10',
+        product_id: 'lp2841xtr',
         product_name: 'Curtains',
         value: 'curtains',
         priceperpair: 50,
@@ -101,7 +101,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '11',
+        product_id: 'lp2081xsr',
         product_name: 'CushionCovers',
         value: 'cushioncovers',
         priceperpair: 50,
@@ -109,7 +109,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '12',
+        product_id: 'lp2981xzr',
         product_name: 'PillowCovers',
         value: 'pillowcovers',
         priceperpair: 50,
@@ -117,7 +117,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '13',
+        product_id: 'lp2080srx',
         product_name: 'Towels',
         value: 'towels',
         priceperpair: 50,
@@ -125,7 +125,7 @@ const LaundrtProducts = [
         status: 'Active'
     },
     {
-        product_id: '14',
+        product_id: 'lp2880srq',
         product_name: 'Masks',
         value: 'masks',
         priceperpair: 50,
