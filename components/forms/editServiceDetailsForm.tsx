@@ -27,25 +27,11 @@ import { set } from "date-fns"
 import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
 
 
-interface NewServiceFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface EditServiceFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
+    data: any
 }
 
-const laundrybykg_itemsSchema = z.object({
-    title: z.string().min(2, { message: "Service title is required" }),
-    laundrybykg: z.string(),
-    laundrybykgprice: z.string(),
-    laundryperpair: z.string(),
-    laundrybykg_items: z.array(z.string()),
-})
-
-const laundryperpair_itemsSchema = z.object({
-    title: z.string().min(2, { message: "Service title is required" }),
-    laundrybykg: z.string(),
-    laundrybykgprice: z.string(),
-    laundryperpair: z.string(),
-    laundryperpair_items: z.array(z.string()),
-})
 
 const formSchema = z.object({
     title: z.string().min(2, { message: "Service title is required" }),
@@ -60,19 +46,20 @@ const formSchema = z.object({
 
 })
 
-export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps) {
+export function EditServiceForm({ className, data, gap, ...props }: EditServiceFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: "",
-            laundrybykg: "Deactivated",
-            laundrybykgprice: "0",
-            laundryperpair: "Deactivated",
+            title: data.title,
+            laundrybykg: data.laundrybykg === 'Active' ? 'Activated' : 'Deactivated',
+            laundrybykgprice: data.laundrybykgprice,
+            laundryperpair: data.laundryperpair === 'Active' ? 'Activated' : 'Deactivated',
             laundryitems: {
-                laundrybykg_items: [],
-                laundryperpair_items: [],
+                laundrybykg_items: Object.keys(data.laundry_items).map((item: any) => data.laundry_items[item].product_id),
+                laundryperpair_items: Object.keys(data.laundry_items).map((item: any) => data.laundry_items[item].product_id),
+
             }
         },
 
@@ -92,8 +79,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     }
 
-    const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
-    const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
+    const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>(form.watch("laundryitems.laundrybykg_items"));
+    const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>(form.watch("laundryitems.laundryperpair_items"));
 
 
 
@@ -118,8 +105,9 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
     }
 
     React.useEffect(() => {
-        console.log(form)
-    }, [form])
+
+        console.log('items', Object.keys(data.laundry_items).map((item: any) => data.laundry_items[item].product_id))
+    }, [data])
 
 
     return (
@@ -471,14 +459,14 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                     {isLoading && (
                                         <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                                     )}
-                                    Create
+                                    Update
                                 </Button>
                                 :
                                 <Button type="submit" className="w-fit" disabled>
                                     {isLoading && (
                                         <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                                     )}
-                                    Create
+                                    Update
                                 </Button>
                         }
 

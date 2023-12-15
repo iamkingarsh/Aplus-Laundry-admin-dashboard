@@ -324,7 +324,7 @@ const LaundryProducts = [
 
 const Services = [
     {
-        service_id: '#AL1469',
+        service_id: 'AL1469',
         title: 'Dry Cleaning',
         servicestatus: 'Active',
         laundry_items: {
@@ -332,12 +332,12 @@ const Services = [
         },
         laundrybykg: 'Active',
         laundrybykgprice: 50,
-        laundryperpair: 'Active',
+        laundryperpair: 'Deactive',
         icon: <ServerIcon className="w-3 mr-2" />
 
     },
     {
-        service_id: '#AL1479',
+        service_id: 'AL1479',
         title: 'Premium Laundry',
         servicestatus: 'Active',
         laundry_items: [
@@ -351,7 +351,7 @@ const Services = [
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
-        service_id: '#AL1489',
+        service_id: 'AL1489',
         title: 'Laundry',
         servicestatus: 'Active',
         laundry_items: [
@@ -365,7 +365,7 @@ const Services = [
         icon: <ServerIcon className="w-3 mr-2" />
     },
     {
-        service_id: '#AL1499',
+        service_id: 'AL1499',
         title: 'Steam Ironing',
         servicestatus: 'Active',
         laundry_items: [
