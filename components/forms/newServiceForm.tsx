@@ -103,9 +103,17 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     const handleSelectChange = (value: string, laundrytype: string): any => {
         if (laundrytype === "laundrybykg") {
-            setSelectedItemsForLPK([...selectedItemsForLPK, value]);
+            if (selectedItemsForLPK.includes(value)) {
+                setSelectedItemsForLPK(selectedItemsForLPK.filter((item: any) => item !== value));
+            } else {
+                setSelectedItemsForLPK([...selectedItemsForLPK, value]);
+            }
         } else {
-            setSelectedItemsForLPP([...selectedItemsForLPP, value]);
+            if (selectedItemsForLPP.includes(value)) {
+                setSelectedItemsForLPP(selectedItemsForLPP.filter((item: any) => item !== value));
+            } else {
+                setSelectedItemsForLPP([...selectedItemsForLPP, value]);
+            }
         }
     }
 
@@ -387,7 +395,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                     } onCheckedChange={
                                                                         () => {
                                                                             if (selectedItemsForLPP.length === Items.length) {
-                                                                                setSelectedItemsForLPK([])
+                                                                                setSelectedItemsForLPP([])
                                                                             } else {
                                                                                 setSelectedItemsForLPP(Items.map((item: any) => item.product_id))
                                                                             }
@@ -454,7 +462,9 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                     </div>
                     <div className='' >
                         {
-                            form.watch("laundrybykg") === 'Activated' || form.watch("laundryperpair") === 'Activated' ?
+                            form.watch("laundrybykg") === 'Activated' && form.watch("laundrybykgprice") !== '0' && (form.watch("laundryitems.laundrybykg_items") ?? []).length > 0 ||
+                                form.watch("laundryperpair") === 'Activated' && (form.watch("laundryitems.laundryperpair_items") ?? []).length > 0
+                                ?
                                 <Button type="submit" className="w-fit" disabled={isLoading}>
                                     {isLoading && (
                                         <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
