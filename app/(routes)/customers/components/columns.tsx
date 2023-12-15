@@ -62,10 +62,6 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         ),
     },
     {
-        accessorKey: "id",
-        header: "User id",
-    },
-    {
         accessorKey: "fullname",
         header: ({ column }) => {
             return (
