@@ -55,7 +55,7 @@ const formSchema = z.object({
     laundryitems: z.object({
         laundrybykg_items: z.array(z.string()),
         laundryperpair_items: z.array(z.string()),
-    })
+    }).partial()
 
 
 })
@@ -67,9 +67,9 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            laundrybykg: "",
-            laundrybykgprice: "",
-            laundryperpair: "",
+            laundrybykg: "Deactivated",
+            laundrybykgprice: "0",
+            laundryperpair: "Deactivated",
             laundryitems: {
                 laundrybykg_items: [],
                 laundryperpair_items: [],
@@ -95,6 +95,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
     const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
 
+
+
     const isOptionSelected = (value: string, laundrytype: string): any => {
         return laundrytype === "laundrybykg" ? selectedItemsForLPK.includes(value) : selectedItemsForLPP.includes(value);
     };
@@ -109,7 +111,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     React.useEffect(() => {
         console.log(form)
-    }, [selectedItemsForLPK, selectedItemsForLPP])
+    }, [form])
 
 
     return (
@@ -152,7 +154,12 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                     <FormControl>
                                         <Card className="flex h-9 rounded-md p-1 px-4 items-center justify-between">
                                             <span className="text-sm">Activate Service</span>
-                                            <Switch id="laundrybykg"   {...field} />
+                                            <Switch
+                                                checked={form.watch("laundrybykg") === "Activated" ? true : false}
+                                                onCheckedChange={
+                                                    form.watch("laundrybykg") === "Activated" ? () => form.setValue("laundrybykg", "Deactivated") : () => form.setValue("laundrybykg", "Activated")
+                                                }
+                                                id="laundryperpair"  {...field} />
                                         </Card>
 
                                     </FormControl>
@@ -160,6 +167,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                 </FormItem>
                             )}
                         />
+
                         <FormField
                             name="laundryperpair"
                             control={form.control}
@@ -169,7 +177,12 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                     <FormControl>
                                         <Card className="flex h-9 rounded-md p-1 px-4 items-center justify-between">
                                             <span className="text-sm">Activate Service</span>
-                                            <Switch id="laundryperpair"  {...field} />
+                                            <Switch
+                                                checked={form.watch("laundryperpair") === "Activated" ? true : false}
+                                                onCheckedChange={
+                                                    form.watch("laundryperpair") === "Activated" ? () => form.setValue("laundryperpair", "Deactivated") : () => form.setValue("laundryperpair", "Activated")
+                                                }
+                                                id="laundryperpair"  {...field} />
                                         </Card>
 
                                     </FormControl>
@@ -177,8 +190,25 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                 </FormItem>
                             )}
                         />
-
-                        <FormField
+                        {form.watch("laundrybykg") === 'Activated' &&
+                            <FormField
+                                name="laundrybykgprice"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="laundrybykgprice">Laundry By KG Price</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="eg. 50"
+                                                id="laundrybykgprice"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        }
+                        {form.watch("laundrybykg") === 'Activated' && <FormField
                             name="laundryitems.laundrybykg_items"
                             control={form.control}
                             render={({ field }) => (
@@ -204,11 +234,11 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                             <DropdownMenuSeparator />
                                             <Sheet>
                                                 <SheetTrigger asChild>
-                                                    <Button variant="outline">Open Products Catalogue</Button>
+                                                    <Button variant="outline">Open Items Catalogue</Button>
                                                 </SheetTrigger>
                                                 <SheetContent>
                                                     <SheetHeader>
-                                                        <SheetTitle>Select Products</SheetTitle>
+                                                        <SheetTitle>Select Laundry Items</SheetTitle>
                                                         <SheetDescription>
                                                             Please select the products
                                                         </SheetDescription>
@@ -298,16 +328,148 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
                                 </FormItem>
                             )}
-                        />
+                        />}
+                        {form.watch("laundryperpair") === 'Activated' && <FormField
+                            name="laundryitems.laundryperpair_items"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="products"> Select Laundry Per Pair Items</FormLabel>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                className={cn(
+                                                    "w-full justify-between",
+                                                    !field.value && "text-muted-foreground"
+                                                )}
+                                            >
+
+                                                Select Laundry Items
+                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-full" onCloseAutoFocus={(e) => e.preventDefault()}>
+                                            <DropdownMenuLabel>Select Laundry Items</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <Sheet>
+                                                <SheetTrigger asChild>
+                                                    <Button variant="outline">Open Items Catalogue</Button>
+                                                </SheetTrigger>
+                                                <SheetContent>
+                                                    <SheetHeader>
+                                                        <SheetTitle>Select Products</SheetTitle>
+                                                        <SheetDescription>
+                                                            Please select the products
+                                                        </SheetDescription>
+                                                    </SheetHeader>
+                                                    <ScrollArea className="h-[85%] my-2 px-2 rounded-md ">
+
+
+                                                        <div className="grid gap-4 py-4">
+                                                            <Card
+                                                                onSelect={(e) => e.preventDefault()}
+
+                                                                // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
+
+                                                                className="flex gap-2 p-2 justify-between items-center"
+                                                            >
+
+                                                                <div>
+                                                                    All
+                                                                </div>
+                                                                <div className="flex gap-2 items-center justify-end">
+
+                                                                    <Switch checked={
+                                                                        selectedItemsForLPP.length === Items.length ? true : false
+
+                                                                    } onCheckedChange={
+                                                                        () => {
+                                                                            if (selectedItemsForLPP.length === Items.length) {
+                                                                                setSelectedItemsForLPK([])
+                                                                            } else {
+                                                                                setSelectedItemsForLPP(Items.map((item: any) => item.product_id))
+                                                                            }
+                                                                        }
+                                                                    } id="laundrybykg" />
+
+                                                                </div>
+
+                                                            </Card>
+                                                            {Items.map((value: any, index: number) => {
+                                                                return (
+
+                                                                    <Card
+                                                                        onSelect={(e) => e.preventDefault()}
+                                                                        key={index}
+                                                                        // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
+
+                                                                        className="flex gap-2 p-2 justify-between items-center"
+                                                                    >
+
+                                                                        <div>
+                                                                            {value.product_name}
+                                                                        </div>
+                                                                        <div className="flex gap-2 items-center justify-end">
+
+                                                                            <Switch checked={isOptionSelected(value.product_id, "laundryperpair")} onCheckedChange={() => handleSelectChange(value.product_id, "laundryperpair")} id="laundryperpair" />
+                                                                        </div>
+
+                                                                    </Card>
+
+                                                                )
+                                                            })}
+
+
+
+
+                                                        </div>
+                                                    </ScrollArea>
+                                                    <SheetFooter className="flex w-full items-center md:justify-between">
+
+                                                        <SheetClose asChild>
+                                                            {/* <Button onClick={() => { form.setValue("products", { ...selectedItems }); console.log(form.setValue("products", selectedItems), { ...selectedItems }) }} type="submit">Save changes</Button> */}
+
+                                                            <Button onClick={() => {
+
+                                                                form.setValue("laundryitems.laundryperpair_items", [...selectedItemsForLPP]);
+
+
+                                                            }} type="submit">Save changes</Button>
+
+                                                        </SheetClose>
+                                                    </SheetFooter>
+                                                </SheetContent>
+                                            </Sheet>
+
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <FormMessage />
+
+                                </FormItem>
+                            )}
+                        />}
 
                     </div>
                     <div className='' >
-                        <Button type="submit" className="w-fit" disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
-                            )}
-                            Create
-                        </Button>
+                        {
+                            form.watch("laundrybykg") === 'Activated' || form.watch("laundryperpair") === 'Activated' ?
+                                <Button type="submit" className="w-fit" disabled={isLoading}>
+                                    {isLoading && (
+                                        <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                                    )}
+                                    Create
+                                </Button>
+                                :
+                                <Button type="submit" className="w-fit" disabled>
+                                    {isLoading && (
+                                        <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                                    )}
+                                    Create
+                                </Button>
+                        }
+
                     </div>
 
                 </form>
