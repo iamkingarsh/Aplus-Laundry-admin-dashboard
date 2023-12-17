@@ -28,6 +28,7 @@ import { Textarea } from "../ui/textarea"
 import toast, { Toast } from "react-hot-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Upload } from "lucide-react"
+import { url } from "inspector"
 
 const profileFormSchema = z.object({
     profilepic: z.string(),
@@ -66,7 +67,6 @@ export function ProfileForm() {
 
 
 
-
     function onSubmit(data: ProfileFormValues) {
 
 
@@ -86,16 +86,37 @@ export function ProfileForm() {
                                 {/* <Input type="file" {...field} /> */}
                                 <div className="flex gap-4 items-center">
                                     <Avatar className='w-12 h-12'>
-                                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                                        <AvatarFallback>{defaultValues.FullName?.slice(0, 2)}</AvatarFallback>
+                                        <AvatarImage src={form.watch('profilepic')} alt="@shadcn" />
+                                        <AvatarFallback>{form.watch('FullName')?.slice(0, 2)}</AvatarFallback>
                                     </Avatar>
                                     <Button
                                         onClick={() => {
-                                            document.getElementById('upload')?.click()
+                                            document.getElementById('upload')?.click();
+
                                         }}
                                         className='flex gap-4' size='default' variant="ghost" type='button'>Change <Upload className='w-4' />
                                     </Button>
-                                    <Input id="upload" className="hidden" hidden type="file" />
+                                    <Input
+                                        onChange={(e: any) => {
+                                            const file = e.target.files[0];
+
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                reader.onload = (event: any) => {
+                                                    const imageUrl = event.target.result;
+                                                    form.setValue('profilepic', imageUrl);
+                                                    console.log(imageUrl);
+                                                };
+
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }}
+                                        id="upload"
+                                        className="hidden"
+                                        hidden
+                                        type="file"
+                                    />
+
 
                                 </div>
                             </FormControl>
