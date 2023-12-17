@@ -2,7 +2,7 @@
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-import { PlusIcon, ServerIcon } from 'lucide-react'
+import { PlusIcon, } from 'lucide-react'
 import React from 'react'
 import { columns } from './components/columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'

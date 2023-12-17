@@ -26,6 +26,8 @@ import {
 } from "../ui/select"
 import { Textarea } from "../ui/textarea"
 import toast, { Toast } from "react-hot-toast"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Upload } from "lucide-react"
 
 const profileFormSchema = z.object({
     profilepic: z.string(),
@@ -50,8 +52,8 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-    profilepic: "https://avatars.githubusercontent.com/u/1503206?v=4",
-    FullName: "Shadcn",
+    profilepic: "https://github.com/shadcn.png",
+    FullName: "Arshad",
     email: "contact@mohammedarshad.com",
 }
 
@@ -61,6 +63,8 @@ export function ProfileForm() {
         defaultValues,
         mode: "onChange",
     })
+
+
 
 
     function onSubmit(data: ProfileFormValues) {
@@ -79,7 +83,21 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Profile Picture</FormLabel>
                             <FormControl>
-                                <Input type="file" {...field} />
+                                {/* <Input type="file" {...field} /> */}
+                                <div className="flex gap-4 items-center">
+                                    <Avatar className='w-12 h-12'>
+                                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                                        <AvatarFallback>{defaultValues.FullName?.slice(0, 2)}</AvatarFallback>
+                                    </Avatar>
+                                    <Button
+                                        onClick={() => {
+                                            document.getElementById('upload')?.click()
+                                        }}
+                                        className='flex gap-4' size='default' variant="ghost" type='button'>Change <Upload className='w-4' />
+                                    </Button>
+                                    <Input id="upload" className="hidden" hidden type="file" />
+
+                                </div>
                             </FormControl>
 
                             <FormMessage />
@@ -106,8 +124,8 @@ export function ProfileForm() {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder="example@example.com " {...field} />
+                            <FormControl >
+                                <Input disabled placeholder="example@example.com " />
                             </FormControl>
 
 
