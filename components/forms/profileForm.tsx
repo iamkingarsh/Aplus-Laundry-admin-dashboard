@@ -108,7 +108,7 @@ export function ProfileForm() {
                                                     console.log(imageUrl);
                                                 };
 
-                                                reader.readAsDataURL(file);
+                                                reader.readAsDataURL(file); // change the logic during backend integration, use cloudinary
                                             }
                                         }}
                                         id="upload"
