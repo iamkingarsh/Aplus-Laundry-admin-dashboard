@@ -11,6 +11,8 @@ import { DatePickerWithRange } from '@/components/date-range'
 
 export default function page() {
 
+    const role = 'owner'
+
     const StatsData = [
         {
             title: 'Total Revenue',
