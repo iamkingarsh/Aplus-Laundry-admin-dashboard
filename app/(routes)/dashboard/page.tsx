@@ -14,6 +14,7 @@ export default function page() {
     const roles = [
         'Owner',
         'Admin',
+        'Manager',
     ]
 
     const StatsData = [
