@@ -14,9 +14,10 @@ import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import toast from "react-hot-toast"
+import { Select, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select"
 
 
-interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NewTeamMemberFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
@@ -27,25 +28,21 @@ const formSchema = z.object({
         { message: "Name must be less than 50 characters long" }
     ),
     email: z.string().email(),
-    password: z.string().min(6).max(100),
+    mobile: z.string().min(10).max(10),
     phoneno: z.string().min(10).max(10),
     address: z.string().min(10).max(100),
-    city: z.string().min(2).max(50),
-    state: z.string().min(2).max(50),
-    pincode: z.string().min(6).max(6),
-    country: z.string().min(2).max(50),
+    role: z.string().min(2).max(50),
+
 
 })
 
-export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
+export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            country: "India",
-            state: "Andhra Pradesh",
-            city: "Ongole",
+            role: 'Manager',
         },
 
     })
@@ -124,31 +121,6 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                             )}
                         />
                         <FormField
-                            name="password"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="password">Password</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="password"
-                                            placeholder="*******"
-                                            type="password"
-                                            autoCapitalize="none"
-                                            autoComplete="password"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.password?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
                             name="phoneno"
                             control={form.control}
                             render={({ field }) => (
@@ -201,101 +173,25 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                             )}
                         />
                         <FormField
-                            name="city"
+                            name="role"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="city">City</FormLabel>
-                                    <FormControl>
+                                    <FormLabel htmlFor="role">Role</FormLabel>
 
-                                        <Input
-                                            id="city"
-                                            placeholder="eg. Mumbai"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="city"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.city?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="state"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="state">State</FormLabel>
-                                    <FormControl>
+                                    <Select {...field}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a Role" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Manager"> Manager</SelectItem>
+                                        </SelectContent>
 
-                                        <Input
-                                            id="state"
-                                            placeholder="eg. Maharashtra"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="state"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.state?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )} />
-                        <FormField
-                            name="pincode"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="pincode">Pincode</FormLabel>
-                                    <FormControl>
 
-                                        <Input
-                                            id="pincode"
-                                            placeholder="eg. 400001"
-                                            type="number"
-                                            autoCapitalize="none"
-                                            autoComplete="pincode"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors?.pincode?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="country"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="country">Country</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="country"
-                                            placeholder="eg. India"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="country"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors?.country?.message}
-                                    </FormMessage>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -305,7 +201,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                             {isLoading && (
                                 <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                             )}
-                            Create
+                            Invite
                         </Button>
                     </div>
 

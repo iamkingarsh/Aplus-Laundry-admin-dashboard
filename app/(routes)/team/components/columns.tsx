@@ -103,7 +103,6 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         accessorKey: "address",
         header: "Address",
     },
-
     {
         id: "actions",
         cell: ({ row }) => <CellAction data={row.original} />,
