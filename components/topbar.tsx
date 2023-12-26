@@ -8,11 +8,14 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuSub, DropdownMenuPortal,
 import { Cloud, CreditCard, Github, Keyboard, LifeBuoy, LogOutIcon, Mail, MessageSquare, Plus, PlusCircle, Settings, User, UserPlus, Users } from 'lucide-react'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
+import { useGlobalModal } from '@/hooks/GlobalModal'
+import { NewTeamMemberForm } from './forms/newTeamMemberForm'
 
 
 
 function TopBar() {
     const router = useRouter()
+    const modal = useGlobalModal()
     return (
         <div className='py-3 bg-primary-foreground sticky z-40 top-0 overflow-hidden px-6 border-b-2 flex justify-between'>
             <div>
@@ -51,7 +54,16 @@ function TopBar() {
                                 <Users className="mr-2 h-4 w-4" />
                                 <span>Team</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onSelect={
+                                    () => {
+
+                                        modal.title = "Invite A New Team Member"
+                                        modal.description = "Invite anyone to your team by sending them an email!"
+                                        modal.children = <NewTeamMemberForm gap={2} />
+                                        modal.onOpen()
+                                    }
+                                }>
                                 <Plus className="mr-2 h-4 w-4" />
                                 <span>New Team Member</span>
                             </DropdownMenuItem>
