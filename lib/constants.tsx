@@ -1,5 +1,5 @@
 "use client"
-import { BoxIcon, CogIcon, FrameIcon, GroupIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users } from "lucide-react"
+import { BoxIcon, CogIcon, FrameIcon, GroupIcon, IndianRupeeIcon, LayoutDashboardIcon, ServerIcon, ShoppingBagIcon, TagIcon, UserCog, Users, Users2Icon, UsersIcon } from "lucide-react"
 import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
 
 const BrandName = "APlus Laundry"
@@ -64,6 +64,11 @@ const sidebarTabs = [
         title: 'Coupons',
         path: '/coupons',
         icon: <TagIcon className="w-4 mr-2" />
+    },
+    {
+        title: 'Team',
+        path: '/team',
+        icon: <UsersIcon className="w-4 mr-2" />
     },
     {
         title: 'Settings',

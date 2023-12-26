@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Heading from './ui/heading'
 import { ComboboxDemo } from './ui/combobox'
@@ -6,9 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuSub, DropdownMenuPortal, DropdownMenuGroup, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Cloud, CreditCard, Github, Keyboard, LifeBuoy, LogOutIcon, Mail, MessageSquare, Plus, PlusCircle, Settings, User, UserPlus, Users } from 'lucide-react'
 import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
+
 
 
 function TopBar() {
+    const router = useRouter()
     return (
         <div className='py-3 bg-primary-foreground sticky z-40 top-0 overflow-hidden px-6 border-b-2 flex justify-between'>
             <div>
@@ -40,7 +44,10 @@ function TopBar() {
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onSelect={() => router.push('/team')
+                                }
+                            >
                                 <Users className="mr-2 h-4 w-4" />
                                 <span>Team</span>
                             </DropdownMenuItem>
