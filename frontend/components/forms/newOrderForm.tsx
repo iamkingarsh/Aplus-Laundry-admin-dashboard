@@ -628,7 +628,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                             Please select laundry items from the list
                                                         </SheetDescription>
                                                     </SheetHeader>
-                                                    <ScrollArea className="h-[85%] my-2 px-2 rounded-md ">
+                                                    <ScrollArea className="h-[85%] my-2  rounded-md ">
 
 
                                                         <div className="grid gap-4 py-4">
@@ -640,7 +640,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         checked={isOptionSelected(value.title)}
                                                                         // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
                                                                         onCheckedChange={() => handleSelectChange(value.title, value.price)}
-                                                                        className="flex gap-2 justify-between items-center"
+                                                                        className="flex gap-2 mx-2 justify-between items-center"
                                                                     >
 
                                                                         <div>
