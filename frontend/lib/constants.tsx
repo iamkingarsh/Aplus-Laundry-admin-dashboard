@@ -433,11 +433,6 @@ const categories = [
     }
 ]
 
-const currentUser = {
-    name: 'Naveen',
-    role: 'Admin'
-
-}
 
 export default sidebarTabs;
-export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors, categories, currentUser }
+export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors, categories }
