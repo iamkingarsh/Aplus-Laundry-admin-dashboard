@@ -7,8 +7,10 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { NewOrderForm } from './forms/newOrderForm';
 import { NewCustomerForm } from './forms/newCustomerForm';
 import { NewCouponsForm } from './forms/newCouponForm'
+import checkIfOwner from '@/lib/checkIfOwner'
 
 function CreateNew() {
+    const isOwner = checkIfOwner()
 
     const GlobalModal = useGlobalModal();
     return (
@@ -40,26 +42,17 @@ function CreateNew() {
                     New Customer
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
-                    <LucidePlusCircle className='w-4 mr-2' />
-                    New Product
-                </DropdownMenuItem>
+                {isOwner &&
+                    <DropdownMenuItem onSelect={() => {
+                        GlobalModal.title = "Create New Coupon"
+                        GlobalModal.description = "Create a new Coupon Code "
+                        GlobalModal.children = <NewCouponsForm gap={1} />
+                        GlobalModal.onOpen()
+                    }}>
+                        <LucidePlusCircle className='w-4 mr-2' />
+                        New Coupon
 
-                <DropdownMenuItem>
-                    <LucidePlusCircle className='w-4 mr-2' />
-                    New Category
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onSelect={() => {
-                    GlobalModal.title = "Create New Coupon"
-                    GlobalModal.description = "Create a new Coupon Code "
-                    GlobalModal.children = <NewCouponsForm gap={1} />
-                    GlobalModal.onOpen()
-                }}>
-                    <LucidePlusCircle className='w-4 mr-2' />
-                    New Coupon
-
-                </DropdownMenuItem>
+                    </DropdownMenuItem>}
 
 
             </DropdownMenuContent>

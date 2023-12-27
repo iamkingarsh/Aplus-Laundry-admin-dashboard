@@ -2,7 +2,7 @@ import React from 'react'
 
 function checkIfOwner() {
     const currentRole = 'owner'
-    const isOwner = currentRole === 'owner' ? false : true
+    const isOwner = currentRole === 'owner' ? true : false
     return isOwner
 }
 
