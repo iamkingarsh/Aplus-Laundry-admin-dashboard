@@ -16,13 +16,14 @@
 # production
 /build
 
-# misc
-.DS_Store
-*.pem
-
 *.env
 /.env
 .env.example
+
+
+# misc
+.DS_Store
+*.pem
 
 # debug
 npm-debug.log*
