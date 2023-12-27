@@ -9,6 +9,7 @@ import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import checkIfOwner from "@/lib/checkIfOwner";
+import { ta } from "date-fns/locale";
 
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -66,6 +67,37 @@ export function Sidebar({ className }: SidebarProps) {
                                 </Button>
 
                             ))}
+                            {
+                                !owner && sidebarTabs.filter((tab: any) => {
+                                    return tab.title !== 'App Banners' && tab.title !== 'Services' && tab.title !== 'Categories' && tab.title !== 'Laundry Items' && tab.title !== 'Revenue' && tab.title !== 'Coupons' && tab.title !== 'Team'
+                                }).map((tab: any, i: any) => (
+                                    <Button onClick={() => router.push(tab?.path)} key={i}
+                                        variant={
+                                            pathname.includes(tab.path) ? 'secondary' : 'ghost'
+                                        }
+                                        className="w-full justify-start flex items-center">
+                                        {collapsed ?
+                                            <TooltipProvider delayDuration={500}>
+                                                <Tooltip>
+                                                    <TooltipTrigger className="w-full">
+                                                        <div>
+                                                            {tab.icon}
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        {tab.title}
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                            : <div className="flex items-center">
+                                                {tab.icon}
+                                                {tab.title}
+                                            </div>}
+
+                                    </Button>
+
+                                ))
+                            }
                         </div>
                     </div>
                     <div>
