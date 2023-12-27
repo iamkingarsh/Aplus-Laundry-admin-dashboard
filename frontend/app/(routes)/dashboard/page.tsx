@@ -7,15 +7,12 @@ import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
 import { DatePickerWithRange } from '@/components/date-range'
+import { roles } from '@/lib/constants'
 
 
 export default function page() {
 
-    const roles = [
-        'Owner',
-        'Admin',
-        'Manager',
-    ]
+    const currentUsersRole = 'manager'
 
     const StatsData = [
         {
@@ -70,15 +67,18 @@ export default function page() {
                     })}
                 </div>
                 <div className='space-x-2 flex'>
-                    <Card className='w-full'>
-                        <CardHeader>
-                            <Heading title='Sales Overview' />
-                        </CardHeader>
-                        <CardContent>
-                            <RevenueGraph />
+                    {
 
-                        </CardContent>
-                    </Card>
+                        <Card className='w-full'>
+                            <CardHeader>
+                                <Heading title='Sales Overview' />
+                            </CardHeader>
+                            <CardContent>
+                                <RevenueGraph />
+
+                            </CardContent>
+                        </Card>
+                    }
                     <Card className='w-full'>
                         <CardHeader>
                             <Heading title='Recent Orders' />
