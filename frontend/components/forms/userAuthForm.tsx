@@ -85,14 +85,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     }
 
-    const handleCountDown = () => {
-        if (otpSent && countDown > 0) {
 
-            setTimeout(() => {
-                setCountDown(countDown - 1)
-            }, 1000)
-        }
-    }
 
     const handleRedirect = () => {
         setTimeout(() => {
@@ -101,6 +94,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }
 
     React.useEffect(() => {
+        const handleCountDown = () => {
+            if (otpSent && countDown > 0) {
+
+                setTimeout(() => {
+                    setCountDown(countDown - 1)
+                }, 1000)
+            }
+        }
         if (validOtp) {
             handleRedirect()
         }
@@ -108,7 +109,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         if (otpSent) {
             handleCountDown()
         }
-    }, [validOtp, otpSent, countDown, handleCountDown])
+    }, [validOtp, otpSent, countDown])
 
     const handleResend = () => {
         setCountDown(60)
