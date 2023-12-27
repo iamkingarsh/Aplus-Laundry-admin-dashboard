@@ -25,6 +25,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [otpErrorMessage, setOtpErrorMessage] = React.useState<string>("")
     const [validOtp, setValidOtp] = React.useState<boolean>(false)
 
+    const [countDown, setCountDown] = React.useState<number>(60)
+
     const validEmail = "mohammedarshad.arsh@gmail.com"
     const otp = "123456"
 
@@ -83,6 +85,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     }
 
+    const handleCountDown = () => {
+        if (otpSent && countDown > 0) {
+
+            setTimeout(() => {
+                setCountDown(countDown - 1)
+            }, 1000)
+        }
+    }
+
     const handleRedirect = () => {
         setTimeout(() => {
             window.location.href = "/dashboard"
@@ -93,7 +104,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         if (validOtp) {
             handleRedirect()
         }
-    }, [validOtp])
+
+        if (otpSent) {
+            handleCountDown()
+        }
+    }, [validOtp, otpSent, countDown, handleCountDown])
+
+    const handleResend = () => {
+        setCountDown(60)
+    }
 
     return (
         <div className={cn("grid gap-6", className)} {...props}>
@@ -195,7 +214,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
                             <div className="flex flex-col space-y-2 text-center">
                                 <p className="text-sm text-muted-foreground">
-                                    Didn&apos;t receive OTP? <a href="#" className="text-primary">Resend</a>
+                                    Didn&apos;t receive OTP?{otpSent && countDown == 0 ? <a onClick={handleResend} >Resend</a> : <span className="text-primary opacity-50"> Resend OTP In {countDown}</span>}
                                 </p>
 
                             </div>
