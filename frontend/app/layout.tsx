@@ -18,12 +18,28 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const userSignedIn = false
+  const getThemePreference = async () => {
+    if (typeof window !== 'undefined') {
+      const theme = localStorage.getItem('theme')
+      console.log(theme)
+      if (theme) {
+
+        return theme
+      }
+    }
+    return 'light'
+  }
+
+  getThemePreference().then((theme) => {
+    console.log(theme)
+  }
+  )
   return (
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme={getThemePreference()}
           enableSystem={true}
           disableTransitionOnChange
         >
