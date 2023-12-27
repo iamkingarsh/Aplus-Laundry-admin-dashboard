@@ -10,6 +10,7 @@ import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 import { useGlobalModal } from '@/hooks/GlobalModal'
 import { NewTeamMemberForm } from './forms/newTeamMemberForm'
+import toast from 'react-hot-toast'
 
 
 
@@ -69,7 +70,10 @@ function TopBar() {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                            onSelect={() => { router.push('/login'); toast.success('Logged Out Successfully!') }}
+
+                        >
                             <LogOutIcon className="mr-2 h-4 w-4" />
                             <span>Log out</span>
 

@@ -7,98 +7,202 @@ import { Icons } from "../ui/icons"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { tr } from "date-fns/locale"
+import { set } from "date-fns"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [email, setEmail] = React.useState<string>("")
+    const [error, setError] = React.useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = React.useState<string>("")
     const [otpSent, setOtpSent] = React.useState<boolean>(false)
+
+    const [otpValue, setOtpValue] = React.useState<string>("")
+    const [otpError, setOtpError] = React.useState<boolean>(false)
+    const [otpErrorMessage, setOtpErrorMessage] = React.useState<string>("")
+    const [validOtp, setValidOtp] = React.useState<boolean>(false)
+
+    const validEmail = "mohammedarshad.arsh@gmail.com"
+    const otp = "123456"
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
-        setIsLoading(true)
 
+        if (email === "") {
+            setError(true)
+            setErrorMessage("Email cannot be empty")
+            return
+        }
+        else if (!email.includes("@")) {
+            setError(true)
+            setErrorMessage("Invalid Email")
+            return
+        }
+        else if (email !== validEmail) {
+            setError(true)
+            setErrorMessage("Email not registered")
+            return
+        }
+        else {
+            setError(false)
+            setErrorMessage("")
+            setIsLoading(true)
+            setTimeout(() => {
+                setIsLoading(false)
+                setOtpSent(true)
+            }, 3000)
+        }
+
+    }
+
+    async function onOtpSubmit(event: React.SyntheticEvent) {
+        event.preventDefault()
+
+        if (otpValue === "") {
+            setOtpError(true)
+            setOtpErrorMessage("OTP cannot be empty")
+            return
+        }
+        else if (otpValue !== otp) {
+            setOtpError(true)
+            setOtpErrorMessage("Invalid OTP")
+            return
+        }
+        else {
+            setOtpError(false)
+            setOtpErrorMessage("")
+            setIsLoading(true)
+            setTimeout(() => {
+                setIsLoading(false)
+                setValidOtp(true)
+            }, 3000)
+        }
+
+    }
+
+    const handleRedirect = () => {
         setTimeout(() => {
-            setIsLoading(false)
-            setOtpSent(true)
+            window.location.href = "/dashboard"
         }, 3000)
     }
 
+    React.useEffect(() => {
+        if (validOtp) {
+            handleRedirect()
+        }
+    }, [validOtp])
+
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            {!otpSent ? <div className="flex flex-col space-y-2 text-center">
+            {otpSent && validOtp ? <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">
-                    Login to Your Admin Dashboard
+                    OTP Verified
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                    Only Admins can access this page.
+                    Redirecting to Dashboard in 3 seconds...
                 </p>
             </div> :
-                <div className="flex flex-col space-y-2 text-center">
+
+
+                !otpSent ? <div className="flex flex-col space-y-2 text-center">
                     <h1 className="text-2xl font-semibold tracking-tight">
-                        Verify OTP
+                        Login to Your Admin Dashboard
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Enter the OTP sent to your registered email!
+                        Only Admins can access this page.
                     </p>
-                </div>
+                </div> :
+                    <div className="flex flex-col space-y-2 text-center">
+                        <h1 className="text-2xl font-semibold tracking-tight">
+                            Verify OTP
+                        </h1>
+                        <p className="text-sm text-muted-foreground">
+                            Enter the OTP sent to your registered email!
+                        </p>
+                    </div>
 
             }
-            <form onSubmit={onSubmit}>
-                {!otpSent ?
-                    <div className="grid gap-2">
 
-                        <div className="grid gap-1">
-                            <Label htmlFor="email">
-                                Email
-                            </Label>
-                            <Input
-                                id="email"
-                                placeholder="name@example.com"
-                                type="email"
-                                autoCapitalize="none"
-                                autoComplete="email"
-                                autoCorrect="off"
+            {otpSent && validOtp ? <div className="flex flex-col space-y-2 text-center">
 
-                                disabled={isLoading}
-                            />
+            </div> :
+
+                !otpSent ?
+                    <form onSubmit={onSubmit}>
+                        <div className="grid gap-2">
+
+                            <div className="grid gap-1">
+                                <Label htmlFor="email">
+                                    Email
+                                </Label>
+                                <Input
+                                    id="email"
+                                    placeholder="name@example.com"
+                                    type="email"
+                                    autoCapitalize="none"
+                                    autoComplete="email"
+                                    autoCorrect="off"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+
+                                    disabled={isLoading}
+                                />
+                                {error && <span className="text-red-500 text-xs leading-tight">{errorMessage}</span>}
+                            </div>
+                            <Button
+                                type="submit"
+                                disabled={isLoading}>
+                                {isLoading && (
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                )}
+                                Get OTP
+                            </Button>
                         </div>
-                        <Button
-                            type="submit"
-                            disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                            )}
-                            Get OTP
-                        </Button>
-                    </div> :
-                    <div className="grid gap-2">
+                    </form>
+                    :
+                    <form onSubmit={onOtpSubmit}>
 
-                        <div className="grid gap-1">
-                            <Label htmlFor="email">
-                                Enter OTP
-                            </Label>
-                            <Input
-                                id="email"
-                                placeholder="
+
+                        <div className="grid gap-2">
+
+                            <div className="grid gap-1">
+                                <Label htmlFor="email">
+                                    Enter OTP
+                                </Label>
+                                <Input
+                                    id="email"
+                                    placeholder="
                                 Enter OTP"
-                                type="number"
-                                autoCapitalize="none"
-                                autoComplete="otp"
-                                autoCorrect="off"
-                            />
-                        </div>
+                                    type="number"
+                                    value={otpValue}
+                                    onChange={(e) => setOtpValue(e.target.value)}
+                                    autoCapitalize="none"
+                                    autoComplete="otp"
+                                    autoCorrect="off"
+                                />
+                                {otpError && <span className="text-red-500 text-xs leading-tight">{otpErrorMessage}</span>}
+                            </div>
 
-                        <Button disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                            )}
-                            Verify
-                        </Button>
-                    </div>
-                }
-            </form>
+                            <Button disabled={isLoading}>
+                                {isLoading && (
+                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                                )}
+                                Verify
+                            </Button>
+
+                            <div className="flex flex-col space-y-2 text-center">
+                                <p className="text-sm text-muted-foreground">
+                                    Didn&apos;t receive OTP? <a href="#" className="text-primary">Resend</a>
+                                </p>
+
+                            </div>
+                        </div>
+                    </form>
+
+            }
 
 
         </div>
