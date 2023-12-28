@@ -106,8 +106,6 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                 setOtpErrorMessage("Invalid OTP")
             }, 3000) // remove this timeout and add submit logic
         }
-
-
     }
 
     return (

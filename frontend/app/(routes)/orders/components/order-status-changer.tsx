@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useGlobalModal } from '@/hooks/GlobalModal'
 import { OrdersStatuses } from '@/lib/constants'
 import { cn } from '@/lib/utils'
