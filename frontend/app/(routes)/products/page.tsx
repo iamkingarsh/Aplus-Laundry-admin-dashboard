@@ -11,6 +11,7 @@ import { categories } from '@/lib/constants'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
+// @mujahed demo data for laundry items
 const LaundrtProducts = [
     {
         product_id: 'lp12359asd',
