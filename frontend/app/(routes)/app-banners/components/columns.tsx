@@ -20,7 +20,7 @@ export type CustomersColumns = {
     id: string
     title: string
     desc: string
-    background: string
+    bannerImg: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -75,8 +75,8 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "background",
-        header: " Background Image",
+        accessorKey: "bannerImg",
+        header: "Banner Image",
         cell: ({ row }) => <ImageModal data={row.original} />,
 
     },

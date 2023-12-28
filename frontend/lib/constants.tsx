@@ -394,10 +394,13 @@ const OrdersStatuses = [
         title: 'processing',
     },
     {
+        title: 'pending',
+    },
+    {
         title: 'picked',
     },
     {
-        title: 'on way',
+        title: 'onway',
     },
     {
         title: 'delivered',
@@ -433,11 +436,6 @@ const categories = [
     }
 ]
 
-const currentUser = {
-    name: 'Naveen',
-    role: 'Admin'
-
-}
 
 export default sidebarTabs;
-export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors, categories, currentUser }
+export { BrandName, Services, OrdersStatuses, LaundrtProducts, brandColors, categories }

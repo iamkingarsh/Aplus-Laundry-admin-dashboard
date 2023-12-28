@@ -7,12 +7,15 @@ import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
 import { DatePickerWithRange } from '@/components/date-range'
-import { roles } from '@/lib/constants'
+import checkIfOwner from '@/utils/checkIfOwner'
+
 
 
 export default function page() {
 
-    const currentUsersRole = 'manager'
+
+
+    const isOwner = checkIfOwner()
 
     const StatsData = [
         {
@@ -49,6 +52,12 @@ export default function page() {
         },
     ]
 
+
+    const StatsDataForManger = [
+        //remove revenue 
+        ...StatsData.filter((data) => data.title !== 'Total Revenue')
+    ]
+
     return (
         <>
             <div className='w-full space-y-4 h-full flex p-6 flex-col'>
@@ -60,18 +69,30 @@ export default function page() {
                     </div>
                 </div>
                 <div className='w-full flex gap-2'>
-                    {StatsData.map((data, index) => {
-                        return (
-                            <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} href={data.href} desc={data.desc} />
-                        )
-                    })}
+                    {
+                        isOwner &&
+
+                        StatsData.map((data, index) => {
+                            return (
+                                <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} href={data.href} desc={data.desc} />
+                            )
+                        })}
+                    {
+                        !isOwner &&
+                        StatsDataForManger.map((data, index) => {
+                            return (
+                                <StatsCard key={index} title={data.title} statPrefix={data.statPrefix} stat={data.stat} icon={data.icon} href={data.href} desc={data.desc} />
+                            )
+                        })
+                    }
                 </div>
                 <div className='space-x-2 flex'>
                     {
-
+                        isOwner &&
                         <Card className='w-full'>
                             <CardHeader>
-                                <Heading title='Sales Overview' />
+                                <Heading title='Revenue' />
+
                             </CardHeader>
                             <CardContent>
                                 <RevenueGraph />

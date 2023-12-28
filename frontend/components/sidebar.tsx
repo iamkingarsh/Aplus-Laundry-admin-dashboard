@@ -8,6 +8,8 @@ import sidebarTabs, { BrandName } from "@/lib/constants"
 import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import checkIfOwner from "@/utils/checkIfOwner";
+import { ta } from "date-fns/locale";
 
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,6 +19,7 @@ export function Sidebar({ className }: SidebarProps) {
     const pathname = usePathname()
     const router = useRouter()
     const [collapsed, setCollapsed] = useState<boolean>(false)
+    const owner = checkIfOwner()
 
     return (
         <div className={cn(collapsed ? `sticky top-0 text-black dark:text-white w-[5dvw] transition-all transit h-[100dvh] duration-500 overflow-hidden border-r-2` : ` sticky top-0 transition-all duration-500 text-black dark:text-white w-[20dvw] h-[100dvh] overflow-hidden border-r-2`, className)}>
@@ -37,7 +40,7 @@ export function Sidebar({ className }: SidebarProps) {
                         }
 
                         <div className="space-y-2">
-                            {sidebarTabs.map((tab: any, i: any) => (
+                            {owner && sidebarTabs.map((tab: any, i: any) => (
                                 <Button onClick={() => router.push(tab?.path)} key={i}
                                     variant={
                                         pathname.includes(tab.path) ? 'secondary' : 'ghost'
@@ -64,6 +67,37 @@ export function Sidebar({ className }: SidebarProps) {
                                 </Button>
 
                             ))}
+                            {
+                                !owner && sidebarTabs.filter((tab: any) => {
+                                    return tab.title !== 'App Banners' && tab.title !== 'Services' && tab.title !== 'Categories' && tab.title !== 'Laundry Items' && tab.title !== 'Revenue' && tab.title !== 'Coupons' && tab.title !== 'Team'
+                                }).map((tab: any, i: any) => (
+                                    <Button onClick={() => router.push(tab?.path)} key={i}
+                                        variant={
+                                            pathname.includes(tab.path) ? 'secondary' : 'ghost'
+                                        }
+                                        className="w-full justify-start flex items-center">
+                                        {collapsed ?
+                                            <TooltipProvider delayDuration={500}>
+                                                <Tooltip>
+                                                    <TooltipTrigger className="w-full">
+                                                        <div>
+                                                            {tab.icon}
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        {tab.title}
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                            : <div className="flex items-center">
+                                                {tab.icon}
+                                                {tab.title}
+                                            </div>}
+
+                                    </Button>
+
+                                ))
+                            }
                         </div>
                     </div>
                     <div>
