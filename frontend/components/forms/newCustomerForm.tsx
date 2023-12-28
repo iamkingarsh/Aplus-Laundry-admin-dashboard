@@ -93,6 +93,9 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
         if (values.otp === validOTP) {
             setTimeout(() => {
                 setIsLoading(false)
+                setOtpSent(false)
+                setOtpError(false)
+                setOtpErrorMessage("")
                 toast.success('OTP Verified')
             }, 3000) // remove this timeout and add submit logic
         }
