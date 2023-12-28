@@ -20,6 +20,13 @@
 .DS_Store
 *.pem
 
+*.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/.env
+.env.example
 
 # debug
 npm-debug.log*
@@ -27,11 +34,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
-.env.example
-.env.local
-.env.staging
-
+.env*.local
 
 # vercel
 .vercel

@@ -21,7 +21,7 @@ export default function page() {
         {
             title: 'Total Revenue',
             stat: 2300,
-            statPrefix: '$',
+            statPrefix: '₹',
             icon: <IndianRupeeIcon />,
             desc: '+180.1% from last month',
             href: '/revenue'
