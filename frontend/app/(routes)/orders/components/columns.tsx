@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { MobileIcon } from "@radix-ui/react-icons"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import CellAction from "./cell-action"
+import { OrderStatusChanger } from "./order-status-changer"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type OrdersColumns = {
@@ -106,20 +107,21 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "onhold" && "bg-yellow-500"
-                        } ${row.original.status === "pending" && "bg-blue-500"
-                        } ${row.original.status === "picked" && "bg-green-500"
-                        } ${row.original.status === "onway" && "bg-purple-500"
-                        } ${row.original.status === "delivered" && "bg-green-500"
-                        } ${row.original.status === "cancelled" && "bg-red-500"
-                        }`}
-                />
-                {row.original.status}
-            </div>
-        ),
+
+        cell: ({ row }) => <OrderStatusChanger data={row.original} />
+        //     <div className="flex items-center">
+        //         <div
+        //             className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "onhold" && "bg-yellow-500"
+        //                 } ${row.original.status === "pending" && "bg-blue-500"
+        //                 } ${row.original.status === "picked" && "bg-green-500"
+        //                 } ${row.original.status === "onway" && "bg-purple-500"
+        //                 } ${row.original.status === "delivered" && "bg-green-500"
+        //                 } ${row.original.status === "cancelled" && "bg-red-500"
+        //                 }`}
+        //         />
+        //         {row.original.status}
+        //     </div>
+        // ),
     },
     {
         accessorKey: "payment_method",

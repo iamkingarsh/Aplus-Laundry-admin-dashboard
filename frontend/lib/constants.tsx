@@ -394,10 +394,13 @@ const OrdersStatuses = [
         title: 'processing',
     },
     {
+        title: 'pending',
+    },
+    {
         title: 'picked',
     },
     {
-        title: 'on way',
+        title: 'onway',
     },
     {
         title: 'delivered',

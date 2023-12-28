@@ -328,7 +328,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             console.log("selectedItems", selectedItems)
             calculatePriceByWeight()
         }
-    }, [selectedItems, cartTotal, weight, weightBy, form.watch("products")])
+    }, [selectedItems, cartTotal, weight, weightBy, form, calculatePriceByWeight])
 
     const CustomerData = AllData.find((data) => data.email === form.watch("customer"))
 
@@ -342,7 +342,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             form.setValue("products", {});
         }
-    }, [form.watch("order_type")])
+    }, [form])
 
 
 
