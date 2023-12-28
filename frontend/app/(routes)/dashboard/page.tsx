@@ -7,7 +7,7 @@ import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
 import { DatePickerWithRange } from '@/components/date-range'
-import checkIfOwner from '@/lib/checkIfOwner'
+import checkIfOwner from '@/utils/checkIfOwner'
 
 
 

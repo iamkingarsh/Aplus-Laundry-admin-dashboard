@@ -7,7 +7,7 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { NewOrderForm } from './forms/newOrderForm';
 import { NewCustomerForm } from './forms/newCustomerForm';
 import { NewCouponsForm } from './forms/newCouponForm'
-import checkIfOwner from '@/lib/checkIfOwner'
+import checkIfOwner from '@/utils/checkIfOwner'
 
 function CreateNew() {
     const isOwner = checkIfOwner()
