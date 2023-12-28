@@ -327,6 +327,8 @@ const LaundryProducts = [
 
 ] as any
 
+
+//@mujahed this is dummy data for services
 const Services = [
     {
         service_id: 'AL1469',
@@ -394,10 +396,13 @@ const OrdersStatuses = [
         title: 'processing',
     },
     {
+        title: 'pending',
+    },
+    {
         title: 'picked',
     },
     {
-        title: 'on way',
+        title: 'onway',
     },
     {
         title: 'delivered',
@@ -408,7 +413,7 @@ const OrdersStatuses = [
 ]
 
 
-
+// @mujahed this is dummy data for categories
 const categories = [
     {
         category_id: '148652',

@@ -173,10 +173,6 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
                     <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
 
                         <Image src={bannerImage} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
-                        <div className="absolute text-white text-left p-4 ">
-                            <h1 className="text-2xl font-bold">{form.watch("banner_title")}</h1>
-                            <p className="text-sm">{form.watch("banner_description")}</p>
-                        </div>
                     </Card>
                     :
                     <Card className="w-[400px] flex-col relative m-auto h-48 overflow-hidden flex  border-2 items-center justify-center">

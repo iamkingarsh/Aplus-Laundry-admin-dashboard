@@ -26,14 +26,14 @@ app.use(express.json())
 // Enable CORS for a specific origin
 app.use(cors({ origin: '*' }));
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.listen(process.env.PORT, () => {
+  console.log('Server listening on port ' + process.env.PORT);
 });
 //basic home route
 app.get("/", (req, res) => {
   res.send("home");
 });
-app.use('/register',authRoute);
+app.use('/auth',authRoute);
 
 
 

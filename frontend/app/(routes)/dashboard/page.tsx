@@ -7,7 +7,7 @@ import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
 import { DatePickerWithRange } from '@/components/date-range'
-import checkIfOwner from '@/lib/checkIfOwner'
+import checkIfOwner from '@/utils/checkIfOwner'
 
 
 
@@ -21,7 +21,7 @@ export default function page() {
         {
             title: 'Total Revenue',
             stat: 2300,
-            statPrefix: '$',
+            statPrefix: '₹',
             icon: <IndianRupeeIcon />,
             desc: '+180.1% from last month',
             href: '/revenue'

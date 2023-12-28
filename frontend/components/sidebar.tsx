@@ -8,7 +8,7 @@ import sidebarTabs, { BrandName } from "@/lib/constants"
 import { useState } from "react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
-import checkIfOwner from "@/lib/checkIfOwner";
+import checkIfOwner from "@/utils/checkIfOwner";
 import { ta } from "date-fns/locale";
 
 

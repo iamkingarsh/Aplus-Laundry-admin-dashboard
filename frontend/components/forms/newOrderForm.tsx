@@ -328,7 +328,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             console.log("selectedItems", selectedItems)
             calculatePriceByWeight()
         }
-    }, [selectedItems, cartTotal, weight, weightBy, form.watch("products")])
+    }, [selectedItems, cartTotal, weight, weightBy, form, calculatePriceByWeight])
 
     const CustomerData = AllData.find((data) => data.email === form.watch("customer"))
 
@@ -342,7 +342,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             form.setValue("products", {});
         }
-    }, [form.watch("order_type")])
+    }, [form])
 
 
 
@@ -598,7 +598,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="products"> Select Products</FormLabel>
+                                    <FormLabel htmlFor="products"> Select Laundry Items</FormLabel>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button
@@ -610,25 +610,25 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 )}
                                             >
 
-                                                Select Products
+                                                Select Laundry Items
                                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent className="w-full" onCloseAutoFocus={(e) => e.preventDefault()}>
-                                            <DropdownMenuLabel>Select Products</DropdownMenuLabel>
+                                            <DropdownMenuLabel>Select Laundry Items</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
                                             <Sheet>
                                                 <SheetTrigger asChild>
-                                                    <Button variant="outline">Open Products Catalogue</Button>
+                                                    <Button variant="outline">Open Items Catalogue</Button>
                                                 </SheetTrigger>
                                                 <SheetContent>
                                                     <SheetHeader>
-                                                        <SheetTitle>Select Products</SheetTitle>
+                                                        <SheetTitle>Select Laundry Items</SheetTitle>
                                                         <SheetDescription>
-                                                            Please select the products
+                                                            Please select laundry items from the list
                                                         </SheetDescription>
                                                     </SheetHeader>
-                                                    <ScrollArea className="h-[85%] my-2 px-2 rounded-md ">
+                                                    <ScrollArea className="h-[85%] my-2  rounded-md ">
 
 
                                                         <div className="grid gap-4 py-4">
@@ -640,7 +640,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         checked={isOptionSelected(value.title)}
                                                                         // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
                                                                         onCheckedChange={() => handleSelectChange(value.title, value.price)}
-                                                                        className="flex gap-2 justify-between items-center"
+                                                                        className="flex gap-2 mx-2 justify-between items-center"
                                                                     >
 
                                                                         <div>
@@ -648,8 +648,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
                                                                             <Button onClick={() => RemoveProductQunatity(value.title, value.price)} variant="outline">-</Button>
-
-                                                                            {selectedItems[value.title]?.quantity || 0}
+                                                                            <Input value={selectedItems[value.title]?.quantity || 0} onChange={(e) => { setProductQuantity(Number(e.target.value)); setSelectedItems((prev) => ({ ...prev, [value.title]: { quantity: Number(e.target.value), price: value.price } })) }} className="w-10" defaultValue={0} type="text" min={1} max={100} />
+                                                                            {/* {selectedItems[value.title]?.quantity || 0} */}
                                                                             <Button onClick={(e) => AddProductQunatity(value.title, e, value.price)} variant="outline">+</Button>
                                                                         </div>
 

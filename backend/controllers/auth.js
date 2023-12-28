@@ -22,9 +22,9 @@ export const signup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
-  const { mobileNumber } = req.body;
+  const { email } = req.body;
   try {
-    const validEmailUser = await User.findOne({ mobileNumber });
+    const validEmailUser = await User.findOne({ email });
     if (!validEmailUser) {
       return next(errorHandeler(404, 'User not found'));
     }

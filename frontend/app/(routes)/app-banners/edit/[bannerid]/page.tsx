@@ -40,7 +40,7 @@ export default function EditAppBannerPage({ params }: Props) {
         // delete logic here
         useModal.onClose()
         toast.success('Banner Deleted Successfully')
-        router.push('/coupons')
+        router.push('/app-banners')
     }
 
     return (
