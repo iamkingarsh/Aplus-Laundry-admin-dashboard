@@ -24,7 +24,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                            "w-full justify-between",
+                            "w-[90%] gap-2 flex items-center justify-between",
                             !currentStatus && "text-muted-foreground"
                         )}
                     >
