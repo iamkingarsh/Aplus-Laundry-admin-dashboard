@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 const metadata: Metadata = {
     title: 'Customers | APLus Laundry',
@@ -118,6 +119,12 @@ const AllData = [
     ...Subscribeddata,
     ...NonSubscribeddata
 ] as any[];
+
+const bulkDeleteFunction = (selectedRows: any) => {
+    console.log(selectedRows)
+    toast.success('Deleted Successfully')
+}
+
 export default function page() {
 
     return (
@@ -142,7 +149,11 @@ export default function page() {
                         <TabsTrigger className='gap-2' value="non-subscribed">Non-subscribed <Badge className='text-bg-primary-foreground' variant="outline">{NonSubscribeddata?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
-                        <DataTable searchKey='email' columns={columns} data={AllData} />
+                        <DataTable bulkDeleteTitle='Are you sure?'
+                            bulkDeleteIdName='id'
+                            bulkDeleteToastMessage='Selected Customers Deleted Successfully'
+                            apiRouteForBulkDelete='/api/customers/bulk-delete'
+                            bulkDeleteDescription='Delete this data' searchKey='email' columns={columns} data={AllData} />
                     </TabsContent>
                     <TabsContent value="subscribed">
                         <DataTable searchKey='email' columns={columns} data={Subscribeddata} />
