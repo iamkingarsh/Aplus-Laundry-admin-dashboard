@@ -99,25 +99,67 @@ export default function page() {
                         <TabsTrigger className='gap-2' value="delivered">Delivered <Badge className='text-bg-primary-foreground' variant="outline">{DeliveredOrderData?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
-                        <DataTable searchKey='customer_name' columns={columns} data={AllOrdersData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={AllOrdersData} />
                     </TabsContent>
                     <TabsContent value="on-hold">
-                        <DataTable searchKey='customer_name' columns={columns} data={OnHoldOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={OnHoldOrderData} />
                     </TabsContent>
                     <TabsContent value="pending">
-                        <DataTable searchKey='customer_name' columns={columns} data={PendingOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={PendingOrderData} />
                     </TabsContent>
                     <TabsContent value="picked">
-                        <DataTable searchKey='customer_name' columns={columns} data={PickedOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={PickedOrderData} />
                     </TabsContent>
                     <TabsContent value="onway">
-                        <DataTable searchKey='customer_name' columns={columns} data={OnWayOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={OnWayOrderData} />
                     </TabsContent>
                     <TabsContent value="delivered">
-                        <DataTable searchKey='customer_name' columns={columns} data={DeliveredOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={DeliveredOrderData} />
                     </TabsContent>
                     <TabsContent value="cancelled">
-                        <DataTable searchKey='customer_name' columns={columns} data={CancelledOrderData} />
+                        <DataTable
+                            bulkDeleteIdName='order_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                            bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+                            bulkDeleteToastMessage='Selected orders deleted successfully'
+                            searchKey='customer_name' columns={columns} data={CancelledOrderData} />
                     </TabsContent>
                 </Tabs>
 
