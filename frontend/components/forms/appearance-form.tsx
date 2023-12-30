@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import toast from "react-hot-toast"
+import { useEffect, useState } from "react"
+import { get } from "http"
 
 
 
@@ -29,15 +31,17 @@ const appearanceFormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
-// This can come from your database or API.
-const defaultValues: Partial<AppearanceFormValues> = {
-    theme: "light",
-}
 
 export function AppearanceForm() {
+    const [defaultTheme, setDefaultTheme] = useState(
+        typeof window !== 'undefined' ? localStorage.getItem('theme') : 'dark'
+    )
+
     const form = useForm<AppearanceFormValues>({
         resolver: zodResolver(appearanceFormSchema),
-        defaultValues,
+        defaultValues: {
+            theme: defaultTheme === "dark" ? "dark" : "light"
+        }
     })
 
     function onSubmit(data: AppearanceFormValues) {
@@ -49,6 +53,7 @@ export function AppearanceForm() {
     const updateTheme = (theme: string) => {
         document.documentElement.setAttribute('class', theme);
     };
+
 
     return (
         <Form {...form}>

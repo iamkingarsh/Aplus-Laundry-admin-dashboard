@@ -31,17 +31,33 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select"
+import { DataTablePagination } from "./data-table-pagination"
+import toast from "react-hot-toast"
+import { useGlobalModal } from "@/hooks/GlobalModal"
+import { Alert } from "../forms/Alert"
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    searchKey: string
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    searchKey: string;
+    bulkDeleteIdName?: string;
+    bulkDeleteTitle?: string;
+    bulkDeleteDescription?: string;
+    bulkDeleteToastMessage?: string;
+    apiRouteForBulkDelete?: string;
 }
+
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     searchKey,
+    bulkDeleteIdName,
+    bulkDeleteTitle,
+    bulkDeleteDescription,
+    bulkDeleteToastMessage,
+    apiRouteForBulkDelete
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [rowSelection, setRowSelection] = React.useState({})
@@ -67,6 +83,22 @@ export function DataTable<TData, TValue>({
             columnVisibility,
         },
     })
+
+    const modal = useGlobalModal()
+
+    const handleBulkDelete = (ids: any) => {
+        // @mujahed add delete functionallity here
+        modal.onClose()
+        console.log(apiRouteForBulkDelete) // api route for bulk delete coming from props
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            console.log(id)
+            // deleteProduct(id)
+        }
+        toast.success(bulkDeleteToastMessage ?? "Successfully Deleted")
+
+
+    };
 
     return (
         <div>
@@ -163,24 +195,32 @@ export function DataTable<TData, TValue>({
                         {table.getFilteredSelectedRowModel().rows.length} of{" "}
                         {table.getFilteredRowModel().rows.length} row(s) selected.
                     </span>}
+                    {
+                        table.getFilteredSelectedRowModel().rows.length > 1 &&
+                        <Button variant="outline" className="ml-2" onClick={() => table.toggleAllPageRowsSelected()}>
+                            Clear Selection
+                        </Button>
+                    }
+
+                    {
+                        table.getFilteredSelectedRowModel().rows.length > 1 &&
+                        <Button variant="destructive" className="ml-2" onClick={() => {
+
+                            const selectedIds = table.getFilteredSelectedRowModel().rows.map((row: any) => row.original[bulkDeleteIdName as string]);
+
+
+                            modal.title = bulkDeleteTitle ?? "Delete This Data?"
+                            modal.description = bulkDeleteDescription ?? "Are you sure you want to delete this data? This action cannot be undone."
+                            modal.children = <Alert onConfirm={() => handleBulkDelete(selectedIds)} />
+                            modal.onOpen()
+
+                        }}>
+                            Delete Selected
+                        </Button>
+                    }
                 </div>
-                <div>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
+                <div >
+                    <DataTablePagination table={table} />
                 </div>
             </div>
         </div>
