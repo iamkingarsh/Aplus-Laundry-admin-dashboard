@@ -32,7 +32,13 @@ export default function CategoriesPage() {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable searchKey='title' columns={columns} data={categories as any} />
+                <DataTable
+                    bulkDeleteIdName='category_id'
+                    bulkDeleteTitle='Are you sure you want to delete the selected categories?'
+                    bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
+                    apiRouteForBulkDelete='/api/categories/bulk-delete'
+                    bulkDeleteToastMessage='Selected categories deleted successfully'
+                    searchKey='title' columns={columns} data={categories as any} />
             </div>
 
 

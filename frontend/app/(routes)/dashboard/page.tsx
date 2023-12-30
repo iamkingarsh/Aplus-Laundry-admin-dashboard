@@ -8,6 +8,8 @@ import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
 import { DatePickerWithRange } from '@/components/date-range'
 import checkIfOwner from '@/utils/checkIfOwner'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 
 
@@ -91,8 +93,10 @@ export default function page() {
                         isOwner &&
                         <Card className='w-full'>
                             <CardHeader>
-                                <Heading title='Revenue' />
-
+                                <div className='flex flex-col gap-0'>
+                                    <Heading className='text-xl' title='Overview' />
+                                    <p className='text-muted-foreground text-sm'>You Made ₹ 2300 in the last 30 days</p>
+                                </div>
                             </CardHeader>
                             <CardContent>
                                 <RevenueGraph />
@@ -101,8 +105,16 @@ export default function page() {
                         </Card>
                     }
                     <Card className='w-full'>
-                        <CardHeader>
-                            <Heading title='Recent Orders' />
+                        <CardHeader >
+                            <div className='flex gap-0 justify-between items-center'>
+                                <div className='flex flex-col gap-0'>
+                                    <Heading className='text-xl' title='Recent Orders' />
+                                    <p className='text-muted-foreground text-sm'>You Made 30 Orders in the last 30 days</p>
+                                </div>
+                                <Link href="/orders">
+                                    <Button variant='link'>View All</Button>
+                                </Link>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <RecentOrders />

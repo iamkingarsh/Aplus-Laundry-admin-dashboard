@@ -62,10 +62,6 @@ export const columns: ColumnDef<DeliveryAgentsColumns>[] = [
         ),
     },
     {
-        accessorKey: "id",
-        header: "User id",
-    },
-    {
         accessorKey: "fullname",
         header: ({ column }) => {
             return (
