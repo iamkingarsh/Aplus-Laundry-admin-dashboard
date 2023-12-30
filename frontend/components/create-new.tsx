@@ -11,8 +11,8 @@ import checkIfOwner from '@/utils/checkIfOwner'
 
 function CreateNew() {
     const isOwner = checkIfOwner()
-
     const GlobalModal = useGlobalModal();
+
     return (
         <DropdownMenu  >
             <DropdownMenuTrigger asChild>
