@@ -2,9 +2,16 @@
 import { AllData } from '@/app/(routes)/customers/page'
 import { AllOrdersData } from '@/app/(routes)/orders/page'
 import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { brandColors } from '@/lib/constants'
-
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Avatar, AvatarFallback } from './ui/avatar'
 
 
 export default function RecentOrders() {
@@ -21,6 +28,7 @@ export default function RecentOrders() {
             return {
                 ...data,
                 name: CustomersData[index].fullname,
+                email: CustomersData[index].email,
                 date: CustomersData[index].date,
                 profilepic: CustomersData[index].profilepic,
             }
@@ -42,73 +50,50 @@ export default function RecentOrders() {
 
     return (
         <div className='flex flex-col gap-2'>
-            <div className='flex flex-col gap-2'>
-                <h1 className='text-lg font-semibold'>Overview</h1>
-                <div className='flex gap-2'>
-                    <div className='flex gap-2'>
-                        <div className='flex gap-1'>
-                            <p className='text-sm text-gray-500'>Pending</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.pending}`}>{pending?.length}</p>
-                        </div>
-                        <div className='flex gap-1'>
-
-
-                            <p className='text-sm text-gray-500'>Processing</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.processing}`}>{processing?.length}</p>
-                        </div>
-                        <div className='flex gap-1'>
-
-                            <p className='text-sm text-gray-500'>Delivered</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.delivered}`}>{delivered?.length}</p>
-                        </div>
-                        <div className='flex gap-1'>
-                            <p className='text-sm text-gray-500'>onway</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.onway}`}>{onway?.length}</p>
-                        </div>
-                        <div className='flex gap-1'>
-                            <p className='text-sm text-gray-500'>Cancelled</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.cancelled}`}>{cancelled?.length}</p>
-                        </div>
-                        <div className='flex gap-1'>
-                            <p className='text-sm text-gray-500'>Total</p>
-                            <p className={`text-sm font-semibold rounded-full px-2 ${brandColors.default}`}>{Data?.length}</p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div>
+                <Table>
+                    <TableCaption>A list of your recent Orders.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">Order ID</TableHead>
+                            <TableHead>Customer</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead className="text-left">Status</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {
+                            RecentOrders.map((data: any, index: any) => (
+                                <TableRow key={index}>
+                                    <TableCell> {data.order_id}</TableCell>
+                                    <TableCell>
+                                        <div className='flex flex-col  gap-0'>
+                                            <span className='font-medium leading-tight'>{data.name}</span>
+                                            <span className='text-xs text-muted-foreground'>{data.email}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className='text-sm text-muted-foreground'>
+                                        6 days ago</TableCell>
+                                    <TableCell className="flex items-center justify-start gap-2">
 
-
-                {RecentOrders.map((data: any, index: number) => {
-                    return (
-                        <div key={index} className='w-full flex justify-between my-2 items-center'>
-                            <div className='flex gap-2 items-center'>
-
-                                <Avatar className='w-10 h-10 border-2'>
-                                    <AvatarImage src={data.profilepic} alt="@shadcn" />
-                                    <AvatarFallback> {data.fullname} </AvatarFallback>
-                                </Avatar>
-
-                                <div className='flex flex-col'>
-                                    <p className='text-sm font-semibold'>{data.name}</p>
-                                    <p className='text-xs text-gray-500'>{data.date}</p>
-                                </div>
-                            </div>
-                            <div className='flex gap-2 items-center'>
-                                <p className={`text-sm px-2 rounded-full font-semibold ${data.status ===
-                                    'pending' ? brandColors.pending : data.status ===
-                                        'processing' ? brandColors.processing : data.status ===
-                                            'delivered' ? brandColors.delivered : data.status ===
-                                                'cancelled' ? brandColors.cancelled : data.status ===
-                                                    'onway' ? brandColors.onway : brandColors.default}
-                                }`}>{data.status}</p>
-                                <p className='text-sm font-semibold'>{data.price}</p>
-                            </div>
-                        </div>
-                    )
-                })
-                }
+                                        <div className="flex items-center">
+                                            <div
+                                                className={`w-2 h-2 rounded-full mr-2 ${data.status === "onhold" && "bg-yellow-500"
+                                                    } ${data.status === "pending" && "bg-blue-500"
+                                                    } ${data.status === "picked" && "bg-green-500"
+                                                    } ${data.status === "onway" && "bg-purple-500"
+                                                    } ${data.status === "delivered" && "bg-green-500"
+                                                    } ${data.status === "cancelled" && "bg-red-500"
+                                                    }`}
+                                            />
+                                            {data.status}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
+                    </TableBody>
+                </Table>
             </div>
         </div>
     )
