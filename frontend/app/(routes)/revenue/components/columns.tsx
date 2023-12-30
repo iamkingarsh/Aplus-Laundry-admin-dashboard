@@ -67,10 +67,6 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "id",
-        header: "Transaction ID",
-    },
-    {
         accessorKey: "source.payer_name",
         header: ({ column }) => {
             return (
@@ -176,7 +172,7 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
                         } ${row.original.source.entity === "payout" && "bg-red-500"
                         }`}
                 />
-                {row.original.source.entity}
+                {row.original.source.entity === "bank_transfer" ? "Credit" : "Debit"}
             </div>
         ),
     },
