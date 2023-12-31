@@ -2,11 +2,12 @@ import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { AllData } from '../page';
 import { Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { AllOrdersData } from '../../orders/page';
 
 interface Props {
     params: {
@@ -24,8 +25,33 @@ const customerDetails = [
     AllData[0].city = 'Hyderabad',
     AllData[0].pincode = '500050',
     AllData[0].state = 'Telangana',
+    AllData[0].orders = [
+        {
+            order_id: '#a2855',
+
+        },
+        {
+
+            order_id: '#fa725',
+
+
+        },
+        {
+            order_id: '#ee055',
+
+        },
+        {
+            order_id: '#0a133',
+
+
+        }
+    ]
 ]
 const customerData = { ...AllData[0], ...customerDetails };
+
+
+const orderIDs = customerData.orders.map((order: any) => order.order_id)
+
 
 
 
@@ -126,31 +152,64 @@ export default function CustomerPage({ params }: Props) {
 
                 </Card>
                 <div className='gap-4 flex flex-col'>
-                    <Card >
-                        <CardHeader>
-                            <Heading className='text-lg' title='Live Orders' />
-                        </CardHeader>
-                        <Separator className='mb-2' orientation='horizontal' />
-                        <CardContent>
 
-
-
-                        </CardContent>
-
-                    </Card>
                     <Card >
                         <CardHeader>
                             <div className='flex items-center justify-between'>
-
                                 <Heading className='text-lg' title='Recent Orders' />
-                                <Button variant='link'>View All</Button>
+                                <Button variant='link'>View All Orders</Button>
                             </div>
                         </CardHeader>
-                        <Separator className='mb-2' orientation='horizontal' />
+                        <Separator className='mb-4' orientation='horizontal' />
                         <CardContent>
 
+                            {
+                                AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)
+                                ).slice(0, 5).map((order: any, index: number) => (
+                                    <Card key={index} className='flex justify-between p-2 px-4 my-2 items-center'>
 
 
+                                        <div className='flex items-center'>
+                                            <Pin className='w-6 h-6 mr-3' />
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground  text-sm">Order ID</span>
+                                                <span className="text-sm">{order.order_id}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col">
+                                            <span className="text-muted-foreground  text-sm">Order Date</span>
+                                            <span className="text-sm">{order.order_date}</span>
+                                        </div>
+                                        <div className="flex flex-col ml-4">
+                                            <span className="text-muted-foreground  text-sm">Order Status</span>
+                                            <div className='flex items-center gap-1'>
+                                                <div
+                                                    className={`w-2 h-2 rounded-full mr-2 ${order.status === "onhold" && "bg-yellow-500"
+                                                        } ${order.status === "pending" && "bg-blue-500"
+                                                        } ${order.status === "picked" && "bg-green-500"
+                                                        } ${order.status === "onway" && "bg-purple-500"
+                                                        } ${order.status === "delivered" && "bg-green-500"
+                                                        } ${order.status === "cancelled" && "bg-red-500"
+                                                        }`} />
+                                                <span className="text-sm">
+
+                                                    {order.status}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <Button variant='link' size='sm' className='ml-4 text-sm'>View Order</Button>
+
+
+
+                                    </Card>
+                                ))
+
+                            }
+                            <CardFooter className='flex justify-center items-center gap-2'>
+                                <span className='text-sm text-center'>Showing recent {AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length > 5 ? '5 ' : AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length} orders of {customerData.fullname}</span>
+                            </CardFooter>
                         </CardContent>
 
                     </Card>

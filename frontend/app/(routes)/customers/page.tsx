@@ -11,6 +11,7 @@ import { PlusIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { NewCustomerButton } from '@/components/newCustomerButton'
 
 const metadata: Metadata = {
     title: 'Customers | APLus Laundry',
@@ -134,9 +135,9 @@ export default function page() {
                     <Heading className='leading-tight' title='Customers' />
                     <p className='text-muted-foreground text-sm'>Manage Your Customers</p>
                 </div>
-                <Link href={'/customers/create-new'}>
-                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
-                </Link>
+
+                <NewCustomerButton />
+
 
             </div>
             <Separator orientation='horizontal' />
@@ -174,8 +175,6 @@ export default function page() {
                             apiRouteForBulkDelete='/api/customers/bulk-delete'
                             bulkDeleteToastMessage='Selected Customers Deleted Successfully'
                             searchKey='email' columns={columns} data={NonSubscribeddata} />
-
-
                     </TabsContent>
                 </Tabs>
 
