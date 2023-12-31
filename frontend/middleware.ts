@@ -2,7 +2,7 @@ import { is, tr } from 'date-fns/locale';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Variable to track login status (initially set to true)
-let isLoggedIn: boolean = false;
+let isLoggedIn = true
 
 export function middleware(request: NextRequest) {
     // Access and potentially modify isLoggedIn within your middleware logic

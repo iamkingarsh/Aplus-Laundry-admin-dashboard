@@ -123,9 +123,9 @@ export default function page() {
             "id": "txn_00000000000001",
             "entity": "transaction",
             "account_number": "1121431121541121",
-            "amount": 400,
+            "amount": 90000,
             "currency": "INR",
-            "credit": 400,
+            "credit": 90000,
             "debit": 0,
             "balance": 10000000,
             "source": {
@@ -197,13 +197,13 @@ export default function page() {
             "amount": 200,
             "currency": "INR",
             "credit": 0,
-            "debit": 200,
+            "debit": 20000,
             "balance": 9000000,
             "source": {
                 "id": "pout_00000000000001",
                 "entity": "payout",
                 "fund_account_id": "fa_00000000000001",
-                "amount": 200,
+                "amount": 20000,
                 "payer_name": "Mujahed",
                 "notes": {
                     "notes_key_1": "Tea, Earl Grey, Hot",
@@ -226,13 +226,13 @@ export default function page() {
             "amount": 200,
             "currency": "INR",
             "credit": 0,
-            "debit": 200,
+            "debit": 20000,
             "balance": 9000000,
             "source": {
                 "id": "pout_00000000000001",
                 "entity": "payout",
                 "fund_account_id": "fa_00000000000001",
-                "amount": 200,
+                "amount": 20000,
                 "payer_name": "Mujahed",
                 "notes": {
                     "notes_key_1": "Tea, Earl Grey, Hot",
