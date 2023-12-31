@@ -157,7 +157,7 @@ export default function CustomerPage({ params }: Props) {
                         <CardHeader>
                             <div className='flex items-center justify-between'>
                                 <Heading className='text-lg' title='Recent Orders' />
-                                <Button variant='link'>View All</Button>
+                                <Button variant='link'>View All Orders</Button>
                             </div>
                         </CardHeader>
                         <Separator className='mb-4' orientation='horizontal' />
