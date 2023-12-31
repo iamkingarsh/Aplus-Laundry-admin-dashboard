@@ -33,11 +33,11 @@ export function middleware(request: NextRequest) {
 
 //get all the routes inside the (routes) organizational folder and subfolders
 export const config = {
-    matcher: [
-        '/dashboard/:path*',
-        '/(routes)/:path*',
-        '/login',
-        '/acceptInvite/:path*',
+    // matcher: [
+    //     '/((?!api|_next/static|_next/image|favicon.ico|/assets).*)',
 
-    ],
+
+    // ],
+    matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
+
