@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
     // Example usage:
     if (isLoggedIn) {
         // Allow access to protected routes
-        console.log(request.url)
+      
         if (request.url.includes('/login')) {
             return NextResponse.redirect(new URL('/dashboard', request.url));
 
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
 
         return NextResponse.next();
     } else {
-        console.log(request.url)
+    
 
         // Redirect to login page if not logged in, but allow access to login page itself
         if (request.url.includes('/login')) {
