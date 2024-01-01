@@ -89,7 +89,12 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
+    const validEmailUser = await User.findOne({ email });
+        if (!validEmailUser) {
+          return res.status(404).send({ msg: "User not found", ok: false });
+        }
 
+        console.log('email email', email);
     // Continue with other operations, such as sending an email
     emailVerificationEmail(email, OTP);
 
@@ -156,7 +161,7 @@ console.log(email,validEmailUser)
     // Delete OTP records for the user's email
     await UserOTP.deleteMany({ email: email });
     emailVerificationSuccess(email)
-    res.status(200).send({ msg: "Email verified", ok: true });
+    res.status(200).send({ msg: "Email verified", ok: true , token:token });
   } catch (error) {
     console.error(error);
     res.status(500).send({ msg: "Internal Server Error", ok: false });
