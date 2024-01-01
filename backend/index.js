@@ -3,12 +3,11 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoute from './routes/auth.js';
-
+import CategoryRouter from './routes/category.js';
+import ProductRouter from './routes/product.js';
+import ServiceRouter from './routes/services.js';
 import errorHandler from './middleware/error.js';
 // const bodyParser = require('body-parser');
-
-
-
 dotenv.config();
 
 mongoose
@@ -33,9 +32,9 @@ app.listen(process.env.PORT, () => {
 app.get("/", (req, res) => {
   res.send("home");
 });
-app.use('/auth',authRoute);
-
-
-
+app.use('/auth',authRoute);  
+app.use('/category',CategoryRouter);
+app.use('/product',ProductRouter);
+app.use('/service',ServiceRouter);
 
 app.use(errorHandler);
