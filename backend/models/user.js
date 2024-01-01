@@ -23,7 +23,10 @@ const userSchema = new mongoose.Schema({
     },role:{
         type: String,
         required: true,
-
+        customerType:{
+            type: String,
+            required: true,
+        }
     }
 }, {
     timestamps: true
