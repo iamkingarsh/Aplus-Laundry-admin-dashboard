@@ -89,7 +89,11 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
-
+    const validEmailUser = await User.findOne({ email });
+    console.log(email,validEmailUser)
+        if (!validEmailUser) {
+          return res.status(404).send({ msg: "User not found", ok: false });
+        }
     // Continue with other operations, such as sending an email
     emailVerificationEmail(email, OTP);
 
