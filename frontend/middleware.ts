@@ -1,4 +1,3 @@
-import { is, tr } from 'date-fns/locale';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Variable to track login status (initially set to true)
@@ -33,11 +32,6 @@ export function middleware(request: NextRequest) {
 
 //get all the routes inside the (routes) organizational folder and subfolders
 export const config = {
-    // matcher: [
-    //     '/((?!api|_next/static|_next/image|favicon.ico|/assets).*)',
-
-
-    // ],
     matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
 
