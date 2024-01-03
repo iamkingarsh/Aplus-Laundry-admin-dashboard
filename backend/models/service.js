@@ -1,0 +1,47 @@
+import mongoose from 'mongoose';
+
+const serviceSchema = new mongoose.Schema({
+  serviceTitle: {
+    type: String,
+    required: true,
+    minlength: 3,
+    validate: {
+      validator: (value) => value.length >= 3,
+      message: 'Service title must be at least 3 characters long',
+    },
+  },
+  laundryPerPair: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    items: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
+  },
+  laundryByKG: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    price: {
+      type: Number,
+      required: function () {
+        return this.laundryByKG.active;
+      },
+    },
+    items: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
+  },
+});
+
+const Service = mongoose.model('Service', serviceSchema);
+
+export default Service;
