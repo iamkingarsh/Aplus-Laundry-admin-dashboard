@@ -11,19 +11,15 @@ const orderSchema = new mongoose.Schema({
     },
   },
   service: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Service', // Reference to the Service collection
     required: true,
-    minlength: 1,
-    validate: {
-      validator: (value) => value.length >= 1,
-      message: 'Please select a service',
-    },
   },
   products: [
     {
       id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product', 
+        ref: 'Product', // Reference to the Product collection
         required: true,
       },
       quantity: {
@@ -33,13 +29,9 @@ const orderSchema = new mongoose.Schema({
     },
   ],
   customer: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User collection
     required: true,
-    minlength: 1,
-    validate: {
-      validator: (value) => value.length >= 1,
-      message: 'Please select a customer',
-    },
   },
   status: {
     type: String,
@@ -54,7 +46,8 @@ const orderSchema = new mongoose.Schema({
     type: String,
   },
   delivery_agent: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the User collection for delivery_agent
   },
   cartTotal: {
     type: Number,
