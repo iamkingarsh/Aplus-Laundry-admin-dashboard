@@ -25,6 +25,10 @@ const couponSchema = new mongoose.Schema({
       message: 'Discount code is required',
     },
   },
+  active: {
+    type: Boolean,
+    default: true,
+  },
   discount_expiry_date: {
     type: Date,
     required: true,
