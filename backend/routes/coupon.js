@@ -7,23 +7,23 @@ import  {
     deleteCouponById,
     updateCouponActiveStatusById,
   }  from '../controllers/coupon.js';
-import { authenticateToken } from '../middleware/authToken.js';
+import { adminAuthenticateToken } from '../middleware/authToken.js';
 
 const couponRouter = express.Router();
 
 // Add or update a coupon
-couponRouter.post('/addorupdate', authenticateToken, createOrUpdateCoupon);
+couponRouter.post('/addorupdate', adminAuthenticateToken, createOrUpdateCoupon);
 
 // Get all coupons
-couponRouter.get('/all', authenticateToken, getAllCoupons);
+couponRouter.get('/all', adminAuthenticateToken, getAllCoupons);
 
 // Get a specific coupon by its ID
-couponRouter.get('/:id', authenticateToken, getCouponById);
+couponRouter.get('/:id', adminAuthenticateToken, getCouponById);
 
 // Delete a coupon by its ID
-couponRouter.delete('/:id', authenticateToken, deleteCouponById);
+couponRouter.delete('/:id', adminAuthenticateToken, deleteCouponById);
 
 // Update the active status of a coupon by its ID
-couponRouter.put('/:id/activate', authenticateToken, updateCouponActiveStatusById);
+couponRouter.put('/:id/activate', adminAuthenticateToken, updateCouponActiveStatusById);
 
 export default couponRouter;
