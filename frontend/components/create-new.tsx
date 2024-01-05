@@ -8,6 +8,7 @@ import { NewOrderForm } from './forms/newOrderForm';
 import { NewCustomerForm } from './forms/newCustomerForm';
 import { NewCouponsForm } from './forms/newCouponForm'
 import checkIfOwner from '@/utils/checkIfOwner'
+import Link from 'next/link'
 
 function CreateNew() {
     const isOwner = checkIfOwner()
@@ -37,15 +38,30 @@ function CreateNew() {
                     GlobalModal.description = "Please select the type of customer you would like to create"
                     GlobalModal.children = <div className='flex w-full  gap-2'>
                         <div className='w-1/2'>
+                            <Link href='/customers/create-new?subscription=true'>
+                                <Button
+                                    onClick={() => {
+                                        GlobalModal.onClose()
+                                    }
+                                    }
+                                    variant="secondary" className="w-full flex flex-col gap-3 h-40" >
+                                    <LucideUserPlus2 className='w-8 mr-2' />
+                                    Create Subscription User</Button>
+                            </Link>
 
-                            <Button variant="secondary" className="w-full flex flex-col gap-3 h-40" >
-                                <LucideUserPlus2 className='w-8 mr-2' />
-                                Create Subscription User</Button>
                         </div>
                         <div className='w-1/2'>
-                            <Button variant="secondary" className="w-full flex flex-col gap-3 h-40" >
-                                <User2 className='w-8 mr-2' />
-                                Create Non Subscription User</Button>
+                            <Link href='/customers/create-new?subscription=false'>
+
+                                <Button
+                                    onClick={() => {
+                                        GlobalModal.onClose()
+                                    }
+                                    }
+                                    variant="secondary" className="w-full flex flex-col gap-3 h-40" >
+                                    <User2 className='w-8 mr-2' />
+                                    Create Non Subscription User</Button>
+                            </Link>
                         </div>
 
 

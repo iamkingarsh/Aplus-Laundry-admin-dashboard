@@ -32,6 +32,7 @@ const formSchema = z.object({
     phoneno: z.string().min(10).max(10),
     address: z.string().min(10).max(100),
     city: z.string().min(2).max(50),
+    customer_type: z.string().min(2).max(50),
     state: z.string().min(2).max(50),
     pincode: z.string().min(6).max(6),
     country: z.string().min(2).max(50),
@@ -51,12 +52,19 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
     const [otpErrorMessage, setOtpErrorMessage] = React.useState<string>("")
     const [otp, setOtp] = React.useState<string>("")
 
+    // get subscription type from url
+
+    const subscription = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get('subscription') : null;
+
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             country: "India",
             state: "Andhra Pradesh",
             city: "Ongole",
+            customer_type: subscription === "false" ? "Non-Subscription" : "Subscription",
         },
 
     })
@@ -77,7 +85,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
 
         setIsLoading(true)
 
-
+        console.log(values)
         setTimeout(() => {
             setIsLoading(false)
             setOtpSent(true)
@@ -109,6 +117,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
     }
 
     return (
+
         <div className={cn("grid gap-6 ", className)} {...props}>
 
             {otpSent ?

@@ -8,23 +8,36 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String, 
         unique: true,
-        required:true,
+        required: function () {
+            return ['owner', 'admin'].includes(this.role);
+        },
     },
     mobileNumber: {
         type: Number, 
-        required: true,
+        required: function () {
+            return ['customer', 'deliveryagent'].includes(this.role);
+        },
         unique: true
     },
     address: {
         type: String, 
-    },profileImg: {
+    },
+    profileImg: {
         type: String, 
-        default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-    },role:{
+        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+    },
+    role: {
         type: String,
         required: true,
-
-    }
+        enum: ['owner', 'admin', 'deliveryagent', 'customer'],
+    },
+    customerType: {
+        type: String,
+        required: function () {
+            return this.role === 'customer';
+        },
+        enum: ['subscriber', 'unsubscribed'],
+    },
 }, {
     timestamps: true
 });
