@@ -71,7 +71,7 @@ export function ProfileForm() {
 
 
 
-    // Function to upload image to Firebase Storage and get the URL
+
     const uploadImageToFirebase = async (file: any) => {
         try {
             const storageRef = ref(storage, `profile-pics/${file.name}`);
