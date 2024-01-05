@@ -61,7 +61,6 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
 
         setIsLoading(true)
 
-
         setTimeout(() => {
             setIsLoading(false)
             toast.success('Customer created successfully')

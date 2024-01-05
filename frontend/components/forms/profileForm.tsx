@@ -28,7 +28,9 @@ import { Textarea } from "../ui/textarea"
 import toast, { Toast } from "react-hot-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Upload } from "lucide-react"
-import { url } from "inspector"
+import { storage } from "@/lib/firebase"
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { useState } from "react"
 
 const profileFormSchema = z.object({
     profilepic: z.string(),
@@ -65,13 +67,34 @@ export function ProfileForm() {
         mode: "onChange",
     })
 
+    const [profilepic, setProfilepic] = useState<string | null>(null)
+
+
+
+
+    const uploadImageToFirebase = async (file: any) => {
+        try {
+            const storageRef = ref(storage, `profile-pics/${file.name}`);
+            // Upload file
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            console.log('File available at', downloadURL);
+            toast.success('Profile Picture added successfully!');
+
+        } catch (error) {
+            console.log('Error in uploadImageToFirebase:', error);
+        }
+    };
+
 
 
     function onSubmit(data: ProfileFormValues) {
 
-
+        uploadImageToFirebase(profilepic);
         toast.success("Profile updated.")
     }
+
+
 
     return (
         <Form {...form}>
@@ -99,13 +122,15 @@ export function ProfileForm() {
                                     <Input
                                         onChange={(e: any) => {
                                             const file = e.target.files[0];
-
+                                            console.log('env file', process.env.FIREBASE_STORAGE_BUCKET);
+                                            setProfilepic(file);
                                             if (file) {
                                                 const reader = new FileReader();
                                                 reader.onload = (event: any) => {
                                                     const imageUrl = event.target.result;
                                                     form.setValue('profilepic', imageUrl);
                                                     console.log(imageUrl);
+
                                                 };
 
                                                 reader.readAsDataURL(file); // change the logic during backend integration, use cloudinary
