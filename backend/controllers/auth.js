@@ -13,18 +13,20 @@ import {
 
 
 
-export const signup = async (req, res, next) => {
+export const register = async (req, res, next) => {
   const {
     fullName,
     mobileNumber,
     role,
-    email
+    email,
+    customerType
   } = req.body;
   const newUser = new User({
     fullName,
     mobileNumber,
     role,
-    email
+    email,
+    customerType
   });
   try {
     const validEmailUser = await User.findOne({
@@ -35,7 +37,9 @@ export const signup = async (req, res, next) => {
     }
     await newUser.save();
     const token = jwt.sign({
-      id: newUser._id
+      id: newUser._id ,
+      role: newUser.role,
+
     }, process.env.JWT_SECRETKEY);
     res.cookie('accessToken', token, {
       httpOnly: true
