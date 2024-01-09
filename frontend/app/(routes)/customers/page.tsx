@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
+import { NewCustomerButton } from '@/components/newCustomerButton'
 
 const metadata: Metadata = {
     title: 'Customers | APLus Laundry',
@@ -118,6 +120,12 @@ const AllData = [
     ...Subscribeddata,
     ...NonSubscribeddata
 ] as any[];
+
+const bulkDeleteFunction = (selectedRows: any) => {
+    console.log(selectedRows)
+    toast.success('Deleted Successfully')
+}
+
 export default function page() {
 
     return (
@@ -127,9 +135,9 @@ export default function page() {
                     <Heading className='leading-tight' title='Customers' />
                     <p className='text-muted-foreground text-sm'>Manage Your Customers</p>
                 </div>
-                <Link href={'/customers/create-new'}>
-                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
-                </Link>
+
+                <NewCustomerButton />
+
 
             </div>
             <Separator orientation='horizontal' />
@@ -142,14 +150,31 @@ export default function page() {
                         <TabsTrigger className='gap-2' value="non-subscribed">Non-subscribed <Badge className='text-bg-primary-foreground' variant="outline">{NonSubscribeddata?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
-                        <DataTable searchKey='email' columns={columns} data={AllData} />
+                        <DataTable
+                            bulkDeleteIdName='id'
+                            bulkDeleteTitle='Are you sure you want to delete these customers?'
+                            bulkDeleteDescription='This will delete the selected customers, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/customers/bulk-delete'
+                            bulkDeleteToastMessage='Selected Customers Deleted Successfully'
+                            searchKey='email' columns={columns} data={AllData} />
                     </TabsContent>
                     <TabsContent value="subscribed">
-                        <DataTable searchKey='email' columns={columns} data={Subscribeddata} />
+                        <DataTable
+                            bulkDeleteIdName='id'
+                            bulkDeleteTitle='Are you sure you want to delete these customers?'
+                            bulkDeleteDescription='This will delete the selected customers, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/customers/bulk-delete'
+                            bulkDeleteToastMessage='Selected Customers Deleted Successfully'
+                            searchKey='email' columns={columns} data={Subscribeddata} />
                     </TabsContent>
                     <TabsContent value="non-subscribed">
-                        <DataTable searchKey='email' columns={columns} data={NonSubscribeddata} />
-
+                        <DataTable
+                            bulkDeleteIdName='id'
+                            bulkDeleteTitle='Are you sure you want to delete these customers?'
+                            bulkDeleteDescription='This will delete the selected customers, and they will not be recoverable.'
+                            apiRouteForBulkDelete='/api/customers/bulk-delete'
+                            bulkDeleteToastMessage='Selected Customers Deleted Successfully'
+                            searchKey='email' columns={columns} data={NonSubscribeddata} />
                     </TabsContent>
                 </Tabs>
 

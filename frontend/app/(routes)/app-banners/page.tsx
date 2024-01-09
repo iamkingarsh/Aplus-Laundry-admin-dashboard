@@ -36,7 +36,13 @@ export default function page() {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable searchKey='title' columns={columns} data={BannersData} />
+                <DataTable
+                    bulkDeleteIdName='id'
+                    bulkDeleteTitle='Are you sure you want to delete these App Banners?'
+                    bulkDeleteDescription='This will delete the selected App Banners, and they will not be recoverable.'
+                    apiRouteForBulkDelete='/api/app-banners/bulk-delete'
+                    bulkDeleteToastMessage='Selected App Banners Deleted Successfully'
+                    searchKey='title' columns={columns} data={BannersData} />
 
             </div>
 

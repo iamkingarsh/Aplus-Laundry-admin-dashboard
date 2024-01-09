@@ -26,6 +26,7 @@
 .env.test.local
 .env.production.local
 /.env
+.env
 .env.example
 
 # debug
@@ -35,6 +36,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel

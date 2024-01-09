@@ -31,6 +31,10 @@ const formSchema = z.object({
     mobile: z.string().min(10).max(10),
     phoneno: z.string().min(10).max(10),
     address: z.string().min(10).max(100),
+    city: z.string().min(2).max(50),
+    state: z.string().min(2).max(50),
+    pincode: z.string().min(6).max(6),
+    country: z.string().min(2).max(50),
     role: z.string().min(2).max(50),
 
 
@@ -43,6 +47,10 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
         resolver: zodResolver(formSchema),
         defaultValues: {
             role: 'Manager',
+            city: 'Ongole',
+            state: 'Andhra Pradesh',
+            country: 'India',
+
         },
 
     })
@@ -52,7 +60,6 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
         // Add submit logic here
 
         setIsLoading(true)
-
 
         setTimeout(() => {
             setIsLoading(false)
@@ -173,6 +180,105 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
                             )}
                         />
                         <FormField
+                            name="city"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="city">City</FormLabel>
+                                    <FormControl>
+
+                                        <Input
+                                            id="city"
+                                            placeholder="eg. Mumbai"
+                                            type="text"
+                                            autoCapitalize="none"
+                                            autoComplete="city"
+                                            autoCorrect="off"
+                                            disabled={isLoading}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors.city?.message}
+                                    </FormMessage>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="state"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="state">State</FormLabel>
+                                    <FormControl>
+
+                                        <Input
+                                            id="state"
+                                            placeholder="eg. Maharashtra"
+                                            type="text"
+                                            autoCapitalize="none"
+                                            autoComplete="state"
+                                            autoCorrect="off"
+                                            disabled={isLoading}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors.state?.message}
+                                    </FormMessage>
+                                </FormItem>
+                            )} />
+                        <FormField
+                            name="pincode"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="pincode">Pincode</FormLabel>
+                                    <FormControl>
+
+                                        <Input
+                                            id="pincode"
+                                            placeholder="eg. 400001"
+                                            type="number"
+                                            autoCapitalize="none"
+                                            autoComplete="pincode"
+                                            autoCorrect="off"
+                                            disabled={isLoading}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors?.pincode?.message}
+                                    </FormMessage>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="country"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="country">Country</FormLabel>
+                                    <FormControl>
+
+                                        <Input
+                                            id="country"
+                                            placeholder="eg. India"
+                                            type="text"
+                                            autoCapitalize="none"
+                                            autoComplete="country"
+                                            autoCorrect="off"
+                                            disabled={isLoading}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage>
+                                        {form.formState.errors?.country?.message}
+                                    </FormMessage>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
                             name="role"
                             control={form.control}
                             render={({ field }) => (
@@ -201,7 +307,7 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
                             {isLoading && (
                                 <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                             )}
-                            Invite
+                            Create
                         </Button>
                     </div>
 

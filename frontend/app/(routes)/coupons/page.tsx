@@ -59,7 +59,13 @@ export default function CustomerPage({ params }: Props) {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable searchKey='coupon_code' columns={columns} data={CouponsData} />
+                <DataTable
+                    bulkDeleteIdName='couponid'
+                    bulkDeleteTitle='Are you sure you want to delete these Coupons?'
+                    bulkDeleteDescription='This will delete the selected Coupons, and they will not be recoverable.'
+                    apiRouteForBulkDelete='/api/coupons/bulk-delete'
+                    bulkDeleteToastMessage='Selected Coupons Deleted Successfully'
+                    searchKey='coupon_code' columns={columns} data={CouponsData} />
             </div>
 
 

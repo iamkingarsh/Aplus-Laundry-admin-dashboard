@@ -17,6 +17,8 @@ import toast from "react-hot-toast"
 import { Textarea } from "../ui/textarea"
 import { Card } from "../ui/card"
 import Image from "next/image"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { storage } from "@/lib/firebase"
 
 
 interface NewAppBannerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,10 +44,26 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     })
 
+    const [bannerImage, setBannerImage] = React.useState("" as any)
+    const [bannerImageFile, setBannerImageFile] = React.useState("" as any)
+
+    const uploadImageToFirebase = async (file: any) => {
+        try {
+            const storageRef = ref(storage, `app-banners/${file.name}`);
+            // Upload file
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            console.log('File available at', downloadURL);
+            toast.success('Profile Picture added successfully!');
+
+        } catch (error) {
+            console.log('Error in uploadImageToFirebase:', error);
+        }
+    };
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-
+        uploadImageToFirebase(bannerImageFile)
         setIsLoading(true)
 
 
@@ -56,25 +74,26 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     }
 
-    const [bannerImage, setBannerImage] = React.useState("" as any) // @ mujahed Replace this by creating a cloudinary image upload component
-
 
     const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] as any;
-
+        setBannerImageFile(file)
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setBannerImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            reader.onload = (event: any) => {
+                const imageUrl = event.target.result;
+                form.setValue('banner_image', imageUrl);
+                setBannerImage(imageUrl);
 
-            // Use the field.onChange from useForm
-            form.setValue("banner_image", file);
+            };
+
+            reader.readAsDataURL(file); // change the logic during backend integration, use cloudinary
         } else {
             setBannerImage(null);
         }
     };
+
+
 
     return (
         <div className={cn("grid gap-6 ", className)} {...props}>
