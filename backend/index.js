@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoute from './routes/auth.js';
-
 import errorHandler from './middleware/error.js';
 import orderRouter from './routes/order.js';
 import productRouter from './routes/product.js';
