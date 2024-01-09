@@ -9,6 +9,8 @@ import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { tr } from "date-fns/locale"
 import { set } from "date-fns"
+import api from '../../axiosUtility/api'
+import Cookies from 'js-cookie';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -28,7 +30,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const [countDown, setCountDown] = React.useState<number>(60)
 
     const validEmail = "mohammedarshad.arsh@gmail.com"
-    const otp = "123456"
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
@@ -43,47 +44,78 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             setErrorMessage("Invalid Email")
             return
         }
-        else if (email !== validEmail) {
-            setError(true)
-            setErrorMessage("Email not registered")
-            return
-        }
-        else {
-            setError(false)
-            setErrorMessage("")
-            setIsLoading(true)
-            setTimeout(() => {
-                setIsLoading(false)
-                setOtpSent(true)
-            }, 3000)
-        }
+        // else if (email !== validEmail) {
+        //     setError(true)
+        //     setErrorMessage("Email not registered")
+        //     return
+        // }
+
+        try {
+            // Make a POST request to the "/auth/emailOtpSend" endpoint
+            const response = await api.post('/auth/emailOtpSend', {
+              email: email,
+              
+            });
+      
+             
+            if (response) {
+              setTimeout(() => {
+                setIsLoading(false);
+                setOtpSent(true);
+              }, 3000);
+            } else {
+               
+              setError(true);
+              setErrorMessage("Failed to send email OTP");
+              setIsLoading(false);
+            }
+          } catch (error) {
+             
+            console.error("Error sending email OTP:", error?.response.data.msg);
+            setError(true);
+            setErrorMessage( error?.response.data.msg);
+            setIsLoading(false);
+          }
+        
 
     }
 
     async function onOtpSubmit(event: React.SyntheticEvent) {
-        event.preventDefault()
-
+        event.preventDefault();
+      
         if (otpValue === "") {
-            setOtpError(true)
-            setOtpErrorMessage("OTP cannot be empty")
-            return
+          setOtpError(true);
+          setOtpErrorMessage("OTP cannot be empty");
+          return;
+        } else {
+          setOtpError(false);
+          setOtpErrorMessage("");
+          setIsLoading(true);
+      
+          try {
+            const response = await api.post('/auth/emailOtpVerify', {
+              email: email,
+              otp: otpValue,
+            });
+      
+            const { data } = response;
+      
+            setIsLoading(false);
+            setValidOtp(true);
+      
+            // Save the token to a cookie
+            Cookies.set('AplusToken', data.token, { expires: 7 }); // Set the expiration in days
+      
+            console.log('Verification response:', response);
+            console.log('Verification successful:', data);
+          } catch (error) {
+            setIsLoading(false);
+            console.error('Error verifying OTP:', error?.response.data.msg);
+            setOtpErrorMessage(error?.response.data.msg);
+          }
         }
-        else if (otpValue !== otp) {
-            setOtpError(true)
-            setOtpErrorMessage("Invalid OTP")
-            return
-        }
-        else {
-            setOtpError(false)
-            setOtpErrorMessage("")
-            setIsLoading(true)
-            setTimeout(() => {
-                setIsLoading(false)
-                setValidOtp(true)
-            }, 3000)
-        }
-
-    }
+      }
+      
 
 
 
