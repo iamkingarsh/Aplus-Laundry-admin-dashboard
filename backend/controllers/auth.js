@@ -182,7 +182,7 @@ export const verifyotp = async (req, res) => {
     const matchingOTP = databaseotp.find((record) => record.otp == otp);
 
     if (!matchingOTP) {
-      return res.status(202).send({
+      return res.status(401).send({
         msg: "Wrong OTP!",
         ok: false
       });
@@ -201,11 +201,11 @@ export const verifyotp = async (req, res) => {
       });
 
       return res
-        .status(202)
-        .send({
-          msg: "Your OTP has expired, can't verify",
-          ok: false
-        });
+      .status(402)
+      .send({
+        msg: "Your OTP has expired, can't verify",
+        ok: false
+      });
     }
 
     // Update user's emailVerified status
