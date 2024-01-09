@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default function AuthenticationPage() {
+  
   return (
     <>
 
