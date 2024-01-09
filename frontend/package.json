@@ -9,7 +9,6 @@
     "analyze": "next build && source-map-explorer 'out/**/*.{js,js.map}'",
     "lint": "next lint"
   },
-  
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -28,6 +27,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-table": "^8.10.7",
+    "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
