@@ -53,69 +53,69 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         try {
             // Make a POST request to the "/auth/emailOtpSend" endpoint
             const response = await api.post('/auth/emailOtpSend', {
-              email: email,
-              
+                email: email,
+
             });
-      
-             
+
+
             if (response) {
-              setTimeout(() => {
-                setIsLoading(false);
-                setOtpSent(true);
-              }, 3000);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setOtpSent(true);
+                }, 3000);
             } else {
-               
-              setError(true);
-              setErrorMessage("Failed to send email OTP");
-              setIsLoading(false);
+
+                setError(true);
+                setErrorMessage("Failed to send email OTP");
+                setIsLoading(false);
             }
-          } catch (error) {
-             
-            console.error("Error sending email OTP:", error?.response.data.msg);
+        } catch (error: any) {
+
+            console.error("Error sending email OTP:", error?.message);
             setError(true);
-            setErrorMessage( error?.response.data.msg);
+            setErrorMessage(error?.message);
             setIsLoading(false);
-          }
-        
+        }
+
 
     }
 
     async function onOtpSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
-      
+
         if (otpValue === "") {
-          setOtpError(true);
-          setOtpErrorMessage("OTP cannot be empty");
-          return;
+            setOtpError(true);
+            setOtpErrorMessage("OTP cannot be empty");
+            return;
         } else {
-          setOtpError(false);
-          setOtpErrorMessage("");
-          setIsLoading(true);
-      
-          try {
-            const response = await api.post('/auth/emailOtpVerify', {
-              email: email,
-              otp: otpValue,
-            });
-      
-            const { data } = response;
-      
-            setIsLoading(false);
-            setValidOtp(true);
-      
-            // Save the token to a cookie
-            Cookies.set('AplusToken', data.token, { expires: 7 }); // Set the expiration in days
-      
-            console.log('Verification response:', response);
-            console.log('Verification successful:', data);
-          } catch (error) {
-            setIsLoading(false);
-            console.error('Error verifying OTP:', error?.response.data.msg);
-            setOtpErrorMessage(error?.response.data.msg);
-          }
+            setOtpError(false);
+            setOtpErrorMessage("");
+            setIsLoading(true);
+
+            try {
+                const response = await api.post('/auth/emailOtpVerify', {
+                    email: email,
+                    otp: otpValue,
+                });
+
+                const { data } = response;
+
+                setIsLoading(false);
+                setValidOtp(true);
+
+                // Save the token to a cookie
+                Cookies.set('AplusToken', data.token, { expires: 7 }); // Set the expiration in days
+
+                console.log('Verification response:', response);
+                console.log('Verification successful:', data);
+            } catch (error) {
+                setIsLoading(false);
+                console.error('Error verifying OTP:', error?.response.data.msg);
+                setOtpErrorMessage(error?.response.data.msg);
+            }
         }
-      }
-      
+    }
+
 
 
 
