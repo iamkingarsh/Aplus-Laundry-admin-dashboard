@@ -1,3 +1,4 @@
+"use client"
 import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
@@ -11,65 +12,66 @@ import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
 import { categories } from '@/lib/constants';
 // import { useEffect } from 'react';
-import api from  '../../../axiosUtility/api'
-export const metadata: Metadata = {
-    title: 'Categories | APLus Laundry',
-    description: ' Manage your categories here! ',
-}
+import api from '../../../axiosUtility/api'
+import { useLayoutEffect } from 'react';
+// export const metadata: Metadata = {
+//   title: 'Categories | APLus Laundry',
+//   description: ' Manage your categories here! ',
+// }
 
-const fetchDataWithToken = async (endpoint) => {
+const fetchDataWithToken = async (endpoint: any) => {
   const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-    try {
-      const response = await api.get(endpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      // Handle the response as needed
-      console.log('API Response:', response);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-  
- 
-   
+  try {
+    const response = await api.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Handle the response as needed
+    console.log('API Response:', response);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+
+
 export default function CategoriesPage() {
 
-    // Use useLayoutEffect instead of useEffect
-    // useLayoutEffect(() => {
-        fetchDataWithToken('/category/all');
-    // }, []);
-    
-   
-    return (
-        <div className='w-full space-y-2 h-full flex p-6 flex-col'>
-            <div className="topbar w-full flex justify-between items-center">
-                <div>
-                    <Heading className='leading-tight ' title='Categories' />
-                    <p className='text-muted-foreground text-sm'>Manage your laundry item categories here! </p>
-                </div>
-                <Link href={'/categories/create-new'}>
-                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
-                </Link>
-            </div>
-            <Separator orientation='horizontal' />
-            <div className="container mx-auto py-10">
-                <DataTable
-                    bulkDeleteIdName='category_id'
-                    bulkDeleteTitle='Are you sure you want to delete the selected categories?'
-                    bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
-                    apiRouteForBulkDelete='/api/categories/bulk-delete'
-                    bulkDeleteToastMessage='Selected categories deleted successfully'
-                    searchKey='title' columns={columns} data={categories as any} />
-            </div>
+  // Use useLayoutEffect instead of useEffect
+  useLayoutEffect(() => {
+    fetchDataWithToken('/category/all');
+  }, []);
 
 
+  return (
+    <div className='w-full space-y-2 h-full flex p-6 flex-col'>
+      <div className="topbar w-full flex justify-between items-center">
+        <div>
+          <Heading className='leading-tight ' title='Categories' />
+          <p className='text-muted-foreground text-sm'>Manage your laundry item categories here! </p>
         </div>
+        <Link href={'/categories/create-new'}>
+          <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+        </Link>
+      </div>
+      <Separator orientation='horizontal' />
+      <div className="container mx-auto py-10">
+        <DataTable
+          bulkDeleteIdName='category_id'
+          bulkDeleteTitle='Are you sure you want to delete the selected categories?'
+          bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
+          apiRouteForBulkDelete='/api/categories/bulk-delete'
+          bulkDeleteToastMessage='Selected categories deleted successfully'
+          searchKey='title' columns={columns} data={categories as any} />
+      </div>
 
-    )
+
+    </div>
+
+  )
 }
 
 
