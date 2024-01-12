@@ -10,15 +10,40 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
 import { categories } from '@/lib/constants';
-
+// import { useEffect } from 'react';
+import api from  '../../../axiosUtility/api'
 export const metadata: Metadata = {
     title: 'Categories | APLus Laundry',
     description: ' Manage your categories here! ',
 }
 
+const fetchDataWithToken = async (endpoint) => {
+  const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-
+    try {
+      const response = await api.get(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      // Handle the response as needed
+      console.log('API Response:', response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
+ 
+   
 export default function CategoriesPage() {
+
+    // Use useLayoutEffect instead of useEffect
+    // useLayoutEffect(() => {
+        fetchDataWithToken('/category/all');
+    // }, []);
+    
+   
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between items-center">
