@@ -9,6 +9,7 @@ import productRouter from './routes/product.js';
 import serviceRouter from './routes/service.js';
 import couponRouter from './routes/coupon.js';
 import appBannerRouter from './routes/appBanner.js';
+import categoryRouter from './routes/category.js';
 // const bodyParser = require('body-parser');
 
 
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
   res.send("home");
 });
 app.use('/auth',authRoute);
+app.use('/category',categoryRouter)
 app.use('/order',orderRouter);
 app.use('/product', productRouter);
 app.use('/service', serviceRouter);
