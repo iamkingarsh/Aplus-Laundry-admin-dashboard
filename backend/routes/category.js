@@ -14,11 +14,11 @@ const categoryRouter = express.Router();
 // Route: /category/createorupdate
 categoryRouter.post('/createorupdate', authenticateToken, createOrUpdateCategory);
 
-// Route: /category/:categoryId
-categoryRouter.get('/:categoryId', authenticateToken, getCategoryById);
-
 // Route: /category/all
 categoryRouter.get('/all', authenticateToken, getAllCategories);
+
+// Route: /category/:categoryId
+categoryRouter.get('/:categoryId', authenticateToken, getCategoryById);
 
 // Route: /category/:categoryId
 categoryRouter.delete('/:categoryId', authenticateToken, deleteCategoryById);
