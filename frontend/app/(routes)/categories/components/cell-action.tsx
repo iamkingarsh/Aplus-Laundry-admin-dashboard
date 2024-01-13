@@ -25,7 +25,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
             console.log('Data deleted successfully:', result);
             toast.success('Category Deleted Successfully')
             GlobalModal.onClose()
-            window.location.reload()
+
         } catch (error) {
             console.error('Error deleting data:', error);
         }

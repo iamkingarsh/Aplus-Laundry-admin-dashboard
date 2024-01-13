@@ -26,29 +26,15 @@ import { fetchDataWithToken } from '@/axiosUtility/data.api';
 
 
 export default function CategoriesPage() {
-
   const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const data = async () => {
-      try {
-        const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+  Data().then((data) => {
+    setLoading(true)
+    setCategories(data)
+    setLoading(false)
+  })
 
-        if (result && result.categories) {
-          const categories = result.categories;
-          setCategories(categories);
-          // Now you can work with the 'categories' array
-        } else {
-          console.error('Response format is not as expected');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    data()
-
-
-  }, [])
 
 
   return (
@@ -64,13 +50,13 @@ export default function CategoriesPage() {
       </div>
       <Separator orientation='horizontal' />
       <div className="container mx-auto py-10">
-        <DataTable
+        {!loading && <DataTable
           bulkDeleteIdName='_id'
           bulkDeleteTitle='Are you sure you want to delete the selected categories?'
           bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
           apiRouteForBulkDelete='/api/categories/bulk-delete'
           bulkDeleteToastMessage='Selected categories deleted successfully'
-          searchKey='title' columns={columns} data={categories as any} />
+          searchKey='title' columns={columns} data={categories as any} />}
       </div>
 
 
