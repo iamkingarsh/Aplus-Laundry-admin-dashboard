@@ -49,7 +49,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         //     setErrorMessage("Email not registered")
         //     return
         // }
-
+        setIsLoading(true)
         try {
             // Make a POST request to the "/auth/emailOtpSend" endpoint
             const response = await api.post('/auth/emailOtpSend', {
@@ -71,9 +71,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             }
         } catch (error: any) {
 
-            console.error("Error sending email OTP:", error?.message);
+            console.error("Error sending email OTP:", error?.response.data.msg);
             setError(true);
-            setErrorMessage(error?.message);
+            setErrorMessage(error?.response.data.msg);
             setIsLoading(false);
         }
 
@@ -108,7 +108,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
                 console.log('Verification response:', response);
                 console.log('Verification successful:', data);
-            } catch (error) {
+            } catch (error: any) {
                 setIsLoading(false);
                 console.error('Error verifying OTP:', error?.response.data.msg);
                 setOtpErrorMessage(error?.response.data.msg);
