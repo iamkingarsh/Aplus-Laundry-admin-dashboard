@@ -76,6 +76,7 @@ export const getAllCategories = async (req, res) => {
     }
 };
 
+
 export const deleteCategoryById = async (req, res) => {
     try {
         const {

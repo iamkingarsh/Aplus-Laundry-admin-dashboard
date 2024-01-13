@@ -1,4 +1,3 @@
-"use client"
 import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
@@ -11,40 +10,25 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
 import { categories } from '@/lib/constants';
+import { fetchData } from './Data';
 // import { useEffect } from 'react';
-import api from '../../../axiosUtility/api'
-import { useLayoutEffect } from 'react';
+// import api from '../../../axiosUtility/api'
+
+// import { useEffect, useLayoutEffect } from 'react';
+// import { fetchDataWithToken } from '@/axiosUtility/data.api';
 // export const metadata: Metadata = {
 //   title: 'Categories | APLus Laundry',
 //   description: ' Manage your categories here! ',
 // }
 
-const fetchDataWithToken = async (endpoint: any) => {
-  const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
 
-  try {
-    const response = await api.get(endpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // Handle the response as needed
-    console.log('API Response:', response);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
 
 
 
 export default function CategoriesPage() {
 
-  // Use useLayoutEffect instead of useEffect
-  useLayoutEffect(() => {
-    fetchDataWithToken('/category/all');
-  }, []);
-
+  
+  
 
   return (
     <div className='w-full space-y-2 h-full flex p-6 flex-col'>
