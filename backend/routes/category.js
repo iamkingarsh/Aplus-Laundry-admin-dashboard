@@ -18,9 +18,9 @@ categoryRouter.post('/createorupdate', authenticateToken, createOrUpdateCategory
 categoryRouter.get('/all', authenticateToken, getAllCategories);
 
 // Route: /category/:categoryId
-categoryRouter.get('/:categoryId', authenticateToken, getCategoryById);
+categoryRouter.get('/id/:categoryId', authenticateToken, getCategoryById);
 
 // Route: /category/:categoryId
-categoryRouter.delete('/:categoryId', authenticateToken, deleteCategoryById);
+categoryRouter.delete('/id/:categoryId', authenticateToken, deleteCategoryById);
 
 export default categoryRouter;

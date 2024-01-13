@@ -27,12 +27,13 @@ interface Props {
 
 
 export default function EditCategoryPage({ params }: Props) {
-    const categoryData = categories.filter((item: any) => item.category_id === params.categoryid)[0] as any
+    const categoryData = params.categoryid
 
     const useModal = useGlobalModal()
     const router = useRouter()
 
     const deleteCoupon = async (couponid: string) => {
+
         // delete logic here
         useModal.onClose()
         toast.success('Category Deleted Successfully')
