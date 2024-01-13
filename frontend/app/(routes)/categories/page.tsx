@@ -14,6 +14,7 @@ import Data from './Data';
 import api, { fetchData } from '../../../axiosUtility/api'
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { fetchDataWithToken } from '@/axiosUtility/data.api';
+import GetData from './Data';
 
 // export const metadata: Metadata = {
 //   title: 'Categories | APLus Laundry',
@@ -26,15 +27,47 @@ import { fetchDataWithToken } from '@/axiosUtility/data.api';
 
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState([])
+
   const [loading, setLoading] = useState(true)
 
-  Data().then((data) => {
-    setLoading(true)
-    setCategories(data)
-    setLoading(false)
-  })
 
+
+  const [categories, setCategories] = useState([])
+  const getData = async () => {
+    setLoading(true)
+    try {
+      const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+
+      if (result && result.categories) {
+        const categories = result.categories;
+        setCategories(categories);
+        setLoading(false)
+        // Now you can work with the 'categories' array
+      } else {
+        console.error('Response format is not as expected');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+  useEffect(() => {
+    getData()
+  }, [])
+
+
+
+  // useEffect(() => {
+
+  //   setLoading(true)
+  //   const data = GetData().then((data) => { return data }) as any
+  //   setCategories(data)
+  //   setLoading(false)
+  // }, [])
+
+
+
+
+  console.log(categories)
 
 
   return (

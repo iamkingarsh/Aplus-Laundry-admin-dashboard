@@ -12,8 +12,9 @@ import { categories } from '@/lib/constants';
 import { Group, Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import Data from '../../Data';
 
 
 
@@ -28,13 +29,15 @@ interface Props {
 
 export default function EditCategoryPage({ params }: Props) {
     const categoryData = params.categoryid
+    const [loading, setLoading] = useState(false)
+    const [categories, setCategories] = useState([])
 
     const useModal = useGlobalModal()
     const router = useRouter()
 
-    const deleteCoupon = async (couponid: string) => {
 
-        // delete logic here
+
+    const deleteCoupon = async (couponid: string) => {
         useModal.onClose()
         toast.success('Category Deleted Successfully')
         router.push('/categories')
@@ -51,11 +54,9 @@ export default function EditCategoryPage({ params }: Props) {
                     <div className='flex items-center gap-3'>
                         <Button
                             onClick={() => {
-
                                 useModal.title = 'Are you sure you want to delete this category?'
                                 useModal.description = 'This action cannot be undone'
                                 useModal.children = <Alert onConfirm={() => deleteCoupon(params.categoryid)} />
-
                                 useModal.onOpen()
                             }}
                             variant='destructive'>

@@ -18,14 +18,14 @@ interface Props {
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const deleteOrder = async () => {
-        console.log('delete' + data._id)
+
 
         try {
             const result = await deleteData(`/category/id/${data._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
-            console.log('Data deleted successfully:', result);
+
             toast.success('Category Deleted Successfully')
             GlobalModal.onClose()
-
+            window.location.reload()
         } catch (error) {
             console.error('Error deleting data:', error);
         }
