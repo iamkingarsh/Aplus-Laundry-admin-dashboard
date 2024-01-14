@@ -77,7 +77,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        console.log(values)
+
         setIsLoading(true)
         try {
 

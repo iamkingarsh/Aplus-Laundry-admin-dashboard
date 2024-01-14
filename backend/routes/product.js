@@ -17,10 +17,10 @@ import express from 'express';
   productRouter.get('/getall', authenticateToken, getAllProductsWithCategories);
   
   // Route for updating the active status of a product
-  productRouter.put('/:id/active', authenticateToken, updateProductActiveStatus);
+  productRouter.put('/id/:id/active', authenticateToken, updateProductActiveStatus);
   
   // Route for deleting a product by ID
-  productRouter.delete('/:id', authenticateToken, deleteProductById);
+  productRouter.delete('/id/:id', authenticateToken, deleteProductById);
   
   export default productRouter;
   

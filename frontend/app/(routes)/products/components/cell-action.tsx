@@ -8,17 +8,28 @@ import { ProductsColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { deleteData } from '@/axiosUtility/api';
 
 interface Props {
-    data: ProductsColumns
+    data: ProductsColumns | any
 }
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const router = useRouter()
-    const deleteOrder = () => {
-        console.log('delete')
-        toast.success('Item Deleted Successfully')
+    const deleteOrder = async () => {
+        console.log(data._id)
+        try {
+            const result = await deleteData(`/product/id/${data._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+            console.log('Success:', result);
+            toast.success('Category Deleted Successfully')
+            GlobalModal.onClose()
+            router.refresh()
+            window.location.reload()
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
         GlobalModal.onClose()
     }
     return (
