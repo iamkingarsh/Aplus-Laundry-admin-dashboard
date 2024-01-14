@@ -83,6 +83,14 @@ export const columns: ColumnDef<ProductsColumns>[] = [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <div
+                    className={`w-2 h-2 rounded-full mr-2 `}
+                />
+                {row.original.category?.title}
+            </div>
+        ),
     },
     {
         accessorKey: "status",
