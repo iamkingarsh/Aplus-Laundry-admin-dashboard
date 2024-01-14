@@ -1,3 +1,4 @@
+'use client'
 import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
@@ -9,13 +10,12 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
-import { categories } from '@/lib/constants';
-import { fetchData } from './Data';
-// import { useEffect } from 'react';
-// import api from '../../../axiosUtility/api'
+import Data from './Data';
+import api, { fetchData } from '../../../axiosUtility/api'
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { fetchDataWithToken } from '@/axiosUtility/data.api';
+import GetData from './Data';
 
-// import { useEffect, useLayoutEffect } from 'react';
-// import { fetchDataWithToken } from '@/axiosUtility/data.api';
 // export const metadata: Metadata = {
 //   title: 'Categories | APLus Laundry',
 //   description: ' Manage your categories here! ',
@@ -25,10 +25,50 @@ import { fetchData } from './Data';
 
 
 
+
 export default function CategoriesPage() {
 
-  
-  
+  const [loading, setLoading] = useState(true)
+
+
+
+  const [categories, setCategories] = useState([])
+  const getData = async () => {
+    setLoading(true)
+    try {
+      const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+
+      if (result && result.categories) {
+        const categories = result.categories;
+        setCategories(categories);
+        setLoading(false)
+        // Now you can work with the 'categories' array
+      } else {
+        console.error('Response format is not as expected');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+  useEffect(() => {
+    getData()
+  }, [])
+
+
+
+  // useEffect(() => {
+
+  //   setLoading(true)
+  //   const data = GetData().then((data) => { return data }) as any
+  //   setCategories(data)
+  //   setLoading(false)
+  // }, [])
+
+
+
+
+  console.log(categories)
+
 
   return (
     <div className='w-full space-y-2 h-full flex p-6 flex-col'>
@@ -43,13 +83,13 @@ export default function CategoriesPage() {
       </div>
       <Separator orientation='horizontal' />
       <div className="container mx-auto py-10">
-        <DataTable
-          bulkDeleteIdName='category_id'
+        {!loading && <DataTable
+          bulkDeleteIdName='_id'
           bulkDeleteTitle='Are you sure you want to delete the selected categories?'
           bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
           apiRouteForBulkDelete='/api/categories/bulk-delete'
           bulkDeleteToastMessage='Selected categories deleted successfully'
-          searchKey='title' columns={columns} data={categories as any} />
+          searchKey='title' columns={columns} data={categories as any} />}
       </div>
 
 

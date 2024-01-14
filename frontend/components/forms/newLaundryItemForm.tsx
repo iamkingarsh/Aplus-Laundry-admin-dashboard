@@ -18,6 +18,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
+import { fetchData } from "@/axiosUtility/api"
+import { set } from "date-fns"
 
 
 interface NewLaundryItemFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,6 +36,31 @@ const formSchema = z.object({
 
 export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+    const [categories, setCategories] = React.useState([])
+    const getData = async () => {
+        setIsLoading(true)
+        try {
+            const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+
+            if (result && result.categories) {
+                let categories = result.categories;
+                setCategories(categories)
+                setIsLoading(false)
+                // Now you can work with the 'categories' array
+            } else {
+                console.error('Response format is not as expected');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    React.useEffect(() => {
+        getData()
+    }, [])
+
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -110,7 +137,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                                 >
                                                     {field.value
                                                         ? categories.find(
-                                                            (data) => data.title === field.value
+                                                            (data: any) => data.title === field.value
                                                         )?.title
                                                         : "Select Category"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -136,7 +163,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
 
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {categories.map((data) => (
+                                                    {categories.map((data: any) => (
                                                         <CommandItem
                                                             value={data.title}
                                                             key={data.title}

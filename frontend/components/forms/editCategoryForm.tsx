@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
+import Data from "@/app/(routes)/categories/Data"
 
 
 interface EditCategoryFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,11 +35,21 @@ const formSchema = z.object({
 
 export function EditCategoryForm({ className, categoryData, gap, ...props }: EditCategoryFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [categories, setCategories] = React.useState<any>([])
+
+    // Data().then((data) => {
+    //     setIsLoading(true)
+    //     setCategories(data)
+    //     setIsLoading(false)
+    // })
+
+
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: categoryData?.title || '',
+            title: categories?.title || '',
 
         },
 
