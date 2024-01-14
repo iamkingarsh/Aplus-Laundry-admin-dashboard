@@ -18,8 +18,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
-import { fetchData } from "@/axiosUtility/api"
+import api, { fetchData } from "@/axiosUtility/api"
 import { set } from "date-fns"
+import { useRouter } from "next/navigation"
 
 
 interface NewLaundryItemFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,7 +31,7 @@ const formSchema = z.object({
     product_name: z.string().min(3, { message: "Product name must be atleast 3 characters long" }),
     category: z.string().min(3, { message: "Category must be atleast 3 characters long" }),
     priceperpair: z.string().min(1, { message: "Price per pair must be atleast Rs. 1" }),
-
+    status: z.boolean().default(true)
 
 })
 
@@ -61,23 +62,46 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
     }, [])
 
 
-
+    const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             product_name: "",
             priceperpair: "0",
             category: ""
+
         },
 
     })
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
 
         setIsLoading(true)
+        try {
 
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+                return acc;
+            }, {});
+
+            const response = await api.post('/product/adorupdate', lowercaseValues, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            router.push('/products')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
         setTimeout(() => {
             setIsLoading(false)
@@ -137,7 +161,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                                 >
                                                     {field.value
                                                         ? categories.find(
-                                                            (data: any) => data.title === field.value
+                                                            (data: any) => data._id === field.value
                                                         )?.title
                                                         : "Select Category"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -152,7 +176,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                                 />
                                                 <CommandEmpty>
                                                     <div>
-                                                        No Customer found.
+                                                        No Categories Found
                                                     </div>
                                                     {/* <div>
                                                         <Button onClick={OpenNewCustomerModal} variant="ghost" className="mt-2">
@@ -168,20 +192,25 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                                             value={data.title}
                                                             key={data.title}
                                                             onSelect={() => {
-                                                                form.setValue("category", data.title)
+                                                                form.setValue("category", data._id)
                                                             }}
                                                         >
                                                             {data.title}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
-                                                                    data.title === field.value
+                                                                    data._id === field.value
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}
                                                             />
                                                         </CommandItem>
                                                     ))}
+                                                    {/* {
+                                                        categories.length > 0 && <CommandItem onSelect={() => {
+                                                            router.push('/categories/new')
+                                                        }}> <div className="flex flex-row items-center"> <Plus className="h-4 w-4 mr-2" /> Add Category</div></CommandItem>
+                                                    } */}
                                                     {/* <CommandItem onSelect={OpenNewCustomerModal}> <div className="flex flex-row items-center"> <Plus className="h-4 w-4 mr-2" /> Add Customer</div></CommandItem> */}
                                                 </CommandGroup>
                                             </Command>
