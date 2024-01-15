@@ -91,8 +91,14 @@ export const updateProductActiveStatus = async (req, res) => {
             });
         }
 
-        // Update the 'active' field
-        product.active = active;
+    
+        //change status to false if active is false
+
+        if (active === false) {
+            product.active = true;
+        } else {
+            product.active = false;
+        }
 
         // Save the updated product
         await product.save();
