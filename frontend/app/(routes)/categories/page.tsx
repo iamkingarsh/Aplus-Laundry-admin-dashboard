@@ -89,6 +89,7 @@ export default function CategoriesPage() {
           bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
           apiRouteForBulkDelete='/api/categories/bulk-delete'
           bulkDeleteToastMessage='Selected categories deleted successfully'
+          deleteRoute="/category/ids"
           searchKey='title' columns={columns} data={categories as any} />}
       </div>
 
