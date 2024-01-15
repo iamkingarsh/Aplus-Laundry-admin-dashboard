@@ -15,6 +15,8 @@ import express from 'express';
   
   // Route for getting all products with categories
   productRouter.get('/getall', authenticateToken, getAllProductsWithCategories);
+  productRouter.get('/getid/:id', authenticateToken, getAllProductsWithCategories);
+
   
   // Route for updating the active status of a product
   productRouter.put('/id/:id/active', authenticateToken, updateProductActiveStatus);
