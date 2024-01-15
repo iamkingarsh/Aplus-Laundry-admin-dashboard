@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const SwitchComponent: React.FC<Props> = ({ data }) => {
-    console.log(data.active)
+ 
     const [checked, setChecked] = React.useState(data.active)
     const modal = useGlobalModal()
 

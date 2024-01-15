@@ -157,6 +157,8 @@ export default function Page() {
                 const products = result.products;
                 setLaundryProducts(products);
                 setLoading(false)
+        console.log('products',products)
+
                 // Now you can work with the 'categories' array
             } else {
                 console.error('Response format is not as expected');
@@ -187,6 +189,8 @@ export default function Page() {
     useEffect(() => {
         getData()
         getCategoriesData()
+        console.log('categories',categories)
+
         // const categories = GetData().then((res) => { return res }) as any
         // setCategories(categories)
 
@@ -209,7 +213,7 @@ export default function Page() {
                     <TabsList className='gap-3'>
                         <TabsTrigger className='gap-2' value="All">All <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.length}</Badge> </TabsTrigger>
                         {categories?.map((category: any, index) => (
-                            <TabsTrigger key={index} className='gap-2' value={category.title}>{category.title} <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.filter((product: any) => product.category.title === category.title)
+                            <TabsTrigger key={index} className='gap-2' value={category?.title}>{category?.title} <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.filter((product: any) => product.category === category.title)
                                 ?.length}</Badge> </TabsTrigger>
                         ))}
 

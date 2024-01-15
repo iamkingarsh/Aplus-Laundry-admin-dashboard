@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import toast from "react-hot-toast"
-import api from '../../axiosUtility/api'
+import  {postData} from '../../axiosUtility/api'
 import { useRouter } from 'next/navigation';
 
 
@@ -48,17 +48,12 @@ export function NewCategoryForm({ className, gap, ...props }: NewCategoryFormPro
         setIsLoading(true); 
       try {
        
-        const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
         const lowercaseValues = Object.keys(values).reduce((acc, key) => {
           acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
           return acc;
         }, {});
       
-        const response = await api.post('/category/createorupdate', lowercaseValues, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }); 
+        const response = await postData('/category/createorupdate', lowercaseValues); 
         console.log('API Response:', response);
       
         setIsLoading(false);
