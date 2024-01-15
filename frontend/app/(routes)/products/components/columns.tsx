@@ -10,9 +10,9 @@ import CellAction from "./cell-action"
 import SwitchComponent from "./switch"
 
 export type ProductsColumns = {
-    product_id: string
+    _id: string
     product_name: string
-    status: string
+    active: boolean
     priceperpair: number
     category: string
 
@@ -93,7 +93,7 @@ export const columns: ColumnDef<ProductsColumns>[] = [
         ),
     },
     {
-        accessorKey: "status",
+        accessorKey: "active",
         header: ({ column }) => {
             return (
                 <Button
