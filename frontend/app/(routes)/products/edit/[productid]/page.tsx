@@ -10,10 +10,12 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React , { useEffect, useLayoutEffect, useState } from 'react';
+
 import toast from 'react-hot-toast';
 import { LaundrtProducts } from '../../page';
 import { EditLaundryItemForm } from '@/components/forms/editLaundryItemForm';
+import { fetchData } from '@/axiosUtility/api';
 
 
 
@@ -28,11 +30,45 @@ interface Props {
 
 
 export default function EditLaundryItemPage({ params }: Props) {
-    const laundryItemData = LaundrtProducts.filter((item: any) => item.product_id === params.productid)[0] as any
+
+    
+    console.log(params)
+
+    // const laundryItemData = LaundrtProducts.filter((item: any) => item.product_id === params.productid)[0] as any
+    const [laundryItemData,setLaundryItemData]= useState(null)
+    const getData = async () => { 
+        try {
+          const result = await fetchData(`/product/getid/${params.productid}`);
+          console.log('result',result)
+    
+          if (result && result.products
+) {
+            const products = result.products;
+            setLaundryItemData(products[0]);
+            console.log('hi',products)
+
+          } else {
+            console.error('Response format is not as expected:', result.products.title);
+            // You might want to set an error state or show a message to the user
+          }
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          // Handle the error state here, show a message to the user, etc.
+        } finally { 
+        } 
+      };
+    
+      useEffect(() => {
+        // Trigger the data fetching when the component mounts or when categoryId changes
+        getData();
+      }, [params.productid]); // Assuming categoryId is a prop or state variable
+    
 
 
+    // const [checked, setChecked] = React.useState(laundryItemData.status === 'Active' ? true : false)
+    const [checked, setChecked] = React.useState(  true )
 
-    const [checked, setChecked] = React.useState(laundryItemData.status === 'Active' ? true : false)
     const useModal = useGlobalModal()
     const router = useRouter()
 
