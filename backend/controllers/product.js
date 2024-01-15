@@ -1,6 +1,7 @@
 import Product from "../models/product.js";
 
 export const createOrUpdateProduct = async (req, res) => {
+    console.log(req.body)
     try {
         const {
             id,
@@ -51,6 +52,7 @@ export const getAllProductsWithCategories = async (req, res) => {
     try {
         const products = await Product.find().populate('category');
 
+        console.log('products',products)
         return res.status(200).json({
             products,
             ok: true
@@ -62,6 +64,33 @@ export const getAllProductsWithCategories = async (req, res) => {
         });
     }
 };
+
+export const getProductById = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const product = await Product.findById(productId).populate('category');
+
+        if (!product) {
+            return res.status(404).json({
+                message: 'Product not found',
+                ok: false
+            });
+        }
+
+        console.log('Product:', product);
+        return res.status(200).json({
+            product: product[0], // Send only the first element as a single object
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
+    }
+};
+
+
 
 export const updateProductActiveStatus = async (req, res) => {
     try {
