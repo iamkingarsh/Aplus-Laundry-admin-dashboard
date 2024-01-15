@@ -7,6 +7,7 @@ import {
   getCategoryById,
   getAllCategories,
   deleteCategoryById,
+  deleteCategoriesByIds
 } from '../controllers/category.js';
 
 const categoryRouter = express.Router();
@@ -22,5 +23,8 @@ categoryRouter.get('/id/:categoryId', authenticateToken, getCategoryById);
 
 // Route: /category/:categoryId
 categoryRouter.delete('/id/:categoryId', authenticateToken, deleteCategoryById);
+
+categoryRouter.delete('/ids', authenticateToken, deleteCategoriesByIds);
+
 
 export default categoryRouter;
