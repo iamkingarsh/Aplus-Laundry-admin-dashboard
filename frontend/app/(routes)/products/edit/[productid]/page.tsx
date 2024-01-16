@@ -10,12 +10,12 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React , { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { LaundrtProducts } from '../../page';
+// import { LaundrtProducts } from '../../page';
 import { EditLaundryItemForm } from '@/components/forms/editLaundryItemForm';
-import { fetchData , deleteData } from '@/axiosUtility/api';
+import { fetchData, deleteData } from '@/axiosUtility/api';
 import SwitchComponent from '../../components/switch';
 
 
@@ -32,45 +32,45 @@ interface Props {
 
 export default function EditLaundryItemPage({ params }: Props) {
 
-    
+
     console.log(params)
 
     // const laundryItemData = LaundrtProducts.filter((item: any) => item.product_id === params.productid)[0] as any
-    const [laundryItemData,setLaundryItemData]= useState(null)
-    console.log('hi',laundryItemData)
+    const [laundryItemData, setLaundryItemData] = useState(null)
+    console.log('hi', laundryItemData)
 
-    const getData = async () => { 
+    const getData = async () => {
         try {
-          const result = await fetchData(`/product/getid/${params.productid}`);
-          console.log('result',result)
-    
-          if (result && result.products
-) {
-            const products = result.products;
-            setLaundryItemData(products[0]);
-            console.log('hi',products)
+            const result = await fetchData(`/product/getid/${params.productid}`);
+            console.log('result', result)
 
-          } else {
-            console.error('Response format is not as expected:', result.products.title);
-            // You might want to set an error state or show a message to the user
-          }
+            if (result && result.products
+            ) {
+                const products = result.products;
+                setLaundryItemData(products[0]);
+                console.log('hi', products)
+
+            } else {
+                console.error('Response format is not as expected:', result.products.title);
+                // You might want to set an error state or show a message to the user
+            }
 
         } catch (error) {
-          console.error('Error fetching data:', error);
-          // Handle the error state here, show a message to the user, etc.
-        } finally { 
-        } 
-      };
-    
-      useEffect(() => {
+            console.error('Error fetching data:', error);
+            // Handle the error state here, show a message to the user, etc.
+        } finally {
+        }
+    };
+
+    useEffect(() => {
         // Trigger the data fetching when the component mounts or when categoryId changes
         getData();
-      }, [params.productid]); // Assuming categoryId is a prop or state variable
-    
+    }, [params.productid]); // Assuming categoryId is a prop or state variable
+
 
 
     // const [checked, setChecked] = React.useState(laundryItemData.status === 'Active' ? true : false)
-    const [checked, setChecked] = React.useState(  true )
+    const [checked, setChecked] = React.useState(true)
 
     const useModal = useGlobalModal()
     const router = useRouter()
@@ -88,7 +88,7 @@ export default function EditLaundryItemPage({ params }: Props) {
             console.error('Error deleting data:', error);
         }
 
-       
+
     }
 
     return (
@@ -100,7 +100,7 @@ export default function EditLaundryItemPage({ params }: Props) {
                 </div>
                 <div className='flex items-center gap-3'>
                     {/* <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!checked)} /> */}
-                    <SwitchComponent data={laundryItemData} />
+                    <SwitchComponent data={laundryItemData as any} />
                     <Button
                         onClick={() => {
 

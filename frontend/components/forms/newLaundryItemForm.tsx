@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
-import api, { fetchData , postData } from "@/axiosUtility/api"
+import api, { fetchData, postData } from "@/axiosUtility/api"
 import { set } from "date-fns"
 import { useRouter } from "next/navigation"
 
@@ -98,11 +98,6 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
             setIsLoading(false);
             toast.error('Error creating Item');
         }
-
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
 
     }
 
