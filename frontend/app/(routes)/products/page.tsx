@@ -221,10 +221,11 @@ export default function Page() {
                     <TabsContent value="All">
 
                         <DataTable
-                            bulkDeleteIdName='product_id'
+                            bulkDeleteIdName='_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected items?'
                             bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
                             apiRouteForBulkDelete='/api/products/bulk-delete'
+                             deleteRoute="/product/ids"
                             bulkDeleteToastMessage='Selected items deleted successfully'
                             searchKey='product_name' columns={columns} data={LaundryProducts} />
                     </TabsContent>
@@ -232,10 +233,12 @@ export default function Page() {
                     {categories.map((category: any, index) => (
                         <TabsContent key={index} value={category.title}>
                             <DataTable
-                                bulkDeleteIdName='product_id'
+                                bulkDeleteIdName='_id'
+
                                 bulkDeleteTitle='Are you sure you want to delete the selected items?'
                                 bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
                                 apiRouteForBulkDelete='/api/products/bulk-delete'
+                                 deleteRoute="/product/ids"
                                 bulkDeleteToastMessage='Selected items deleted successfully'
                                 searchKey='product_name' columns={columns} data={
                                     LaundryProducts.filter((product: any) => product.category._id === category._id)
