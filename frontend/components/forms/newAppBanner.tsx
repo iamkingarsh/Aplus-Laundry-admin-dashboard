@@ -19,7 +19,7 @@ import { Card } from "../ui/card"
 import Image from "next/image"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "@/lib/firebase"
-import api, { fetchData , postData } from "@/axiosUtility/api"
+import api, { fetchData, postData } from "@/axiosUtility/api"
 import { useRouter } from "next/navigation"
 
 
@@ -53,43 +53,39 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     const uploadImageToFirebase = async (file: any) => {
         try {
-          const storageRef = ref(storage, `app-banners/${file.name}`);
-          // Upload file
-          const snapshot = await uploadBytes(storageRef, file);
-          const downloadURL = await getDownloadURL(storageRef);
-          console.log('File available at', downloadURL);
-          toast.success('Profile Picture added successfully!');
-          return downloadURL;
+            const storageRef = ref(storage, `app-banners/${file.name}`);
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
         } catch (error) {
-          console.log('Error in uploadImageToFirebase:', error);
+            console.log('Error in uploadImageToFirebase:', error);
         }
-      };
-      
-      async function onSubmit(values: z.infer<typeof formSchema>) {
+    };
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
         setIsLoading(true);
         console.log('AppBanner values', values);
-      
-        try {
-          const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-      
-          // Upload the image and get the download URL
-          const downloadURL = await uploadImageToFirebase(bannerImageFile);
-      
-          // Convert values to lowercase
-          const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-            acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
-            return acc;
-          }, {});
-      
-          // Combine form values with the uploaded banner image URL
-          const data = {
-            ...lowercaseValues,
-            banner_image: downloadURL,
-          };
-            const response = await postData('/appBanner/addorupdate', data );
-            console.log('API Response:', data);
 
+        try {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+
+            // Upload the image and get the download URL
+            const downloadURL = await uploadImageToFirebase(bannerImageFile);
+
+            // Convert values to lowercase
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+                return acc;
+            }, {});
+
+            // Combine form values with the uploaded banner image URL
+            const data = {
+                ...lowercaseValues,
+                banner_image: downloadURL,
+            };
+            const response = await postData('/appBanner/addorupdate', data);
+            console.log('API Response:', data);
             setIsLoading(false);
             toast.success('Item created successfully');
             router.push('/app-banners')
@@ -99,10 +95,7 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
             toast.error('Error creating Item');
         }
 
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
+
 
     }
 

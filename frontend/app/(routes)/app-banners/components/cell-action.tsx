@@ -21,6 +21,7 @@ interface Props {
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const router = useRouter()
+
     const deleteBanner = async () => {
         try {
             const urlParts = data.banner_image.split('/');
