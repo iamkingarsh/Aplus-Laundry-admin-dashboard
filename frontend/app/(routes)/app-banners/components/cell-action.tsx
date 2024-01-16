@@ -40,10 +40,10 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                         GlobalModal.description = '  '
                         GlobalModal.children = <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
 
-                            <Image src={data.background} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
+                            <Image src={data.banner_image} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
                             <div className="absolute text-white text-left p-4 ">
-                                <h1 className="text-2xl font-bold">{data.title}</h1>
-                                <p className="text-sm">{data.desc}</p>
+                                <h1 className="text-2xl font-bold">{data.banner_title}</h1>
+                                <p className="text-sm">{data.banner_description}</p>
                             </div>
                         </Card>
                         GlobalModal.onOpen()
@@ -54,7 +54,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     Banner Preview</DropdownMenuItem>
                 <DropdownMenuItem
                     onSelect={() => {
-                        router.push(`/app-banners/edit/${data.id}`)
+                        router.push(`/app-banners/edit/${data._id}`)
                     }
                     }
                 >

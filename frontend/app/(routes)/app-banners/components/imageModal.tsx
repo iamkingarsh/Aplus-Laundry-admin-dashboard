@@ -15,6 +15,8 @@ interface Props {
 
 export const ImageModal: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
+    console.log('delete banner',data)
+    
     const deleteOrder = () => {
         console.log('delete banner')
         GlobalModal.onClose()
@@ -26,7 +28,7 @@ export const ImageModal: React.FC<Props> = ({ data }) => {
                 () => {
                     GlobalModal.title = 'Banner Preview'
                     GlobalModal.description = ' '
-                    GlobalModal.children = <Image alt={data.title} src={data.background} width={400} height={200} />
+                    GlobalModal.children = <Image alt={data.banner_title} src={data.banner_image} width={400} height={200} />
 
                     GlobalModal.onOpen()
                 }

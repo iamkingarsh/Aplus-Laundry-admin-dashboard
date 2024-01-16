@@ -1,4 +1,6 @@
 import Category from "../models/category.js";
+import mongoose from 'mongoose';
+
 
 export const createOrUpdateCategory = async (req, res) => {
     try {
@@ -62,12 +64,10 @@ export const getCategoryById = async (req, res) => {
     }
 };
 
-import mongoose from 'mongoose';
 
 export const deleteCategoriesByIds = async (req, res) => {
     try {
         const categoryIds  = req.body;
-        console.log('categoryIds categoryIds', req.body);
 
         if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
             return res.status(400).json({

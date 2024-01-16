@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { ProductsColumns } from './columns'
 import { Switch } from "@/components/ui/switch"
 import { Button } from '@/components/ui/button'
@@ -12,10 +12,13 @@ interface Props {
 }
 
 export const SwitchComponent: React.FC<Props> = ({ data }) => {
- 
-    const [checked, setChecked] = React.useState(data.active)
-    const modal = useGlobalModal()
+ const [checked, setChecked] = useState(data?.active);
 
+ useEffect(() => {
+   setChecked(data?.active);
+ }, [data?.active]);  
+ 
+    const modal = useGlobalModal()
     const changeStatus = async (value: any) => {
         try {
             console.log('id', data.active)

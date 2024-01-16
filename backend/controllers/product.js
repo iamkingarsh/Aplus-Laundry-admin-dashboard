@@ -1,4 +1,6 @@
 import Product from "../models/product.js";
+import mongoose from 'mongoose';
+
 
 export const createOrUpdateProduct = async (req, res) => {
     console.log(req.body)
@@ -171,6 +173,47 @@ export const deleteProductById = async (req, res) => {
         console.error(error);
         return res.status(500).json({
             error: 'Internal Server Error'
+        });
+    }
+};
+
+export const deleteProductByIds = async (req, res) => {
+    try {
+        const productIds  = req.body;
+
+        if (!productIds || !Array.isArray(productIds) || productIds.length === 0) {
+            return res.status(400).json({
+                message: 'Invalid product IDs provided 1',
+                ok: false,
+            });
+        }
+
+        // Validate each product ID
+        if (!productIds.every(mongoose.Types.ObjectId.isValid)) {
+            return res.status(400).json({
+                message: 'Invalid product IDs provided',
+                ok: false,
+            });
+        }
+
+        // Delete products by their IDs
+        const deletionResult = await Product.deleteMany({ _id: { $in: productIds } });
+
+        if (deletionResult.deletedCount > 0) {
+            return res.status(200).json({
+                message: 'products deleted successfully',
+                ok: true,
+            });
+        } else {
+            return res.status(404).json({
+                message: 'No products found for deletion',
+                ok: false,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
         });
     }
 };

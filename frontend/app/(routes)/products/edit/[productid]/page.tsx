@@ -15,7 +15,8 @@ import React , { useEffect, useLayoutEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { LaundrtProducts } from '../../page';
 import { EditLaundryItemForm } from '@/components/forms/editLaundryItemForm';
-import { fetchData } from '@/axiosUtility/api';
+import { fetchData , deleteData } from '@/axiosUtility/api';
+import SwitchComponent from '../../components/switch';
 
 
 
@@ -36,6 +37,8 @@ export default function EditLaundryItemPage({ params }: Props) {
 
     // const laundryItemData = LaundrtProducts.filter((item: any) => item.product_id === params.productid)[0] as any
     const [laundryItemData,setLaundryItemData]= useState(null)
+    console.log('hi',laundryItemData)
+
     const getData = async () => { 
         try {
           const result = await fetchData(`/product/getid/${params.productid}`);
@@ -74,9 +77,18 @@ export default function EditLaundryItemPage({ params }: Props) {
 
     const deleteCoupon = async (couponid: string) => {
         // delete logic here
-        useModal.onClose()
-        toast.success('Item Deleted Successfully')
-        router.push('/products')
+
+        try {
+            const result = await deleteData(`/product/id/${couponid}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+
+            useModal.onClose()
+            toast.success('Item Deleted Successfully')
+            router.push('/products')
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
+       
     }
 
     return (
@@ -87,7 +99,8 @@ export default function EditLaundryItemPage({ params }: Props) {
                     <p className='text-muted-foreground text-sm'>Edit your  laundry item details</p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!checked)} />
+                    {/* <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!checked)} /> */}
+                    <SwitchComponent data={laundryItemData} />
                     <Button
                         onClick={() => {
 

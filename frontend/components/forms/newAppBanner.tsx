@@ -19,6 +19,8 @@ import { Card } from "../ui/card"
 import Image from "next/image"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "@/lib/firebase"
+import api, { fetchData , postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 
 
 interface NewAppBannerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -32,6 +34,8 @@ const formSchema = z.object({
 })
 
 export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormProps) {
+    const router = useRouter()
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -49,23 +53,51 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     const uploadImageToFirebase = async (file: any) => {
         try {
-            const storageRef = ref(storage, `app-banners/${file.name}`);
-            // Upload file
-            const snapshot = await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            console.log('File available at', downloadURL);
-            toast.success('Profile Picture added successfully!');
-
+          const storageRef = ref(storage, `app-banners/${file.name}`);
+          // Upload file
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(storageRef);
+          console.log('File available at', downloadURL);
+          toast.success('Profile Picture added successfully!');
+          return downloadURL;
         } catch (error) {
-            console.log('Error in uploadImageToFirebase:', error);
+          console.log('Error in uploadImageToFirebase:', error);
         }
-    };
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
+      };
+      
+      async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        uploadImageToFirebase(bannerImageFile)
-        setIsLoading(true)
+        setIsLoading(true);
+        console.log('AppBanner values', values);
+      
+        try {
+          const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      
+          // Upload the image and get the download URL
+          const downloadURL = await uploadImageToFirebase(bannerImageFile);
+      
+          // Convert values to lowercase
+          const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+            acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+            return acc;
+          }, {});
+      
+          // Combine form values with the uploaded banner image URL
+          const data = {
+            ...lowercaseValues,
+            banner_image: downloadURL,
+          };
+            const response = await postData('/appBanner/addorupdate', data );
+            console.log('API Response:', data);
 
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            router.push('/app-banners')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
         setTimeout(() => {
             setIsLoading(false)

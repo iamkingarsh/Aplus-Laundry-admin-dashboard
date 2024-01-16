@@ -17,6 +17,7 @@ import toast from "react-hot-toast"
 import { Textarea } from "../ui/textarea"
 import { Card } from "../ui/card"
 import Image from "next/image"
+import { postData } from "@/axiosUtility/api"
 
 
 interface EditAppBannerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,23 +34,55 @@ const formSchema = z.object({
 
 export function EditAppBannerForm({ className, gap, bannerdata, bannerid, ...props }: EditAppBannerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    console.log('bannerdata bannerdata bannerdata',bannerdata)
+
+  
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            banner_title: bannerdata[0].title,
-            banner_description: bannerdata[0].desc,
-            banner_image: bannerdata[0].background,
-        },
-
-    })
+    });
+    
+    React.useEffect(() => {
+        form.reset({
+            banner_title: bannerdata?.banner_title || '',
+            banner_description: bannerdata?.banner_description || '',
+            banner_image: bannerdata?.banner_image || '',
+        });
+    }, [bannerdata]);
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
 
         setIsLoading(true)
-
+        const editData = async() =>{
+            try {
+                const lowercaseValues = Object.fromEntries(
+                  Object.entries(values).map(([key, value]) => [key, typeof value === 'string' ? value.toLowerCase() : value])
+                );
+              
+            
+                const payload = {
+                    ...lowercaseValues,
+                    id: bannerdata?._id,
+                  };
+                  
+                console.log('payload',payload)
+                const response =  await postData('/appBanner/addorupdate', payload);
+                console.log('API Response:', response);
+              
+                setIsLoading(false);
+                toast.success('Category updated successfully');
+                // router.push('/products');
+              } catch (error) {
+                console.error('Error creating/updating category:', error);
+                setIsLoading(false);
+                toast.error(`Error creating/updating category: ${error.message}`);
+              }
+        }
+       
+          
+        // editData()
 
         setTimeout(() => {
             setIsLoading(false)
@@ -58,9 +91,9 @@ export function EditAppBannerForm({ className, gap, bannerdata, bannerid, ...pro
 
     }
 
-    const [bannerImage, setBannerImage] = React.useState(bannerdata[0].background) // @ mujahed Replace this by creating a cloudinary image upload component
+    const [bannerImage, setBannerImage] = React.useState(bannerdata?.banner_image) // @ mujahed Replace this by creating a cloudinary image upload component
 
-
+console.log(bannerImage)
     const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] as any;
 
@@ -159,7 +192,7 @@ export function EditAppBannerForm({ className, gap, bannerdata, bannerid, ...pro
 
                     </div>
                     <div className='' >
-                        {form.watch("banner_title") === bannerdata[0].title && form.watch("banner_description") === bannerdata[0].desc && form.watch("banner_image") === bannerdata[0].background ?
+                        {form.watch("banner_title") === bannerdata?.banner_title && form.watch("banner_description") === bannerdata?.banner_description && form.watch("banner_image") === bannerdata?.banner_image ?
                             <Button type="submit" className="w-fit" disabled>
 
                                 Update

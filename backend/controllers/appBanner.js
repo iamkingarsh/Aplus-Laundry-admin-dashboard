@@ -8,7 +8,7 @@ export const createOrUpdateAppBanner = async (req, res) => {
             banner_description,
             banner_image
         } = req.body;
-
+console.log('req.body',req.body)
         const existingAppBanner = await AppBanner.findById(id);
 
         if (existingAppBanner) {
