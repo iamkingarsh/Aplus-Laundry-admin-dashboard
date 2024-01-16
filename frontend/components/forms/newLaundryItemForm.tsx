@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
-import api, { fetchData } from "@/axiosUtility/api"
+import api, { fetchData , postData } from "@/axiosUtility/api"
 import { set } from "date-fns"
 import { useRouter } from "next/navigation"
 
@@ -87,11 +87,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                 return acc;
             }, {});
 
-            const response = await api.post('/product/adorupdate', lowercaseValues, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await postData('/product/adorupdate', lowercaseValues);
             console.log('API Response:', response);
 
             setIsLoading(false);
