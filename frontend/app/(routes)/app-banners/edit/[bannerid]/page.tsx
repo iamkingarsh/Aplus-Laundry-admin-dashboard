@@ -1,4 +1,5 @@
 "use client"
+import { fetchData } from '@/axiosUtility/api';
 import { Alert } from '@/components/forms/Alert';
 import { EditAppBannerForm } from '@/components/forms/editAppBannerForm';
 import { EditCouponsForm } from '@/components/forms/editCouponForm';
@@ -11,7 +12,7 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 
@@ -22,17 +23,37 @@ interface Props {
     }
 }
 
-const bannerdata = [
-    {
-        title: "Flat 10% Off",
-        desc: "Get 10% off use code 'Wel10' ",
-        background: "/assets/bg.png"
+// const bannerdata = [
+//     {
+//         title: "Flat 10% Off",
+//         desc: "Get 10% off use code 'Wel10' ",
+//         background: "/assets/bg.png"
 
-    }
-] as any
+//     }
+// ] as any
 
 
 export default function EditAppBannerPage({ params }: Props) {
+    const [bannerdata,setBannerdata] = useState(null)
+
+    const getData = async () => { 
+        try {
+          const result = await fetchData(`/appBanner/id/${params.bannerid}`);
+          console.log('result',result?.appBanner)
+          setBannerdata(result?.appBanner)
+           
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          // Handle the error state here, show a message to the user, etc.
+        } finally { 
+        } 
+      };
+    
+      useEffect(() => {
+        // Trigger the data fetching when the component mounts or when categoryId changes
+        getData();
+      }, [params.bannerid])
     const useModal = useGlobalModal()
     const router = useRouter()
 
