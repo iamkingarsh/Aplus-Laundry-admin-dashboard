@@ -14,6 +14,6 @@ appBannerRouter.get('/getall', adminAuthenticateToken, getAllAppBanners);
 appBannerRouter.get('/id/:id', adminAuthenticateToken, getAppBannerById);
 
 // Delete an app banner by ID
-appBannerRouter.delete('/:id', adminAuthenticateToken, deleteAppBannerById);
+appBannerRouter.delete('/id/:id', adminAuthenticateToken, deleteAppBannerById);
 
 export default appBannerRouter;

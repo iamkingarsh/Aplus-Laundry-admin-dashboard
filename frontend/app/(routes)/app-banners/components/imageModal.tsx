@@ -8,6 +8,7 @@ import { CustomersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { Card } from '@/components/ui/card';
 
 interface Props {
     data: CustomersColumns
@@ -15,20 +16,16 @@ interface Props {
 
 export const ImageModal: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
-    console.log('delete banner',data)
-    
-    const deleteOrder = () => {
-        console.log('delete banner')
-        GlobalModal.onClose()
-        toast.success('banner deleted successfully')
-    }
+
     return (
         <>
             <EyeIcon onClick={
                 () => {
                     GlobalModal.title = 'Banner Preview'
                     GlobalModal.description = ' '
-                    GlobalModal.children = <Image alt={data.banner_title} src={data.banner_image} width={400} height={200} />
+                    GlobalModal.children = <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
+                        <Image src={data.banner_image} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
+                    </Card>
 
                     GlobalModal.onOpen()
                 }

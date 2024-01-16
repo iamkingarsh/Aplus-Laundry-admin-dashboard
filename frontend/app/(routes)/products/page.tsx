@@ -157,7 +157,7 @@ export default function Page() {
                 const products = result.products;
                 setLaundryProducts(products);
                 setLoading(false)
-        console.log('products',products)
+                console.log('products', products)
 
                 // Now you can work with the 'categories' array
             } else {
@@ -189,7 +189,7 @@ export default function Page() {
     useEffect(() => {
         getData()
         getCategoriesData()
-        console.log('categories',categories)
+        console.log('categories', categories)
 
         // const categories = GetData().then((res) => { return res }) as any
         // setCategories(categories)
@@ -213,7 +213,7 @@ export default function Page() {
                     <TabsList className='gap-3'>
                         <TabsTrigger className='gap-2' value="All">All <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.length}</Badge> </TabsTrigger>
                         {categories?.map((category: any, index) => (
-                            <TabsTrigger key={index} className='gap-2' value={category?.title}>{category?.title} <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.filter((product: any) => product.category === category.title)
+                            <TabsTrigger key={index} className='gap-2' value={category?.title}>{category?.title} <Badge className='text-bg-primary-foreground ' variant="outline">{LaundryProducts.filter((product: any) => product.category.title === category.title)
                                 ?.length}</Badge> </TabsTrigger>
                         ))}
 
@@ -225,7 +225,7 @@ export default function Page() {
                             bulkDeleteTitle='Are you sure you want to delete the selected items?'
                             bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
                             apiRouteForBulkDelete='/api/products/bulk-delete'
-                             deleteRoute="/product/ids"
+                            deleteRoute="/product/ids"
                             bulkDeleteToastMessage='Selected items deleted successfully'
                             searchKey='product_name' columns={columns} data={LaundryProducts} />
                     </TabsContent>
@@ -234,11 +234,10 @@ export default function Page() {
                         <TabsContent key={index} value={category.title}>
                             <DataTable
                                 bulkDeleteIdName='_id'
-
                                 bulkDeleteTitle='Are you sure you want to delete the selected items?'
                                 bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
                                 apiRouteForBulkDelete='/api/products/bulk-delete'
-                                 deleteRoute="/product/ids"
+                                deleteRoute="/product/ids"
                                 bulkDeleteToastMessage='Selected items deleted successfully'
                                 searchKey='product_name' columns={columns} data={
                                     LaundryProducts.filter((product: any) => product.category._id === category._id)
