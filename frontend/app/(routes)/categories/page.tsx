@@ -86,8 +86,7 @@ export default function CategoriesPage() {
         {!loading && <DataTable
           bulkDeleteIdName='_id'
           bulkDeleteTitle='Are you sure you want to delete the selected categories?'
-          bulkDeleteDescription='This will delete the selected categories, and they will not be recoverable.'
-          apiRouteForBulkDelete='/api/categories/bulk-delete'
+          bulkDeleteDescription='This will delete all the selected categories, and they will not be recoverable.'
           bulkDeleteToastMessage='Selected categories deleted successfully'
           deleteRoute="/category/ids"
           searchKey='title' columns={columns} data={categories as any} />}

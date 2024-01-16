@@ -236,7 +236,7 @@ export default function Page() {
                                 bulkDeleteIdName='_id'
                                 bulkDeleteTitle='Are you sure you want to delete the selected items?'
                                 bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
-                                apiRouteForBulkDelete='/api/products/bulk-delete'
+                                // apiRouteForBulkDelete='/api/products/bulk-delete'
                                 deleteRoute="/product/ids"
                                 bulkDeleteToastMessage='Selected items deleted successfully'
                                 searchKey='product_name' columns={columns} data={
