@@ -81,7 +81,6 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
         setIsLoading(true)
         try {
 
-            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
             const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
                 acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
                 return acc;
