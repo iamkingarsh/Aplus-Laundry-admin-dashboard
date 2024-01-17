@@ -23,7 +23,7 @@ import { useState } from "react"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type CouponsColumns = {
-    category_id: string
+    _id: string
     title: string
 }
 

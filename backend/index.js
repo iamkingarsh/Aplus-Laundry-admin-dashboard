@@ -3,8 +3,13 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoute from './routes/auth.js';
-
 import errorHandler from './middleware/error.js';
+import orderRouter from './routes/order.js';
+import productRouter from './routes/product.js';
+import serviceRouter from './routes/service.js';
+import couponRouter from './routes/coupon.js';
+import appBannerRouter from './routes/appBanner.js';
+import categoryRouter from './routes/category.js';
 // const bodyParser = require('body-parser');
 
 
@@ -34,6 +39,14 @@ app.get("/", (req, res) => {
   res.send("home");
 });
 app.use('/auth',authRoute);
+app.use('/category',categoryRouter)
+app.use('/order',orderRouter);
+app.use('/product', productRouter);
+app.use('/service', serviceRouter);
+app.use('/coupon', couponRouter);
+app.use('/appBanner',appBannerRouter);
+
+
 
 
 

@@ -11,13 +11,13 @@ const productSchema = new mongoose.Schema({
     },
   },
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',  
     required: true,
-    minlength: 3,
-    validate: {
-      validator: (value) => value.length >= 3,
-      message: 'Category must be at least 3 characters long',
-    },
+  },  
+  active: {
+    type: Boolean,
+    default: true,
   },
   priceperpair: {
     type: String,
@@ -27,7 +27,6 @@ const productSchema = new mongoose.Schema({
       message: 'Price per pair must be at least Rs. 1',
     },
   },
-  
 });
 
 const Product = mongoose.model('Product', productSchema);

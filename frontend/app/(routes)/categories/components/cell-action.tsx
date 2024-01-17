@@ -8,6 +8,7 @@ import { CouponsColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { deleteData } from '@/axiosUtility/api';
 
 interface Props {
     data: CouponsColumns
@@ -16,10 +17,20 @@ interface Props {
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
-    const deleteOrder = () => {
-        console.log('delete')
-        toast.success('Category Deleted Successfully')
-        GlobalModal.onClose()
+    const deleteOrder = async () => {
+
+
+        try {
+            const result = await deleteData(`/category/id/${data._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+
+            toast.success('Category Deleted Successfully')
+            GlobalModal.onClose()
+            window.location.reload()
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
+
     }
     const router = useRouter()
     return (
@@ -37,7 +48,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     <DropdownMenuItem
                         onSelect={
                             () => {
-                                router.push(`/categories/edit/${data.category_id}`)
+                                router.push(`/categories/edit/${data._id}`)
                             }
                         }>
                         <Edit2 className="mr-2 h-4 w-4" />

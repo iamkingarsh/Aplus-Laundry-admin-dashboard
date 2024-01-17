@@ -13,7 +13,7 @@ const serviceSchema = new mongoose.Schema({
   laundryPerPair: {
     active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     items: [
       {
@@ -25,7 +25,7 @@ const serviceSchema = new mongoose.Schema({
   laundryByKG: {
     active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     price: {
       type: Number,
