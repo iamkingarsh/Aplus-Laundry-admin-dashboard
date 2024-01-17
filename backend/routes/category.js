@@ -1,7 +1,7 @@
 import express from 'express';
  
  // Adjust the path based on your project structure
-import { authenticateToken } from '../middleware/authToken.js';
+import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 import {
   createOrUpdateCategory,
   getCategoryById,
@@ -13,7 +13,7 @@ import {
 const categoryRouter = express.Router();
 
 // Route: /category/createorupdate
-categoryRouter.post('/createorupdate', authenticateToken, createOrUpdateCategory);
+categoryRouter.post('/createorupdate', adminAuthenticateToken, createOrUpdateCategory);
 
 // Route: /category/all
 categoryRouter.get('/all', authenticateToken, getAllCategories);
@@ -22,9 +22,9 @@ categoryRouter.get('/all', authenticateToken, getAllCategories);
 categoryRouter.get('/id/:categoryId', authenticateToken, getCategoryById);
 
 // Route: /category/:categoryId
-categoryRouter.delete('/id/:categoryId', authenticateToken, deleteCategoryById);
+categoryRouter.delete('/id/:categoryId', adminAuthenticateToken, deleteCategoryById);
 
-categoryRouter.delete('/ids', authenticateToken, deleteCategoriesByIds);
+categoryRouter.delete('/ids', adminAuthenticateToken, deleteCategoriesByIds);
 
 
 export default categoryRouter;
