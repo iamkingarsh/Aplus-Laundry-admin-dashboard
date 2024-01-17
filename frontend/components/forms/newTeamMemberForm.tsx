@@ -58,7 +58,7 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-
+console.log('values',values)
         setIsLoading(true)
 
         setTimeout(() => {

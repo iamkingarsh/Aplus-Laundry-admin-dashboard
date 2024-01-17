@@ -16,13 +16,13 @@ import {
 import CellAction from "./cell-action"
 
 export type CustomersColumns = {
-    id: string
-    fullname: string
+    _id: string
+    fullName: string
     address: string
-    mobile: string
+    mobileNumber: string
     status: "active" | "inactive"
     email: string
-    profilepic: string
+    profileImg: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -49,20 +49,20 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "profilepic",
+        accessorKey: "profileImg",
         header: "Profile",
         cell: ({ row }) => (
             <div className="flex items-center">
                 <Avatar className='w-8 h-8'>
-                    <AvatarImage src={row.original.profilepic} alt="@shadcn" />
-                    <AvatarFallback> {row.original.fullname[0]} </AvatarFallback>
+                    <AvatarImage src={row.original.profileImg} alt="@shadcn" />
+                    <AvatarFallback> {row.original.fullName } </AvatarFallback>
                 </Avatar>
 
             </div>
         ),
     },
     {
-        accessorKey: "fullname",
+        accessorKey: "fullName",
         header: ({ column }) => {
             return (
                 <Button
@@ -90,7 +90,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "mobile",
+        accessorKey: "mobileNumber",
         header: "Mobile No.",
     },
     {

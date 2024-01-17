@@ -16,6 +16,8 @@ import { Plus } from "lucide-react"
 import toast from "react-hot-toast"
 import Heading from "../ui/heading"
 import { set } from "date-fns"
+import { postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 
 
 interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,16 +25,16 @@ interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const formSchema = z.object({
-    fullname: z.string().min(2,
+    fullName: z.string().min(2,
         { message: "Name must be atleast 2 characters long" }
     ).max(50,
         { message: "Name must be less than 50 characters long" }
     ),
     email: z.string().email(),
-    phoneno: z.string().min(10).max(10),
+    mobileNumber: z.string().min(10).max(10),
     address: z.string().min(10).max(100),
     city: z.string().min(2).max(50),
-    customer_type: z.string().min(2).max(50),
+    customerType: z.string().min(2).max(50),
     state: z.string().min(2).max(50),
     pincode: z.string().min(6).max(6),
     country: z.string().min(2).max(50),
@@ -47,6 +49,7 @@ const formSchemaOtp = z.object({
 
 export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const router = useRouter()
 
 
     // get subscription type from url
@@ -61,7 +64,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
             country: "India",
             state: "Andhra Pradesh",
             city: "Ongole",
-            customer_type: subscription === "false" ? "Non-Subscription" : "Subscription",
+            customerType: subscription === "false" ? "nonsubscriber" : "subscriber",
         },
 
     })
@@ -71,8 +74,31 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
 
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
+        try {
+
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+                return acc;
+            }, {});
+
+            const data = {
+                ...lowercaseValues,
+                role: 'customer'
+            };
+            
+            const response = await postData('/auth/register', data);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            router.push('/delivery-partners')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
         setIsLoading(true)
 
@@ -98,25 +124,25 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                     <div className={`grid grid-cols-${gap} gap-3`}>
                         {/* <div className={`grid grid-cols-2 gap-3`}> */}
                         <FormField
-                            name="fullname"
+                            name="fullName"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="fullname">Full Name</FormLabel>
+                                    <FormLabel htmlFor="fullName">Full Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                            id="fullname"
+                                            id="fullName"
                                             placeholder="eg. John Doe"
                                             type="text"
                                             autoCapitalize="none"
-                                            autoComplete="fullname"
+                                            autoComplete="fullName"
                                             autoCorrect="off"
                                             disabled={isLoading}
                                             {...field}
                                         />
                                     </FormControl>
                                     <FormMessage>
-                                        {form.formState.errors.fullname?.message}
+                                        {form.formState.errors.fullName?.message}
                                     </FormMessage>
                                 </FormItem>
                             )}
@@ -148,19 +174,19 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                         />
 
                         <FormField
-                            name="phoneno"
+                            name="mobileNumber"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="phoneno">Mobile No.</FormLabel>
+                                    <FormLabel htmlFor="mobileNumber">Mobile No.</FormLabel>
                                     <FormControl>
 
                                         <Input
-                                            id="phoneno"
+                                            id="mobileNumber"
                                             placeholder="eg. +91 9876543210"
                                             type="number"
                                             autoCapitalize="none"
-                                            autoComplete="phoneno"
+                                            autoComplete="mobileNumber"
                                             autoCorrect="off"
 
                                             disabled={isLoading}
@@ -168,7 +194,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                                         />
                                     </FormControl>
                                     <FormMessage>
-                                        {form.formState.errors.phoneno?.message}
+                                        {form.formState.errors.mobileNumber?.message}
                                     </FormMessage>
                                 </FormItem>
                             )}

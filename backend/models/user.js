@@ -36,7 +36,13 @@ const userSchema = new mongoose.Schema({
         required: function () {
             return this.role === 'customer';
         },
-        enum: ['subscriber', 'unsubscribed'],
+        enum: ['subscriber', 'nonsubscriber'],
+    },
+    pincode: {
+        type: String,
+        required: function () {
+            return this.role === 'customer';
+        },
     },
 }, {
     timestamps: true
