@@ -1,4 +1,6 @@
 import AppBanner from "../models/appBanner.js";
+import mongoose from 'mongoose';
+
 
 export const createOrUpdateAppBanner = async (req, res) => {
     try {
@@ -106,3 +108,45 @@ export const deleteAppBannerById = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error', ok: false });
     }
   };
+
+  export const deleteAppBannerByIds = async (req, res) => {
+    console.log(req.body)
+    try {
+        const appBannerIds  = req.body;
+
+        if (!appBannerIds || !Array.isArray(appBannerIds) || appBannerIds.length === 0) {
+            return res.status(400).json({
+                message: 'Invalid appBanner IDs provided 1',
+                ok: false,
+            });
+        }
+
+        // Validate each appBanner ID
+        if (!appBannerIds.every(mongoose.Types.ObjectId.isValid)) {
+            return res.status(400).json({
+                message: 'Invalid appBanner IDs provided',
+                ok: false,
+            });
+        }
+
+        // Delete categories by their IDs
+        const deletionResult = await AppBanner.deleteMany({ _id: { $in: appBannerIds } });
+
+        if (deletionResult.deletedCount > 0) {
+            return res.status(200).json({
+                message: 'Categories deleted successfully',
+                ok: true,
+            });
+        } else {
+            return res.status(404).json({
+                message: 'No categories found for deletion',
+                ok: false,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+        });
+    }
+};
