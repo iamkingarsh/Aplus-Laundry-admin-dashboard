@@ -1,11 +1,13 @@
+'use client'
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-import React from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { columns } from './components/columns'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { PlusIcon } from 'lucide-react'
+import api, { fetchData } from '../../../axiosUtility/api'
 
 const DeliveryAgentsData = [
     { "id": 1, "fullname": "Stacy Sokale", "email": "ssokale0@unicef.org", "mobile": "931-110-1570", "status": "active", "address": "3606 Tony Crossing", "profilepic": "https://robohash.org/nihilperferendisid.png?size=50x50&set=set1" },
@@ -59,6 +61,28 @@ const DeliveryAgentsData = [
 ] as any[]
 
 export default function page() {
+
+    // const [DeliveryAgentsData, setDeliveryAgentsData] = useState([])
+    // const getData = async () => {
+       
+    //   try {
+    //     const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+    //     console.log('result result',result)
+    //     if (result && result.categories) {
+    //       const categories = result.categories;
+    //       setDeliveryAgentsData(categories);
+           
+    //       // Now you can work with the 'categories' array
+    //     } else {
+    //       console.error('Response format is not as expected');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching data:', error);
+    //   }
+    // } 
+    // useEffect(() => {
+    //   getData()
+    // }, [])
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between items-center">
