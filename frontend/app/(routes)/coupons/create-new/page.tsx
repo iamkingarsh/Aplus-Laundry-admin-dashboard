@@ -1,10 +1,13 @@
+ 
 import { NewCouponsForm } from '@/components/forms/newCouponForm';
 import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import Heading from '@/components/ui/heading';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { Metadata } from 'next';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; 
+
 
 export const metadata: Metadata = {
     title: 'Create New Coupon | APLus Laundry',
@@ -19,6 +22,8 @@ interface Props {
 
 
 export default function CouponsPage({ params }: Props) {
+
+ 
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
