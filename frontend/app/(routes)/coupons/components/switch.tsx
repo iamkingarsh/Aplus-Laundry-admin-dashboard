@@ -16,13 +16,13 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
 
     return (
         <div>
-            <Switch checked={checked} onCheckedChange={
+            <Switch checked={data.active} onCheckedChange={
                 (value) => {
                     modal.title = 'Are you sure you want to change the status?'
                     modal.description = 'you can undo this action later'
                     modal.children = <>
                         <div className='flex flex-row justify-end gap-2'>
-                            <Button onClick={() => { setChecked(value); modal.onClose() }}>Yes</Button>
+                            <Button onClick={() => { setChecked(value); modal.onClose();console.log(value) }}>Yes</Button>
                             <Button onClick={() => modal.onClose()}>No</Button>
                         </div>
                     </>
