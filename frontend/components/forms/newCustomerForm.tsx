@@ -52,14 +52,14 @@ const formSchemaOtp = z.object({
 export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-    // get subscription type from url
+
 
     const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
-    // const subscription = URLSearchParams ? new URLSearchParams(window.location.search).get('subscription') : null;
+
     const router = useRouter()
 
-    console.log(subscription)
-    // console.log(new URLSearchParams(window.location.search).get('subscription'))
+
+
 
 
     const form = useForm<z.infer<typeof formSchema>>({
