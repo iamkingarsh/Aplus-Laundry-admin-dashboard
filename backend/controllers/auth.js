@@ -293,7 +293,7 @@ export const getAllCustomers = async (req, res, next) => {
 
 export const getAlldeliveryagent = async (req, res, next) => {
   try {
-    const deliveryagents = await User.find({ role: 'custdeliveryagentomer' });
+    const deliveryagents = await User.find({ role: 'deliveryagent' });
     res.status(200).json(deliveryagents);
   } catch (error) {
     // Handle errors, you can customize this part based on your application's error handling strategy
