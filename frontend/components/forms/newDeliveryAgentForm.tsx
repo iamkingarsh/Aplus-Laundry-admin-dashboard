@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation"
 
 
 
-interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NewDeliveryAgentFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
@@ -35,26 +35,16 @@ const formSchema = z.object({
     mobileNumber: z.string().min(10).max(10),
     address: z.string().min(10).max(100),
     city: z.string().min(2).max(50),
-    customerType: z.string().min(2).max(50),
+    role: z.string().min(2).max(50),
     state: z.string().min(2).max(50),
     pincode: z.string().min(6).max(6),
     country: z.string().min(2).max(50),
 
 })
 
-const formSchemaOtp = z.object({
-    otp: z.string().min(6).max(6,
-        { message: " OTP must be 6 characters long" }
-    ),
 
-})
-
-export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
+export function NewDeliveryAgentForm({ className, gap, ...props }: NewDeliveryAgentFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
-
-
-    const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
 
     const router = useRouter()
 
@@ -68,7 +58,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
             country: "India",
             state: "Andhra Pradesh",
             city: "Ongole",
-            customerType: subscription === false ? "nonsubscriber" : "subscriber",
+            role: "deliveryagent"
         },
 
     })
@@ -89,15 +79,15 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
 
             const data = {
                 ...lowercaseValues,
-                role: 'customer'
+
             };
 
             const response = await postData('/auth/register', data);
             console.log('API Response:', response);
 
             setIsLoading(false);
-            toast.success('Item created successfully');
-            router.push('/customers')
+            toast.success('Delivery Agent created successfully');
+            router.push('/delivery-partners')
         } catch (error) {
             console.error('Error creating Item:', error);
             setIsLoading(false);

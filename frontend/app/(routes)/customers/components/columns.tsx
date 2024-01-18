@@ -14,13 +14,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import CellAction from "./cell-action"
+import format from "date-fns/format"
 
 export type CustomersColumns = {
     _id: string
     fullName: string
     address: string
     mobileNumber: string
-    status: "active" | "inactive"
+    createdAt: string
     email: string
     profileImg: string
 }
@@ -55,7 +56,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
             <div className="flex items-center">
                 <Avatar className='w-8 h-8'>
                     <AvatarImage src={row.original.profileImg} alt="@shadcn" />
-                    <AvatarFallback> {row.original.fullName } </AvatarFallback>
+                    <AvatarFallback> {row.original.fullName} </AvatarFallback>
                 </Avatar>
 
             </div>
@@ -98,25 +99,21 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         header: "Address",
     },
     {
-        accessorKey: "status",
+        accessorKey: "dateCreated",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
                 >
-                    Status
+                    Date Created
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
         cell: ({ row }) => (
             <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "active" ? "bg-green-500" : "bg-red-500"
-                        }`}
-                />
-                {row.original.status}
+                {format(new Date(row.original.createdAt), "PP")}
             </div>
         ),
     },

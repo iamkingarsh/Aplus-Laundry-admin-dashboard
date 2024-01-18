@@ -1,5 +1,6 @@
 import { NewAppBannerForm } from '@/components/forms/newAppBanner';
 import { NewCustomerForm } from '@/components/forms/newCustomerForm';
+import { NewDeliveryAgentForm } from '@/components/forms/newDeliveryAgentForm';
 import Heading from '@/components/ui/heading';
 import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
@@ -31,7 +32,7 @@ export default function DeliveryPage({ params }: Props) {
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <NewCustomerForm gap={2} />
+                <NewDeliveryAgentForm gap={3} />
             </div>
 
 
