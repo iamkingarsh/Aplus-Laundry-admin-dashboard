@@ -24,7 +24,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import { set } from "date-fns"
-import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
+import { fetchData } from "@/axiosUtility/api"
+
 
 
 interface NewServiceFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -56,12 +57,42 @@ const formSchema = z.object({
         laundrybykg_items: z.array(z.string()),
         laundryperpair_items: z.array(z.string()),
     }).partial()
-
-
 })
+
+
 
 export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [LaundryProducts, setLaundryProducts] = React.useState([]) as any[]
+
+    const getData = async () => {
+        setIsLoading(true)
+        try {
+            const result = await fetchData('/product/getall'); // Replace 'your-endpoint' with the actual API endpoint
+            console.log(result)
+            if (result && result.products) {
+                const products = result.products;
+                setLaundryProducts(products);
+                setIsLoading(false)
+                console.log('products', products)
+
+                // Now you can work with the 'categories' array
+            } else {
+                console.error('Response format is not as expected');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+
+
+    React.useEffect(() => {
+        getData()
+
+
+
+    }, [])
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -271,14 +302,14 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                 <div className="flex gap-2 items-center justify-end">
 
                                                                     <Switch className="data-[state=checked]:bg-green-500" checked={
-                                                                        selectedItemsForLPK.length === Items.length ? true : false
+                                                                        selectedItemsForLPK.length === LaundryProducts.length ? true : false
 
                                                                     } onCheckedChange={
                                                                         () => {
-                                                                            if (selectedItemsForLPK.length === Items.length) {
+                                                                            if (selectedItemsForLPK.length === LaundryProducts.length) {
                                                                                 setSelectedItemsForLPK([])
                                                                             } else {
-                                                                                setSelectedItemsForLPK(Items.map((item: any) => item.product_id))
+                                                                                setSelectedItemsForLPK(LaundryProducts.map((item: any) => item._id))
                                                                             }
                                                                         }
                                                                     } id="laundrybykg" />
@@ -286,7 +317,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                 </div>
 
                                                             </Card>
-                                                            {Items.map((value: any, index: number) => {
+                                                            {LaundryProducts.map((value: any, index: number) => {
                                                                 return (
 
                                                                     <Card
@@ -302,7 +333,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
 
-                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value.product_id, "laundrybykg")} onCheckedChange={() => handleSelectChange(value.product_id, "laundrybykg")} id="laundrybykg" />
+                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value._id, "laundrybykg")} onCheckedChange={() => handleSelectChange(value._id, "laundrybykg")} id="laundrybykg" />
                                                                         </div>
 
                                                                     </Card>
@@ -392,14 +423,14 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                 <div className="flex gap-2 items-center justify-end">
 
                                                                     <Switch className="data-[state=checked]:bg-green-500" checked={
-                                                                        selectedItemsForLPP.length === Items.length ? true : false
+                                                                        selectedItemsForLPP.length === LaundryProducts.length ? true : false
 
                                                                     } onCheckedChange={
                                                                         () => {
-                                                                            if (selectedItemsForLPP.length === Items.length) {
+                                                                            if (selectedItemsForLPP.length === LaundryProducts.length) {
                                                                                 setSelectedItemsForLPP([])
                                                                             } else {
-                                                                                setSelectedItemsForLPP(Items.map((item: any) => item.product_id))
+                                                                                setSelectedItemsForLPP(LaundryProducts.map((item: any) => item._id))
                                                                             }
                                                                         }
                                                                     } id="laundrybykg" />
@@ -407,7 +438,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                 </div>
 
                                                             </Card>
-                                                            {Items.map((value: any, index: number) => {
+                                                            {LaundryProducts.map((value: any, index: number) => {
                                                                 return (
 
                                                                     <Card
@@ -423,7 +454,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
 
-                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value.product_id, "laundryperpair")} onCheckedChange={() => handleSelectChange(value.product_id, "laundryperpair")} id="laundryperpair" />
+                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value._id, "laundryperpair")} onCheckedChange={() => handleSelectChange(value._id, "laundryperpair")} id="laundryperpair" />
                                                                         </div>
 
                                                                     </Card>
