@@ -41,6 +41,14 @@ const couponSchema = new mongoose.Schema({
   },
 });
 
+couponSchema.pre('save', function (next) {
+  const currentDate = new Date();
+  if (this.discount_expiry_date && this.discount_expiry_date <= currentDate) {
+    this.active = false;
+  }
+  next();
+});
+
 const Coupon = mongoose.model('Coupon', couponSchema);
 
 export default Coupon;

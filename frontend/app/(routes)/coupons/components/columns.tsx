@@ -24,13 +24,13 @@ import SwitchComponent from "./switch"
 // You can use a Zod schema here if you want.
 export type CouponsColumns = {
 
-    coupon_code: string
+    discount_code: string
     discount_type: string
     discount_value: string
-    min_order_value: string
-    status: string
-    expiry_date: string
-    couponid: string
+    discount_minimum_purchase_amount: string
+    active: boolean
+    discount_expiry_date: string
+    _id: string
 }
 
 
@@ -58,7 +58,7 @@ export const columns: ColumnDef<CouponsColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "coupon_code",
+        accessorKey: "discount_code",
         header: ({ column }) => {
             return (
                 <Button
@@ -75,7 +75,7 @@ export const columns: ColumnDef<CouponsColumns>[] = [
                 <div
                     className={`w-2 h-2 rounded-full mr-2 `}
                 />
-                {row.original.coupon_code} <Clipboard onClick={() => { navigator.clipboard.writeText(row.original.coupon_code); toast.success("Copied to clipboard") }} className='ml-2 w-4 h-4 cursor-pointer' />
+                {row.original.discount_code} <Clipboard onClick={() => { navigator.clipboard.writeText(row.original.discount_code); toast.success("Copied to clipboard") }} className='ml-2 w-4 h-4 cursor-pointer' />
             </div>
         ),
 
@@ -103,7 +103,7 @@ export const columns: ColumnDef<CouponsColumns>[] = [
         ),
     },
     {
-        accessorKey: "min_order_value",
+        accessorKey: "discount_minimum_purchase_amount",
         header: ({ column }) => {
             return (
                 <Button
@@ -120,7 +120,7 @@ export const columns: ColumnDef<CouponsColumns>[] = [
                 <div
                     className={`w-2 h-2 rounded-full mr-2 `}
                 />
-                {row.original.min_order_value}
+                {row.original.discount_minimum_purchase_amount}
             </div>
         ),
     },
@@ -148,13 +148,13 @@ export const columns: ColumnDef<CouponsColumns>[] = [
         ),
     },
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "active",
+        header: "active",
         cell: ({ row }) => <SwitchComponent data={row.original} />
         ,
     },
     {
-        accessorKey: "expiry_date",
+        accessorKey: "discount_expiry_date",
         header: ({ column }) => {
             return (
                 <Button

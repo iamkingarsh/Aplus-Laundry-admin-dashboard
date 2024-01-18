@@ -45,21 +45,25 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [couponCode, setCouponCode] = React.useState<string>("")
 
-
+console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.discount_type)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            discount_type: CouponCodeData[0].discount_type,
-            discount_value: CouponCodeData[0].discount_value,
-
-            // discount_expiry_date: new Date('2023-10-10'),
-            discount_expiry_date: CouponCodeData[0].discount_expiry_date,
-            discount_usage_limit: CouponCodeData[0].discount_usage_limit,
-            discount_minimum_purchase_amount: CouponCodeData[0].discount_minimum_purchase_amount,
-            discount_code: CouponCodeData[0].coupon_code,
-        },
+        
 
     })
+
+    React.useEffect(() => {
+        form.reset({
+            discount_type: CouponCodeData?.discount_type,
+            discount_value: CouponCodeData?.discount_value,
+
+            // discount_expiry_date: new Date('2023-10-10'),
+            discount_expiry_date: CouponCodeData?.discount_expiry_date,
+            discount_usage_limit: CouponCodeData?.discount_usage_limit,
+            discount_minimum_purchase_amount: CouponCodeData?.discount_minimum_purchase_amount,
+            discount_code: CouponCodeData?.discount_code,
+        });
+    }, [CouponCodeData]);
 
 
 
@@ -203,7 +207,8 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
                                                         )}
                                                     >
                                                         {field.value ? (
-                                                            format(field.value, "PPP")
+                                                            // format(field.value, "PPP")
+                                                            field.value
                                                         ) : (
                                                             <span>Pick a date</span>
                                                         )}
@@ -325,7 +330,7 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
                                     <div>
                                         <li className='text-sm opacity-70'>{form.watch("discount_type") == 'percentage' ? 'Percentage' : 'Fixed'} discount</li>
                                         {form.watch("discount_value") > "0" && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
-                                        {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date").toDateString()}</li>}
+                                        {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date")}</li>}
                                         <li className='text-sm opacity-70 '>{form.watch("discount_minimum_purchase_amount") != "0" && 'Rs. '}{form.watch("discount_minimum_purchase_amount") != "0" && form.watch("discount_minimum_purchase_amount")} {form.watch("discount_minimum_purchase_amount") == "0" && "No "} Min purchase amount is required to avail this discount</li>
                                         <li className='text-sm opacity-70 '>{form.watch("discount_usage_limit") != "0" && form.watch("discount_usage_limit")} {form.watch("discount_usage_limit") != "0" && "Time(s)"} {form.watch("discount_usage_limit") == "0" && "Unlimited"} usage limit</li>
 

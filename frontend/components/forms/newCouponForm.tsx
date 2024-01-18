@@ -21,6 +21,9 @@ import { Calendar } from "../ui/calendar"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 import { Separator } from "../ui/separator"
 import Heading from "../ui/heading"
+import { postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
+
 
 interface NewCouponsFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -57,6 +60,8 @@ const CustomInput = (disabledKeys: any, field: any, ...props: any[]) => {
 };
 
 export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps) {
+    const router = useRouter()
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [couponCode, setCouponCode] = React.useState<string>("")
 
@@ -77,11 +82,34 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
 
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-
+       console.log('values',values)
         setIsLoading(true)
 
+        try {
+
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+                return acc;
+            }, {});
+
+            const data = {
+                ...lowercaseValues,
+                role: 'customer'
+            };
+
+            const response = await postData('/coupon/addorupdate', data);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('coupons created successfully');
+            router.push('/coupons')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
         setTimeout(() => {
             setIsLoading(false)
