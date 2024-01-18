@@ -20,6 +20,7 @@ import { postData } from "@/axiosUtility/api"
 import { useRouter } from "next/navigation"
 
 
+
 interface NewCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
@@ -45,17 +46,20 @@ const formSchemaOtp = z.object({
     otp: z.string().min(6).max(6,
         { message: " OTP must be 6 characters long" }
     ),
+
 })
 
 export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    const router = useRouter()
-
 
     // get subscription type from url
 
-    const subscription = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get('subscription') : null;
+    const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
+    // const subscription = URLSearchParams ? new URLSearchParams(window.location.search).get('subscription') : null;
+    const router = useRouter()
 
+    console.log(subscription)
+    // console.log(new URLSearchParams(window.location.search).get('subscription'))
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -64,7 +68,7 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
             country: "India",
             state: "Andhra Pradesh",
             city: "Ongole",
-            customerType: subscription === "false" ? "nonsubscriber" : "subscriber",
+            customerType: subscription === false ? "nonsubscriber" : "subscriber",
         },
 
     })
@@ -87,27 +91,19 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
                 ...lowercaseValues,
                 role: 'customer'
             };
-            
+
             const response = await postData('/auth/register', data);
             console.log('API Response:', response);
 
             setIsLoading(false);
             toast.success('Item created successfully');
-            router.push('/delivery-partners')
+            router.push('/customers')
         } catch (error) {
             console.error('Error creating Item:', error);
             setIsLoading(false);
             toast.error('Error creating Item');
         }
 
-        setIsLoading(true)
-
-        console.log(values)
-        setTimeout(() => {
-            setIsLoading(false)
-
-
-        }, 3000) // remove this timeout and add submit logic
 
     }
 
