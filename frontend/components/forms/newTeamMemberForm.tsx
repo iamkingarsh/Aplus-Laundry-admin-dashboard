@@ -55,11 +55,11 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            role: 'Manager',
+
             city: 'Ongole',
             state: 'Andhra Pradesh',
             country: 'India',
-
+            role: 'admin'
         },
 
     })
@@ -71,13 +71,30 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        setIsLoading(true)
+        try {
 
-        console.log(values)
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
+                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+                return acc;
+            }, {});
+
+            const data = {
+                ...lowercaseValues,
+
+            };
+
+            const response = await postData('/auth/register', data);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Delivery Agent created successfully');
+            router.push('/delivery-partners')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
+
 
     }
 
@@ -292,7 +309,7 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Manager"> Manager</SelectItem>
+                                            <SelectItem value="admin">Admin</SelectItem>
                                         </SelectContent>
 
 
