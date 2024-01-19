@@ -1,6 +1,6 @@
 import express from 'express';  // Adjust the path based on your project structure
-import { createOrUpdateAppBanner, deleteAppBannerById, getAllAppBanners, getAppBannerById } from '../controllers/appBanner.js';
-import { adminAuthenticateToken } from '../middleware/authToken.js';
+import { createOrUpdateAppBanner, deleteAppBannerById, deleteAppBannerByIds, getAllAppBanners, getAppBannerById } from '../controllers/appBanner.js';
+import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 
 const appBannerRouter = express.Router();
 
@@ -8,12 +8,14 @@ const appBannerRouter = express.Router();
 appBannerRouter.post('/addorupdate', adminAuthenticateToken, createOrUpdateAppBanner);
 
 // Get all app banners
-appBannerRouter.get('/getall', adminAuthenticateToken, getAllAppBanners);
+appBannerRouter.get('/getall', authenticateToken, getAllAppBanners);
 
 // Get a specific app banner by ID
-appBannerRouter.get('/id/:id', adminAuthenticateToken, getAppBannerById);
+appBannerRouter.get('/id/:id', authenticateToken, getAppBannerById);
 
 // Delete an app banner by ID
-appBannerRouter.delete('/id/:id', adminAuthenticateToken, deleteAppBannerById);
+appBannerRouter.delete('/id/:id', adminAuthenticateToken, deleteAppBannerById);   
 
+
+appBannerRouter.delete('/ids', adminAuthenticateToken, deleteAppBannerByIds);
 export default appBannerRouter;

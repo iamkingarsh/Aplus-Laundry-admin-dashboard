@@ -64,7 +64,7 @@ export default function Page() {
           bulkDeleteIdName='_id'
           bulkDeleteTitle='Are you sure you want to delete these App Banners?'
           bulkDeleteDescription='This will delete the selected App Banners, and they will not be recoverable.'
-          apiRouteForBulkDelete='/api/app-banners/bulk-delete'
+          deleteRoute="/appBanner/ids" //@mujahed need to create a route for deleting multiple banners at once in backend
           bulkDeleteToastMessage='Selected App Banners Deleted Successfully'
           searchKey='banner_title' columns={columns} data={bannersData} />
 

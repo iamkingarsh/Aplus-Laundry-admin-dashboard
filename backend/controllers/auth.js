@@ -13,34 +13,62 @@ import {
 
 
 
+
 export const register = async (req, res, next) => {
   const {
     fullName,
     mobileNumber,
     role,
     email,
-    customerType
+    customerType,
+    address,
+    pincode
   } = req.body;
-  const newUser = new User({
-    fullName,
-    mobileNumber,
-    role,
-    email,
-    customerType
-  });
-  try {
-    const validEmailUser = await User.findOne({
-      mobileNumber
-    });
-    if (validEmailUser) {
-      return next(errorHandeler(404, 'User is already registered'));
-    }
-    await newUser.save();
-    const token = jwt.sign({
-      id: newUser._id ,
-      role: newUser.role,
 
+  // Filter out undefined or empty fields
+  const userFields = {
+    ...(fullName && { fullName }),
+    ...(mobileNumber && { mobileNumber }),
+    ...(role && { role }),
+    ...(email && { email }),
+    ...(customerType && { customerType }),
+    ...(address && { address }),
+    ...(pincode && { pincode }),
+  };
+
+  try {
+    // Check if the user already exists by email or mobileNumber
+    const existingUser = await User.findOne({
+      $or: [{ email }, { mobileNumber }]
+    });
+
+    if (existingUser) {
+      // Update existing user with the provided fields
+      await User.updateOne({ _id: existingUser._id }, { $set: userFields });
+      const updatedUser = await User.findById(existingUser._id);
+
+      const token = jwt.sign({
+        id: updatedUser._id,
+        role: updatedUser.role,
+      }, process.env.JWT_SECRETKEY);
+
+      return res.cookie('accessToken', token, {
+        httpOnly: true
+      }).status(200).json({
+        message: "User updated",
+        user: token
+      });
+    }
+
+    // If the user does not exist, create a new user
+    const newUser = new User(userFields);
+    await newUser.save();
+
+    const token = jwt.sign({
+      id: newUser._id,
+      role: newUser.role,
     }, process.env.JWT_SECRETKEY);
+
     res.cookie('accessToken', token, {
       httpOnly: true
     }).status(201).json({
@@ -51,6 +79,8 @@ export const register = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 export const signin = async (req, res, next) => {
   const {
@@ -249,3 +279,36 @@ export const verifyotp = async (req, res) => {
     });
   }
 };
+
+export const getAllCustomers = async (req, res, next) => {
+  try {
+    const customers = await User.find({ role: 'customer' });
+    res.status(200).json(customers);
+  } catch (error) {
+    // Handle errors, you can customize this part based on your application's error handling strategy
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getAlldeliveryagent = async (req, res, next) => {
+  try {
+    const deliveryagents = await User.find({ role: 'deliveryagent' });
+    res.status(200).json(deliveryagents);
+  } catch (error) {
+    // Handle errors, you can customize this part based on your application's error handling strategy
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getallTeamMembers = async (req, res, next) => {
+  try {
+    const teamMembers = await User.find({ role: 'admin' || 'owner' });
+    res.status(200).json(teamMembers);
+  } catch (error) {
+    // Handle errors, you can customize this part based on your application's error handling strategy
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}

@@ -36,7 +36,7 @@ import { DataTablePagination } from "./data-table-pagination"
 import toast from "react-hot-toast"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import { Alert } from "../forms/Alert"
-import {deleteAllData} from '../../axiosUtility/api'
+import { deleteAllData } from '../../axiosUtility/api'
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -46,10 +46,9 @@ interface DataTableProps<TData, TValue> {
     bulkDeleteTitle?: string;
     bulkDeleteDescription?: string;
     bulkDeleteToastMessage?: string;
-    apiRouteForBulkDelete?: string;
-    deleteRoute?:string
-    
-    
+    deleteRoute?: string
+
+
 }
 
 
@@ -61,7 +60,6 @@ export function DataTable<TData, TValue>({
     bulkDeleteTitle,
     bulkDeleteDescription,
     bulkDeleteToastMessage,
-    apiRouteForBulkDelete,
     deleteRoute
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -93,21 +91,21 @@ export function DataTable<TData, TValue>({
 
     const handleBulkDelete = (ids: any) => {
         // @mujahed add delete functionallity here
-        
+
         console.log('ids ids', ids);
 
         const Delete = async () => {
-          try {
-            const result = await deleteAllData(deleteRoute, ids ); // Assuming deleteData supports sending data in the request body
-            window.location.reload();
-        
-            modal.onClose();  
-          } catch (error) {
-            console.error('Error deleting data:', error);
-          }
+            try {
+                const result = await deleteAllData(deleteRoute as string, ids); // Assuming deleteData supports sending data in the request body
+                window.location.reload();
+
+                modal.onClose();
+            } catch (error) {
+                console.error('Error deleting data:', error);
+            }
         };
-        
-        
+
+
         Delete()
         toast.success(bulkDeleteToastMessage ?? "Successfully Deleted")
 

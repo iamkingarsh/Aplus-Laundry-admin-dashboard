@@ -18,12 +18,12 @@ couponRouter.post('/addorupdate', adminAuthenticateToken, createOrUpdateCoupon);
 couponRouter.get('/all', adminAuthenticateToken, getAllCoupons);
 
 // Get a specific coupon by its ID
-couponRouter.get('/:id', adminAuthenticateToken, getCouponById);
+couponRouter.get('/id/:id', adminAuthenticateToken, getCouponById);
 
 // Delete a coupon by its ID
-couponRouter.delete('/:id', adminAuthenticateToken, deleteCouponById);
+couponRouter.delete('/id/:id', adminAuthenticateToken, deleteCouponById);
 
 // Update the active status of a coupon by its ID
-couponRouter.put('/:id/activate', adminAuthenticateToken, updateCouponActiveStatusById);
+couponRouter.put('/id/:id/activate', adminAuthenticateToken, updateCouponActiveStatusById);
 
 export default couponRouter;

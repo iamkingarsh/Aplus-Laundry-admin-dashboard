@@ -14,15 +14,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import CellAction from "./cell-action"
+import format from "date-fns/format"
 
 export type CustomersColumns = {
-    id: string
-    fullname: string
+    _id: string
+    fullName: string
     address: string
-    mobile: string
-    status: "active" | "inactive"
+    mobileNumber: string
+    createdAt: string
     email: string
-    profilepic: string
+    profileImg: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -49,20 +50,20 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "profilepic",
+        accessorKey: "profileImg",
         header: "Profile",
         cell: ({ row }) => (
             <div className="flex items-center">
                 <Avatar className='w-8 h-8'>
-                    <AvatarImage src={row.original.profilepic} alt="@shadcn" />
-                    <AvatarFallback> {row.original.fullname[0]} </AvatarFallback>
+                    <AvatarImage src={row.original.profileImg} alt="@shadcn" />
+                    <AvatarFallback> {row.original.fullName} </AvatarFallback>
                 </Avatar>
 
             </div>
         ),
     },
     {
-        accessorKey: "fullname",
+        accessorKey: "fullName",
         header: ({ column }) => {
             return (
                 <Button
@@ -90,7 +91,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "mobile",
+        accessorKey: "mobileNumber",
         header: "Mobile No.",
     },
     {
@@ -98,25 +99,21 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         header: "Address",
     },
     {
-        accessorKey: "status",
+        accessorKey: "dateCreated",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
                 >
-                    Status
+                    Date Created
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
         cell: ({ row }) => (
             <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "active" ? "bg-green-500" : "bg-red-500"
-                        }`}
-                />
-                {row.original.status}
+                {format(new Date(row.original.createdAt), "PP")}
             </div>
         ),
     },

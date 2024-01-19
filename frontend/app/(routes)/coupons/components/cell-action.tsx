@@ -34,7 +34,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     <DropdownMenuItem
                         onSelect={
                             () => {
-                                router.push(`/coupons/${data.couponid}`)
+                                router.push(`/coupons/${data._id}`)
                             }
                         }
                     >
@@ -43,7 +43,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     <DropdownMenuItem
                         onSelect={
                             () => {
-                                router.push(`/coupons/edit/${data.couponid}`)
+                                router.push(`/coupons/edit/${data._id}`)
                             }
                         }>
                         <Edit2 className="mr-2 h-4 w-4" />

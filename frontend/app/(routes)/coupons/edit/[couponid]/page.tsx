@@ -10,7 +10,8 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React,{ useEffect, useLayoutEffect, useState } from 'react';
+import { fetchData } from '@/axiosUtility/api';
 import toast from 'react-hot-toast';
 
 
@@ -21,23 +22,42 @@ interface Props {
     }
 }
 
-const CouponCodeData = [
-    {
-        // couponid: couponid,
-        coupon_code: 'FIRSTORDER',
-        discount_type: 'percentage',
-        discount_value: '10',
-        min_order_value: '100',
-        status: 'Active',
-        discount_expiry_date: new Date("2024-10-10"),
-        discount_usage_limit: '1',
+// const CouponCodeData = [
+//     {
+//         // couponid: couponid,
+//         coupon_code: 'FIRSTORDER',
+//         discount_type: 'percentage',
+//         discount_value: '10',
+//         min_order_value: '100',
+//         status: 'Active',
+//         discount_expiry_date: new Date("2024-10-10"),
+//         discount_usage_limit: '1',
 
-    }
-] as any
+//     }
+// ] as any
 
 
 export default function EditCouponsPage({ params }: Props) {
-    const [checked, setChecked] = React.useState(CouponCodeData[0].status === 'Active' ? true : false)
+    const [CouponCodeData, setCouponsData] = useState(null)
+
+    const getData = async () => {
+
+        try {
+            const result = await fetchData('/coupon/'+params?.couponid); // Replace 'your-endpoint' with the actual API endpoint
+            setCouponsData(result?.coupon)
+ 
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    console.log('result CouponsData CouponsData',CouponCodeData,params)
+
+
+    // console.log('AllData', AllData)
+    useEffect(() => {
+        getData()
+    }, [])
+    const [checked, setChecked] = React.useState(CouponCodeData?.active)
     const useModal = useGlobalModal()
     const router = useRouter()
 
