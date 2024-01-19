@@ -36,7 +36,7 @@ const formSchema = z.object({
     discount_code: z.string().toUpperCase().min(2, { message: "Discount code is required" }),
     discount_expiry_date: z.date(),
     discount_usage_limit: z.string(),
-    discount_minimum_purchase_amount: z.string().optional()
+    discount_minimum_purchase_amount: z.string().optional() 
 })
 
 
