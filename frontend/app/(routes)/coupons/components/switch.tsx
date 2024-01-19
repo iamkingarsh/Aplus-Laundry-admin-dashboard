@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CouponsColumns } from './columns'
 import { Switch } from "@/components/ui/switch"
 import { Button } from '@/components/ui/button'
@@ -15,6 +15,10 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
     const [checked, setChecked] = React.useState(data.active)
     const modal = useGlobalModal()
 
+    useEffect(() => {
+        setChecked(data?.active)
+    }, [data?.active])
+
 
     const changeStatus = async (value: any) => {
         try {
@@ -23,7 +27,7 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
 
 
             const response = await api.put(`/coupon/id/${data._id}/activate`, {
-                active: !checked
+                active: value
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -40,7 +44,7 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
 
     return (
         <div>
-            <Switch checked={data.active} onCheckedChange={
+            <Switch checked={checked} onCheckedChange={
                 (value) => {
                     modal.title = 'Are you sure you want to change the status?'
                     modal.description = 'you can undo this action later'
