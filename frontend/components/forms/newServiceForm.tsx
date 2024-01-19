@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import toast from "react-hot-toast"
 import { Textarea } from "../ui/textarea"
-import { Card } from "../ui/card"
+import { Card, CardContent, CardHeader } from "../ui/card"
 import Image from "next/image"
 import { Switch } from "../ui/switch"
 import { Select, SelectTrigger } from "../ui/select"
@@ -93,6 +93,25 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
 
     }, [])
+
+
+    const productsByCategory = {} as any;
+
+    LaundryProducts.forEach((product: any) => {
+        if (!productsByCategory[product.category.title]) {
+            productsByCategory[product.category.title] = [];
+        }
+        productsByCategory[product.category.title].push(product);
+    });
+
+    const getLaundryItemsCategoryData = Object.entries(productsByCategory).map(([key, value]) => {
+        return {
+            category: key,
+            products: value,
+        };
+    });
+
+    console.log('getLaundryItemsCategoryData', getLaundryItemsCategoryData)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -277,7 +296,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                 <SheetTrigger asChild>
                                                     <Button variant="outline">Open Items Catalogue</Button>
                                                 </SheetTrigger>
-                                                <SheetContent>
+                                                <SheetContent className="w-full">
                                                     <SheetHeader>
                                                         <SheetTitle>Select Laundry Items</SheetTitle>
                                                         <SheetDescription>
@@ -317,7 +336,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                 </div>
 
                                                             </Card>
-                                                            {LaundryProducts.map((value: any, index: number) => {
+                                                            {getLaundryItemsCategoryData.map((value: any, index: number) => {
                                                                 return (
 
                                                                     <Card
@@ -325,16 +344,27 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                         key={index}
                                                                         // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
 
-                                                                        className="flex gap-2 p-2 justify-between items-center"
+                                                                        className="flex flex-col gap-2 p-2 "
                                                                     >
+                                                                        <CardHeader className="flex gap-2 justify-between items-center">
+                                                                            {value.category}
 
-                                                                        <div>
-                                                                            {value.product_name}
-                                                                        </div>
-                                                                        <div className="flex gap-2 items-center justify-end">
+                                                                        </CardHeader>
+                                                                        <CardContent className="flex flex-col gap-2 p-2 ">
+                                                                            {value.products.map((product: any, index: number) => {
+                                                                                return (<div key={index} className="flex gap-2 justify-between">
 
-                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value._id, "laundrybykg")} onCheckedChange={() => handleSelectChange(value._id, "laundrybykg")} id="laundrybykg" />
-                                                                        </div>
+                                                                                    <div>
+                                                                                        {product.product_name}
+                                                                                    </div>
+                                                                                    <div className="flex gap-2 items-center justify-end">
+
+                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundrybykg")} onCheckedChange={() => handleSelectChange(product._id, "laundrybykg")} id="laundrybykg" />
+                                                                                    </div>
+                                                                                </div>)
+                                                                            }
+                                                                            )}
+                                                                        </CardContent>
 
                                                                     </Card>
 

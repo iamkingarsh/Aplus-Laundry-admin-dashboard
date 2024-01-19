@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
 import { fetchData } from '@/axiosUtility/api';
 
- const metadata: Metadata = {
+const metadata: Metadata = {
     title: 'Coupon Codes | APLus Laundry',
     description: ' Manage your coupons here! ',
 }
@@ -56,12 +56,12 @@ export default function CustomerPage({ params }: Props) {
         try {
             const result = await fetchData('/coupon/all'); // Replace 'your-endpoint' with the actual API endpoint
             setCouponsData(result?.coupons)
- 
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
-    console.log('result',CouponsData)
+    console.log('result', CouponsData)
 
 
     // console.log('AllData', AllData)
@@ -85,7 +85,7 @@ export default function CustomerPage({ params }: Props) {
                     bulkDeleteIdName='couponid'
                     bulkDeleteTitle='Are you sure you want to delete these Coupons?'
                     bulkDeleteDescription='This will delete the selected Coupons, and they will not be recoverable.'
-                    apiRouteForBulkDelete='/api/coupons/bulk-delete'
+
                     bulkDeleteToastMessage='Selected Coupons Deleted Successfully'
                     searchKey='coupon_code' columns={columns} data={CouponsData} />
             </div>
