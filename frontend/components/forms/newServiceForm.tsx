@@ -347,7 +347,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                         className="flex flex-col gap-2 p-2 "
                                                                     >
                                                                         <CardHeader className="flex gap-2 justify-between items-center">
-                                                                            {value.category}
+
+                                                                            {value.category.charAt(0).toUpperCase() + value.category.slice(1)}
 
                                                                         </CardHeader>
                                                                         <CardContent className="flex flex-col gap-2 p-2 ">
@@ -355,7 +356,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                                 return (<div key={index} className="flex gap-2 justify-between">
 
                                                                                     <div>
-                                                                                        {product.product_name}
+                                                                                        {product.product_name.charAt(0).toUpperCase() + product.product_name.slice(1)}
+
                                                                                     </div>
                                                                                     <div className="flex gap-2 items-center justify-end">
 
@@ -467,8 +469,10 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
                                                                 </div>
 
+
+
                                                             </Card>
-                                                            {LaundryProducts.map((value: any, index: number) => {
+                                                            {getLaundryItemsCategoryData.map((value: any, index: number) => {
                                                                 return (
 
                                                                     <Card
@@ -476,21 +480,35 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                                                                         key={index}
                                                                         // checked={isOptionSelected == value.title && selectedItems[value.title] > 1 ? true : false}
 
-                                                                        className="flex gap-2 p-2 justify-between items-center"
+                                                                        className="flex flex-col gap-2 p-2 "
                                                                     >
+                                                                        <CardHeader className="flex gap-2 justify-between items-center">
+                                                                            {value.category.charAt(0).toUpperCase() + value.category.slice(1)}
 
-                                                                        <div>
-                                                                            {value.product_name}
-                                                                        </div>
-                                                                        <div className="flex gap-2 items-center justify-end">
 
-                                                                            <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(value._id, "laundryperpair")} onCheckedChange={() => handleSelectChange(value._id, "laundryperpair")} id="laundryperpair" />
-                                                                        </div>
+                                                                        </CardHeader>
+                                                                        <CardContent className="flex flex-col gap-2 p-2 ">
+                                                                            {value.products.map((product: any, index: number) => {
+                                                                                return (<div key={index} className="flex gap-2 justify-between">
+
+                                                                                    <div>
+                                                                                        {product.product_name.charAt(0).toUpperCase() + product.product_name.slice(1)}
+
+                                                                                    </div>
+                                                                                    <div className="flex gap-2 items-center justify-end">
+
+                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundryperpair")} onCheckedChange={() => handleSelectChange(product._id, "laundryperpair")} id="laundryperpair" />
+                                                                                    </div>
+                                                                                </div>)
+                                                                            }
+                                                                            )}
+                                                                        </CardContent>
 
                                                                     </Card>
 
                                                                 )
                                                             })}
+
 
 
 
