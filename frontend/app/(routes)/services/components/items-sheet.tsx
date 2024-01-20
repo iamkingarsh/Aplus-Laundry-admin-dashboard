@@ -20,7 +20,8 @@ interface Props {
 }
 
 
-export const ItemsSheet: React.FC<Props> = ({ data }) => {
+export const ItemsSheet: React.FC<Props> = ({ data }) => {   
+
     const Items = Object.keys(data.laundry_items as any).filter((item: any) => item.category === item.title).map((item: any, index) => {
         return data.laundry_items[item]
     }) as any
@@ -35,6 +36,7 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
         Categories.map((category: any) => category.title).includes(item.category)
     ) as any;
 
+    console.log('datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata',ItemsByCategory,Items)
 
 
 
