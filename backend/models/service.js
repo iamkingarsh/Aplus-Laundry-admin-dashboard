@@ -18,7 +18,7 @@ const serviceSchema = new mongoose.Schema({
     items: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'product',
       },
     ],
   },
@@ -30,13 +30,13 @@ const serviceSchema = new mongoose.Schema({
     price: {
       type: Number,
       required: function () {
-        return this.laundryByKG.active;
+        return this.laundryByKG.active; 
       },
     },
     items: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'product',
       },
     ],
   },
