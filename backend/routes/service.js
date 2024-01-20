@@ -13,7 +13,7 @@ import { authenticateToken } from '../middleware/authToken.js';
 const serviceRouter = express.Router();
 
 
-serviceRouter.post('/adorupdate', authenticateToken, createOrUpdateService);
+serviceRouter.post('/addorupdate', authenticateToken, createOrUpdateService);
 
 
 serviceRouter.get('/allwithitems', authenticateToken, getAllServicesWithItems);
