@@ -8,16 +8,17 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import { columns } from './components/columns'
-import { Services } from '@/lib/constants'
+// import { Services } from '@/lib/constants'
 import { fetchData } from '@/axiosUtility/api'
 
 export default function page() {
+    const [Services,setServices] = useState([])
 
     const getData = async () => {
         // setLoading(true)
         try {
             const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
-            console.log(result.services,'result')
+            console.log(result.services, 'result')
 
             const transformedData = result?.services.map(service => {
                 return {
@@ -41,9 +42,10 @@ export default function page() {
                     icon: <ServerIcon className="w-3 mr-2" />,
                 };
             });
-            
-            console.log(transformedData,'transformedData');
-            
+
+            console.log(transformedData, 'transformedData');
+            setServices(transformedData)
+
             // if (result && result.products) {
             //     const products = result.products;
             //     // setLaundryProducts(products);
@@ -59,13 +61,9 @@ export default function page() {
         }
     }
 
- 
+
     useEffect(() => {
-        getData()  
-
-        // const categories = GetData().then((res) => { return res }) as any
-        // setCategories(categories)
-
+        getData()
     }, [])
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col '>
