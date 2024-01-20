@@ -10,8 +10,8 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React,{ useEffect, useLayoutEffect, useState } from 'react';
-import { fetchData,activateCoupon } from '@/axiosUtility/api';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { fetchData, activateCoupon } from '@/axiosUtility/api';
 import toast from 'react-hot-toast';
 
 
@@ -42,7 +42,7 @@ export default function EditCouponsPage({ params }: Props) {
 
     const getData = async () => {
         try {
-            const result = await fetchData('/coupon/' + params?.couponid);
+            const result = await fetchData('/coupon/id/' + params?.couponid);
             setCouponsData(result?.coupon);
             setChecked(result?.coupon?.active)
 
@@ -50,7 +50,7 @@ export default function EditCouponsPage({ params }: Props) {
             console.error('Error fetching data:', error);
         }
     };
-    
+
     // console.log('result CouponsData CouponsData',CouponCodeData,params)
 
 
@@ -71,24 +71,24 @@ export default function EditCouponsPage({ params }: Props) {
     }
 
 
-    
+
     const statusChange = async () => {
         setChecked((prevChecked) => !prevChecked); // Update the state
         try {
             const data = {
                 active: !checked // Use the updated state value
             };
-            
-            console.log( !CouponCodeData.active,data ,checked,'checkedcheckedcheckedcheckedcheckedcheckedcheckedchecked')
+
+            console.log(!CouponCodeData.active, data, checked, 'checkedcheckedcheckedcheckedcheckedcheckedcheckedchecked')
             const response = await activateCoupon(`/coupon/${params?.couponid}/activate`, data);
-            toast.success('Coupon status changed successfully',data,checked);
+            toast.success('Coupon status changed successfully', data, checked);
         } catch (error) {
             console.error('Error changing coupon status:', error);
             toast.error('Error changing coupon status');
         }
     };
-    
-    
+
+
 
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>

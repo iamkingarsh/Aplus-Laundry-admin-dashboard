@@ -155,7 +155,7 @@ export default function Page() {
             console.log(result)
             if (result && result.products) {
                 const products = result.products;
-                setLaundryProducts(products); 
+                setLaundryProducts(products);
                 setLoading(false)
                 console.log('products', products)
 
@@ -224,7 +224,6 @@ export default function Page() {
                             bulkDeleteIdName='_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected items?'
                             bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/products/bulk-delete'
                             deleteRoute="/product/ids"
                             bulkDeleteToastMessage='Selected items deleted successfully'
                             searchKey='product_name' columns={columns} data={LaundryProducts} />
