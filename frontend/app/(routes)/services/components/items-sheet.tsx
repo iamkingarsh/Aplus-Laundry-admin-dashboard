@@ -82,9 +82,11 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
 
                     <Tabs className='w-full'>
                         <TabsList className='flex w-full gap-2'>
+                            {
+                                laundryByKGFilteredItems.length > 0 && <TabsTrigger className='w-full' value='laundrybykg'  >Laundry By KG</TabsTrigger>}
+                            {laundryPerPairFilteredItems.length > 0 && <TabsTrigger className='w-full' value='laundryperpair' >Laundry Per Pair</TabsTrigger>
+                            }
 
-                            <TabsTrigger className='w-full' value='laundrybykg'  >Laundry By KG</TabsTrigger>
-                            <TabsTrigger className='w-full' value='laundryperpair'  >Laundry Per Pair</TabsTrigger>
                         </TabsList>
                         <TabsContent value='laundrybykg' className='w-full'>
                             <ScrollArea>
@@ -156,8 +158,6 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                                                 </Card>)
                                         })}
                                     </>
-
-
                                 </div>
                             </ScrollArea>
                         </TabsContent>
