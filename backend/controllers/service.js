@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
 import Service from "../models/service.js";
@@ -151,6 +152,58 @@ export const deleteServiceById = async (req, res) => {
         return res.status(500).json({
             error: 'Internal Server Error',
             ok: false
+        });
+    }
+};
+
+
+export const deleteServiceByIds = async (req, res) => {
+    try {
+        const serviceIds  = req.body;
+
+        console.log('serviceIds',serviceIds);
+
+        if (!serviceIds || !Array.isArray(serviceIds) || serviceIds.length === 0) {
+            return res.status(400).json({
+                message: 'Invalid service IDs provided 1',
+                ok: false,
+            });
+        }
+        console.log('serviceIds1');
+
+        // Validate each service ID
+        if (!serviceIds.every(mongoose.Types.ObjectId.isValid)) {
+            return res.status(400).json({
+                message: 'Invalid service IDs provided',
+                ok: false,
+            });
+        }
+        console.log('serviceIds2');
+
+        // Delete services by their IDs
+        const deletionResult = await Service.deleteMany({ _id: { $in: serviceIds } });
+        console.log('serviceIds3');
+
+        if (deletionResult.deletedCount > 0) {
+            console.log('serviceIds4');
+            return res.status(200).json({
+                message: 'products deleted successfully',
+                ok: true,
+            });
+
+        } else {
+            console.log('serviceIds5');
+            return res.status(404).json({
+                message: 'No products found for deletion',
+                ok: false,
+            });
+
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
         });
     }
 };

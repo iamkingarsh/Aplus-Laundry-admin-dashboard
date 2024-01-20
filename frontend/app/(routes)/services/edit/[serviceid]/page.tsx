@@ -17,7 +17,7 @@ import { EditLaundryItemForm } from '@/components/forms/editLaundryItemForm';
 // import { LaundrtProducts } from '@/app/(routes)/products/page';
 import { Services } from '@/lib/constants';
 import { EditServiceForm } from '@/components/forms/editServiceDetailsForm';
-import { fetchData } from '@/axiosUtility/api';
+import { deleteData, fetchData } from '@/axiosUtility/api';
 
 
 
@@ -44,11 +44,21 @@ export default function EditServiceDetailsPage({ params }: Props) {
     const useModal = useGlobalModal()
     const router = useRouter()
 
-    const deleteCoupon = async (couponid: string) => {
-        // delete logic here
-        useModal.onClose()
-        toast.success('Item Deleted Successfully')
-        router.push('/services')
+
+    const deleteService = async () => {
+
+        try {
+            const result = await deleteData(`/service/id/${serviceData._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+            console.log('Success:', result);
+            toast.success('Service Deleted Successfully')
+            useModal.onClose()
+            router.push('/services')
+
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
+        // GlobalModal.onClose()
     }
     const getData = async () => {
         try {
@@ -86,13 +96,12 @@ export default function EditServiceDetailsPage({ params }: Props) {
                     <p className='text-muted-foreground text-sm'>Edit your  service details</p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!checked)} />
                     <Button
                         onClick={() => {
 
                             useModal.title = 'Are you sure you want to delete this service?'
                             useModal.description = 'This action cannot be undone'
-                            useModal.children = <Alert onConfirm={() => deleteCoupon(params.serviceid)} />
+                            useModal.children = <Alert onConfirm={() => deleteService(params.serviceid)} />
 
                             useModal.onOpen()
                         }}

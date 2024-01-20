@@ -7,6 +7,7 @@ import {
     getAllServicesWithItems,
     getServiceByIdWithItems,
     deleteServiceById,
+    deleteServiceByIds,
   } from '../controllers/service.js';
 import { authenticateToken } from '../middleware/authToken.js';
 
@@ -23,5 +24,7 @@ serviceRouter.get('/id/:id/withitems', authenticateToken, getServiceByIdWithItem
 
 
 serviceRouter.delete('/id/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/ids', authenticateToken, deleteServiceByIds);
+
 
 export default serviceRouter;

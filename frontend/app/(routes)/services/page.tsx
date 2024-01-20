@@ -79,6 +79,7 @@ export default function Page() {
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
                 <DataTable
+                    deleteRoute='/service/ids'
                     bulkDeleteIdName='service_id'
                     bulkDeleteTitle='Are you sure you want to delete the selected services?'
                     bulkDeleteDescription='This will delete the selected services, and they will not be recoverable.'
