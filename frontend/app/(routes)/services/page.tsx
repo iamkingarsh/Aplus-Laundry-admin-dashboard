@@ -84,7 +84,6 @@ export default function page() {
                     bulkDeleteIdName='service_id'
                     bulkDeleteTitle='Are you sure you want to delete the selected services?'
                     bulkDeleteDescription='This will delete the selected services, and they will not be recoverable.'
-                    apiRouteForBulkDelete='/api/services/bulk-delete'
                     bulkDeleteToastMessage='Selected services deleted successfully'
                     searchKey='title' columns={columns} data={Services as any} />
             </div>

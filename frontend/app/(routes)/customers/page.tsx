@@ -147,12 +147,12 @@ export default function Page() {
 
             setNonSubscribeddata(nonSubscribedUsers);
             setSubscribeddata(subscribedUsers);
- 
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
-    console.log('AllData', AllData)
+
     useEffect(() => {
         getData()
     }, [])

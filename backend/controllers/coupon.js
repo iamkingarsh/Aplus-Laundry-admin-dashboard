@@ -151,7 +151,7 @@ export const updateCouponActiveStatusById = async (req, res) => {
         }
 
         return res.status(200).json({
-            message: 'Coupon active status updated successfully',
+            message: 'Coupon status updated successfully',
             coupon: existingCoupon
         });
     } catch (error) {
