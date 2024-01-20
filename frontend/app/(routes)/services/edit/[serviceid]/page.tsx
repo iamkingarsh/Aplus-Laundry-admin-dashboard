@@ -37,7 +37,7 @@ export default function EditServiceDetailsPage({ params }: Props) {
     console.log(params)
 
 
-    const [checked, setChecked] = React.useState(ServiceData.laundryperpair === 'Active' || ServiceData?.laundrybykg === 'Active' ? true : false)
+    const [checked, setChecked] = React.useState(ServiceData?.laundryperpair === 'Active' || ServiceData?.laundrybykg === 'Active' ? true : false)
     const useModal = useGlobalModal()
     const router = useRouter()
 

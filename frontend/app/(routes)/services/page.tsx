@@ -20,7 +20,7 @@ export default function Page() {
             const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
             console.log(result.services, 'result')
 
-            const transformedData = result?.services.map(service => {
+            const transformedData = result?.services.map((service: any) => {
                 return {
                     service_id: service._id, // Replace with your actual logic to generate service_id
                     title: service.serviceTitle,

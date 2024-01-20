@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Switch } from "@/components/ui/switch"
 import { useGlobalModal } from '@/hooks/GlobalModal'
@@ -12,13 +12,13 @@ interface Props {
 }
 
 export const SwitchComponent: React.FC<Props> = ({ data }) => {
-    const [checked, setChecked] = React.useState(data)
+    const [checked, setChecked] = useState(data) as any
     const modal = useGlobalModal()
 
     return (
         <div>
             <Switch checked={checked} onCheckedChange={
-                (value) => {
+                (value: any) => {
                     modal.title = 'Are you sure you want to change the status?'
                     modal.description = 'you can undo this action later'
                     modal.children = <>

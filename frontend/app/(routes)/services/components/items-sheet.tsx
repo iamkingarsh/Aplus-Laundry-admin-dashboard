@@ -89,37 +89,33 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                         <TabsContent value='laundrybykg' className='w-full'>
                             <ScrollArea>
                                 <div
-                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
+                                    className='flex flex-col gap-4  h-[80vh] py-4 pr-4 '
                                 >
                                     <>
+
                                         {laundryByKGFilteredItems.map((item: any, index: any) => {
                                             return (
                                                 <Card key={index}
-                                                    className='flex flex-col w-full p-3 justify-between '
-
-                                                >
-                                                    <span className='text-lg font-bold mb-2'>
-                                                        {item.category}
-                                                    </span>
+                                                    className='flex flex-col h-fit w-full px-4  py-4'>
+                                                    <span className='text-lg font-bold mb-2'> {item.category} </span>
                                                     <Separator orientation='horizontal' />
-                                                    {item.products.map((items: any, index: any) => {
-                                                        return (
-                                                            <>
-                                                                <div key={index}
-                                                                    className='flex w-full p-3 justify-between '
+                                                    <div key={index}
+                                                        className='flex flex-col w-full p-3 justify-between '
 
-                                                                >
+                                                    >
+                                                        {item.products.map((items: any, index: any) => {
+                                                            return (
+                                                                <div key={index} className='flex w-full py-2 justify-between '>
                                                                     <span className='text-md'>
-
                                                                         {items.product_name}
                                                                     </span>
 
                                                                     <SwitchComponent data={items.active} />
                                                                 </div>
-                                                            </>
 
-                                                        )
-                                                    })}
+                                                            )
+                                                        })}
+                                                    </div>
 
                                                 </Card>)
                                         })}
@@ -129,40 +125,33 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
                         </TabsContent>
                         <TabsContent value='laundryperpair' className='w-full'>
                             <ScrollArea>
-                                <div
-                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
-                                >
-
+                                <div className='flex flex-col gap-4  h-[80vh] py-4 pr-4 '>
                                     <>
-
                                         {laundryPerPairFilteredItems.map((item: any, index: any) => {
                                             return (
                                                 <Card key={index}
-                                                    className='flex flex-col w-full p-3 justify-between '
-
-                                                >
+                                                    className='flex flex-col w-full px-4  py-4'>
                                                     <span className='text-lg font-bold mb-2'>
                                                         {item.category}
                                                     </span>
                                                     <Separator orientation='horizontal' />
-                                                    {item.products.map((items: any, index: any) => {
-                                                        return (
-                                                            <>
-                                                                <div key={index}
-                                                                    className='flex w-full p-3 justify-between '
+                                                    <div key={index}
+                                                        className='flex flex-col w-full p-3 justify-between '
 
-                                                                >
+                                                    >
+                                                        {item.products.map((items: any, index: any) => {
+                                                            return (
+                                                                <div key={index} className='flex w-full py-2 justify-between '>
                                                                     <span className='text-md'>
-
                                                                         {items.product_name}
                                                                     </span>
 
                                                                     <SwitchComponent data={items.active} />
                                                                 </div>
-                                                            </>
 
-                                                        )
-                                                    })}
+                                                            )
+                                                        })}
+                                                    </div>
 
                                                 </Card>)
                                         })}
