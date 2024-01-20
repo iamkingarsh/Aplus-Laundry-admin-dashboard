@@ -19,9 +19,9 @@ serviceRouter.post('/addorupdate', authenticateToken, createOrUpdateService);
 serviceRouter.get('/allwithitems', authenticateToken, getAllServicesWithItems);
 
 
-serviceRouter.get('/:id/withitems', authenticateToken, getServiceByIdWithItems);
+serviceRouter.get('/id/:id/withitems', authenticateToken, getServiceByIdWithItems);
 
 
-serviceRouter.delete('/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/id/:id', authenticateToken, deleteServiceById);
 
 export default serviceRouter;

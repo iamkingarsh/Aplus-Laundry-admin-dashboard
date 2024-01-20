@@ -87,7 +87,7 @@ export const getAllServicesWithItems = async (req, res) => {
 export const getServiceByIdWithItems = async (req, res) => {
     try {
         const {
-            serviceId
+            id: serviceId 
         } = req.params;
 
         const service = await Service.findById(serviceId).populate({
@@ -128,8 +128,10 @@ export const getServiceByIdWithItems = async (req, res) => {
 export const deleteServiceById = async (req, res) => {
     try {
         const {
-            serviceId
+            id: serviceId 
         } = req.params;
+
+        console.log('serviceIdserviceIdserviceIdserviceIdserviceIdserviceIdserviceId',serviceId);   
 
         const deletedService = await Service.findByIdAndDelete(serviceId);
 

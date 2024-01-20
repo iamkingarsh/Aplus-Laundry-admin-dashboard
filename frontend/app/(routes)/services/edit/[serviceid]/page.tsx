@@ -10,13 +10,14 @@ import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Trash } from 'lucide-react';
 import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 import { EditLaundryItemForm } from '@/components/forms/editLaundryItemForm';
-import { LaundrtProducts } from '@/app/(routes)/products/page';
+// import { LaundrtProducts } from '@/app/(routes)/products/page';
 import { Services } from '@/lib/constants';
 import { EditServiceForm } from '@/components/forms/editServiceDetailsForm';
+import { fetchData } from '@/axiosUtility/api';
 
 
 
@@ -31,13 +32,15 @@ interface Props {
 
 
 export default function EditServiceDetailsPage({ params }: Props) {
+    const [serviceData, setServiceData] = React.useState<any>(null)
+    // const ServiceData = Services.filter((item: any) => item.service_id === params.serviceid)[0] as any
 
-    const ServiceData = Services.filter((item: any) => item.service_id === params.serviceid)[0] as any
-    console.log(ServiceData)
     console.log(params)
 
 
-    const [checked, setChecked] = React.useState(ServiceData?.laundryperpair === 'Active' || ServiceData?.laundrybykg === 'Active' ? true : false)
+
+
+    const [checked, setChecked] = React.useState()
     const useModal = useGlobalModal()
     const router = useRouter()
 
@@ -47,7 +50,34 @@ export default function EditServiceDetailsPage({ params }: Props) {
         toast.success('Item Deleted Successfully')
         router.push('/services')
     }
+    const getData = async () => {
+        try {
+            const result = await fetchData(`/service/id/${params.serviceid}/withitems`);
+            console.log('result', result)
 
+            if (result && result.service
+            ) {
+                const services = result.service;
+                setServiceData(services)
+                console.log('hi', services)
+
+            } else {
+                console.error('Response format is not as expected:', result.products.title);
+                // You might want to set an error state or show a message to the user
+            }
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // Handle the error state here, show a message to the user, etc.
+        } finally {
+        }
+    };
+
+    console.log('serviceData', serviceData)
+
+    useEffect(() => {
+        getData()
+    }, [])
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex items-center justify-between">
@@ -76,7 +106,7 @@ export default function EditServiceDetailsPage({ params }: Props) {
             <div className="container mx-auto  py-10">
                 {/* <EditCouponsForm gap={2} CouponCodeData={laundryItemData} couponid={params.productid} /> */}
                 {/* {<EditLaundryItemForm gap={3} laundryItemData={laundryItemData} />} */}
-                {<EditServiceForm gap={3} data={ServiceData} />}
+                <EditServiceForm gap={3} data={serviceData} />
 
             </div>
 

@@ -8,19 +8,31 @@ import { ServicesColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { deleteData } from '@/axiosUtility/api';
 
 interface Props {
-    data: ServicesColumns
+    data: ServicesColumns | any
 }
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
-    const deleteOrder = () => {
-        console.log('delete')
-        toast.success('Service Deleted Successfully')
-        GlobalModal.onClose()
-    }
     const router = useRouter()
+    console.log(data.service_id, 'data')
+    const deleteService = async () => {
+        console.log('dat', data?.service_id)
+        try {
+            const result = await deleteData(`/service/id/${data?.service_id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+            console.log('Success:', result);
+            toast.success('Seervice Deleted Successfully')
+            GlobalModal.onClose()
+            router.refresh()
+            window.location.reload()
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
+        // GlobalModal.onClose()
+    }
     return (
         <div>
             <DropdownMenu>
@@ -45,7 +57,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                         onSelect={() => {
                             GlobalModal.title = `Delete ${data.title} `
                             GlobalModal.description = "Are you sure you want to delete this Service?"
-                            GlobalModal.children = <Alert onConfirm={deleteOrder} />
+                            GlobalModal.children = <Alert onConfirm={() => deleteService()} />
                             GlobalModal.onOpen()
                         }}
                         className="focus:bg-destructive focus:text-destructive-foreground">
