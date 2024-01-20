@@ -7,6 +7,7 @@ import {
     getAllServicesWithItems,
     getServiceByIdWithItems,
     deleteServiceById,
+    deleteServiceByIds,
   } from '../controllers/service.js';
 import { authenticateToken } from '../middleware/authToken.js';
 
@@ -19,9 +20,11 @@ serviceRouter.post('/addorupdate', authenticateToken, createOrUpdateService);
 serviceRouter.get('/allwithitems', authenticateToken, getAllServicesWithItems);
 
 
-serviceRouter.get('/:id/withitems', authenticateToken, getServiceByIdWithItems);
+serviceRouter.get('/id/:id/withitems', authenticateToken, getServiceByIdWithItems);
 
 
-serviceRouter.delete('/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/id/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/ids', authenticateToken, deleteServiceByIds);
+
 
 export default serviceRouter;

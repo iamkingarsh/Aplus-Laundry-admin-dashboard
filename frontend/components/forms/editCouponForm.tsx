@@ -75,7 +75,7 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
         setTimeout(() => {
             setIsLoading(false)
 
-            toast.success('Coupon created successfully')
+            toast.success('Coupon Updated successfully')
         }, 3000) // remove this timeout and add submit logic
 
     }
@@ -304,7 +304,7 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
                             {isLoading && (
                                 <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                             )}
-                            Create
+                            Update
                         </Button>
                     </div>
 
