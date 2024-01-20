@@ -11,8 +11,8 @@ import { columns } from './components/columns'
 // import { Services } from '@/lib/constants'
 import { fetchData } from '@/axiosUtility/api'
 
-export default function page() {
-    const [Services,setServices] = useState([])
+export default function Page() {
+    const [Services, setServices] = useState([])
 
     const getData = async () => {
         // setLoading(true)
@@ -29,11 +29,11 @@ export default function page() {
                         laundryByKG: {
                             active: service.laundryByKG.active,
                             price: service.laundryByKG.price,
-                            items: service.laundryByKG.items.map(item => ({ id: item._id, name: item.product_name })),
+                            items: service.laundryByKG.items.map((item: any) => ({ item })),
                         },
                         laundryPerPair: {
                             active: service.laundryPerPair.active,
-                            items: service.laundryPerPair.items.map(item => ({ id: item._id, name: item.product_name })),
+                            items: service.laundryPerPair.items.map((item: any) => ({ item })),
                         },
                     },
                     laundrybykg: service.laundryByKG.active ? 'Active' : 'Deactive',
