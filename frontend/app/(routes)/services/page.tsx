@@ -1,15 +1,72 @@
-
+"use client"
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon, ServerIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 import { columns } from './components/columns'
 import { Services } from '@/lib/constants'
+import { fetchData } from '@/axiosUtility/api'
 
 export default function page() {
+
+    const getData = async () => {
+        // setLoading(true)
+        try {
+            const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
+            console.log(result.services,'result')
+
+            const transformedData = result?.services.map(service => {
+                return {
+                    service_id: service._id, // Replace with your actual logic to generate service_id
+                    title: service.serviceTitle,
+                    servicestatus: 'Active', // You may need to determine the service status based on your business logic
+                    laundry_items: {
+                        laundryByKG: {
+                            active: service.laundryByKG.active,
+                            price: service.laundryByKG.price,
+                            items: service.laundryByKG.items.map(item => ({ id: item._id, name: item.product_name })),
+                        },
+                        laundryPerPair: {
+                            active: service.laundryPerPair.active,
+                            items: service.laundryPerPair.items.map(item => ({ id: item._id, name: item.product_name })),
+                        },
+                    },
+                    laundrybykg: service.laundryByKG.active ? 'Active' : 'Deactive',
+                    laundrybykgprice: service.laundryByKG.price,
+                    laundryperpair: service.laundryPerPair.active ? 'Active' : 'Deactive',
+                    icon: <ServerIcon className="w-3 mr-2" />,
+                };
+            });
+            
+            console.log(transformedData,'transformedData');
+            
+            // if (result && result.products) {
+            //     const products = result.products;
+            //     // setLaundryProducts(products);
+            //     // setLoading(false)
+            //     console.log('products', products)
+
+            //     // Now you can work with the 'categories' array
+            // } else {
+            //     console.error('Response format is not as expected');
+            // }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+ 
+    useEffect(() => {
+        getData()  
+
+        // const categories = GetData().then((res) => { return res }) as any
+        // setCategories(categories)
+
+    }, [])
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col '>
             <div className="topbar w-full flex justify-between items-center">
