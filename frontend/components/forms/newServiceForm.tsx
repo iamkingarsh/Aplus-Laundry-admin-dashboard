@@ -24,7 +24,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import { set } from "date-fns"
-import { fetchData } from "@/axiosUtility/api"
+import { fetchData, postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 
 
 
@@ -49,7 +50,7 @@ const laundryperpair_itemsSchema = z.object({
 })
 
 const formSchema = z.object({
-    title: z.string().min(2, { message: "Service title is required" }),
+    serviceTitle: z.string().min(2, { message: "Service title is required" }),
     laundrybykg: z.string(),
     laundrybykgprice: z.string(),
     laundryperpair: z.string(),
@@ -62,6 +63,8 @@ const formSchema = z.object({
 
 
 export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps) {
+    const router = useRouter()
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [LaundryProducts, setLaundryProducts] = React.useState([]) as any[]
 
@@ -97,7 +100,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: "",
+            serviceTitle: "",
             laundrybykg: "Deactivated",
             laundrybykgprice: "0",
             laundryperpair: "Deactivated",
@@ -110,18 +113,37 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
     })
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Add submit logic here
-
-        setIsLoading(true)
-        console.log(values)
-
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
-
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsLoading(true);
+    
+        try {
+            const data = {
+                serviceTitle: values.serviceTitle,
+                laundryPerPair: {
+                    active: values.laundryperpair === "Activated",
+                    items: values.laundryitems.laundryperpair_items
+                },
+                laundryByKG: {
+                    active: values.laundrybykg === "Activated",
+                    price: values.laundrybykgprice ? parseFloat(values.laundrybykgprice) : 0,
+                    items: values.laundryitems.laundrybykg_items
+                }
+            };
+    
+            const response = await postData('/service/addorupdate', data);
+            console.log('API Response:', response);
+    
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            // Optionally, you can redirect the user or perform other actions upon successful submission.
+            router.push('/services');
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
     }
+    
 
     const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
@@ -163,15 +185,15 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                     <div className={`grid grid-cols-${gap} gap-3`}>
                         {/* <div className={`grid grid-cols-2 gap-3`}> */}
                         <FormField
-                            name="title"
+                            name="serviceTitle"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="title">Service Title</FormLabel>
+                                    <FormLabel htmlFor="serviceTitle">Service Title</FormLabel>
                                     <FormControl>
 
                                         <Input
-                                            id="title"
+                                            id="serviceTitle"
                                             type="text"
                                             autoComplete="off"
                                             disabled={isLoading}
