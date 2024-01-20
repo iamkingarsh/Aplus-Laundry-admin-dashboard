@@ -1,4 +1,4 @@
-"use client" // @mujahed change it to "'use server'" when implementing backend if required
+"use client"
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
@@ -155,7 +155,7 @@ export default function Page() {
             console.log(result)
             if (result && result.products) {
                 const products = result.products;
-                setLaundryProducts(products);
+                setLaundryProducts(products); 
                 setLoading(false)
                 console.log('products', products)
 
