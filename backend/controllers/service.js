@@ -1,4 +1,8 @@
+import Category from "../models/category.js";
+import Product from "../models/product.js";
 import Service from "../models/service.js";
+// import Product from "../models/product.js";
+
 
 export const createOrUpdateService = async (req, res) => {
     try {
@@ -48,10 +52,24 @@ export const createOrUpdateService = async (req, res) => {
 
 export const getAllServicesWithItems = async (req, res) => {
     try {
-        const services = await Service.find().populate({
-            path: 'laundryPerPair.items laundryByKG.items',
-            model: 'Product',
+        const services = await Service.find()
+        .populate({
+          path: 'laundryPerPair.items',
+          model: Product,
+          populate: {
+            path: 'category',  // assuming category is a reference to another model
+            model: Category, // replace 'Category' with the actual model name for the category
+          },
+        })
+        .populate({
+          path: 'laundryByKG.items',
+          model: Product,
+          populate: {
+            path: 'category',  // assuming category is a reference to another model
+            model: Category, // replace 'Category' with the actual model name for the category
+          },
         });
+      
 
         return res.status(200).json({
             services,
@@ -73,17 +91,27 @@ export const getServiceByIdWithItems = async (req, res) => {
         } = req.params;
 
         const service = await Service.findById(serviceId).populate({
-            path: 'laundryPerPair.items laundryByKG.items',
-            model: 'Product',
-        });
-
+            path: 'laundryPerPair.items',
+            model: Product,
+            populate: {
+              path: 'category',  // assuming category is a reference to another model
+              model: Category, // replace 'Category' with the actual model name for the category
+            },
+          })
+          .populate({
+            path: 'laundryByKG.items',
+            model: Product,
+            populate: {
+              path: 'category',  // assuming category is a reference to another model
+              model: Category, // replace 'Category' with the actual model name for the category
+            },
+          });
         if (!service) {
             return res.status(404).json({
                 message: 'Service not found',
                 ok: false
             });
         }
-
         return res.status(200).json({
             service,
             ok: true
