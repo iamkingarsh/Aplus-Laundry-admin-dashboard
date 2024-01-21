@@ -302,6 +302,17 @@ export const getAlldeliveryagent = async (req, res, next) => {
   }
 };
 
+export const getallTeamMembers = async (req, res, next) => {
+  try {
+    const teamMembers = await User.find({ role: 'admin' || 'owner' });
+    res.status(200).json(teamMembers);
+  } catch (error) {
+    // Handle errors, you can customize this part based on your application's error handling strategy
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export const deletebyid = async (req, res, next) => {
   try {
     const userId = req.params.id;
