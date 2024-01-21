@@ -312,3 +312,53 @@ export const getallTeamMembers = async (req, res, next) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+export const deletebyid = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    // Check if the user ID is valid (optional)
+    // if (!isValidUserId(userId)) {
+    //   return res.status(400).json({ error: "Invalid User ID" });
+    // }
+
+    // Find and delete the user by ID
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Respond with a success message or the deleted user details
+    res.status(200).json({ message: "User deleted successfully", deletedUser });
+  } catch (error) {
+    // Handle errors, you can customize this part based on your application's error handling strategy
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+export const getUserById = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    // Check if the user ID is valid (optional)
+    // if (!isValidUserId(userId)) {
+    //   return res.status(400).json({ error: "Invalid User ID" });
+    // }
+
+    // Find the user by ID
+    const foundUser = await User.findById(userId);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Respond with the user data
+    res.status(200).json({ user: foundUser });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

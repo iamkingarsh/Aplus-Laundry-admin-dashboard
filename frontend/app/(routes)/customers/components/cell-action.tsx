@@ -7,6 +7,7 @@ import React from 'react'
 import { CustomersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import toast from 'react-hot-toast';
+import { deleteData } from '@/axiosUtility/api';
 
 interface Props {
     data: CustomersColumns
@@ -14,10 +15,21 @@ interface Props {
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
-    const deleteOrder = () => {
-        console.log('delete Customer')
-        GlobalModal.onClose()
-        toast.success('Customer deleted successfully')
+
+    const deleteCustomer = async () => {
+
+
+        try {
+            const result = await deleteData(`/auth/id/${data._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
+
+            toast.success('Category Deleted Successfully')
+            GlobalModal.onClose()
+            window.location.reload()
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        }
+
+
     }
     return (
         <DropdownMenu>
@@ -40,7 +52,7 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     onSelect={() => {
                         GlobalModal.title = 'Delete Customer'
                         GlobalModal.description = 'Are you sure you want to delete this customer?'
-                        GlobalModal.children = <Alert onConfirm={deleteOrder} />
+                        GlobalModal.children = <Alert onConfirm={deleteCustomer} />
                         GlobalModal.onOpen()
                     }
                     }
