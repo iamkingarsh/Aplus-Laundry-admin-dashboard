@@ -20,11 +20,11 @@ const orderSchema = new mongoose.Schema({
       id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product', // Reference to the Product collection
-        required: true,
+        // required: true,
       },
       quantity: {
         type: Number,
-        required: true,
+        // required: true,
       },
     },
   ],
@@ -58,6 +58,13 @@ const orderSchema = new mongoose.Schema({
   cartWeightBy: {
     type: String,
   },
+  // transaction: {
+  //   id: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Transaction', 
+  //     // required: true,
+  //   },
+  // },
 });
 
 const Order = mongoose.model('Order', orderSchema);
