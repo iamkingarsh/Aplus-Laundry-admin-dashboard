@@ -1,6 +1,6 @@
 import express from 'express';
 // <<<<<<< mujahed
-import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, getallTeamMembers, sendOTPforMobileverification, verifymobileotp ,} from '../controllers/auth.js';
+import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, getallTeamMembers, sendOTPforMobileverification, verifymobileotp, getUserById, deletebyid, getCurrentUserById, getCurrentUser ,} from '../controllers/auth.js';
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 // =======
 // import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, deletebyid, getUserById, getallTeamMembers ,} from '../controllers/auth.js';
@@ -21,6 +21,8 @@ router.get("/getalldeliveryagent",getAlldeliveryagent)
 router.get("/getallTeamMembers",getallTeamMembers)
 router.delete("/id/:id",deletebyid)
 router.get("/id/:id",getUserById)
+router.post("/currentUser",getCurrentUser)
+
 // router.post("/facebook",facebookAuth)
 // router.post("/google",googleAuth)
 export default router
