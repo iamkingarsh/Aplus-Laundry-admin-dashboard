@@ -239,7 +239,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         // Add submit logic here
 
         setIsLoading(true)
-        console.log(values)
+        console.log('valuesvaluesvaluesvalues',values)
 
         setTimeout(() => {
             setIsLoading(false)
