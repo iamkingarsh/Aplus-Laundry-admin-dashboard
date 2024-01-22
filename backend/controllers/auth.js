@@ -10,8 +10,8 @@ import {
   emailVerificationEmail,
   emailVerificationSuccess
 } from "../config/sendMail.js";
-
-
+import { sendVerificationCode } from "../config/sendSms.js";
+import axios from 'axios'
 
 
 export const register = async (req, res, next) => {
@@ -133,6 +133,15 @@ export const sendOTPforverification = async (req, res) => {
     console.log('req', req.body);
     const email = user.email;
 
+    const validEmailUser = await User.findOne({
+      email
+    });
+    if (!validEmailUser) {
+      return res.status(404).send({
+        msg: "User not found",
+        ok: false
+      });
+    }
     let OTP = Math.floor(Math.random() * 900000) + 100000;
 
     console.log("OTP is generated", OTP);
@@ -151,15 +160,7 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
-    const validEmailUser = await User.findOne({
-      email
-    });
-    if (!validEmailUser) {
-      return res.status(404).send({
-        msg: "User not found",
-        ok: false
-      });
-    }
+   
 
     console.log('email email', email);
     // Continue with other operations, such as sending an email
@@ -169,6 +170,66 @@ export const sendOTPforverification = async (req, res) => {
     res.status(200).send({
       ok: true,
       msg: "email sent"
+    });
+  } catch (error) {
+    console.error("Error in sendOTPforverification:", error);
+    res.status(500).send({
+      msg: error.message
+    });
+  }
+};
+
+
+
+export const sendOTPforMobileverification = async (req, res) => {
+  try {
+    let user = req.body;
+    console.log('req', req.body);
+    const mobileNumber = user.mobileNumber;
+    const validmobileNumberUser = await User.findOne({
+      mobileNumber
+    });
+    console.log('validmobileNumberUser',validmobileNumberUser)
+    // mobileNumberVerificationmobileNumber(mobileNumber, OTP);
+    if (!validmobileNumberUser) {
+      return res.status(404).send({
+        msg: "User not found",
+        ok: false
+      });
+    }
+   
+
+    let OTP = Math.floor(Math.random() * 900000) + 100000;
+
+    console.log("OTP is generated", OTP);
+
+    // Create a new UserOTP instance
+    let otp = new UserOTP({
+      mobileNumber: mobileNumber,
+      otp: OTP,
+      createdAt: new Date(),
+      expireAt: new Date() + 86400000,
+    });
+
+    console.log("OTP is about to be saved");
+
+    // Save the OTP to the database
+    await otp.save();
+    // // Send OTP via 2factor.in API
+    const response = await axios.post(
+      `https://2factor.in/API/V1/f7a67a1f-b7d4-11ee-8cbb-0200cd936042/SMS/${mobileNumber}/${OTP}/GROMER`
+    );
+    // const verification = await sendVerificationCode(`+91${mobileNumber}`);
+    console.log("OTP is saved in the database");
+    
+
+    console.log('mobileNumber mobileNumber', mobileNumber);
+    // Continue with other operations, such as sending an mobileNumber
+
+    // Send the response
+    res.status(200).send({
+      ok: true,
+      msg: "mobileNumber sent"
     });
   } catch (error) {
     console.error("Error in sendOTPforverification:", error);
@@ -231,11 +292,11 @@ export const verifyotp = async (req, res) => {
       });
 
       return res
-      .status(402)
-      .send({
-        msg: "Your OTP has expired, can't verify",
-        ok: false
-      });
+        .status(402)
+        .send({
+          msg: "Your OTP has expired, can't verify",
+          ok: false
+        });
     }
 
     // Update user's emailVerified status
@@ -268,6 +329,107 @@ export const verifyotp = async (req, res) => {
     emailVerificationSuccess(email)
     res.status(200).send({
       msg: "Email verified",
+      ok: true,
+      token: Token
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      msg: "Internal Server Error",
+      ok: false
+    });
+  }
+};
+
+export const verifymobileotp = async (req, res) => {
+  try {
+    let user = req.body;
+    console.log('user', user);
+    const mobileNumber = req.mobileNo || user.mobileNumber;
+
+    if (!user) {
+      return res.status(404).send({
+        msg: "User not found",
+        ok: false
+      });
+    }
+
+    const {
+      otp
+    } = req.body;
+
+    // Find OTP records for the user's mobileNumber
+    const databaseotp = await UserOTP.find({
+      mobileNumber: mobileNumber
+    });
+
+    if (!databaseotp || databaseotp.length === 0) {
+      return res.status(404).send({
+        msg: "No OTP records found",
+        ok: false
+      });
+    }
+
+    // Check if the provided OTP matches any of the OTP records
+    const matchingOTP = databaseotp.find((record) => record.otp == otp);
+
+    if (!matchingOTP) {
+      return res.status(401).send({
+        msg: "Wrong OTP!",
+        ok: false
+      });
+    }
+
+    // Calculate the time difference
+    const currentTime = new Date();
+    const createdAt = new Date(matchingOTP.createdAt);
+    const timeDifference = currentTime - createdAt;
+
+    // Check if the time difference is more than 15 minutes (900,000 milliseconds)
+    if (timeDifference > 900000) {
+      // Delete OTP records for the user's mobileNumber
+      await otp.deleteMany({
+        mobileNumber: mobileNumber
+      });
+
+      return res
+        .status(402)
+        .send({
+          msg: "Your OTP has expired, can't verify",
+          ok: false
+        });
+    }
+
+    // Update user's mobileNumberVerified status
+    const validmobileNumberUser = await User.findOne({
+      mobileNumber
+    });
+    console.log(mobileNumber, validmobileNumberUser)
+    if (!validmobileNumberUser) {
+      return res.status(404).send({
+        msg: "User not found",
+        ok: false
+      });
+    }
+
+    // Include user ID and role in the JWT token payload
+    const tokenPayload = {
+      id: validmobileNumberUser._id,
+      role: validmobileNumberUser.role,
+    };
+
+    const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
+    res.cookie('accessToken', Token, {
+      httpOnly: true
+    });
+
+    // Delete OTP records for the user's mobileNumber
+    await UserOTP.deleteMany({
+      mobileNumber: mobileNumber
+    });
+    // emailVerificationSuccess(email)
+    res.status(200).send({
+      msg: "Mobile Number verified",
       ok: true,
       token: Token
     });

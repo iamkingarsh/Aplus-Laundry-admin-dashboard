@@ -106,7 +106,7 @@ export const getServiceByIdWithItems = async (req, res) => {
               path: 'category',  // assuming category is a reference to another model
               model: Category, // replace 'Category' with the actual model name for the category
             },
-          });
+          }); 
         if (!service) {
             return res.status(404).json({
                 message: 'Service not found',
