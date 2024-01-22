@@ -16,7 +16,7 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
     const modal = useGlobalModal()
 
     return (
-        <div>
+        <div className="w-full flex justify-center items-center">
             <Switch checked={checked} onCheckedChange={
                 (value: any) => {
                     modal.title = 'Are you sure you want to change the status?'

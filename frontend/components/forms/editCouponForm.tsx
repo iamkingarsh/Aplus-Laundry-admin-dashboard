@@ -25,7 +25,7 @@ import Heading from "../ui/heading"
 interface EditCouponsFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
     couponid: string
-    CouponCodeData: any[]
+    CouponCodeData: any
 }
 
 
@@ -36,7 +36,7 @@ const formSchema = z.object({
     discount_code: z.string().toUpperCase().min(2, { message: "Discount code is required" }),
     discount_expiry_date: z.date(),
     discount_usage_limit: z.string(),
-    discount_minimum_purchase_amount: z.string().optional() 
+    discount_minimum_purchase_amount: z.string().optional()
 })
 
 
@@ -45,11 +45,9 @@ export function EditCouponsForm({ className, gap, couponid, CouponCodeData, ...p
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [couponCode, setCouponCode] = React.useState<string>("")
 
-console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.discount_type)
+    console.log('CouponCodeData CouponCodeData CouponCodeData', CouponCodeData?.discount_type)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        
-
     })
 
     React.useEffect(() => {
@@ -77,7 +75,7 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
         setTimeout(() => {
             setIsLoading(false)
 
-            toast.success('Coupon created successfully')
+            toast.success('Coupon Updated successfully')
         }, 3000) // remove this timeout and add submit logic
 
     }
@@ -111,8 +109,9 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                             className="uppercase"
 
                                             autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field || couponCode}
+                                            disabled
+                                            // {...field || couponCode}
+                                            value={CouponCodeData?.discount_code}
                                         />
                                         {/* <div>
 
@@ -135,22 +134,22 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                     <FormControl>
                                         <RadioGroup
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            defaultValue={field.value?.toString()}
                                             className="flex flex-col space-y-1"
                                         >
                                             <FormItem className="flex items-center space-x-3 space-y-0">
                                                 <FormControl>
-                                                    <RadioGroupItem value="percentage" />
+                                                    <RadioGroupItem disabled value="percentage" />
                                                 </FormControl>
-                                                <FormLabel className="font-normal">
+                                                <FormLabel className="font-normal opacity-50">
                                                     Percentage discount
                                                 </FormLabel>
                                             </FormItem>
                                             <FormItem className="flex items-center space-x-3 space-y-0">
                                                 <FormControl>
-                                                    <RadioGroupItem value="fixed" />
+                                                    <RadioGroupItem disabled value="fixed" />
                                                 </FormControl>
-                                                <FormLabel className="font-normal">
+                                                <FormLabel className="font-normal opacity-50">
                                                     Fixed amount discount
                                                 </FormLabel>
                                             </FormItem>
@@ -178,8 +177,8 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                                 className=""
 
                                                 autoCorrect="off"
-                                                disabled={isLoading}
-                                                {...field}
+                                                disabled
+                                                value={CouponCodeData?.discount_value}
                                             />
                                             {form.watch("discount_type") === "percentage" ? <Percent className="absolute right-4 top-3 h-4 w-4 opacity-50" /> : <IndianRupee className="absolute right-4 top-3 h-4 w-4 opacity-50" />}
                                         </div>
@@ -208,7 +207,8 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                                     >
                                                         {field.value ? (
                                                             // format(field.value, "PPP")
-                                                            field.value
+                                                            format(new Date(field.value), "PP")
+                                                            // field.value
                                                         ) : (
                                                             <span>Pick a date</span>
                                                         )}
@@ -219,7 +219,7 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                             <PopoverContent className="w-auto p-0" align="start">
                                                 <Calendar
                                                     mode="single"
-                                                    selected={field.value}
+                                                    selected={new Date(field.value)}
                                                     onSelect={field.onChange}
                                                     disabled={(date) =>
                                                         date < new Date() || date < new Date("1900-01-01")
@@ -304,7 +304,7 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                             {isLoading && (
                                 <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
                             )}
-                            Create
+                            Update
                         </Button>
                     </div>
 
@@ -330,7 +330,7 @@ console.log('CouponCodeData CouponCodeData CouponCodeData',CouponCodeData?.disco
                                     <div>
                                         <li className='text-sm opacity-70'>{form.watch("discount_type") == 'percentage' ? 'Percentage' : 'Fixed'} discount</li>
                                         {form.watch("discount_value") > "0" && <li className='text-sm opacity-70 '>{form.watch("discount_type") === 'fixed' && 'Rs. '}{form.watch("discount_value")}{form.watch("discount_type") === 'percentage' && '%'} will be off on the total cart</li>}
-                                        {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {form.watch("discount_expiry_date")}</li>}
+                                        {form.watch("discount_expiry_date") && <li className='text-sm opacity-70 '>Expires on {new Date(form.watch("discount_expiry_date")).toDateString().toString()}</li>}
                                         <li className='text-sm opacity-70 '>{form.watch("discount_minimum_purchase_amount") != "0" && 'Rs. '}{form.watch("discount_minimum_purchase_amount") != "0" && form.watch("discount_minimum_purchase_amount")} {form.watch("discount_minimum_purchase_amount") == "0" && "No "} Min purchase amount is required to avail this discount</li>
                                         <li className='text-sm opacity-70 '>{form.watch("discount_usage_limit") != "0" && form.watch("discount_usage_limit")} {form.watch("discount_usage_limit") != "0" && "Time(s)"} {form.watch("discount_usage_limit") == "0" && "Unlimited"} usage limit</li>
 
