@@ -505,6 +505,28 @@ export const getUserById = async (req, res, next) => {
   try {
     const userId = req.params.id;
 
+    // Find the user by ID
+    const foundUser = await User.findById(userId);
+
+    // Check if the user is not found
+    if (!foundUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Respond with the user data
+    res.status(200).json({ user: foundUser });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+export const getCurrentUserById = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
     // Check if the user ID is valid (optional)
     // if (!isValidUserId(userId)) {
     //   return res.status(400).json({ error: "Invalid User ID" });
@@ -522,5 +544,39 @@ export const getUserById = async (req, res, next) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getCurrentUser = async (req, res, next) => {
+  console.log(' authenticateToken', req.body.token);
+
+  const token = req.body.token;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRETKEY);
+    console.log(' decoded decoded', decoded);
+
+    // Check if the required role is present in the decoded token
+    if (!decoded.role || !['owner', 'admin', 'deliveryagent', 'customer'].includes(decoded.role)) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+
+    // Fetch user details based on the user ID obtained from the token
+    const userId = decoded.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ user: user });
+
+  } catch (err) {
+    console.error('Token verification error:', err.message);
+    return res.status(403).json({ message: 'Forbidden' });
   }
 };
