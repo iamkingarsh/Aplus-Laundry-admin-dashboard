@@ -35,7 +35,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import Link from "next/link"
 import { Badge } from "../ui/badge"
 import { fetchData } from "@/axiosUtility/api"
-
+import useRazorpay from "react-razorpay";
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -145,6 +145,7 @@ const formSchema = z.object({
 const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
+    const [Razorpay] = useRazorpay();
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
     const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number, } }>({});
@@ -160,12 +161,13 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
 
+
     const getCustomersData = async () => {
         try {
             const result = await fetchData('/auth/getallcustomers'); // Replace 'your-endpoint' with the actual API endpoint
             setAllData(result)
             const nonSubscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'nonsubscriber');
-
+            console.log('sdgaserrhwseth', result)
             const subscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'subscriber');
 
             // setNonSubscribeddata(nonSubscribedUsers);
@@ -240,6 +242,39 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
         setIsLoading(true)
         console.log(values)
+
+
+        // const order = await createOrder(params); //  Create order on your backend
+
+        const options = {
+            key: "rzp_test_bXDoN2Q1QTkbvw", // Enter the Key ID generated from the Dashboard
+            amount: "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            currency: "INR",
+            name: "Acme Corp",
+            description: "Test Transaction",
+            image: "https://example.com/your_logo",
+            order_id: "order_NRnvBssXJ2f4BG", //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+            handler: function (response: any) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);
+            },
+            prefill: {
+                name: "Piyush Garg",
+                email: "youremail@example.com",
+                contact: "9999999999",
+            },
+            notes: {
+                address: "Razorpay Corporate Office",
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+
+        const rzp1 = new Razorpay(options as any);
+        rzp1.open();
+
 
         setTimeout(() => {
             setIsLoading(false)
