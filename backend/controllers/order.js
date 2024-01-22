@@ -1,68 +1,88 @@
 import Order from '../models/order.js';
+import Razorpay from 'razorpay';
 
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_SECRET,
+  });
 // Add or update an order
 export const createOrUpdateOrder = async (req, res) => {
     try {
-        const {
-            id,
-            order_type,
-            service,
-            products,
-            customer,
-            status,
-            payment,
-            delivery_agent,
-            cartTotal,
-            cartWeight,
-            cartWeightBy,
-        } = req.body;
-
-        const existingOrder = await Order.findById(id);
-
-        if (existingOrder) {
-            existingOrder.order_type = order_type;
-            existingOrder.service = service;
-            existingOrder.products = products;
-            existingOrder.customer = customer;
-            existingOrder.status = status;
-            existingOrder.payment = payment;
-            existingOrder.delivery_agent = delivery_agent;
-            existingOrder.cartTotal = cartTotal;
-            existingOrder.cartWeight = cartWeight;
-            existingOrder.cartWeightBy = cartWeightBy;
-
-            await existingOrder.save();
-
-            return res.status(200).json({
-                message: 'Order updated successfully',
-                order: existingOrder
-            });
-        } else {
-            const newOrder = new Order({
-                order_type,
-                service,
-                products,
-                customer,
-                status,
-                payment,
-                delivery_agent,
-                cartTotal,
-                cartWeight,
-                cartWeightBy,
-            });
-
-            await newOrder.save();
-
-            return res.status(201).json({
-                message: 'Order created successfully',
-                order: newOrder
-            });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
+      const {
+        id,
+        order_type,
+        service,
+        products,
+        customer,
+        status,
+        payment,
+        delivery_agent,
+        cartTotal,
+        cartWeight,
+        cartWeightBy,
+      } = req.body;
+  
+      const existingOrder = await Order.findById(id);
+  
+      if (existingOrder) {
+        existingOrder.order_type = order_type;
+        existingOrder.service = service;
+        existingOrder.products = products;
+        existingOrder.customer = customer;
+        existingOrder.status = status;
+        existingOrder.payment = payment;
+        existingOrder.delivery_agent = delivery_agent;
+        existingOrder.cartTotal = cartTotal;
+        existingOrder.cartWeight = cartWeight;
+        existingOrder.cartWeightBy = cartWeightBy;
+  
+        await existingOrder.save();
+  
+        return res.status(200).json({
+          message: 'Order updated successfully',
+          order: existingOrder,
         });
+      } else {
+        const newOrder = new Order({
+          order_type,
+          service,
+          products,
+          customer,
+          status,
+          payment,
+          delivery_agent,
+          cartTotal,
+          cartWeight,
+          cartWeightBy,
+        });
+  
+        const options = {
+          amount: cartTotal * 100, // Amount in paise
+          currency: 'INR',
+          receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
+        };
+  
+        try {
+          // Create a new Razorpay order
+          const order = await razorpay.orders.create(options);
+          newOrder.razorpayOrderId = order.id; // Save Razorpay order ID in your Order model
+          await newOrder.save();
+  
+          return res.status(201).json({
+            message: 'Order created successfully',
+            order: newOrder,
+            razorpayOrder: order,
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error: error.message });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: 'Internal Server Error',
+      });
     }
 };
 
