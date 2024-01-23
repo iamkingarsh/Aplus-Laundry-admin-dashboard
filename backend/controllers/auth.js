@@ -22,12 +22,14 @@ export const register = async (req, res, next) => {
     email,
     customerType,
     address,
+    profileImg,
     pincode
   } = req.body;
 
   // Filter out undefined or empty fields
   const userFields = {
     ...(fullName && { fullName }),
+    ...(profileImg && { profileImg }),
     ...(mobileNumber && { mobileNumber }),
     ...(role && { role }),
     ...(email && { email }),

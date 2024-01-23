@@ -32,6 +32,8 @@ import { storage } from "@/lib/firebase"
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react"
 import { postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
+import { Icons } from "../ui/icons"
 
 
 const profileFormSchema = z.object({
@@ -91,18 +93,21 @@ export function ProfileForm() {
     }, [])
 
     const [profilepic, setProfilepic] = useState<string | null>(null)
-
+    const [profilepicUrl, setProfilepicUrl] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
 
     const uploadImageToFirebase = async (file: any) => {
         try {
             const storageRef = ref(storage, `profile-pics/${file.name}`);
-            // Upload file
             const snapshot = await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
             console.log('File available at', downloadURL);
+            setProfilepicUrl(downloadURL)
+            form.setValue('profilepic', downloadURL);
             toast.success('Profile Picture added successfully!');
-
+            return downloadURL;
         } catch (error) {
             console.log('Error in uploadImageToFirebase:', error);
         }
@@ -110,10 +115,42 @@ export function ProfileForm() {
 
 
 
-    function onSubmit(data: ProfileFormValues) {
+    async function onSubmit(data: ProfileFormValues) {
+        setLoading(true)
+        if (profilepic !== form.watch('profilepic')) {
+            uploadImageToFirebase(profilepic);
+        }
+        try {
+            if (
+                currentUserData?.profileImg !== profilepicUrl ||
+                currentUserData?.fullName !== form.getValues('FullName') ||
+                currentUserData?.email !== form.getValues('email')
+            ) {
+                const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
 
-        uploadImageToFirebase(profilepic);
-        toast.success("Profile updated.")
+                const result = await postData('/auth/register',
+                    {
+                        token: token,
+                        profileImg: profilepicUrl,
+                        fullName: form.getValues('FullName'),
+                        email: form.getValues('email')
+                    }
+                );
+                router.refresh()
+                toast.success("Profile updated.")
+
+                console.log('result resukt', result);
+                setCurrentUserData(result.user)
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false)
+        }
+
+
+
+
     }
 
     useEffect(() => {
@@ -167,6 +204,7 @@ export function ProfileForm() {
                                         }}
                                         id="upload"
                                         className="hidden"
+                                        disabled={loading}
                                         hidden
                                         type="file"
                                     />
@@ -186,7 +224,7 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input disabled={loading} placeholder="shadcn" {...field} />
                             </FormControl>
 
                             <FormMessage />
@@ -210,7 +248,11 @@ export function ProfileForm() {
                 />
 
 
-                <Button type="submit">Update profile</Button>
+                <Button type="submit">
+                    {loading &&
+                        <Icons.spinner className='w-4 h-4 animate-spin' />
+                    }
+                    Update profile</Button>
             </form>
         </Form>
     )
