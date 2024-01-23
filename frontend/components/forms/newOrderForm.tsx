@@ -34,7 +34,7 @@ import { Checkbox } from "../ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import Link from "next/link"
 import { Badge } from "../ui/badge"
-import { fetchData } from "@/axiosUtility/api"
+import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -48,89 +48,10 @@ const formSchema = z.object({
     order_type: z.string().min(1, { message: "Please select an order type" })
     ,
     serviceId: z.string().min(1, { message: "Please select a service" }),
-    products: z.object({
-        Shirts: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-        }).optional(),
-        TShirts: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Trousers: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Jeans: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Shorts: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Kurtas: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Kurtis: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Sarees: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Bedsheets: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Blankets: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }),
-        Curtains: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
-        }).optional(),
-        CushionCovers: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        PillowCovers: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Towels: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Masks: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-
-        }).optional(),
-        Others: z.object({
-            quantity: z.number().min(1, { message: "Please select a quantity" }).optional(),
-            price: z.number().min(1, { message: "Please select a price" }).optional(),
-            weight: z.number().min(1, { message: "Please add the weight" }).optional(),
-            weightby: z.string().min(1, { message: "Please select a weight type" }).optional(),
-        }).optional(),
-    }).partial(), //find a way to make this schema dynamic @mujahed
+    products: z.array(z.object({
+        id: z.string().min(1, { message: "Please select a product" }),
+        quantity: z.number().min(1, { message: "Please select a quantity" }),
+    })).min(1, { message: "Please select a product" }),
     customer: z.string().min(1, { message: "Please select a customer" }),
     status: z.string().min(1, { message: "Please select a status" }),
     payment: z.string(),
@@ -138,9 +59,6 @@ const formSchema = z.object({
     cartTotal: z.number().optional(),
     cartWeight: z.number().optional(),
     cartWeightBy: z.string().optional(),
-
-
-
 })
 const priceperkg = 50;
 
@@ -237,39 +155,64 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         GlobalModal.onOpen()
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
 
         setIsLoading(true)
-        console.log('valuesvaluesvaluesvalues',values)
+        console.log('valuesvaluesvaluesvalues', values)
+
+        const params = {
+            order_type: values.order_type,
+            service: values.serviceId,
+            products: values.products,
+            customer: values.customer,
+            status: values.status,
+            payment: values.payment,
+            delivery_agent: values.delivery_agent,
+            cartTotal: values.cartTotal,
+            cartWeight: values.cartWeight,
+            cartWeightBy: values.cartWeightBy,
 
 
-        // const order = await createOrder(params); //  Create order on your backend
+        }
+        const response = await postData('/order/addorupdate', params)
+
+        console.log('response', response)
 
         const options = {
-            key: "rzp_test_bXDoN2Q1QTkbvw", // Enter the Key ID generated from the Dashboard
-            amount: "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+            amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             currency: "INR",
-            name: "Acme Corp",
+            name: "Aplus Laundry",
             description: "Test Transaction",
             image: "https://example.com/your_logo",
-            order_id: "order_NRnvBssXJ2f4BG", //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+            order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
                 alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
                 alert(response.razorpay_signature);
             },
             prefill: {
-                name: "Piyush Garg",
-                email: "youremail@example.com",
-                contact: "9999999999",
+                name: CustomerData?.fullName,
+                email: CustomerData?.email,
+                contact: CustomerData?.mobileNumber,
             },
             notes: {
                 address: "Razorpay Corporate Office",
             },
             theme: {
-                color: "#3399cc",
+                color: "#2E3190",
+                backdrop_color: "#2E3190"
             },
+            modal: {
+                ondismiss: function () {
+                    alert("dismissed");
+                },
+                animation: "slide",
+            },
+            // callback_url: 'https://example.com/your_redirect_url',
+
+
         };
 
         const rzp1 = new Razorpay(options as any);
@@ -323,22 +266,27 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             if (!selectedItems[value]) {
                 setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
+                form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
 
             } else if (selectedItems[value]?.quantity === 1) {
                 const updatedSelectedItems = { ...selectedItems };
                 delete updatedSelectedItems[value];
                 setSelectedItems(updatedSelectedItems);
+                form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
 
             }
         } else {
 
             if (!selectedItems[value]) {
                 setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 || rate } }));
+                form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
 
             } else if (selectedItems[value]?.quantity === 1) {
                 const updatedSelectedItems = { ...selectedItems };
                 delete updatedSelectedItems[value];
                 setSelectedItems(updatedSelectedItems);
+                form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
+
 
             }
         }
@@ -424,7 +372,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         }
     }, [selectedItems, cartTotal, weight, weightBy, form, calculatePriceByWeight])
 
-    const CustomerData = AllData.find((data) => data.email === form.watch("customer"))
+    const CustomerData = AllData.find((data) => data._id === form.watch("customer"))
 
     const serviceId = form.watch("serviceId")
 
@@ -440,7 +388,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             setCartTotal(0);
             form.setValue("cartWeight", 0);
 
-            form.setValue("products", {});
+
+
+
         }
     }, [form])
 
@@ -531,7 +481,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 >
                                                     {field.value
                                                         ? AllData.find(
-                                                            (data) => data.email === field.value
+                                                            (data) => data._id === field.value
                                                         )?.email
                                                         : "Select Customer"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -559,17 +509,17 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 <CommandGroup>
                                                     {AllData.map((data) => (
                                                         <CommandItem
-                                                            value={data.email}
+                                                            value={data._id}
                                                             key={data.email}
                                                             onSelect={() => {
-                                                                form.setValue("customer", data.email)
+                                                                form.setValue("customer", data._id)
                                                             }}
                                                         >
                                                             {data.email}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
-                                                                    data.email === field.value
+                                                                    data._id === field.value
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}
@@ -688,11 +638,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                         <SelectContent>
                                             {
                                                 DeliveryAgentsData.map((data: any, index) => (
-                                                    <SelectItem key={index} value={data.email}>{data.email} {`(${data.fullName})`}</SelectItem>
+                                                    <SelectItem key={index} value={data._id}>{data.email} {`(${data.fullName})`}</SelectItem>
                                                 ))
                                             }
-
-                                            {/* <SelectItem value="Fareed">Fareed</SelectItem> */}
 
                                         </SelectContent>
                                     </Select>
@@ -834,7 +782,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                                                             <Button onClick={() => {
 
-                                                                form.setValue("products", { ...selectedItems });
+                                                                form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
                                                                 form.setValue("cartTotal", cartTotal);
 
 
@@ -1062,12 +1010,12 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             <User className='w-6 h-6 mr-3' />
                                             <div className="flex flex-col">
                                                 <span className="text-muted-foreground  text-sm">Name</span>
-                                                <span className="text-md">{CustomerData.fullName}</span>
+                                                <span className="text-md">{CustomerData?.fullName}</span>
                                             </div>
                                         </div>
                                         <Avatar className='w-8  border-muted border-2 h-8 mr-2'>
                                             <AvatarImage src={CustomerData.profileImg} alt="@shadcn" />
-                                            <AvatarFallback>{CustomerData.fullName[0]}</AvatarFallback>
+                                            <AvatarFallback>{CustomerData?.fullName[0]}</AvatarFallback>
                                         </Avatar>
                                     </div>
                                     <Separator orientation='horizontal' />
