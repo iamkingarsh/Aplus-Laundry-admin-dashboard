@@ -30,7 +30,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Upload } from "lucide-react"
 import { storage } from "@/lib/firebase"
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { postData } from "@/axiosUtility/api"
+
 
 const profileFormSchema = z.object({
     profilepic: z.string(),
@@ -55,9 +57,9 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-    profilepic: "https://github.com/shadcn.png",
-    FullName: "Arshad",
-    email: "contact@mohammedarshad.com",
+    profilepic: "",
+    FullName: "",
+    email: "",
 }
 
 export function ProfileForm() {
@@ -67,8 +69,28 @@ export function ProfileForm() {
         mode: "onChange",
     })
 
-    const [profilepic, setProfilepic] = useState<string | null>(null)
+    const [currentUserData, setCurrentUserData] = useState(null as any)
+    const getCurrentData = async () => {
 
+        try {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
+
+            const result = await postData('/auth/currentuser',
+                {
+                    token: token
+                }
+            ); // Replace 'your-endpoint' with the actual API endpoint
+            console.log(result.user)
+            setCurrentUserData(result.user)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    useEffect(() => {
+        getCurrentData()
+    }, [])
+
+    const [profilepic, setProfilepic] = useState<string | null>(null)
 
 
 
@@ -94,6 +116,13 @@ export function ProfileForm() {
         toast.success("Profile updated.")
     }
 
+    useEffect(() => {
+        form.reset({
+            profilepic: currentUserData?.profileImg,
+            FullName: currentUserData?.fullName,
+            email: currentUserData?.email,
+        })
+    }, [currentUserData])
 
 
     return (
@@ -171,7 +200,7 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl >
-                                <Input disabled placeholder="example@example.com " />
+                                <Input {...field} disabled placeholder="example@example.com " />
                             </FormControl>
 
 
