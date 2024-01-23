@@ -22,12 +22,14 @@ export const register = async (req, res, next) => {
     email,
     customerType,
     address,
+    profileImg,
     pincode
   } = req.body;
 
   // Filter out undefined or empty fields
   const userFields = {
     ...(fullName && { fullName }),
+    ...(profileImg && { profileImg }),
     ...(mobileNumber && { mobileNumber }),
     ...(role && { role }),
     ...(email && { email }),
@@ -160,7 +162,7 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
-   
+
 
     console.log('email email', email);
     // Continue with other operations, such as sending an email
@@ -189,7 +191,7 @@ export const sendOTPforMobileverification = async (req, res) => {
     const validmobileNumberUser = await User.findOne({
       mobileNumber
     });
-    console.log('validmobileNumberUser',validmobileNumberUser)
+    console.log('validmobileNumberUser', validmobileNumberUser)
     // mobileNumberVerificationmobileNumber(mobileNumber, OTP);
     if (!validmobileNumberUser) {
       return res.status(404).send({
@@ -197,7 +199,7 @@ export const sendOTPforMobileverification = async (req, res) => {
         ok: false
       });
     }
-   
+
 
     let OTP = Math.floor(Math.random() * 900000) + 100000;
 
@@ -221,7 +223,7 @@ export const sendOTPforMobileverification = async (req, res) => {
     );
     // const verification = await sendVerificationCode(`+91${mobileNumber}`);
     console.log("OTP is saved in the database");
-    
+
 
     console.log('mobileNumber mobileNumber', mobileNumber);
     // Continue with other operations, such as sending an mobileNumber

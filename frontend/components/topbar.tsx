@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Heading from './ui/heading'
 import { ComboboxDemo } from './ui/combobox'
 import { ModeToggle } from './theme-toggler'
@@ -11,12 +11,38 @@ import { useRouter } from 'next/navigation'
 import { useGlobalModal } from '@/hooks/GlobalModal'
 import { NewTeamMemberForm } from './forms/newTeamMemberForm'
 import toast from 'react-hot-toast'
+import { postData } from '@/axiosUtility/api'
+
 
 
 
 function TopBar() {
     const router = useRouter()
     const modal = useGlobalModal()
+    const [currentUserData, setCurrentUserData] = React.useState(null as any)
+
+    console.log('sdgsdhg', currentUserData)
+
+    const getCurrentData = async () => {
+
+        try {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
+
+            const result = await postData('/auth/currentuser',
+                {
+                    token: token
+                }
+            ); // Replace 'your-endpoint' with the actual API endpoint
+            console.log(result.user)
+            setCurrentUserData(result.user)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    useEffect(() => {
+        getCurrentData()
+    }, [])
+
     return (
         <div className='py-3 bg-primary-foreground sticky z-40 top-0 overflow-hidden px-6 border-b-2 flex justify-between'>
             <div>
@@ -27,8 +53,8 @@ function TopBar() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Avatar className='w-8 h-8'>
-                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarImage src={currentUserData?.profileImg} alt="@shadcn" />
+                            <AvatarFallback>{currentUserData?.FullName?.slice(0, 2)}</AvatarFallback>
                         </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">

@@ -188,6 +188,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             image: "https://example.com/your_logo",
             order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
+                console.log('rajooor pay', response);
                 alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
                 alert(response.razorpay_signature);
