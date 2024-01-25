@@ -36,6 +36,7 @@ import Link from "next/link"
 import { Badge } from "../ui/badge"
 import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
+import axios from "axios"
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -174,9 +175,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
         }
         const response = await postData('/order/addorupdate', params)
-
+        
         console.log('response', response)
-
+        
         const options = {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
             amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -187,9 +188,12 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
                 console.log('rajooor pay', response);
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
+                const reply =  postData('/order/save', response)
+                console.log(reply)
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature);
+                // instance.payments.fetch(paymentId)
             },
             prefill: {
                 name: CustomerData?.fullName,
@@ -225,6 +229,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     }
 
+
+ 
 
 
 

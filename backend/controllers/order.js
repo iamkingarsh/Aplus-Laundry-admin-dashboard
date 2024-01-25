@@ -132,6 +132,22 @@ export const verifyPayment = async (req, res) => {
 }
 
 
+export const savePayment = async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.json();
+        const body = razorpay_order_id + "|" + razorpay_payment_id;
+        console.log("id==", body);
+
+        const paymentDetails = await instance.payments.fetch(razorpay_payment_id);
+        console.log("Payment Details:", paymentDetails);
+
+        // Handle the payment details as needed
+        res.status(200).json({ success: true, message: 'Payment details fetched successfully' });
+    } catch (error) {
+        console.error('Error saving payment:', error);
+        res.status(500).json({ success: false, message: 'Error saving payment' });
+    }
+};
 
 // Get all orders
 export const getAllOrders = async (req, res) => {
