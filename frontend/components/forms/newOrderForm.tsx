@@ -36,6 +36,7 @@ import Link from "next/link"
 import { Badge } from "../ui/badge"
 import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
+import axios from "axios"
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -174,9 +175,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
         }
         const response = await postData('/order/addorupdate', params)
-
+        
         console.log('response', response)
-
+        
         const options = {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
             amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -187,9 +188,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
                 console.log('rajooor pay', response);
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
+                // const response = await postData('/order/addorupdate', params)
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature);
+                verifyPayment(response.razorpay_order_id,response.razorpay_payment_id,response.razorpay_signature)
             },
             prefill: {
                 name: CustomerData?.fullName,
@@ -225,6 +228,31 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     }
 
+
+    const verifyPayment = async (razorpayOrderId, razorpayPaymentId, razorpaySignature) => {
+        try {
+          const response = await axios.post(
+            `https://api.razorpay.com/v1/payments/${razorpayPaymentId}/capture`,
+            {
+            //   amount: /* amount in paise */,
+              currency: "INR",
+              payment_id: razorpayPaymentId,
+              order_id: razorpayOrderId,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + Buffer.from(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID + ':').toString('base64'),
+              },
+            }
+          );
+      
+          console.log(response.data);
+          // Check response data to ensure the payment is successful
+        } catch (error) {
+          console.error('Error verifying payment:', error);
+        }
+      };
 
 
 
