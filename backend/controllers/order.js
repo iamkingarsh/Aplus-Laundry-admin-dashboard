@@ -4,88 +4,132 @@ import Razorpay from 'razorpay';
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
-  });
+});
 // Add or update an order
 export const createOrUpdateOrder = async (req, res) => {
     try {
-      const {
-        id,
-        order_type,
-        service,
-        products,
-        customer,
-        status,
-        payment,
-        delivery_agent,
-        cartTotal,
-        cartWeight,
-        cartWeightBy,
-      } = req.body;
-  
-      const existingOrder = await Order.findById(id);
-  
-      if (existingOrder) {
-        existingOrder.order_type = order_type;
-        existingOrder.service = service;
-        existingOrder.products = products;
-        existingOrder.customer = customer;
-        existingOrder.status = status;
-        existingOrder.payment = payment;
-        existingOrder.delivery_agent = delivery_agent;
-        existingOrder.cartTotal = cartTotal;
-        existingOrder.cartWeight = cartWeight;
-        existingOrder.cartWeightBy = cartWeightBy;
-  
-        await existingOrder.save();
-  
-        return res.status(200).json({
-          message: 'Order updated successfully',
-          order: existingOrder,
-        });
-      } else {
-        const newOrder = new Order({
-          order_type,
-          service,
-          products,
-          customer,
-          status,
-          payment,
-          delivery_agent,
-          cartTotal,
-          cartWeight,
-          cartWeightBy,
-        });
-  
-        const options = {
-          amount: cartTotal * 100, // Amount in paise
-          currency: 'INR',
-          receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
-        };
-  
-        try {
-          // Create a new Razorpay order
-          const order = await razorpay.orders.create(options);
-          newOrder.razorpayOrderId = order.id; // Save Razorpay order ID in your Order model
-          await newOrder.save();
-  
-          return res.status(201).json({
-            message: 'Order created successfully',
-            order: newOrder,
-            razorpayOrder: order,
-          });
-        } catch (error) {
-          console.error(error);
-          return res.status(500).json({ error: error.message });
+        const {
+            id,
+            order_type,
+            service,
+            products,
+            customer,
+            status,
+            payment,
+            delivery_agent,
+            cartTotal,
+            cartWeight,
+            cartWeightBy,
+        } = req.body;
+
+        const existingOrder = await Order.findById(id);
+
+        if (existingOrder) {
+            existingOrder.order_type = order_type;
+            existingOrder.service = service;
+            existingOrder.products = products;
+            existingOrder.customer = customer;
+            existingOrder.status = status;
+            existingOrder.payment = payment;
+            existingOrder.delivery_agent = delivery_agent;
+            existingOrder.cartTotal = cartTotal;
+            existingOrder.cartWeight = cartWeight;
+            existingOrder.cartWeightBy = cartWeightBy;
+
+            await existingOrder.save();
+
+            return res.status(200).json({
+                message: 'Order updated successfully',
+                order: existingOrder,
+            });
+        } else {
+            const newOrder = new Order({
+                order_type,
+                service,
+                products,
+                customer,
+                status,
+                payment,
+                delivery_agent,
+                cartTotal,
+                cartWeight,
+                cartWeightBy,
+            });
+
+            const options = {
+                amount: cartTotal * 100, // Amount in paise
+                currency: 'INR',
+                receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
+            };
+
+            try {
+                // Create a new Razorpay order
+                const order = await razorpay.orders.create(options);
+                newOrder.razorpayOrderId = order.id; // Save Razorpay order ID in your Order model
+                await newOrder.save();
+
+                return res.status(201).json({
+                    message: 'Order created successfully',
+                    order: newOrder,
+                    razorpayOrder: order,
+                });
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: error.message });
+            }
         }
-      }
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        error: 'Internal Server Error',
-      });
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+        });
     }
 };
 
+export const verifyPayment = async (req, res) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.json();
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    console.log("id==", body)
+
+    const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
+        .update(body.toString())
+        .digest("hex");
+
+    const isAuthentic = expectedSignature === razorpay_signature;
+
+
+    if (isAuthentic) {
+
+        console.log(Payment)
+
+
+
+        await Payment.create({
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+        });
+
+        //  return NextResponse.redirect(new URL('/paymentsuccess', req.url));
+
+    } else {
+        return NextResponse.json({
+            message: "fail"
+        }, {
+            status: 400,
+        })
+
+    }
+
+
+    return NextResponse.json({
+        message: "success"
+    }, {
+        status: 200,
+    })
+
+}
 
 
 
@@ -111,7 +155,6 @@ export const getAllOrders = async (req, res) => {
         });
     }
 };
-
 // Get a specific order by its ID
 export const getOrderById = async (req, res) => {
     try {

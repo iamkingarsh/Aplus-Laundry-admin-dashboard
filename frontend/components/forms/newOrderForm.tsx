@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckIcon, Mail, MapPin, Phone, Plus, ServerIcon, Trash, User } from "lucide-react"
 import toast from "react-hot-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { LaundrtProducts, OrdersStatuses, Services } from "@/lib/constants"
+import { BrandName, LaundrtProducts, OrdersStatuses, Services } from "@/lib/constants"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
@@ -42,8 +42,6 @@ interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 
-
-
 const formSchema = z.object({
     order_type: z.string().min(1, { message: "Please select an order type" })
     ,
@@ -66,7 +64,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [Razorpay] = useRazorpay();
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
-    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number, } }>({});
+    const [selectedItems, setSelectedItems] = React.useState<{ [key: string]: { quantity: number, price: number, } }>({}) as any;
     const [productQuantity, setProductQuantity] = React.useState<number>(1);
     const [weight, setWeight] = React.useState<number>(0);
     const [weightBy, setWeightBy] = React.useState<string>('kg');
@@ -183,7 +181,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
             amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             currency: "INR",
-            name: "Aplus Laundry",
+            name: BrandName,
             description: "Test Transaction",
             image: "https://example.com/your_logo",
             order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
@@ -203,7 +201,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             },
             theme: {
                 color: "#2E3190",
-                backdrop_color: "#2E3190"
+                // backdrop_color: "#2E3190"
             },
             modal: {
                 ondismiss: function () {
@@ -214,9 +212,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             // callback_url: 'https://example.com/your_redirect_url',
 
 
-        };
+        } as any;
 
-        const rzp1 = new Razorpay(options as any);
+        const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
         rzp1.open();
 
 
