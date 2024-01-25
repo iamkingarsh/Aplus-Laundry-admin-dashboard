@@ -134,11 +134,11 @@ export const verifyPayment = async (req, res) => {
 
 export const savePayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.json();
-        const body = razorpay_order_id + "|" + razorpay_payment_id;
-        console.log("id==", body);
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        // const body = razorpay_order_id + "|" + razorpay_payment_id;
+        console.log("id==", razorpay_order_id, razorpay_payment_id, razorpay_signature);
 
-        const paymentDetails = await instance.payments.fetch(razorpay_payment_id);
+        const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
         console.log("Payment Details:", paymentDetails);
 
         // Handle the payment details as needed
@@ -270,3 +270,7 @@ export const updateOrderStatusById = async (req, res) => {
         });
     }
 };
+
+
+
+
