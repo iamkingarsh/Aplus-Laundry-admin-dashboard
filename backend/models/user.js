@@ -1,3 +1,4 @@
+import e from "express";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -6,24 +7,25 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     email: {
-        type: String, 
+        type: String,
         unique: true,
         required: function () {
             return ['owner', 'admin'].includes(this.role);
         },
     },
     mobileNumber: {
-        type: Number, 
+        type: Number,
         required: function () {
-            return ['customer', 'deliveryagent'].includes(this.role);
+            // return ['customer', 'deliveryagent'].includes(this.role) || email === undefined;
+            return this.email === undefined;
         },
         unique: true
     },
     address: {
-        type: String, 
+        type: String,
     },
     profileImg: {
-        type: String, 
+        type: String,
         default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
     },
     role: {
@@ -40,9 +42,9 @@ const userSchema = new mongoose.Schema({
     },
     pincode: {
         type: String,
-        required: function () {
-            return this.role === 'customer';
-        },
+        // required: function () {
+        //     return this.role === 'customer'; 
+        // },
     },
 }, {
     timestamps: true

@@ -1,14 +1,14 @@
 // serviceRoutes.js
 
 import express from 'express';
- 
+
 import {
   createOrUpdateService,
-    getAllServicesWithItems,
-    getServiceByIdWithItems,
-    deleteServiceById,
-    deleteServiceByIds,
-  } from '../controllers/service.js';
+  getAllServicesWithItems,
+  getServiceByIdWithItems,
+  deleteServiceById,
+  deleteServiceByIds,
+} from '../controllers/service.js';
 import { authenticateToken } from '../middleware/authToken.js';
 
 const serviceRouter = express.Router();
