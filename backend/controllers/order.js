@@ -155,9 +155,9 @@ export const getAllOrders = async (req, res) => {
         const orders = await Order.find()
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name')
-            .populate('customer', 'username')
-            .populate('delivery_agent', 'username')
-            .execPopulate();
+        // .populate('customer', 'fullName')
+        // .populate('delivery_agent', 'fullName')
+        // .execPopulate();
 
         return res.status(200).json({
             orders,
