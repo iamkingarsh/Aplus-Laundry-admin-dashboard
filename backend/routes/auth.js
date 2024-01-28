@@ -12,7 +12,7 @@ router.post("/signin", signin)
 router.post("/emailOtpSend", sendOTPforverification);
 router.post("/mobileOtpSend", sendOTPforMobileverification);
 
-router.post("/adminEmailOtpSend", adminAuthenticateToken, sendOTPforverification);
+router.post("/adminEmailOtpSend", sendOTPforverification);
 router.post("/emailOtpVerify", verifyotp);
 router.post("/mobileOtpVerify", verifymobileotp);
 
