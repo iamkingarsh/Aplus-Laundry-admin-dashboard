@@ -180,7 +180,7 @@ export const getOrderById = async (req, res) => {
 
         const order = await Order.findById(id)
             .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name')
+            .populate('products.id', 'product_name priceperpair category ')
         // .populate('customer', 'fullName')
         // .populate('delivery_agent', 'fullName')
         // .execPopulate();
