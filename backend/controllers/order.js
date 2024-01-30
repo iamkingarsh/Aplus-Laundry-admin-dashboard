@@ -308,9 +308,6 @@ export const updateOrderStatusById = async (req, res) => {
 
 export const createPlan = async (req, res) => {
     try {
-
-        // var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
-
         const plan = razorpay.plans.create({
             period: "weekly",
             interval: 1,
@@ -344,7 +341,7 @@ export const subscribeToPlans = async (req, res) => {
         const subscription = razorpay.subscriptions.create({
             plan_id: "plan_NUkLWwgZYRB3Pu",
             customer_notify: 1,
-            quantity: 1,
+            quantity: 2,
             total_count: 6,
             addons: [
                 {
