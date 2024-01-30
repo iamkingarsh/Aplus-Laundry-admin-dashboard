@@ -1,5 +1,6 @@
 import Order from '../models/order.js';
 import Razorpay from 'razorpay';
+import Transaction from '../models/transacation.js';
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -142,7 +143,41 @@ export const savePayment = async (req, res) => {
         console.log("Payment Details:", paymentDetails);
 
         // Handle the payment details as needed
+        // Save the payment details in your database as well
+        // For example, you may want to save payment details in a 'Payment' model
+        const transaction = new Transaction({
+            payment_id: razorpay_payment_id,
+            entity: paymentDetails.entity,
+            amount: paymentDetails.amount,
+            currency: paymentDetails.currency,
+            status: paymentDetails.status,
+            razorpay_order_id: paymentDetails.order_id,
+            method: paymentDetails.method,
+            captured: paymentDetails.captured,
+            card_id: paymentDetails.card_id,
+            bank: paymentDetails.bank,
+            wallet: paymentDetails.wallet,
+            vpa: paymentDetails.vpa,
+            fee: paymentDetails.fee,
+            tax: paymentDetails.tax,
+            error_code: paymentDetails.error_code,
+            error_description: paymentDetails.error_description,
+            acquirer_data: {
+                rrn: paymentDetails.acquirer_data.rrn,
+                upi_transaction_id: paymentDetails.acquirer_data.upi_transaction_id,
+            },
+            created_at: paymentDetails.created_at,
+            upi: {
+                vpa: paymentDetails.upi.vpa,
+            },
+
+        });
+
+        await transaction.save();
+
+
         res.status(200).json({ success: true, message: 'Payment details fetched successfully' });
+
     } catch (error) {
         console.error('Error saving payment:', error);
         res.status(500).json({ success: false, message: 'Error saving payment' });
