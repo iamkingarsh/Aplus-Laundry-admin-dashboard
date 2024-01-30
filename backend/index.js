@@ -10,6 +10,7 @@ import serviceRouter from './routes/service.js';
 import couponRouter from './routes/coupon.js';
 import appBannerRouter from './routes/appBanner.js';
 import categoryRouter from './routes/category.js';
+import transactionRouter from './routes/transaction.js';
 // const bodyParser = require('body-parser');
 
 
@@ -38,13 +39,14 @@ app.listen(process.env.PORT, () => {
 app.get("/", (req, res) => {
   res.send("home");
 });
-app.use('/auth',authRoute);
-app.use('/category',categoryRouter)
-app.use('/order',orderRouter);
+app.use('/auth', authRoute);
+app.use('/category', categoryRouter)
+app.use('/order', orderRouter);
 app.use('/product', productRouter);
 app.use('/service', serviceRouter);
 app.use('/coupon', couponRouter);
-app.use('/appBanner',appBannerRouter);
+app.use('/appBanner', appBannerRouter);
+app.use('/transaction', transactionRouter)
 
 
 
