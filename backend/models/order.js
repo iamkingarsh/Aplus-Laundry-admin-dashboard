@@ -58,6 +58,10 @@ const orderSchema = new mongoose.Schema({
   cartWeightBy: {
     type: String,
   },
+  orderDate: {
+    type: Date,
+    default: Date.now,
+  }
   // transaction: {
   //   id: {
   //     type: mongoose.Schema.Types.ObjectId,
@@ -65,6 +69,9 @@ const orderSchema = new mongoose.Schema({
   //     // required: true,
   //   },
   // },
+}, {
+  timestamps: true,
+
 });
 
 const Order = mongoose.model('Order', orderSchema);

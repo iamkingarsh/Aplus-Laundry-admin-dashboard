@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     address: {
-        type: String,
+        type: Array,
+        required: function () {
+            return this.role === 'customer';
+        },
+
     },
     profileImg: {
         type: String,
