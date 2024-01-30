@@ -18,7 +18,7 @@ couponRouter.post('/addorupdate', adminAuthenticateToken, createOrUpdateCoupon);
 couponRouter.get('/all', authenticateToken, getAllCoupons);
 
 // Get a specific coupon by its ID
-couponRouter.get('/id/:id', adminAuthenticateToken, getCouponById);
+couponRouter.get('/id/:id', authenticateToken, getCouponById);
 
 // Delete a coupon by its ID
 couponRouter.delete('/id/:id', adminAuthenticateToken, deleteCouponById);
