@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 import { Icons } from "../ui/icons"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
-import { Label } from "../ui/label"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
@@ -19,14 +18,12 @@ import { BrandName, LaundrtProducts, OrdersStatuses, Services } from "@/lib/cons
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
-// import { AllData } from "@/app/(routes)/customers/page"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import { NewCustomerForm } from "./newCustomerForm"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import Heading from "../ui/heading"
-import { set } from "date-fns"
 import { Separator } from "../ui/separator"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
@@ -175,9 +172,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
         }
         const response = await postData('/order/addorupdate', params)
-        
+
         console.log('response', response)
-        
+
         const options = {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
             amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -188,7 +185,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
                 console.log('rajooor pay', response);
-                const reply =  postData('/order/save', response)
+                const reply = postData('/order/save', response)
                 console.log(reply)
                 // alert(response.razorpay_payment_id);
                 // alert(response.razorpay_order_id);
@@ -230,7 +227,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
 
- 
+
 
 
 
@@ -238,7 +235,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
         setProductQuantity((prev) => prev + 1);
-        setSelectedItems((prev) => ({
+        setSelectedItems((prev: any) => ({
             ...prev, [value]: {
                 quantity: (prev[value]?.quantity || 0) + 1,
                 price: price || 0,
@@ -270,7 +267,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
             if (!selectedItems[value]) {
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
+                setSelectedItems((prev: any) => ({ ...prev, [value]: { quantity: 1, price: rate } }));
                 form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
 
             } else if (selectedItems[value]?.quantity === 1) {
@@ -283,7 +280,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         } else {
 
             if (!selectedItems[value]) {
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: 1, price: 0 || rate } }));
+                setSelectedItems((prev: any) => ({ ...prev, [value]: { quantity: 1, price: 0 || rate } }));
                 form.setValue("products", [...Object.keys(selectedItems).map((key) => ({ id: key, quantity: selectedItems[key].quantity })) || []]);
 
             } else if (selectedItems[value]?.quantity === 1) {
@@ -318,7 +315,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             } else if (productQuantity > 1) {
                 setProductQuantity((prev) => prev - 1);
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: rate || 0 } }));
+                setSelectedItems((prev: any) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: rate || 0 } }));
 
             } else {
                 setProductQuantity(1);
@@ -334,7 +331,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
             } else if (selectedItems[value]?.quantity > 1) {
                 setProductQuantity((prev) => prev - 1);
-                setSelectedItems((prev) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: 0 || rate } }));
+                setSelectedItems((prev: any) => ({ ...prev, [value]: { quantity: (prev[value]?.quantity || 0) - 1, price: 0 || rate } }));
 
             } else {
                 setProductQuantity(1);
@@ -710,7 +707,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
                                                                             <Button onClick={() => RemoveProductQunatity(value._id, value.priceperpair)} variant="outline">-</Button>
-                                                                            <Input value={selectedItems[value._id]?.quantity || 0} onChange={(e) => { setProductQuantity(Number(e.target.value)); setSelectedItems((prev) => ({ ...prev, [value._id]: { quantity: Number(e.target.value), price: value.price } })) }} className="w-10" defaultValue={0} type="text" min={1} max={100} />
+                                                                            <Input value={selectedItems[value._id]?.quantity || 0} onChange={(e) => { setProductQuantity(Number(e.target.value)); setSelectedItems((prev: any) => ({ ...prev, [value._id]: { quantity: Number(e.target.value), price: value.price } })) }} className="w-10" defaultValue={0} type="text" min={1} max={100} />
                                                                             {/* {selectedItems[value.title]?.quantity || 0} */}
                                                                             <Button onClick={(e) => AddProductQunatity(value._id, e, value.priceperpair)} variant="outline">+</Button>
                                                                         </div>
