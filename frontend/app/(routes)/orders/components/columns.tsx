@@ -26,7 +26,7 @@ export type OrdersColumns = {
     customer_id: string
     mobile: string
     status: "onhold" | "pending" | "picked" | "onway" | "delivered" | "cancelled"
-    order_date: string
+    order_date: Date
     payment_method: "cod" | "payment gateway"
     channel: "manual" | "Mobile App"
 }
@@ -93,6 +93,7 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                 </Button>
             )
         },
+        cell: ({ row }) => <div>{row.original.order_date}</div>,
     },
     {
         accessorKey: "status",
