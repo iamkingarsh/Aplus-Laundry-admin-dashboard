@@ -11,6 +11,7 @@ export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
             id,
+
             order_type,
             service,
             products,
@@ -44,7 +45,10 @@ export const createOrUpdateOrder = async (req, res) => {
                 order: existingOrder,
             });
         } else {
+            //generate cutsom order id of 8 digits eg AL + Year + random 4 digit number
+            const customOrderId = `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`;
             const newOrder = new Order({
+                order_id: customOrderId,
                 order_type,
                 service,
                 products,

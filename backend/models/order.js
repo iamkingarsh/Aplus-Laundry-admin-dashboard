@@ -1,6 +1,15 @@
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
+  order_id: {
+    type: String,
+    required: true,
+    minlength: 1,
+    validate: {
+      validator: (value) => value.length >= 1,
+      message: 'Please enter an order id',
+    },
+  },
   order_type: {
     type: String,
     required: true,
