@@ -67,7 +67,8 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         try {
             const response = await fetchData('/service/allwithitems')
             console.log('response', response)
-            const filteredServices = response.services.filter((service: any) => service.isSubscriptionService === true)
+            const filteredServices = response.services.filter((service: any) => service.isSubscriptionService === true).map((service: any) => { return service })
+            console.log('filteredServices', filteredServices)
             setServices(filteredServices)
             setIsLoading(false)
         } catch (error) {
@@ -169,7 +170,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                     {field.value
                                                         ? services.find(
                                                             (data: any) => data.serviceTitle === field.value
-                                                        )?.serviceTitle
+                                                        ).serviceTitle
                                                         : "Select a Service"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -188,8 +189,12 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                             value={data.serviceTitle}
                                                             key={data.serviceTitle}
 
+                                                            onSelect={() => {
+                                                                form.setValue("service", data.serviceTitle)
+                                                            }
+                                                            }
                                                         >
-                                                            {data.title}
+                                                            {data.serviceTitle}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",

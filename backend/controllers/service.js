@@ -11,7 +11,8 @@ export const createOrUpdateService = async (req, res) => {
             id,
             serviceTitle,
             laundryPerPair,
-            laundryByKG
+            laundryByKG,
+            isSubscriptionService
         } = req.body;
 
         // Check if the provided id exists in the Service collection
@@ -22,6 +23,7 @@ export const createOrUpdateService = async (req, res) => {
             existingService.serviceTitle = serviceTitle;
             existingService.laundryPerPair = laundryPerPair;
             existingService.laundryByKG = laundryByKG;
+
 
             await existingService.save();
 
@@ -34,7 +36,8 @@ export const createOrUpdateService = async (req, res) => {
             const newService = new Service({
                 serviceTitle,
                 laundryPerPair,
-                laundryByKG
+                laundryByKG,
+                isSubscriptionService
             });
             await newService.save();
 
@@ -54,23 +57,23 @@ export const createOrUpdateService = async (req, res) => {
 export const getAllServicesWithItems = async (req, res) => {
     try {
         const services = await Service.find()
-        .populate({
-          path: 'laundryPerPair.items',
-          model: Product,
-          populate: {
-            path: 'category',  // assuming category is a reference to another model
-            model: Category, // replace 'Category' with the actual model name for the category
-          },
-        })
-        .populate({
-          path: 'laundryByKG.items',
-          model: Product,
-          populate: {
-            path: 'category',  // assuming category is a reference to another model
-            model: Category, // replace 'Category' with the actual model name for the category
-          },
-        });
-      
+            .populate({
+                path: 'laundryPerPair.items',
+                model: Product,
+                populate: {
+                    path: 'category',  // assuming category is a reference to another model
+                    model: Category, // replace 'Category' with the actual model name for the category
+                },
+            })
+            .populate({
+                path: 'laundryByKG.items',
+                model: Product,
+                populate: {
+                    path: 'category',  // assuming category is a reference to another model
+                    model: Category, // replace 'Category' with the actual model name for the category
+                },
+            });
+
 
         return res.status(200).json({
             services,
@@ -88,25 +91,25 @@ export const getAllServicesWithItems = async (req, res) => {
 export const getServiceByIdWithItems = async (req, res) => {
     try {
         const {
-            id: serviceId 
+            id: serviceId
         } = req.params;
 
         const service = await Service.findById(serviceId).populate({
             path: 'laundryPerPair.items',
             model: Product,
             populate: {
-              path: 'category',  // assuming category is a reference to another model
-              model: Category, // replace 'Category' with the actual model name for the category
+                path: 'category',  // assuming category is a reference to another model
+                model: Category, // replace 'Category' with the actual model name for the category
             },
-          })
-          .populate({
-            path: 'laundryByKG.items',
-            model: Product,
-            populate: {
-              path: 'category',  // assuming category is a reference to another model
-              model: Category, // replace 'Category' with the actual model name for the category
-            },
-          }); 
+        })
+            .populate({
+                path: 'laundryByKG.items',
+                model: Product,
+                populate: {
+                    path: 'category',  // assuming category is a reference to another model
+                    model: Category, // replace 'Category' with the actual model name for the category
+                },
+            });
         if (!service) {
             return res.status(404).json({
                 message: 'Service not found',
@@ -129,10 +132,10 @@ export const getServiceByIdWithItems = async (req, res) => {
 export const deleteServiceById = async (req, res) => {
     try {
         const {
-            id: serviceId 
+            id: serviceId
         } = req.params;
 
-        console.log('serviceIdserviceIdserviceIdserviceIdserviceIdserviceIdserviceId',serviceId);   
+        console.log('serviceIdserviceIdserviceIdserviceIdserviceIdserviceIdserviceId', serviceId);
 
         const deletedService = await Service.findByIdAndDelete(serviceId);
 
@@ -159,9 +162,9 @@ export const deleteServiceById = async (req, res) => {
 
 export const deleteServiceByIds = async (req, res) => {
     try {
-        const serviceIds  = req.body;
+        const serviceIds = req.body;
 
-        console.log('serviceIds',serviceIds);
+        console.log('serviceIds', serviceIds);
 
         if (!serviceIds || !Array.isArray(serviceIds) || serviceIds.length === 0) {
             return res.status(400).json({

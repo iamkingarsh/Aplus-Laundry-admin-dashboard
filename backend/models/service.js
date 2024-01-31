@@ -42,8 +42,8 @@ const serviceSchema = new mongoose.Schema({
   },
   isSubscriptionService: {
     type: Boolean,
-    default: false,
     required: true,
+
   },
   // arrayOfrazorpaySubscriptionPlans: [
   //   {
