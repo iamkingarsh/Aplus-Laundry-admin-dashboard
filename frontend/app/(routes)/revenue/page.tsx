@@ -300,7 +300,6 @@ export default function page() {
                     bulkDeleteIdName='couponid'
                     bulkDeleteTitle='Are you sure you want to delete these Coupons?'
                     bulkDeleteDescription='This will delete the selected Coupons, and they will not be recoverable.'
-                    apiRouteForBulkDelete='/api/coupons/bulk-delete'
                     bulkDeleteToastMessage='Selected Coupons Deleted Successfully'
                     searchKey='id' columns={columns} data={TransactionData} />
 
