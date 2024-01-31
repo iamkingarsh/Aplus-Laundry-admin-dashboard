@@ -35,7 +35,7 @@ export default function Page() {
                         modal.description = 'Please select the type of service you would like to create'
                         modal.children = <div className='flex w-full  gap-2'>
                             <div className='w-1/2'>
-                                <Link href='/services/create-new?subscription=true'>
+                                <Link href='/subscription-plans/create-new/above12'>
                                     <Button
                                         onClick={() => {
                                             modal.onClose()
@@ -48,8 +48,7 @@ export default function Page() {
 
                             </div>
                             <div className='w-1/2'>
-                                <Link href='/services/create-new?subscription=false'>
-
+                                <Link href='/subscription-plans/create-new/below12'>
                                     <Button
                                         onClick={() => {
                                             modal.onClose()
