@@ -131,6 +131,61 @@ export const createPlan = async (req, res) => {
     }
 }
 
+export const getAllPlans = async (req, res) => {
+    try {
+        const plan = await razorpay.plans.all()
+        return plan
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+export const subscribeToPlans = async (req, res) => {
+    try {
+        const subscription = razorpay.subscriptions.create({
+            plan_id: "plan_NUkLWwgZYRB3Pu",
+            customer_notify: 1,
+            quantity: 2,
+            total_count: 6,
+            addons: [
+                {
+                    item: {
+                        name: "Kids",
+                        amount: 30000,
+                        currency: "INR"
+                    }
+                },
+                {
+                    item: {
+                        name: "Mens",
+                        amount: 30000,
+                        currency: "INR"
+                    }
+                },
+            ],
+            notes: {
+                key1: "value3",
+                key2: "value2"
+            }
+
+        })
+
+        return res.status(200).json({
+            message: 'Subscription Created  successfully',
+            subscription: subscription
+        });
+
+    } catch (error) {
+
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
+    }
+
+}
+
+
 
 // export const getAllSubscriptionPlans = async (req, res) => {
 //     try {
@@ -232,51 +287,6 @@ export const createPlan = async (req, res) => {
 
 
 
-
-export const subscribeToPlans = async (req, res) => {
-    try {
-        const subscription = razorpay.subscriptions.create({
-            plan_id: "plan_NUkLWwgZYRB3Pu",
-            customer_notify: 1,
-            quantity: 2,
-            total_count: 6,
-            addons: [
-                {
-                    item: {
-                        name: "Kids",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-                {
-                    item: {
-                        name: "Mens",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-            ],
-            notes: {
-                key1: "value3",
-                key2: "value2"
-            }
-
-        })
-
-        return res.status(200).json({
-            message: 'Subscription Created  successfully',
-            subscription: subscription
-        });
-
-    } catch (error) {
-
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
-        });
-    }
-
-}
 
 
 

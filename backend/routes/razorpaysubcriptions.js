@@ -4,6 +4,7 @@ import express from 'express';
 
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 import { deleteTransactionById, getAllTransactions, getTransactionsById } from '../controllers/transaction.js';
+import { getAllPlans } from '../controllers/razorpaySubscriptions.js';
 
 const razorpaySubcriptionRouter = express.Router();
 
@@ -14,7 +15,7 @@ const razorpaySubcriptionRouter = express.Router();
 razorpaySubcriptionRouter.post('/createNewPlan', adminAuthenticateToken, getAllTransactions);
 
 
-razorpaySubcriptionRouter.get('/getallPlans', authenticateToken, getAllTransactions);
+razorpaySubcriptionRouter.get('/getallPlans', authenticateToken, getAllPlans);
 
 razorpaySubcriptionRouter.get('/getPlanById/:id', authenticateToken, getTransactionsById);
 

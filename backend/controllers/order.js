@@ -319,80 +319,10 @@ export const updateOrderStatusById = async (req, res) => {
     }
 };
 
-export const createPlan = async (req, res) => {
-    try {
-        const plan = razorpay.plans.create({
-            period: "weekly",
-            interval: 1,
-            item: {
-                name: "Test plan - Weekly",
-                amount: 89900,
-                currency: "INR",
-                description: "Description for the test plan"
-            },
-            notes: {
-                notes_key_1: "Tea, Earl Grey, Hot",
-                notes_key_2: "Tea, Earl Grey… decaf."
-            }
-        })
-        return res.status(200).json({
-            message: 'Plan Created  successfully',
-            plan: plan
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
-        });
-    }
-}
 
 
 
-export const subscribeToPlans = async (req, res) => {
-    try {
-        const subscription = razorpay.subscriptions.create({
-            plan_id: "plan_NUkLWwgZYRB3Pu",
-            customer_notify: 1,
-            quantity: 2,
-            total_count: 6,
-            addons: [
-                {
-                    item: {
-                        name: "Kids",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-                {
-                    item: {
-                        name: "Mens",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-            ],
-            notes: {
-                key1: "value3",
-                key2: "value2"
-            }
 
-        })
-
-        return res.status(200).json({
-            message: 'Subscription Created  successfully',
-            subscription: subscription
-        });
-
-    } catch (error) {
-
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
-        });
-    }
-
-}
 
 
 
