@@ -57,7 +57,8 @@ const formSchema = z.object({
     laundryitems: z.object({
         laundrybykg_items: z.array(z.string()),
         laundryperpair_items: z.array(z.string()),
-    }).partial()
+    }).partial(),
+    isSubscriptionService: z.boolean()
 })
 
 
@@ -67,6 +68,9 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [LaundryProducts, setLaundryProducts] = React.useState([]) as any[]
+
+
+    const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
 
     const getData = async () => {
         setIsLoading(true)
@@ -126,7 +130,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
             laundryitems: {
                 laundrybykg_items: [],
                 laundryperpair_items: [],
-            }
+            },
+            isSubscriptionService: subscription
         },
 
     })
@@ -134,7 +139,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-    
+
         try {
             const data = {
                 serviceTitle: values.serviceTitle,
@@ -148,10 +153,10 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                     items: values.laundryitems.laundrybykg_items
                 }
             };
-    
+
             const response = await postData('/service/addorupdate', data);
             console.log('API Response:', response);
-    
+
             setIsLoading(false);
             toast.success('Item created successfully');
             // Optionally, you can redirect the user or perform other actions upon successful submission.
@@ -162,7 +167,7 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
             toast.error('Error creating Item');
         }
     }
-    
+
 
     const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
