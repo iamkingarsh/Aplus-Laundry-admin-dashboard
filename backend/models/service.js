@@ -45,6 +45,13 @@ const serviceSchema = new mongoose.Schema({
     default: false,
     required: true,
   },
+  // arrayOfrazorpaySubscriptionPlans: [
+  //   {
+  //     type: array,
+  //     required: function () {
+  //       return this.isSubscriptionService;
+  //   },
+  // ],
 });
 
 const Service = mongoose.model('Service', serviceSchema);

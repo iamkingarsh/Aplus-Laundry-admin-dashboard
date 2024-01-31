@@ -11,6 +11,7 @@ import couponRouter from './routes/coupon.js';
 import appBannerRouter from './routes/appBanner.js';
 import categoryRouter from './routes/category.js';
 import transactionRouter from './routes/transaction.js';
+import razorpaySubcriptionRouter from './routes/razorpaysubcriptions.js';
 // const bodyParser = require('body-parser');
 
 
@@ -47,6 +48,7 @@ app.use('/service', serviceRouter);
 app.use('/coupon', couponRouter);
 app.use('/appBanner', appBannerRouter);
 app.use('/transaction', transactionRouter)
+app.use('/razorpaySubscription', razorpaySubcriptionRouter)
 
 
 
