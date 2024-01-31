@@ -192,24 +192,33 @@ export const savePayment = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
-            .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name')
-        // .populate('customer', 'fullName')
-        // .populate('delivery_agent', 'fullName')
-        // .execPopulate();
-
-        return res.status(200).json({
-            orders,
-            ok: true
-        });
+        .populate('service', 'serviceTitle')
+        .populate('products.id', 'product_name')
+        .populate('customer', 'fullName mobileNumber')
+        .exec();
+  
+      const ordersWithCustomerNames = orders.map((order) => ({
+        ...order.toObject(),
+        customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
+        mobile : order.customer?.mobileNumber || 'N/A',
+        payment_method : order.payment
+      }));
+  
+      return res.status(200).json({
+        orders: ordersWithCustomerNames,
+        ok: true,
+      });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error',
-            ok: false
-        });
+      console.error(error);
+      return res.status(500).json({
+        error: 'Internal Server Error',
+        ok: false,
+      });
     }
-};
+  };
+
+  
+  
 // Get a specific order by its ID
 export const getOrderById = async (req, res) => {
     try {
