@@ -29,25 +29,9 @@ import { useRouter } from "next/navigation"
 
 
 
-interface NewServiceFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NewSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
-
-const laundrybykg_itemsSchema = z.object({
-    title: z.string().min(2, { message: "Service title is required" }),
-    laundrybykg: z.string(),
-    laundrybykgprice: z.string(),
-    laundryperpair: z.string(),
-    laundrybykg_items: z.array(z.string()),
-})
-
-const laundryperpair_itemsSchema = z.object({
-    title: z.string().min(2, { message: "Service title is required" }),
-    laundrybykg: z.string(),
-    laundrybykgprice: z.string(),
-    laundryperpair: z.string(),
-    laundryperpair_items: z.array(z.string()),
-})
 
 const formSchema = z.object({
     serviceTitle: z.string().min(2, { message: "Service title is required" }),
@@ -63,7 +47,7 @@ const formSchema = z.object({
 
 
 
-export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps) {
+export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscriptionPlanFormProps) {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false)

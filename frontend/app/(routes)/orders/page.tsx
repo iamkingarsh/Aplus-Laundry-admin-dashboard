@@ -1,3 +1,4 @@
+"use client"
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
@@ -6,8 +7,9 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { columns } from './components/columns';
+import { fetchData } from '@/axiosUtility/api';
 
 const AllOrdersData = [
     { "order_id": "#fa725", "customer_name": "Worden Croneen", "customer_id": "561a3f0e-66cb-4f5d-b2e5-a19ef30a31b4", "mobile": "266-774-3618", "status": "pending", "order_date": "3/12/2023", "payment_method": "payment gateway", "channel": "manual" },
@@ -50,26 +52,35 @@ const AllOrdersData = [
     { "order_id": "#cec0f", "customer_name": "Pet Course", "customer_id": "698b7283-2a9b-4c7e-a4a2-a73e2d0d44d3", "mobile": "213-391-1068", "status": "picked", "order_date": "11/12/2023", "payment_method": "payment gateway", "channel": "manual" },
     { "order_id": "#3913b", "customer_name": "Tamera Vassbender", "customer_id": "a5544370-6a9f-407b-bfea-7a2e16ab44ba", "mobile": "713-155-4496", "status": "picked", "order_date": "10/15/2023", "payment_method": "payment gateway", "channel": "Mobile App" },
 ] as any[]
-export default function page() {
+export default function Page() {
+    const [allOrdersData, setAllOrdersData] = useState(AllOrdersData)
 
+    const getAllOrdersData = async () => {
+        const response = await fetchData('/order/getall')
+        console.log('ytseyshdhs', response)
+        setAllOrdersData(response.orders)
+    }
 
+    useEffect(() => {
+        getAllOrdersData()
+    }, [])
     const OnHoldOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'onhold')
+        ...allOrdersData.filter((item) => item.status === 'onhold')
     ] as any[]
     const PendingOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'pending')
+        ...allOrdersData.filter((item) => item.status === 'pending')
     ] as any[]
     const PickedOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'picked')
+        ...allOrdersData.filter((item) => item.status === 'picked')
     ] as any[]
     const DeliveredOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'delivered')
+        ...allOrdersData.filter((item) => item.status === 'delivered')
     ] as any[]
     const CancelledOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'cancelled')
+        ...allOrdersData.filter((item) => item.status === 'cancelled')
     ] as any[]
     const OnWayOrderData = [
-        ...AllOrdersData.filter((item) => item.status === 'onway')
+        ...allOrdersData.filter((item) => item.status === 'onway')
     ] as any[]
 
 
@@ -103,16 +114,16 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
-                            searchKey='customer_name' columns={columns} data={AllOrdersData} />
+                            searchKey='customer_name' columns={columns} data={allOrdersData} />
                     </TabsContent>
                     <TabsContent value="on-hold">
                         <DataTable
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={OnHoldOrderData} />
                     </TabsContent>
@@ -121,7 +132,7 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={PendingOrderData} />
                     </TabsContent>
@@ -130,7 +141,7 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={PickedOrderData} />
                     </TabsContent>
@@ -139,7 +150,7 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={OnWayOrderData} />
                     </TabsContent>
@@ -148,7 +159,7 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={DeliveredOrderData} />
                     </TabsContent>
@@ -157,7 +168,7 @@ export default function page() {
                             bulkDeleteIdName='order_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected orders?'
                             bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/orders/bulk-delete'
+
                             bulkDeleteToastMessage='Selected orders deleted successfully'
                             searchKey='customer_name' columns={columns} data={CancelledOrderData} />
                     </TabsContent>

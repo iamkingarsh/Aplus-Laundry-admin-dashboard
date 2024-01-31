@@ -1,6 +1,15 @@
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
+  order_id: {
+    type: String,
+    required: true,
+    minlength: 1,
+    validate: {
+      validator: (value) => value.length >= 1,
+      message: 'Please enter an order id',
+    },
+  },
   order_type: {
     type: String,
     required: true,
@@ -60,8 +69,11 @@ const orderSchema = new mongoose.Schema({
   },
   orderDate: {
     type: Date,
-    default: Date.now,
-  }
+    default: new Date(),
+  },
+  pickupDetails: {
+    type: Object,
+  },
   // transaction: {
   //   id: {
   //     type: mongoose.Schema.Types.ObjectId,

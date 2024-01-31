@@ -30,7 +30,7 @@ const serviceSchema = new mongoose.Schema({
     price: {
       type: Number,
       required: function () {
-        return this.laundryByKG.active; 
+        return this.laundryByKG.active;
       },
     },
     items: [
@@ -40,6 +40,18 @@ const serviceSchema = new mongoose.Schema({
       },
     ],
   },
+  isSubscriptionService: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  // arrayOfrazorpaySubscriptionPlans: [
+  //   {
+  //     type: array,
+  //     required: function () {
+  //       return this.isSubscriptionService;
+  //   },
+  // ],
 });
 
 const Service = mongoose.model('Service', serviceSchema);

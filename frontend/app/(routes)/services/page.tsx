@@ -10,6 +10,10 @@ import React, { useEffect, useState } from 'react'
 import { columns } from './components/columns'
 // import { Services } from '@/lib/constants'
 import { fetchData } from '@/axiosUtility/api'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import { tr } from 'date-fns/locale'
+import { useGlobalModal } from '@/hooks/GlobalModal'
 
 export default function Page() {
     const [Services, setServices] = useState([])
@@ -60,7 +64,11 @@ export default function Page() {
             console.error('Error fetching data:', error);
         }
     }
+    const modal = useGlobalModal()
 
+    const subscribed = Services?.filter((service: any) => service.isSubscriptionService === true)
+
+    const nonsubscribed = Services?.filter((service: any) => service.isSubscriptionService === false || service.isSubscriptionService === undefined)
 
     useEffect(() => {
         getData()
@@ -72,19 +80,84 @@ export default function Page() {
                     <Heading className='leading-tight' title='Services' />
                     <p className='text-muted-foreground text-sm'>Manage Your Services</p>
                 </div>
-                <Link href={'/services/create-new'}>
-                    <Button variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
-                </Link>
+
+                <Button
+                    onClick={() => {
+
+                        modal.title = 'Select Service Type'
+                        modal.description = 'Please select the type of service you would like to create'
+                        modal.children = <div className='flex w-full  gap-2'>
+                            <div className='w-1/2'>
+                                <Link href='/services/create-new?subscription=true'>
+                                    <Button
+                                        onClick={() => {
+                                            modal.onClose()
+                                        }
+                                        }
+                                        variant="secondary" className="w-full flex flex-col gap-3 h-40" >
+                                        <ServerIcon className='w-8 mr-2' />
+                                        Create Subscription Service</Button>
+                                </Link>
+
+                            </div>
+                            <div className='w-1/2'>
+                                <Link href='/services/create-new?subscription=false'>
+
+                                    <Button
+                                        onClick={() => {
+                                            modal.onClose()
+                                        }
+                                        }
+                                        variant="secondary" className="w-full flex flex-col gap-3 h-40" >
+                                        <ServerIcon className='w-8 mr-2' />
+                                        Create Non Subscription Service</Button>
+                                </Link>
+                            </div>
+                        </div>
+                        modal.onOpen()
+
+
+                    }}
+                    variant='default'>Create New <PlusIcon className='w-4 ml-2' /></Button>
+
             </div>
             <Separator orientation='horizontal' />
             <div className="container mx-auto py-10">
-                <DataTable
-                    deleteRoute='/service/ids'
-                    bulkDeleteIdName='service_id'
-                    bulkDeleteTitle='Are you sure you want to delete the selected services?'
-                    bulkDeleteDescription='This will delete the selected services, and they will not be recoverable.'
-                    bulkDeleteToastMessage='Selected services deleted successfully'
-                    searchKey='title' columns={columns} data={Services as any} />
+                <Tabs defaultValue="all" className="w-full">
+                    <TabsList className='gap-3'>
+                        <TabsTrigger className='gap-2' value="all">All <Badge className='text-bg-primary-foreground ' variant="outline">{Services?.length}</Badge> </TabsTrigger>
+                        <TabsTrigger className='gap-2' value="subscribed">Subscription Services <Badge className='text-bg-primary-foreground' variant="outline"> {subscribed?.length}</Badge></TabsTrigger>
+                        <TabsTrigger className='gap-2' value="non-subscribed">Regular Services <Badge className='text-bg-primary-foreground' variant="outline">{nonsubscribed?.length}</Badge> </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="all">
+                        <DataTable
+                            bulkDeleteIdName='id'
+                            bulkDeleteTitle='Are you sure you want to delete these customers?'
+                            bulkDeleteDescription='This will delete the selected customers, and they will not be recoverable.'
+
+                            bulkDeleteToastMessage='Selected Customers Deleted Successfully'
+                            searchKey='email' columns={columns} data={Services} />
+                    </TabsContent>
+                    <TabsContent value="subscribed">
+                        <DataTable
+                            deleteRoute='/service/ids'
+                            bulkDeleteIdName='service_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected services?'
+                            bulkDeleteDescription='This will delete the selected services, and they will not be recoverable.'
+                            bulkDeleteToastMessage='Selected services deleted successfully'
+                            searchKey='title' columns={columns} data={subscribed as any} />
+                    </TabsContent>
+                    <TabsContent value="non-subscribed">
+                        <DataTable
+                            deleteRoute='/service/ids'
+                            bulkDeleteIdName='service_id'
+                            bulkDeleteTitle='Are you sure you want to delete the selected services?'
+                            bulkDeleteDescription='This will delete the selected services, and they will not be recoverable.'
+                            bulkDeleteToastMessage='Selected services deleted successfully'
+                            searchKey='title' columns={columns} data={nonsubscribed as any} />
+                    </TabsContent>
+                </Tabs>
+
             </div>
         </div>
     )
