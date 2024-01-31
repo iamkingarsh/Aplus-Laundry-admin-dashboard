@@ -72,6 +72,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
 
     const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
 
+    console.log('subscription', subscription)
+
     const getData = async () => {
         setIsLoading(true)
         try {
@@ -151,7 +153,8 @@ export function NewServiceForm({ className, gap, ...props }: NewServiceFormProps
                     active: values.laundrybykg === "Activated",
                     price: values.laundrybykgprice ? parseFloat(values.laundrybykgprice) : 0,
                     items: values.laundryitems.laundrybykg_items
-                }
+                },
+                isSubscriptionService: subscription
             };
 
             const response = await postData('/service/addorupdate', data);
