@@ -1,6 +1,33 @@
 import e from "express";
 import mongoose from "mongoose";
 
+
+const addressSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    location: {
+        type: String,
+        required: true,
+    },
+    coordinates: {
+        type: {
+            type: String,
+            default: "Point", 
+        },
+        coordinates: {
+            type: [Number],
+            required: true,
+        },
+    },
+    city: {
+        type: String,  
+        required: true,
+    },
+});
+
+
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -22,11 +49,10 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     address: {
-        type: Array,
+        type: [addressSchema], 
         required: function () {
             return this.role === 'customer';
         },
-
     },
     profileImg: {
         type: String,
@@ -54,6 +80,11 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 export default User;
+
+ 
+
+
+ 
