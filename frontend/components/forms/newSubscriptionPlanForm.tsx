@@ -41,10 +41,10 @@ const formSchema = z.object({
     plan_description: z.string().min(3, { message: "Plan description must be at least 3 characters long" }),
     period: z.enum(["daily", "weekly", "monthly", "quarterly", "yearly"]),
 
-    interval: z.number().min(1, { message: "Interval must be at least 1" }),
+    interval: z.string().min(1, { message: "Interval must be at least 1" }),
     item: z.object({
         name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
-        amount: z.number().min(1, { message: "Item price must be at least 1" }),
+        amount: z.string().min(1, { message: "Item price must be at least 1" }),
         currency: z.string().min(3, { message: "Item currency must be at least 3 characters long" }),
         description: z.string().min(3, { message: "Item description must be at least 3 characters long" }),
     }),
@@ -78,13 +78,8 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
 
 
-
-
     React.useEffect(() => {
         getServices()
-
-
-
     }, [])
 
 
@@ -94,10 +89,10 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         defaultValues: {
             service: "",
             period: "monthly",
-            interval: 1,
+            interval: '1',
             item: {
                 name: "",
-                amount: 0,
+                amount: '0',
                 currency: "INR",
                 description: "",
             },
@@ -109,33 +104,36 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
+        console.log('values', values)
+        // try {
 
-        try {
-            // const data = {
-            //     serviceTitle: values.serviceTitle,
-            //     laundryPerPair: {
-            //         active: values.laundryperpair === "Activated",
-            //         items: values.laundryitems.laundryperpair_items
-            //     },
-            //     laundryByKG: {
-            //         active: values.laundrybykg === "Activated",
-            //         price: values.laundrybykgprice ? parseFloat(values.laundrybykgprice) : 0,
-            //         items: values.laundryitems.laundrybykg_items
-            //     }
-            // };
 
-            // const response = await postData('/service/addorupdate', data);
-            // console.log('API Response:', response);
+        //     const data = {
+        //         period: values.period,
+        //         interval: values.interval,
+        //         item: {
+        //             name: values.item.name,
+        //             amount: values.item.amount,
+        //             currency: values.item.currency,
+        //             description: values.item.description,
+        //         },
 
-            setIsLoading(false);
-            toast.success('Item created successfully');
-            // Optionally, you can redirect the user or perform other actions upon successful submission.
-            router.push('/services');
-        } catch (error) {
-            console.error('Error creating Item:', error);
-            setIsLoading(false);
-            toast.error('Error creating Item');
-        }
+        //     }
+        //     console.log('data', data)
+        //     const response = await postData('/razorpaySubscription/createNewPlan', values);
+
+        //     console.log('API Response:', response);
+
+        //     setIsLoading(false);
+        //     toast.success('Item created successfully');
+        //     // Optionally, you can redirect the user or perform other actions upon successful submission.
+        //     router.push('/services');
+        // } catch (error) {
+        //     console.error('Error creating Item:', error);
+        //     console.log('error', error)
+        //     setIsLoading(false);
+        //     toast.error('Error creating Item');
+        // }
     }
 
 
@@ -307,7 +305,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                     <FormLabel htmlFor="interval">Interval</FormLabel>
                                     <FormControl>
                                         <Input
-                                            type="number"
+                                            type="text"
                                             placeholder="eg. 1"
                                             id="interval"  {...field} />
                                     </FormControl>
@@ -320,10 +318,10 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="plan_name">Plan Name</FormLabel>
+                                    <FormLabel htmlFor="plan_name">Plan Amount</FormLabel>
                                     <FormControl>
                                         <Input
-                                            type="number"
+                                            type="text"
                                             placeholder="eg. 599"
                                             id="plan_name"  {...field} />
                                     </FormControl>
@@ -352,18 +350,18 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                             </FormItem>
                         )}
                     />
-                    <div className='' >
 
 
-                        <Button type="submit" className="w-fit" disabled={isLoading}>
-                            {isLoading && (
-                                <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
-                            )}
-                            Create
-                        </Button>
+
+                    <Button className="w-fit" disabled={isLoading}>
+                        {isLoading && (
+                            <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
+                        )}
+                        Create
+                    </Button>
 
 
-                    </div>
+
 
                 </form>
             </Form>

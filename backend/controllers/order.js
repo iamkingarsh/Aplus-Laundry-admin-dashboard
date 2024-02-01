@@ -180,7 +180,7 @@ export const savePayment = async (req, res) => {
         await transaction.save();
 
 
-        res.status(200).json({ success: true, message: 'Payment details fetched successfully' });
+        res.status(200).json({ success: true, message: 'Payment details saved successfully' });
 
     } catch (error) {
         console.error('Error saving payment:', error);
@@ -192,33 +192,33 @@ export const savePayment = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
-        .populate('service', 'serviceTitle')
-        .populate('products.id', 'product_name')
-        .populate('customer', 'fullName mobileNumber')
-        .exec();
-  
-      const ordersWithCustomerNames = orders.map((order) => ({
-        ...order.toObject(),
-        customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
-        mobile : order.customer?.mobileNumber || 'N/A',
-        payment_method : order.payment
-      }));
-  
-      return res.status(200).json({
-        orders: ordersWithCustomerNames,
-        ok: true,
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        error: 'Internal Server Error',
-        ok: false,
-      });
-    }
-  };
+            .populate('service', 'serviceTitle')
+            .populate('products.id', 'product_name')
+            .populate('customer', 'fullName mobileNumber')
+            .exec();
 
-  
-  
+        const ordersWithCustomerNames = orders.map((order) => ({
+            ...order.toObject(),
+            customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
+            mobile: order.customer?.mobileNumber || 'N/A',
+            payment_method: order.payment
+        }));
+
+        return res.status(200).json({
+            orders: ordersWithCustomerNames,
+            ok: true,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+            ok: false,
+        });
+    }
+};
+
+
+
 // Get a specific order by its ID
 export const getOrderById = async (req, res) => {
     try {
@@ -229,6 +229,8 @@ export const getOrderById = async (req, res) => {
         const order = await Order.findById(id)
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name priceperpair category ')
+            .populate('customer', 'fullName mobileNumber')
+            .exec();
         // .populate('customer', 'fullName')
         // .populate('delivery_agent', 'fullName')
         // .execPopulate();
@@ -319,80 +321,10 @@ export const updateOrderStatusById = async (req, res) => {
     }
 };
 
-export const createPlan = async (req, res) => {
-    try {
-        const plan = razorpay.plans.create({
-            period: "weekly",
-            interval: 1,
-            item: {
-                name: "Test plan - Weekly",
-                amount: 89900,
-                currency: "INR",
-                description: "Description for the test plan"
-            },
-            notes: {
-                notes_key_1: "Tea, Earl Grey, Hot",
-                notes_key_2: "Tea, Earl Grey… decaf."
-            }
-        })
-        return res.status(200).json({
-            message: 'Plan Created  successfully',
-            plan: plan
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
-        });
-    }
-}
 
 
 
-export const subscribeToPlans = async (req, res) => {
-    try {
-        const subscription = razorpay.subscriptions.create({
-            plan_id: "plan_NUkLWwgZYRB3Pu",
-            customer_notify: 1,
-            quantity: 2,
-            total_count: 6,
-            addons: [
-                {
-                    item: {
-                        name: "Kids",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-                {
-                    item: {
-                        name: "Mens",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-            ],
-            notes: {
-                key1: "value3",
-                key2: "value2"
-            }
 
-        })
-
-        return res.status(200).json({
-            message: 'Subscription Created  successfully',
-            subscription: subscription
-        });
-
-    } catch (error) {
-
-        console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error'
-        });
-    }
-
-}
 
 
 

@@ -112,7 +112,12 @@ export const createPlan = async (req, res) => {
         const plan = razorpay.plans.create({
             period: period,
             interval: interval,
-            item: item,
+            item: {
+                name: item.name,
+                amount: item.amount,
+                currency: "INR",
+                description: item.description
+            },
             notes: {
                 notes_key_1: "Laundry, Dry Cleaning, Ironing",
                 notes_key_2: "Laundry, Dry Cleaning, Ironing"
@@ -130,6 +135,23 @@ export const createPlan = async (req, res) => {
         });
     }
 }
+
+export const getAllPlans = async (req, res) => {
+    try {
+        const plans = await razorpay.plans.all();
+
+        return res.status(200).json({
+            plans,
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+            ok: false
+        });
+    }
+};
 
 
 // export const getAllSubscriptionPlans = async (req, res) => {
