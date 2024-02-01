@@ -25,6 +25,8 @@ const transactionSchema = new mongoose.Schema({
     upi: {
         vpa: { type: String }
     }
+}, {
+    timestamps: true
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

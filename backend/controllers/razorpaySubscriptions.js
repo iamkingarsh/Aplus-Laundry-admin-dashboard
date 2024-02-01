@@ -112,7 +112,12 @@ export const createPlan = async (req, res) => {
         const plan = razorpay.plans.create({
             period: period,
             interval: interval,
-            item: item,
+            item: {
+                name: item.name,
+                amount: item.amount,
+                currency: "INR",
+                description: item.description
+            },
             notes: {
                 notes_key_1: "Laundry, Dry Cleaning, Ironing",
                 notes_key_2: "Laundry, Dry Cleaning, Ironing"
@@ -133,57 +138,21 @@ export const createPlan = async (req, res) => {
 
 export const getAllPlans = async (req, res) => {
     try {
-        const plan = await razorpay.plans.all()
-        return plan
-    } catch (err) {
-        console.error(err);
-    }
-}
 
-export const subscribeToPlans = async (req, res) => {
-    try {
-        const subscription = razorpay.subscriptions.create({
-            plan_id: "plan_NUkLWwgZYRB3Pu",
-            customer_notify: 1,
-            quantity: 2,
-            total_count: 6,
-            addons: [
-                {
-                    item: {
-                        name: "Kids",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-                {
-                    item: {
-                        name: "Mens",
-                        amount: 30000,
-                        currency: "INR"
-                    }
-                },
-            ],
-            notes: {
-                key1: "value3",
-                key2: "value2"
-            }
-
-        })
+        const plans = await razorpay.plans.all();
 
         return res.status(200).json({
-            message: 'Subscription Created  successfully',
-            subscription: subscription
+            plans,
+            ok: true
         });
-
     } catch (error) {
-
         console.error(error);
         return res.status(500).json({
-            error: 'Internal Server Error'
+            error: 'Internal Server Error',
+            ok: false
         });
     }
-
-}
+};
 
 
 

@@ -180,7 +180,7 @@ export const savePayment = async (req, res) => {
         await transaction.save();
 
 
-        res.status(200).json({ success: true, message: 'Payment details fetched successfully' });
+        res.status(200).json({ success: true, message: 'Payment details saved successfully' });
 
     } catch (error) {
         console.error('Error saving payment:', error);
@@ -192,33 +192,33 @@ export const savePayment = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
-        .populate('service', 'serviceTitle')
-        .populate('products.id', 'product_name')
-        .populate('customer', 'fullName mobileNumber')
-        .exec();
-  
-      const ordersWithCustomerNames = orders.map((order) => ({
-        ...order.toObject(),
-        customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
-        mobile : order.customer?.mobileNumber || 'N/A',
-        payment_method : order.payment
-      }));
-  
-      return res.status(200).json({
-        orders: ordersWithCustomerNames,
-        ok: true,
-      });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        error: 'Internal Server Error',
-        ok: false,
-      });
-    }
-  };
+            .populate('service', 'serviceTitle')
+            .populate('products.id', 'product_name')
+            .populate('customer', 'fullName mobileNumber')
+            .exec();
 
-  
-  
+        const ordersWithCustomerNames = orders.map((order) => ({
+            ...order.toObject(),
+            customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
+            mobile: order.customer?.mobileNumber || 'N/A',
+            payment_method: order.payment
+        }));
+
+        return res.status(200).json({
+            orders: ordersWithCustomerNames,
+            ok: true,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+            ok: false,
+        });
+    }
+};
+
+
+
 // Get a specific order by its ID
 export const getOrderById = async (req, res) => {
     try {
@@ -229,6 +229,8 @@ export const getOrderById = async (req, res) => {
         const order = await Order.findById(id)
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name priceperpair category ')
+            .populate('customer', 'fullName mobileNumber')
+            .exec();
         // .populate('customer', 'fullName')
         // .populate('delivery_agent', 'fullName')
         // .execPopulate();
