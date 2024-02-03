@@ -812,7 +812,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                         <Heading className='leading-tight' title={`₹${cartTotal}`} />
                                     </div>
                                     <FormMessage />
-
                                 </FormItem>
                             )}
                         />
