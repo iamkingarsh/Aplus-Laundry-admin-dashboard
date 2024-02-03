@@ -103,11 +103,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log('Form values:', values);
+
         setIsLoading(true);
         console.log('values', values)
         // try {
-
-
         //     const data = {
         //         period: values.period,
         //         interval: values.interval,
@@ -136,7 +136,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         // }
     }
 
-
+  
 
 
     return (
@@ -145,7 +145,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
             <Form {...form} >
 
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" grid grid-cols-1 gap-3">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-3">
                     <div className={`grid grid-cols-${gap} gap-3`}>
                         {/* <div className={`grid grid-cols-2 gap-3`}> */}
                         <FormField
@@ -353,12 +353,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
 
 
-                    <Button className="w-fit" disabled={isLoading}>
-                        {isLoading && (
-                            <Icons.spinner className="mr-2 h-4  w-4 animate-spin" />
-                        )}
-                        Create
-                    </Button>
+<Button type="submit" className="w-fit" disabled={isLoading} onSubmit={onSubmit} >
+    {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+    Create
+</Button>
+
 
 
 
