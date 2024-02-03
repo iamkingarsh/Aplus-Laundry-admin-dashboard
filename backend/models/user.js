@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 
 
 const addressSchema = new mongoose.Schema({
-    title: {
+    addressType: {
         type: String,
-        required: true,
+        unique: true
+
     },
     location: {
         type: String,
@@ -19,11 +20,12 @@ const addressSchema = new mongoose.Schema({
         coordinates: {
             type: [Number],
             required: true,
+        },},
+      pincode: {
+        type: String,
+        required: function () {
+            return this.role === 'customer'; 
         },
-    },
-    city: {
-        type: String,  
-        required: true,
     },
 });
 
@@ -69,13 +71,7 @@ const userSchema = new mongoose.Schema({
             return this.role === 'customer';
         },
         enum: ['subscriber', 'nonsubscriber'],
-    },
-    pincode: {
-        type: String,
-        // required: function () {
-        //     return this.role === 'customer'; 
-        // },
-    },
+    }
 }, {
     timestamps: true
 });
