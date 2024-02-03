@@ -82,8 +82,6 @@ export const register = async (req, res, next) => {
   }
 };
 
-
-
 export const signin = async (req, res, next) => {
   const {
     email
@@ -181,8 +179,6 @@ export const sendOTPforverification = async (req, res) => {
   }
 };
 
-
-
 export const sendOTPforMobileverification = async (req, res) => {
   try {
     let user = req.body;
@@ -240,7 +236,6 @@ export const sendOTPforMobileverification = async (req, res) => {
     });
   }
 };
-
 
 export const verifyotp = async (req, res) => {
   try {
@@ -502,7 +497,6 @@ export const deletebyid = async (req, res, next) => {
   }
 };
 
-
 export const getUserById = async (req, res, next) => {
   try {
     const userId = req.params.id;
@@ -522,8 +516,6 @@ export const getUserById = async (req, res, next) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 
 export const getCurrentUserById = async (req, res, next) => {
   try {
@@ -582,3 +574,76 @@ export const getCurrentUser = async (req, res, next) => {
     return res.status(403).json({ message: 'Forbidden' });
   }
 };
+
+export const addOrUpdateAddress = async (req, res) => {
+  try {
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+
+    const userId = decodedToken.id;  
+
+    const { addressId, addressType, location, coordinates, city, pincode } = req.body;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Check for unique addressType within user's addresses
+    const isAddressTypeUnique = user.address.every(addr => addr.addressType !== addressType);
+
+    if (!isAddressTypeUnique) {
+      return res.status(400).json({ success: false, message: 'AddressType must be unique for the user' });
+    }
+
+    const existingAddress = user.address.id(addressId);
+    
+    if (existingAddress) {
+      // Update only specific fields (e.g., location, coordinates)
+      existingAddress.location = location;
+      existingAddress.coordinates = coordinates;
+      console.log("Address updated");
+    } else {
+      // Add a new address
+      user.address.push({ addressType, location, coordinates, city, pincode });
+      console.log("New address added");
+    }
+
+    await user.save();
+
+    return res.status(200).json({ success: true, message: 'Address added/updated successfully', data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+export const deleteAddress = async (req, res) => {
+  try {
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+
+    const userId = decodedToken.id;  
+    const { addressId } = req.params;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.address.pull(addressId);
+
+    await user.save();
+
+    return res.status(200).json({ success: true, message: 'Address deleted successfully', data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
