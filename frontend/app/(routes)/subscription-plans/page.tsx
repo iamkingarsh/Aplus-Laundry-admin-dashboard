@@ -9,13 +9,16 @@ import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGlobalModal } from '@/hooks/GlobalModal';
+import { BrandName } from '@/lib/constants';
 import { DownloadIcon, Plus, PlusIcon, ServerIcon } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
+import useRazorpay from 'react-razorpay';
 // import { columns } from './components/columns';
 
 
 export default function Page() {
+    const [Razorpay] = useRazorpay();
 
 
     const modal = useGlobalModal()
@@ -26,7 +29,6 @@ export default function Page() {
             const res = await fetchData('/razorpaySubscription/getallPlans')
             const plans = res.plans.items
             setAvailablePlans(plans)
-
         } catch (error) {
 
         }
@@ -39,6 +41,62 @@ export default function Page() {
         , [])
 
     console.log(availablePlans)
+
+    const handlePayment = (id: any) => {
+        const data = {
+            plan_id: id,
+            quantity: 2,
+            total_count: 12,
+
+        }
+        const response = fetchData('/razorpaySubscription/createSubscriptionCheckout', data) as any
+        console.log(response)
+        const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+            amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            currency: "INR",
+            name: BrandName,
+            description: "Test Transaction",
+            image: "https://example.com/your_logo",
+            subscription_id: response?.data?.id,
+            redirect: true,
+            recurring: true,
+            handler: function (response: any) {
+                // console.log('rajooor pay', response);
+                // const reply = postData('/order/save', response)
+                // console.log(reply)
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);
+                // instance.payments.fetch(paymentId)
+            },
+            // prefill: {
+            //     name: CustomerData?.fullName,
+            //     email: CustomerData?.email,
+            //     contact: CustomerData?.mobileNumber,
+            // },
+            notes: {
+                address: "Razorpay Corporate Office",
+            },
+            theme: {
+                color: "#2E3190",
+                // backdrop_color: "#2E3190"
+            },
+            modal: {
+                ondismiss: function () {
+                    alert("dismissed");
+                },
+                animation: "slide",
+            },
+            // callback_url: 'https://example.com/your_redirect_url',
+
+
+        } as any;
+
+        const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
+        rzp1?.open()
+
+    }
 
 
     return (
@@ -105,7 +163,7 @@ export default function Page() {
                 <Separator className='my-6' orientation='horizontal' />
                 <div className='grid grid-cols-2 gap-2'>
                     {availablePlans.map((plan: any, index: any) => (
-                        <Card key={index}>
+                        <Card onClick={() => handlePayment(plan.id)} key={index}>
                             <CardHeader>
                                 <div className="flex justify-between items-center">
                                     <Heading className='leading-tight text-xl' title={plan?.item?.name} />
