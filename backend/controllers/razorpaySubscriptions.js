@@ -52,57 +52,57 @@ export const verifyPayment = async (req, res) => {
     );
 };
 
-export const savePayment = async (req, res) => {
-    try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-            req.body;
-        // const body = razorpay_order_id + "|" + razorpay_payment_id;
-        console.log(
-            "id==",
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
-        );
+// export const savePayment = async (req, res) => {
+//     try {
+//         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+//             req.body;
+//         // const body = razorpay_order_id + "|" + razorpay_payment_id;
+//         console.log(
+//             "id==",
+//             razorpay_order_id,
+//             razorpay_payment_id,
+//             razorpay_signature
+//         );
 
-        const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
-        console.log("Payment Details:", paymentDetails); 
-        const transaction = new Transaction({
-            payment_id: razorpay_payment_id,
-            entity: paymentDetails.entity,
-            amount: paymentDetails.amount,
-            currency: paymentDetails.currency,
-            status: paymentDetails.status,
-            razorpay_order_id: paymentDetails.order_id,
-            method: paymentDetails.method,
-            captured: paymentDetails.captured,
-            card_id: paymentDetails.card_id,
-            bank: paymentDetails.bank,
-            wallet: paymentDetails.wallet,
-            vpa: paymentDetails.vpa,
-            fee: paymentDetails.fee,
-            tax: paymentDetails.tax,
-            error_code: paymentDetails.error_code,
-            error_description: paymentDetails.error_description,
-            acquirer_data: {
-                rrn: paymentDetails.acquirer_data.rrn,
-                upi_transaction_id: paymentDetails.acquirer_data.upi_transaction_id,
-            },
-            created_at: paymentDetails.created_at,
-            upi: {
-                vpa: paymentDetails.upi.vpa,
-            },
-        });
+//         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
+//         console.log("Payment Details:", paymentDetails); 
+//         const transaction = new Transaction({
+//             payment_id: razorpay_payment_id,
+//             entity: paymentDetails.entity,
+//             amount: paymentDetails.amount,
+//             currency: paymentDetails.currency,
+//             status: paymentDetails.status,
+//             razorpay_order_id: paymentDetails.order_id,
+//             method: paymentDetails.method,
+//             captured: paymentDetails.captured,
+//             card_id: paymentDetails.card_id,
+//             bank: paymentDetails.bank,
+//             wallet: paymentDetails.wallet,
+//             vpa: paymentDetails.vpa,
+//             fee: paymentDetails.fee,
+//             tax: paymentDetails.tax,
+//             error_code: paymentDetails.error_code,
+//             error_description: paymentDetails.error_description,
+//             acquirer_data: {
+//                 rrn: paymentDetails.acquirer_data.rrn,
+//                 upi_transaction_id: paymentDetails.acquirer_data.upi_transaction_id,
+//             },
+//             created_at: paymentDetails.created_at,
+//             upi: {
+//                 vpa: paymentDetails.upi.vpa,
+//             },
+//         });
 
-        await transaction.save();
+//         await transaction.save();
 
-        res
-            .status(200)
-            .json({ success: true, message: "Payment details fetched successfully" });
-    } catch (error) {
-        console.error("Error saving payment:", error);
-        res.status(500).json({ success: false, message: "Error saving payment" });
-    }
-};
+//         res
+//             .status(200)
+//             .json({ success: true, message: "Payment details fetched successfully" });
+//     } catch (error) {
+//         console.error("Error saving payment:", error);
+//         res.status(500).json({ success: false, message: "Error saving payment" });
+//     }
+// };
 
 export const createPlan = async (req, res) => {
     const { period, interval, item, service_id } = req.body;
@@ -247,6 +247,7 @@ export const createSubscriptionCheckout = async (req, res) => {
             addonQuantity,
             total_count,
             customer_id,
+            service_id
         } = req.body;
         console.log("req.body", req.body);
 
@@ -259,7 +260,7 @@ export const createSubscriptionCheckout = async (req, res) => {
             customer_id,
             notes: {
                 customer_id,
-                key2: "value2",
+                service_id
             },
         };
         // Create subscription using Razorpay instance
@@ -287,5 +288,60 @@ export const createSubscriptionCheckout = async (req, res) => {
         return res
             .status(500)
             .json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
+ 
+
+export const verifySubscriptionPayment = async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
+
+        const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
+        console.log("Payment Details:", paymentDetails);
+
+        const transaction = new Transaction({
+            payment_id: razorpay_payment_id,
+            entity: paymentDetails.entity,
+            amount: paymentDetails.amount,
+            currency: paymentDetails.currency,
+            status: paymentDetails.status,
+            razorpay_order_id: paymentDetails.order_id,
+            method: paymentDetails.method,
+            captured: paymentDetails.captured,
+            card_id: paymentDetails.card_id,
+            bank: paymentDetails.bank,
+            wallet: paymentDetails.wallet,
+            vpa: paymentDetails.vpa,
+            fee: paymentDetails.fee,
+            tax: paymentDetails.tax,
+            error_code: paymentDetails.error_code,
+            error_description: paymentDetails.error_description,
+            acquirer_data: {
+                rrn: paymentDetails.acquirer_data.rrn,
+                upi_transaction_id: paymentDetails.acquirer_data.upi_transaction_id,
+            },
+            created_at: paymentDetails.created_at,
+            upi: {
+                vpa: paymentDetails.upi.vpa,
+            },
+
+        });
+
+        const savedTransaction = await transaction.save();
+
+        // Update the corresponding order document with the transaction ID
+        await Order.findOneAndUpdate(
+            { _id: orderid },
+            { $set: { transaction_id: savedTransaction._id } },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, message: 'Payment details saved successfully' });
+
+    } catch (error) {
+        console.error('Error saving payment:', error);
+        res.status(500).json({ success: false, message: 'Error saving payment' });
     }
 };
