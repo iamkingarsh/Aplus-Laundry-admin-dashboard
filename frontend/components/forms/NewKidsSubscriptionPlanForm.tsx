@@ -31,7 +31,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 
 
 
-interface NewSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NewKidsSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
@@ -53,7 +53,7 @@ const formSchema = z.object({
 
 
 
-export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscriptionPlanFormProps) {
+export function NewKidsSubscriptionPlanForm({ className, gap, ...props }: NewKidsSubscriptionPlanFormProps) {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
@@ -333,33 +333,31 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
 
 
+
+                        <FormField
+                            name="item.description"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="plan_name">Plan Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+
+                                            placeholder="eg. Basic Plan"
+                                            id="plan_name"  {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <Button type="submit" className="w-fit" disabled={isLoading} >
+                            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                            Create
+                        </Button>
+
+
                     </div>
-                    <FormField
-                        name="item.description"
-                        control={form.control}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="plan_name">Plan Description</FormLabel>
-                                <FormControl>
-                                    <Textarea
-
-                                        placeholder="eg. Basic Plan"
-                                        id="plan_name"  {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-
-
-                    <Button type="submit" className="w-fit" disabled={isLoading} >
-                        {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                        Create
-                    </Button>
-
-
-
 
 
                 </form>
