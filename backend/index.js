@@ -51,7 +51,7 @@ app.use('/coupon', couponRouter);
 app.use('/appBanner', appBannerRouter);
 app.use('/transaction', transactionRouter)
 app.use('/razorpaySubscription', razorpaySubcriptionRouter)   
-// app.use('/below12', below12)   
+app.use('/below12', below12)   
 
 
 
