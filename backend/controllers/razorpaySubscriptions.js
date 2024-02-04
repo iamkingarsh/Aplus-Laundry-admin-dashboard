@@ -138,7 +138,7 @@ export const createPlan = async (req, res) => {
 export const getAllPlans = async (req, res) => {
     try {
         const plans = await razorpay.plans.all();
-
+console.log('plansplansplansplansplansplansplansplansplans',plans)
         const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
             const serviceId = plan.notes.service_id;
             const serviceData = await Service.findById(serviceId);
@@ -163,6 +163,30 @@ export const getAllPlans = async (req, res) => {
         });
     }
 };
+
+
+export const deletePlan = async (req, res) => {
+    try {
+      const { id } = req.params;  
+  
+      if (!id) {
+        return res.status(400).json({ success: false, message: 'Plan ID is required' });
+      }
+  
+      const deletedPlan = await razorpay.plans.delete(id);
+  
+      return res.status(200).json({
+        success: true,
+        message: 'Plan deleted successfully',
+        data: deletedPlan,
+      });
+    } catch (error) {
+      console.error('Error deleting plan:', error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  };
+
+  
 
 // export const getAllSubscriptionPlans = async (req, res) => {
 //     try {
