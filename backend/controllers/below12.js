@@ -79,7 +79,6 @@ export const deleteMultipleBelow12ByIds = async (req, res) => {
   export const getAllBelow12Populated = async (req, res) => {
     try {
       const below12List = await Below12.find().populate('service');
-      
       res.status(200).json({ success: true, data: below12List });
     } catch (error) {
       console.error(error);
