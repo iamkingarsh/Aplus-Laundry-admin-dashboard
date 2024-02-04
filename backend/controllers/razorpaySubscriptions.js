@@ -136,11 +136,14 @@ export const createPlan = async (req, res) => {
     }
 }
 
+
+
+
 export const getAllPlans = async (req, res) => {
     try {
 
         const plans = await razorpay.plans.all();
-
+console.log('plansplans',plans)
         return res.status(200).json({
             plans,
             ok: true
@@ -153,7 +156,6 @@ export const getAllPlans = async (req, res) => {
         });
     }
 };
-
 
 
 // export const getAllSubscriptionPlans = async (req, res) => {
@@ -184,11 +186,6 @@ export const getAllPlans = async (req, res) => {
 //         const {
 //             id
 //         } = req.params;
-
-
-
-
-
 //         return res.status(200).json({
 
 //             ok: true
@@ -235,12 +232,6 @@ export const getAllPlans = async (req, res) => {
 //         const {
 //             status
 //         } = req.body;
-
-
-
-
-
-
 //         return res.status(200).json({
 //             message: 'Order status updated successfully',
 //             order: updatedOrder
@@ -254,6 +245,79 @@ export const getAllPlans = async (req, res) => {
 // };
 
 
+
+export const createSubscriptionCheckout = async (req, res) => {
+    try {
+      // Validate the request body
+    //   const errors = validationResult(req);
+    //   if (!errors.isEmpty()) {
+    //     return res.status(400).json({ success: false, errors: errors.array() });
+    //   }
+  
+      const { plan_id, quantity, item, addonQuantity,total_count } = req.body;
+      console.log('req.body',req.body)
+  
+      // Create subscription payload
+      const subscriptionPayload = {
+        plan_id,
+        quantity,
+        total_count,
+        // addons: [
+        //   {
+        //     item: item,
+        //     quantity: addonQuantity
+        //   }
+        // ]
+        addons: [
+            {
+              item: {
+                name: "Delivery charges",
+                amount: 10000,
+                currency: "INR"
+              }
+            },
+            {
+                item: {
+                  name: "Delivery charges",
+                  amount: 10000,
+                  currency: "INR"
+                }
+              },
+              {
+                item: {
+                  name: "Delivery charges",
+                  amount: 10000,
+                  currency: "INR"
+                }
+              },
+              {
+                item: {
+                  name: "Delivery charges",
+                  amount: 10000,
+                  currency: "INR"
+                }
+              }
+          ],
+          notes: {
+            key1: "value3",
+            key2: "value2"
+          }
+      };
+  console.log('subscriptionPayloadsubscriptionPayloadsubscriptionPayloadsubscriptionPayloadsubscriptionPayloadsubscriptionPayload',subscriptionPayload)
+      // Create subscription using Razorpay instance
+      razorpay.subscriptions.create(subscriptionPayload, (error, subscription) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ success: false, message: 'Subscription creation failed' });
+        }
+  
+        return res.status(201).json({ success: true, message: 'Subscription created successfully', data: subscription });
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  };
 
 
 
