@@ -20,7 +20,7 @@ razorpaySubcriptionRouter.post('/createNewPlan', authenticateToken, createPlan);
 razorpaySubcriptionRouter.get('/getallPlans', authenticateToken, getAllPlans);
 
 razorpaySubcriptionRouter.get('/getPlanById/:id', authenticateToken, getTransactionsById);
-razorpaySubcriptionRouter.get('/createSubscriptionCheckout', authenticateToken, createSubscriptionCheckout);
+razorpaySubcriptionRouter.post('/createSubscriptionCheckout', authenticateToken, createSubscriptionCheckout);
 
 
 

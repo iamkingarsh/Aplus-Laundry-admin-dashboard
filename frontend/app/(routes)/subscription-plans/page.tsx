@@ -1,6 +1,6 @@
 
 'use client'
-import { fetchData } from '@/axiosUtility/api';
+import { fetchData, postData } from '@/axiosUtility/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -42,15 +42,16 @@ export default function Page() {
 
     console.log(availablePlans)
 
-    const handlePayment = (id: any) => {
+    const handlePayment = async (id: any) => {
         const data = {
             plan_id: id,
             quantity: 2,
             total_count: 12,
 
         }
-        const response = fetchData('/razorpaySubscription/createSubscriptionCheckout', data) as any
-        console.log(response)
+        const response = await postData('/razorpaySubscription/createSubscriptionCheckout', data) as any
+
+        console.log(response, 'teesr')
         const options = {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
             amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
