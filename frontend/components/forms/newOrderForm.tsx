@@ -171,21 +171,25 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
         }
-        const response = await postData('/order/addorupdate', params)
+        const initialResponse = await postData('/order/addorupdate', params)
 
-        console.log('response', response)
+        console.log('response', initialResponse)
+
+        const orderid = initialResponse?.order?._id
 
         const options = {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-            amount: response?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            amount: initialResponse?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             currency: "INR",
             name: BrandName,
             description: "Test Transaction",
             image: "https://example.com/your_logo",
-            order_id: response?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+            order_id: initialResponse?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
             handler: function (response: any) {
                 console.log('rajooor pay', response);
-                const reply = postData('/order/save', response)
+                const newResponse = { ...response, orderid }
+                console.log('newResponse', newResponse)
+                const reply = postData('/order/save', newResponse)
                 console.log(reply)
                 // alert(response.razorpay_payment_id);
                 // alert(response.razorpay_order_id);
@@ -1052,7 +1056,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                         <div className='flex flex-col gap-2'>
                                             <div className="flex flex-col">
                                                 <span className=" text-muted-foreground  text-sm">Address</span>
-                                                <Link href={``} className="text-md">{CustomerData.address}</Link>
+                                                <Link href={``} className="text-md">{CustomerData?.address[0]?.location}</Link>
 
                                             </div>
 
