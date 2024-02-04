@@ -117,6 +117,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                     currency: values.item.currency,
                     description: values.item.description,
                 },
+                service
 
             }
             console.log('data', data)
