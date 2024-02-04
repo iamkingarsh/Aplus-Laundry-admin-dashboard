@@ -64,6 +64,9 @@ const orderSchema = new mongoose.Schema({
   pickupDetails: {
     pickupDate: Date,
     pickupTime: String,
+  }, transaction_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Transaction', // Reference to the User collection for transaction_id
   },
 }, {
   timestamps: true,
