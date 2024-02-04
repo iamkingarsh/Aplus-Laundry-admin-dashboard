@@ -137,18 +137,37 @@ export const verifyPayment = async (req, res) => {
 }
 
 
+// export const savePayment = async (req, res) => {
+//     try {
+//         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
+//         // const body = razorpay_order_id + "|" + razorpay_payment_id;
+//         console.log("id==", razorpay_order_id, razorpay_payment_id, razorpay_signature);
+
+//         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
+//         console.log("Payment Details:", paymentDetails);
+
+       
+       
+
+//         await transaction.save();
+
+
+//         res.status(200).json({ success: true, message: 'Payment details saved successfully' });
+
+//     } catch (error) {
+//         console.error('Error saving payment:', error);
+//         res.status(500).json({ success: false, message: 'Error saving payment' });
+//     }
+// };
+
+
 export const savePayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-        // const body = razorpay_order_id + "|" + razorpay_payment_id;
-        console.log("id==", razorpay_order_id, razorpay_payment_id, razorpay_signature);
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
         console.log("Payment Details:", paymentDetails);
 
-        // Handle the payment details as needed
-        // Save the payment details in your database as well
-        // For example, you may want to save payment details in a 'Payment' model
         const transaction = new Transaction({
             payment_id: razorpay_payment_id,
             entity: paymentDetails.entity,
@@ -177,8 +196,14 @@ export const savePayment = async (req, res) => {
 
         });
 
-        await transaction.save();
+        const savedTransaction = await transaction.save();
 
+        // Update the corresponding order document with the transaction ID
+        await Order.findOneAndUpdate(
+            { _id: orderid },
+            { $set: { transaction_id: savedTransaction._id } },
+            { new: true }
+        );
 
         res.status(200).json({ success: true, message: 'Payment details saved successfully' });
 
@@ -187,7 +212,6 @@ export const savePayment = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error saving payment' });
     }
 };
-
 // Get all orders
 export const getAllOrders = async (req, res) => {
     try {
