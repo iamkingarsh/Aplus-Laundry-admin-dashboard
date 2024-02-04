@@ -1,6 +1,7 @@
 import Order from "../models/order.js";
 import Razorpay from "razorpay";
 import Transaction from "../models/transacation.js";
+import Service from "../models/service.js";
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -137,9 +138,21 @@ export const createPlan = async (req, res) => {
 export const getAllPlans = async (req, res) => {
     try {
         const plans = await razorpay.plans.all();
-        console.log("plansplans", plans);
+
+        const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
+            const serviceId = plan.notes.service_id;
+            const serviceData = await Service.findById(serviceId);
+
+            return {
+                ...plan,
+                serviceData: serviceData || null,
+            };
+        }));
+
+        console.log("Enriched Plans:", enrichedPlans);
+
         return res.status(200).json({
-            plans,
+            plans: enrichedPlans,
             ok: true,
         });
     } catch (error) {
