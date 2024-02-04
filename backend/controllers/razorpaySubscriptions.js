@@ -118,10 +118,10 @@ export const createPlan = async (req, res) => {
             },
             notes: {
                 service_id,
-                notes_key_2: "Laundry, Dry Cleaning, Ironing",
+                notes_key_1: "Laundry, Dry Cleaning, Ironing",
             },
         });
-
+        console.log("plan", plan);
         return res.status(200).json({
             message: "Plan Created  successfully",
             plan: plan,
@@ -292,7 +292,7 @@ export const createSubscriptionCheckout = async (req, res) => {
 };
 
 
- 
+
 
 export const verifySubscriptionPayment = async (req, res) => {
     try {
