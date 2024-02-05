@@ -12,7 +12,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CheckIcon, Plus } from "lucide-react"
+import { Badge, CheckIcon, Minus, Plus } from "lucide-react"
 import toast from "react-hot-toast"
 import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader } from "../ui/card"
@@ -28,30 +28,45 @@ import { fetchData, postData } from "@/axiosUtility/api"
 import { useRouter } from "next/navigation"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
+import Heading from "../ui/heading"
 
 
 
-interface NewSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface NewSubscriptionFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
 
 const formSchema = z.object({
     service: z.string().min(3, { message: "Service name must be at least 3 characters long" }),
+    customer_id: z.string().min(3, { message: "Customer ID must be at least 3 characters long" }),
+    interval: z.string().min(3, { message: "Interval must be at least 3 characters long" }),
+    service_id: z.string().min(3, { message: "Service ID must be at least 3 characters long" }),
+    kids_qty: z.string().min(1, { message: "Kids Quantity must be at least 1" }),
+    adults_qty: z.string().min(1, { message: "Adults Quantity must be at least 1" }),
     period: z.enum(["monthly", "quarterly", "yearly"]),
-    name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
-    below12: z.string().min(1, { message: "Plan price must be at least 1" }),
-    above12: z.string().min(1, { message: "Plan price must be at least 1" }),
-    planfor: z.enum(["below12", "above12"]),
+
+    plan: z.string().min(3, { message: "Plan name must be at least 3 characters long" }),
+
+    item: z.object({
+        name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
+        amount: z.string().min(1, { message: "Item amount must be at least 1" }),
+        description: z.string().min(3, { message: "Item description must be at least 3 characters long" }),
+    }),
+
+
+    // planfor: z.enum(["below12", "above12"]),
 
 })
 
 
 
-export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscriptionPlanFormProps) {
+export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptionFormProps) {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [services, setServices] = React.useState([]) as any[]
+    const [customers, setCustomers] = React.useState([]) as any[]
+    const [plans, setPlans] = React.useState([]) as any[]
 
     const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
@@ -70,10 +85,36 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         }
     }
 
+    const getCustomers = async () => {
+        setIsLoading(true)
+        try {
+            const response = await fetchData('/auth/getallcustomers')
+            console.log('response fdhdfh', response)
+            setCustomers(response)
+            setIsLoading(false)
+        } catch (error) {
+            console.log('error sdvsd', error)
+        }
+    }
+
+    const getPlans = async () => {
+        setIsLoading(true)
+        try {
+            const response = await fetchData('/planPricing/getall')
+            console.log('response', response)
+            setPlans(response.data)
+            setIsLoading(false)
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
 
 
     React.useEffect(() => {
         getServices()
+        getCustomers()
+        getPlans()
     }, [])
 
 
@@ -83,15 +124,19 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         defaultValues: {
             service: "",
             period: "monthly",
-            name: "",
-            planfor: "above12",
-            below12: "0",
-            above12: "0",
+            item: {
+                name: "",
+                amount: "",
+                description: "",
+            },
+
 
 
         },
 
     })
+
+
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -101,11 +146,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         console.log('values', values)
         try {
             const data = {
-                name: values.name,
-                service: values.service,
-                periodPlan: values.period,
-                below12: values.below12,
-                above12: values.above12,
+                // name: values.name,
+                // service: values.service,
+                // periodPlan: values.period,
+                // below12: values.below12,
+                // above12: values.above12,
             }
 
             const response = await postData('/planPricing/add', data);
@@ -137,7 +182,135 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                     <div className={`grid grid-cols-1 gap-3`}>
                         <div className={`grid grid-cols-${gap} gap-3`}>
                             <FormField
-                                name="name"
+                                name="customer_id"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col gap-2">
+                                        <FormLabel>Select a Customer</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-full justify-between",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? customers.find(
+                                                                (data: any) => data._id === field.value
+                                                            ).email
+                                                            : "Select a Customer"}
+                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-full p-0">
+                                                <Command >
+                                                    <CommandInput
+                                                        placeholder="Search Customers..."
+                                                        className="h-9"
+                                                    />
+                                                    <CommandEmpty>No Customers Found </CommandEmpty>
+                                                    <CommandGroup>
+                                                        {customers.map((data: any) => (
+                                                            <CommandItem
+                                                                value={data._id}
+                                                                key={data._id}
+
+                                                                onSelect={() => {
+                                                                    form.setValue("customer_id", data._id)
+
+                                                                }
+                                                                }
+                                                            >
+                                                                {data.email}
+                                                                <CheckIcon
+                                                                    className={cn(
+                                                                        "ml-auto h-4 w-4",
+                                                                        data._id === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
+                                                                    )}
+                                                                />
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {/* <FormField
+                                name="plan"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col gap-2">
+                                        <FormLabel>Select a Plan</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-full justify-between",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? plans.find(
+                                                                (data: any) => data._id === field.value
+                                                            ).name
+                                                            : "Select a Plan"}
+                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-full p-0">
+                                                <Command >
+                                                    <CommandInput
+                                                        placeholder="Search Plan..."
+                                                        className="h-9"
+                                                    />
+                                                    <CommandEmpty>No Plan Found </CommandEmpty>
+                                                    <CommandGroup>
+                                                        {plans.map((data: any) => (
+                                                            <CommandItem
+                                                                value={data._id}
+                                                                key={data._id}
+
+                                                                onSelect={() => {
+                                                                    form.setValue("plan", data._id)
+
+                                                                }
+                                                                }
+                                                            >
+                                                                {data.name}
+                                                                <CheckIcon
+                                                                    className={cn(
+                                                                        "ml-auto h-4 w-4",
+                                                                        data._id === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
+                                                                    )}
+                                                                />
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            /> */}
+                            <FormField
+                                name="service_id"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
@@ -277,7 +450,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                     </FormItem>
                                 )}
                             />
-                            <FormField
+                            {/* <FormField
                                 name="planfor"
                                 control={form.control}
                                 render={({ field }) => (
@@ -337,8 +510,8 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
-                            {form.watch("planfor") === "below12" && <FormField
+                            /> */}
+                            {/* {form.watch("planfor") === "below12" && <FormField
                                 name="below12"
                                 control={form.control}
                                 render={({ field }) => (
@@ -370,10 +543,48 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                             <FormMessage />
                                         </FormItem>
                                     )}
-                                />}
+                                />} */}
+
+                            {/* <Button >
+                                    <Minus className="w-4 h-4" />
+                                </Button> */}
+                            <FormField
+                                name="kids_qty"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="plan_name">Kids Quantity</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="eg. 2"
+                                                id="plan_name"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {/* <Button >
+                                    <Plus className="w-4 h-4" />
+                                </Button> */}
 
 
-
+                            <FormField
+                                name="adults_qty"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="plan_name">Adults Quantity</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="eg. 2"
+                                                id="plan_name"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
 
 
@@ -389,6 +600,17 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
                 </form>
             </Form>
+
+            <Card>
+                <CardHeader>
+                    <div className="flex justify-between items-center">
+                        <Heading className='leading-tight' title='Available Plans' />
+                        {/* <div className="flex gap-2 items-center">
+                            <Badge className='text-sm'>Total Plans: </Badge>
+                        </div> */}
+                    </div>
+                </CardHeader>
+            </Card>
 
 
 
