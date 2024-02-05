@@ -36,9 +36,7 @@ export default function Page() {
 
     useEffect(() => {
         getAvailablePlans()
-    }
-
-        , [])
+    }, [])
 
     console.log(availablePlans)
 
@@ -104,8 +102,8 @@ export default function Page() {
         <div className='w-full space-y-2 h-full flex p-6 flex-col' >
             <div className="topbar w-full flex justify-between items-center">
                 <div>
-                    <Heading className='leading-tight' title='Your Subcription Plans' />
-                    <p className='text-muted-foreground text-sm'>Manage Your Subscription Plans Here! </p>
+                    <Heading className='leading-tight' title='Your Subcription Plan Pricing' />
+                    <p className='text-muted-foreground text-sm'>Manage your subscription plan pricing here! </p>
                 </div>
 
                 <Button
@@ -123,7 +121,7 @@ export default function Page() {
                                         }
                                         variant="secondary" className="w-full flex flex-col gap-3 h-40" >
                                         <ServerIcon className='w-8 mr-2' />
-                                        12+ Age Group Plan</Button>
+                                        New Plan for 12+ Age Group</Button>
                                 </Link>
 
                             </div>
@@ -136,7 +134,7 @@ export default function Page() {
                                         }
                                         variant="secondary" className="w-full flex flex-col gap-3 h-40" >
                                         <ServerIcon className='w-8 mr-2' />
-                                        12- Age Group Plan</Button>
+                                        New Plan for 12- Age Group</Button>
                                 </Link>
                             </div>
                         </div>

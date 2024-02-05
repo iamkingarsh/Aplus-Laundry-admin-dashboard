@@ -117,11 +117,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                     currency: values.item.currency,
                     description: values.item.description,
                 },
-                service
+                service_id: values.service
 
             }
-            console.log('data', data)
-            const response = await postData('/razorpaySubscription/createNewPlan', values);
+            console.log('datadatadatadatadatadatadatadatadatadatadatadatadata', data)
+            const response = await postData('/planPricing/add', data);
 
             console.log('API Response:', response);
 
@@ -168,7 +168,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                     >
                                                         {field.value
                                                             ? services.find(
-                                                                (data: any) => data.serviceTitle === field.value
+                                                                (data: any) => data._id === field.value
                                                             ).serviceTitle
                                                             : "Select a Service"}
                                                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -189,7 +189,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                                 key={data.serviceTitle}
 
                                                                 onSelect={() => {
-                                                                    form.setValue("service", data.serviceTitle)
+                                                                    form.setValue("service", data._id)
                                                                 }
                                                                 }
                                                             >

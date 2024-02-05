@@ -109,6 +109,7 @@ export const verifyPayment = async (req, res) => {
 export const createPlan = async (req, res) => {
     const { period, interval, item, service_id, kids_qty, adult_qty, user_id } = req.body;
 
+
     try {
         // Create Razorpay plan
         const plan = await razorpay.plans.create({
@@ -122,8 +123,10 @@ export const createPlan = async (req, res) => {
             },
             notes: {
                 service_id,
+
                 kids_qty,
                 adult_qty
+
             },
         });
 
@@ -133,6 +136,7 @@ export const createPlan = async (req, res) => {
             { new: true }
         );
 
+ 
         return res.status(200).json({
             message: "Plan Created successfully",
             plan: plan,
@@ -147,23 +151,39 @@ export const createPlan = async (req, res) => {
 };
 
 export const getAllPlans = async (req, res) => {
+    //     try {
+    //         const plans = await razorpay.plans.all();
+    // console.log('plansplansplansplansplansplansplansplansplans',plans)
+    //         const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
+    //             const serviceId = plan.notes.service_id;
+    //             const serviceData = await Service.findById(serviceId);
+
+
+
+    //         //     return {
+    //         //         ...plan,
+    //         //         serviceData: serviceData || null,
+    //         //     };
+    //         // }));
+
+    //         console.log("Enriched Plans:", plans);
+
+    //         return res.status(200).json({
+    //             plans: plans,
+    //             ok: true,
+    //         });
+    //     }}} catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({
+    //             error: "Internal Server Error",
+    //             ok: false,
+    //         });
+    //     }
+
     try {
         const plans = await razorpay.plans.all();
-console.log('plansplansplansplansplansplansplansplansplans',plans)
-        const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
-            const serviceId = plan.notes.service_id;
-            const serviceData = await Service.findById(serviceId);
-
-            return {
-                ...plan,
-                serviceData: serviceData || null,
-            };
-        }));
-
-        console.log("Enriched Plans:", enrichedPlans);
-
         return res.status(200).json({
-            plans: enrichedPlans,
+            plans: plans,
             ok: true,
         });
     } catch (error) {
@@ -178,26 +198,26 @@ console.log('plansplansplansplansplansplansplansplansplans',plans)
 
 export const deletePlan = async (req, res) => {
     try {
-      const { id } = req.params;  
-  
-      if (!id) {
-        return res.status(400).json({ success: false, message: 'Plan ID is required' });
-      }
-  
-      const deletedPlan = await razorpay.plans.delete(id);
-  
-      return res.status(200).json({
-        success: true,
-        message: 'Plan deleted successfully',
-        data: deletedPlan,
-      });
-    } catch (error) {
-      console.error('Error deleting plan:', error);
-      return res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-  };
+        const { id } = req.params;
 
-  
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'Plan ID is required' });
+        }
+
+        const deletedPlan = await razorpay.plans.delete(id);
+
+        return res.status(200).json({
+            success: true,
+            message: 'Plan deleted successfully',
+            data: deletedPlan,
+        });
+    } catch (error) {
+        console.error('Error deleting plan:', error);
+        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
+
+
 
 // export const getAllSubscriptionPlans = async (req, res) => {
 //     try {
