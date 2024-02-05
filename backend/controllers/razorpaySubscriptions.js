@@ -106,7 +106,7 @@ export const verifyPayment = async (req, res) => {
 // };
 
 export const createPlan = async (req, res) => {
-    const { period, interval, item, service_id } = req.body;
+    const { period, interval, item, service_id,kids_qty,adult_qty } = req.body;
     try {
         const plan = razorpay.plans.create({
             period: period,
@@ -119,7 +119,8 @@ export const createPlan = async (req, res) => {
             },
             notes: {
                 service_id,
-                notes_key_2: "Laundry, Dry Cleaning, Ironing",
+                kids_qty,
+                adult_qty
             },
         });
 
