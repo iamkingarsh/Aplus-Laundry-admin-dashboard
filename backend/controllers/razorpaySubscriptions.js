@@ -119,11 +119,13 @@ export const createPlan = async (req, res) => {
             },
             notes: {
                 service_id,
+
                 kids_qty,
                 adult_qty
+
             },
         });
-
+        console.log("plan", plan);
         return res.status(200).json({
             message: "Plan Created  successfully",
             plan: plan,
@@ -144,16 +146,18 @@ console.log('plansplansplansplansplansplansplansplansplans',plans)
             const serviceId = plan.notes.service_id;
             const serviceData = await Service.findById(serviceId);
 
-            return {
-                ...plan,
-                serviceData: serviceData || null,
-            };
-        }));
 
-        console.log("Enriched Plans:", enrichedPlans);
+
+        //     return {
+        //         ...plan,
+        //         serviceData: serviceData || null,
+        //     };
+        // }));
+
+        console.log("Enriched Plans:", plans);
 
         return res.status(200).json({
-            plans: enrichedPlans,
+            plans: plans,
             ok: true,
         });
     } catch (error) {
