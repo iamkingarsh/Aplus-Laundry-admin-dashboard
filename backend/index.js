@@ -12,7 +12,7 @@ import appBannerRouter from './routes/appBanner.js';
 import categoryRouter from './routes/category.js';
 import transactionRouter from './routes/transaction.js';
 import razorpaySubcriptionRouter from './routes/razorpaysubcriptions.js';
-import below12 from './routes/below12.js';
+import planPricing from './routes/planPricing.js';
 
 // const bodyParser = require('body-parser');
 
@@ -51,7 +51,7 @@ app.use('/coupon', couponRouter);
 app.use('/appBanner', appBannerRouter);
 app.use('/transaction', transactionRouter)
 app.use('/razorpaySubscription', razorpaySubcriptionRouter)
-app.use('/below12', below12)
+app.use('/planPricing', planPricing)
 
 
 
