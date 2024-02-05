@@ -2,6 +2,7 @@ import Order from "../models/order.js";
 import Razorpay from "razorpay";
 import Transaction from "../models/transacation.js";
 import Service from "../models/service.js";
+import User from "../models/user.js";
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -106,9 +107,11 @@ export const verifyPayment = async (req, res) => {
 // };
 
 export const createPlan = async (req, res) => {
-    const { period, interval, item, service_id,kids_qty,adult_qty } = req.body;
+    const { period, interval, item, service_id, kids_qty, adult_qty, user_id } = req.body;
+
     try {
-        const plan = razorpay.plans.create({
+        // Create Razorpay plan
+        const plan = await razorpay.plans.create({
             period: period,
             interval: interval,
             item: {
@@ -124,9 +127,16 @@ export const createPlan = async (req, res) => {
             },
         });
 
+        const updatedUser = await User.findByIdAndUpdate(
+            user_id,
+            { customerType: 'subscriber' },
+            { new: true }
+        );
+
         return res.status(200).json({
-            message: "Plan Created  successfully",
+            message: "Plan Created successfully",
             plan: plan,
+            updatedUser: updatedUser,
         });
     } catch (error) {
         console.error(error);
