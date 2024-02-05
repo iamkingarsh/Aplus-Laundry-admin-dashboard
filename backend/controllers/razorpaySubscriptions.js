@@ -139,20 +139,20 @@ export const getAllPlans = async (req, res) => {
     try {
         const plans = await razorpay.plans.all();
 
-        const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
-            const serviceId = plan.notes.service_id;
-            const serviceData = await Service.findById(serviceId);
+        // const enrichedPlans = await Promise.all(plans.items.map(async (plan) => {
+        //     const serviceId = plan.notes.service_id;
+        //     const serviceData = await Service.findById(serviceId);
 
-            return {
-                ...plan,
-                serviceData: serviceData || null,
-            };
-        }));
+        //     return {
+        //         ...plan,
+        //         serviceData: serviceData || null,
+        //     };
+        // }));
 
-        console.log("Enriched Plans:", enrichedPlans);
+        console.log("Enriched Plans:", plans);
 
         return res.status(200).json({
-            plans: enrichedPlans,
+            plans: plans,
             ok: true,
         });
     } catch (error) {
