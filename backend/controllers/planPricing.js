@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import PlanPricing from "../models/planPricing.js";
- 
+import mongoose from 'mongoose';
+import PlanPricing from '../models/planPricing.js';
 
+// Create or update a PlanPricing
 export const createOrUpdatePlanPricing = async (req, res) => {
   try {
     const { id, name, below12, above12, currency, service, periodPlan } = req.body;
@@ -19,7 +19,14 @@ export const createOrUpdatePlanPricing = async (req, res) => {
 
       return res.status(200).json({ success: true, data: updatedPlanPricing });
     } else {
-      const newPlanPricing = await PlanPricing.create({ name, below12, above12, currency, service, periodPlan });
+      const newPlanPricing = await PlanPricing.create({
+        name,
+        below12,
+        above12,
+        currency,
+        service,
+        periodPlan,
+      });
       return res.status(201).json({ success: true, data: newPlanPricing });
     }
   } catch (error) {
@@ -28,10 +35,7 @@ export const createOrUpdatePlanPricing = async (req, res) => {
   }
 };
 
-
-
-
-
+// Delete a PlanPricing by ID
 export const deletePlanPricingById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,7 +57,34 @@ export const deletePlanPricingById = async (req, res) => {
   }
 };
 
+// Get all PlanPricing entries with service populated
+export const getAllPlanPricingPopulated = async (req, res) => {
+  try {
+    const planPricingList = await PlanPricing.find().populate('service');
+    res.status(200).json({ success: true, data: planPricingList });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
 
+// Get a PlanPricing by ID with service populated
+export const getPlanPricingById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const planPricingDetail = await PlanPricing.findById(id).populate('service');
+
+    if (!planPricingDetail) {
+      return res.status(404).json({ success: false, message: 'PlanPricing not found' });
+    }
+
+    res.status(200).json({ success: true, data: planPricingDetail });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
 
 
 export const deleteMultiplePlanPricingByIds = async (req, res) => {
@@ -76,37 +107,3 @@ export const deleteMultiplePlanPricingByIds = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
-
-export const getAllPlanPricingPopulated = async (req, res) => {
-  try {
-    const planPricingList = await PlanPricing.find().populate('service');
-    res.status(200).json({ success: true, data: planPricingList });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
-};
-
-  
-
-
-
-export const getPlanPricingById = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const planPricingDetail = await PlanPricing.findById(id).populate('service');
-
-    if (!planPricingDetail) {
-      return res.status(404).json({ success: false, message: 'PlanPricing not found' });
-    }
-
-    res.status(200).json({ success: true, data: planPricingDetail });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
-};
-
