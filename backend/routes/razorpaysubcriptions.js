@@ -5,7 +5,7 @@ import express from 'express';
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 import { deleteTransactionById, getAllTransactions, getTransactionsById } from '../controllers/transaction.js';
 
-import { createPlan, createSubscriptionCheckout, getAllPlans } from '../controllers/razorpaySubscriptions.js';
+import { createPlan, createSubscriptionCheckout, deletePlan, getAllPlans } from '../controllers/razorpaySubscriptions.js';
 
 
 const razorpaySubcriptionRouter = express.Router();
@@ -25,6 +25,8 @@ razorpaySubcriptionRouter.post('/createSubscriptionCheckout', authenticateToken,
 
 
 razorpaySubcriptionRouter.delete('/delete/:id', adminAuthenticateToken, deleteTransactionById);
+razorpaySubcriptionRouter.delete('/deletePlan/:id', adminAuthenticateToken, deletePlan);
+
 // razorpaySubcriptionRouter.delete('/ids', authenticateToken, deleteServiceByIds);
 
 

@@ -1,13 +1,19 @@
 import mongoose from 'mongoose';
 
-const below12Schema = new mongoose.Schema({
+const PlanPricingSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Name is required'],
   },
-  amount: {
-    type: Number,
-    required: [true, 'Amount is required'],
+  below12: {
+    amount: {
+      type: Number,
+    },
+  },
+  above12: {
+    amount: {
+      type: Number,
+    },
   },
   currency: {
     type: String,
@@ -19,8 +25,11 @@ const below12Schema = new mongoose.Schema({
     ref: 'Service', // Reference to the Service collection
     required: [true, 'Service is required'],
   },
+  periodPlan: {
+    type: Number,
+  },
 });
 
-const Below12 = mongoose.model('Below12', below12Schema);
+const PlanPricing = mongoose.model('PlanPricing', PlanPricingSchema);
 
-export default Below12;
+export default PlanPricing;
