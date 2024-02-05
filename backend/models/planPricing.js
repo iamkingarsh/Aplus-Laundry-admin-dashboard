@@ -6,11 +6,17 @@ const PlanPricingSchema = new mongoose.Schema({
     required: [true, 'Name is required'],
   },
   below12: {
+    status: {
+      type: Boolean,
+    },
     amount: {
       type: Number,
     },
   },
   above12: {
+    status: {
+      type: Boolean,
+    },
     amount: {
       type: Number,
     },
