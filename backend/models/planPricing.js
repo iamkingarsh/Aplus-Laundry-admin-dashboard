@@ -32,7 +32,7 @@ const PlanPricingSchema = new mongoose.Schema({
     required: [true, 'Service is required'],
   },
   periodPlan: {
-    type: Number,
+    type: String,
   },
 });
 

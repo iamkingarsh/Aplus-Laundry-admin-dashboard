@@ -37,17 +37,11 @@ interface NewSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivEleme
 
 const formSchema = z.object({
     service: z.string().min(3, { message: "Service name must be at least 3 characters long" }),
-
-    // plan_description: z.string().min(3, { message: "Plan description must be at least 3 characters long" }),
-    period: z.enum(["daily", "weekly", "monthly", "quarterly", "yearly"]),
-
-    interval: z.string().min(1, { message: "Interval must be at least 1" }),
-    item: z.object({
-        name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
-        amount: z.string().min(1, { message: "Item price must be at least 1" }),
-        currency: z.string().min(3, { message: "Item currency must be at least 3 characters long" }),
-        description: z.string().min(3, { message: "Item description must be at least 3 characters long" }),
-    }),
+    period: z.enum(["monthly", "quarterly", "yearly"]),
+    name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
+    below12: z.string().min(1, { message: "Plan price must be at least 1" }),
+    above12: z.string().min(1, { message: "Plan price must be at least 1" }),
+    planfor: z.enum(["below12", "above12"]),
 
 })
 
@@ -59,8 +53,8 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [services, setServices] = React.useState([]) as any[]
 
-    const period = [{ title: "daily" }, { title: "weekly" }, { title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
-
+    const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
+    const planfor = [{ title: "below12" }, { title: "above12" }]
 
     const getServices = async () => {
         setIsLoading(true)
@@ -89,13 +83,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         defaultValues: {
             service: "",
             period: "monthly",
-            interval: '1',
-            item: {
-                name: "",
-                amount: '0',
-                currency: "INR",
-                description: "",
-            },
+            name: "",
+            planfor: "above12",
+            below12: "0",
+            above12: "0",
+
 
         },
 
@@ -109,26 +101,21 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         console.log('values', values)
         try {
             const data = {
-                period: values.period,
-                interval: values.interval,
-                item: {
-                    name: values.item.name,
-                    amount: values.item.amount,
-                    currency: values.item.currency,
-                    description: values.item.description,
-                },
-                service_id: values.service
-
+                name: values.name,
+                service: values.service,
+                periodPlan: values.period,
+                below12: values.below12,
+                above12: values.above12,
             }
-            console.log('datadatadatadatadatadatadatadatadatadatadatadatadata', data)
+
             const response = await postData('/planPricing/add', data);
 
             console.log('API Response:', response);
 
             setIsLoading(false);
-            toast.success('Item created successfully');
+            toast.success('Plan Pricing created successfully');
             // Optionally, you can redirect the user or perform other actions upon successful submission.
-            router.push('/services');
+            // router.push('/services');
         } catch (error) {
             console.error('Error creating Item:', error);
             console.log('error', error)
@@ -149,6 +136,23 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                 <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-3">
                     <div className={`grid grid-cols-1 gap-3`}>
                         <div className={`grid grid-cols-${gap} gap-3`}>
+                            <FormField
+                                name="name"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="plan_name">Plan Name</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="eg. Basic Plan"
+                                                id="plan_name"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 name="service"
                                 control={form.control}
@@ -208,9 +212,6 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
-                                        <FormDescription>
-                                            Please select a customer from the dropdown
-                                        </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -272,54 +273,77 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
-                                        <FormDescription>
-                                            Please select a p from the dropdown
-                                        </FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
                             <FormField
-                                name="item.name"
+                                name="planfor"
                                 control={form.control}
                                 render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel htmlFor="plan_name">Plan Name</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="eg. Basic Plan"
-                                                id="plan_name"  {...field} />
-                                        </FormControl>
+                                    <FormItem className="flex flex-col gap-2">
+                                        <FormLabel>Plan For</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        role="combobox"
+                                                        className={cn(
+                                                            "w-full justify-between",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value
+                                                            ? planfor.find(
+                                                                (data: any) => data.title === field.value
+                                                            )?.title === "below12" ? "Below 12" : "Above 12"
+                                                            : "Select Plan for Age Group"}
+                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-full p-0">
+                                                <Command >
+                                                    <CommandInput
+                                                        placeholder="Search Age Group..."
+                                                        className="h-9"
+                                                    />
+                                                    <CommandEmpty>No Age Group Found </CommandEmpty>
+                                                    <CommandGroup>
+                                                        {planfor.map((data: any) => (
+                                                            <CommandItem
+                                                                value={data.title}
+                                                                key={data.title}
+                                                                onSelect={() => {
+                                                                    form.setValue("planfor", data.title)
+                                                                }}
+                                                            >
+                                                                {data.title === "below12" ? "Below 12" : "Above 12"}
+                                                                <CheckIcon
+                                                                    className={cn(
+                                                                        "ml-auto h-4 w-4",
+                                                                        data.title === field.value
+                                                                            ? "opacity-100"
+                                                                            : "opacity-0"
+                                                                    )}
+                                                                />
+                                                            </CommandItem>
+                                                        ))}
+                                                    </CommandGroup>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
                                         <FormMessage />
-                                        <FormDescription>
-                                            This, combined with period, defines the frequency of the plan. If the billing cycle is 2 months, the value should be 2. For daily plans, the minimum value should be 7.
-                                        </FormDescription>
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                name="interval"
+                            {form.watch("planfor") === "below12" && <FormField
+                                name="below12"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel htmlFor="interval">Interval</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="eg. 1"
-                                                id="interval"  {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                name="item.amount"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel htmlFor="plan_name">Plan Amount</FormLabel>
+                                        <FormLabel htmlFor="plan_name">Plan Amount for Below 12</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="text"
@@ -329,28 +353,29 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            />}
+                            {form.watch("planfor") === "above12" &&
+                                <FormField
+                                    name="above12"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel htmlFor="plan_name">Plan Amount for Above 12</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="eg. 599"
+                                                    id="plan_name"  {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />}
 
 
 
                         </div>
 
-                        <FormField
-                            name="item.description"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="plan_name">Plan Description</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-
-                                            placeholder="eg. Basic Plan"
-                                            id="plan_name"  {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
                         <Button type="submit" className="w-fit" disabled={isLoading} >
                             {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
