@@ -121,7 +121,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
             }
             console.log('datadatadatadatadatadatadatadatadatadatadatadatadata', data)
-            const response = await postData('/razorpaySubscription/createNewPlan', data);
+            const response = await postData('/planPricing/add', data);
 
             console.log('API Response:', response);
 
