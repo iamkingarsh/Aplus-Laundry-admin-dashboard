@@ -87,6 +87,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
             planfor: "above12",
             below12: "0",
             above12: "0",
+            
 
 
         },
@@ -104,8 +105,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                 name: values.name,
                 service: values.service,
                 periodPlan: values.period,
-                below12: values.below12,
-                above12: values.above12,
+                below12:{
+                    amount : values.below12
+                } ,  above12:{
+                    amount : values.above12
+                } 
             }
 
             const response = await postData('/planPricing/add', data);
@@ -189,11 +193,12 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                     <CommandGroup>
                                                         {services.map((data: any) => (
                                                             <CommandItem
-                                                                value={data.serviceTitle}
-                                                                key={data.serviceTitle}
+                                                                value={data._id}
+                                                                key={data._id}
 
                                                                 onSelect={() => {
                                                                     form.setValue("service", data._id)
+                                                                    
                                                                 }
                                                                 }
                                                             >
@@ -255,6 +260,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                                 value={data.title}
                                                                 key={data.title}
                                                                 onSelect={() => {
+                                                      
                                                                     form.setValue("period", data.title)
                                                                 }}
                                                             >

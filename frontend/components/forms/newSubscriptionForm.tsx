@@ -67,7 +67,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     const [services, setServices] = React.useState([]) as any[]
     const [customers, setCustomers] = React.useState([]) as any[]
     const [plans, setPlans] = React.useState([]) as any[]
-    const [actualPlan, setActualPlan] = React.useState([]) as any[]
+
     const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
 
@@ -101,9 +101,8 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         setIsLoading(true)
         try {
             const response = await fetchData('/planPricing/getall')
-            console.log('response', response)
+            console.log('response', response.data)
             setPlans(response.data)
-            setActualPlan(response.data.filter((plan: any) => plan.service._id === form.watch("service") && plan.periodPlan === form.watch("period")).map((plan: any) => plan) || [])
             setIsLoading(false)
         } catch (error) {
             console.log('error', error)
@@ -136,14 +135,19 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         },
 
     })
-    React.useEffect(() => {
-        console.log('form service', form.watch("service"))
-        console.log('form', form.watch("period"))
-        const actualPlans = plans.filter((plan: any) => plan.service._id === form.watch("service_id") && plan.periodPlan === form.watch("period")).map((plan: any) => plan)
-        setActualPlan(actualPlans)
-        console.log('actualPlans', actualPlan)
 
-    }, [form.watch("service_id"), form.watch("period")])
+    const fetchPlans = async(id)=>{
+     alert(id)
+     try {
+        const response = await fetchData(`${'/planPricing/'+id}`)
+        console.log('responseresponseresponseresponseresponseresponseresponseresponseresponseresponseresponseresponse', response)
+     
+    } catch (error) {
+        console.log('error', error)
+    }
+    }
+
+
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -374,6 +378,8 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
                                                                 onSelect={() => {
                                                                     form.setValue("service", data._id)
+
+                                                                    fetchPlans(data._id)
                                                                 }
                                                                 }
                                                             >
@@ -434,7 +440,8 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                                             <CommandItem
                                                                 value={data.title}
                                                                 key={data.title}
-                                                                onSelect={() => {
+                                                                onSelect={() => { 
+                                                                    console.log("mujahednallaservice", form.watch("service"))
                                                                     form.setValue("period", data.title)
                                                                 }}
                                                             >
@@ -615,9 +622,6 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                         {/* <div className="flex gap-2 items-center">
                             <Badge className='text-sm'>Total Plans: </Badge>
                         </div> */}
-                        {
-                            actualPlan.length > 0 && <Badge className='text-sm'>Total Plans: {actualPlan.length}</Badge>
-                        }
                     </div>
                 </CardHeader>
             </Card>
