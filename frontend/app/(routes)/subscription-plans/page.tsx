@@ -1,6 +1,6 @@
 
 'use client'
-import { fetchData, postData } from '@/axiosUtility/api';
+import { deleteData, fetchData, postData } from '@/axiosUtility/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { BrandName } from '@/lib/constants';
-import { DownloadIcon, Plus, PlusIcon, ServerIcon } from 'lucide-react';
+import { DownloadIcon, Plus, PlusIcon, ServerIcon, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
@@ -97,6 +97,16 @@ export default function Page() {
         // rzp1?.open()
 
     }
+
+    const handleDelete = async (id: any) => {
+        try {
+            const res = await deleteData(`/planPricing/${id}`)
+            console.log(res)
+            getAvailablePlans()
+        } catch (error) {
+
+        }
+    }
     const router = useRouter()
 
     return (
@@ -148,6 +158,7 @@ export default function Page() {
                                         }</Badge>
 
                                     </div>
+                                    <Trash onClick={() => handleDelete(plan._id)} className='w-4' />
                                 </div>
                             </CardHeader>
                             <CardContent>
