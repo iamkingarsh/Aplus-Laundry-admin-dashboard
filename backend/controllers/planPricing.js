@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import PlanPricing from '../models/planPricing.js';
+import Product from '../models/product.js';
+import Category from '../models/category.js';
 
 // Create or update a PlanPricing
 export const createOrUpdatePlanPricing = async (req, res) => {
@@ -60,13 +62,36 @@ export const deletePlanPricingById = async (req, res) => {
 // Get all PlanPricing entries with service populated
 export const getAllPlanPricingPopulated = async (req, res) => {
   try {
-    const planPricingList = await PlanPricing.find().populate('service');
+    const planPricingList = await PlanPricing.find()
+      .populate({
+        path: 'service',
+        populate: [
+          {
+            path: 'laundryPerPair.items',
+            model: Product,
+            populate: {
+              path: 'category',
+              model: Category,
+            },
+          },
+          {
+            path: 'laundryByKG.items',
+            model: Product,
+            populate: {
+              path: 'category',
+              model: Category,
+            },
+          },
+        ],
+      });
+
     res.status(200).json({ success: true, data: planPricingList });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
 
 // Get a PlanPricing by ID with service populated
 export const getPlanPricingById = async (req, res) => {
