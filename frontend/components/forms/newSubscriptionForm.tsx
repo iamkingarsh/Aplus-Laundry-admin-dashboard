@@ -136,16 +136,15 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
     })
 
-    const fetchPlans = async(id)=>{
-     alert(id)
-     try {
-        const response = await fetchData(`${'/planPricing/'+id}`)
-        console.log('responseresponseresponseresponseresponseresponseresponseresponseresponseresponseresponseresponse', response)
-     
-    } catch (error) {
-        console.log('error', error)
+    const fetchPlans = async (id: any) => {
+        alert(id)
+        console.log('sdhsdhdhsrhrherdh', form.watch("service"))
+        console.log('sdhsdhdhsrhrherdh', form.watch("period"))
+
     }
-    }
+    React.useEffect(() => {
+        fetchPlans(form.watch("service"))
+    }, [form.watch("service"), form.watch("period")])
 
 
 
@@ -440,7 +439,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                                             <CommandItem
                                                                 value={data.title}
                                                                 key={data.title}
-                                                                onSelect={() => { 
+                                                                onSelect={() => {
                                                                     console.log("mujahednallaservice", form.watch("service"))
                                                                     form.setValue("period", data.title)
                                                                 }}

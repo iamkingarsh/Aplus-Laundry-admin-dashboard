@@ -87,7 +87,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
             planfor: "above12",
             below12: "0",
             above12: "0",
-            
+
 
 
         },
@@ -105,11 +105,11 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                 name: values.name,
                 service: values.service,
                 periodPlan: values.period,
-                below12:{
-                    amount : values.below12
-                } ,  above12:{
-                    amount : values.above12
-                } 
+                below12: {
+                    amount: values.below12
+                }, above12: {
+                    amount: values.above12
+                }
             }
 
             const response = await postData('/planPricing/add', data);
@@ -198,7 +198,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
 
                                                                 onSelect={() => {
                                                                     form.setValue("service", data._id)
-                                                                    
+
                                                                 }
                                                                 }
                                                             >
@@ -260,7 +260,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                                                 value={data.title}
                                                                 key={data.title}
                                                                 onSelect={() => {
-                                                      
+
                                                                     form.setValue("period", data.title)
                                                                 }}
                                                             >
@@ -283,68 +283,8 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                     </FormItem>
                                 )}
                             />
+
                             <FormField
-                                name="planfor"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col gap-2">
-                                        <FormLabel>Plan For</FormLabel>
-                                        <Popover>
-                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant="outline"
-                                                        role="combobox"
-                                                        className={cn(
-                                                            "w-full justify-between",
-                                                            !field.value && "text-muted-foreground"
-                                                        )}
-                                                    >
-                                                        {field.value
-                                                            ? planfor.find(
-                                                                (data: any) => data.title === field.value
-                                                            )?.title === "below12" ? "Below 12" : "Above 12"
-                                                            : "Select Plan for Age Group"}
-                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-full p-0">
-                                                <Command >
-                                                    <CommandInput
-                                                        placeholder="Search Age Group..."
-                                                        className="h-9"
-                                                    />
-                                                    <CommandEmpty>No Age Group Found </CommandEmpty>
-                                                    <CommandGroup>
-                                                        {planfor.map((data: any) => (
-                                                            <CommandItem
-                                                                value={data.title}
-                                                                key={data.title}
-                                                                onSelect={() => {
-                                                                    form.setValue("planfor", data.title)
-                                                                }}
-                                                            >
-                                                                {data.title === "below12" ? "Below 12" : "Above 12"}
-                                                                <CheckIcon
-                                                                    className={cn(
-                                                                        "ml-auto h-4 w-4",
-                                                                        data.title === field.value
-                                                                            ? "opacity-100"
-                                                                            : "opacity-0"
-                                                                    )}
-                                                                />
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
-                                                </Command>
-                                            </PopoverContent>
-                                        </Popover>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            {form.watch("planfor") === "below12" && <FormField
                                 name="below12"
                                 control={form.control}
                                 render={({ field }) => (
@@ -359,24 +299,24 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />}
-                            {form.watch("planfor") === "above12" &&
-                                <FormField
-                                    name="above12"
-                                    control={form.control}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="plan_name">Plan Amount for Above 12</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="eg. 599"
-                                                    id="plan_name"  {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />}
+                            />
+
+                            <FormField
+                                name="above12"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="plan_name">Plan Amount for Above 12</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="text"
+                                                placeholder="eg. 599"
+                                                id="plan_name"  {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
 
 
