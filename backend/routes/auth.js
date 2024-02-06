@@ -19,6 +19,7 @@ router.post("/mobileOtpVerify", verifymobileotp);
 router.get("/getallcustomers", getAllCustomers)
 router.get("/getalldeliveryagent", getAlldeliveryagent)
 router.get("/getallTeamMembers", getallTeamMembers)
+
 router.delete("/id/:id", deletebyid)
 router.get("/id/:id", getUserById)
 router.post("/currentUser", getCurrentUser)
