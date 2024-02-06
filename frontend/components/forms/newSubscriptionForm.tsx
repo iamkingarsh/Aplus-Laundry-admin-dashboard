@@ -67,6 +67,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     const [services, setServices] = React.useState([]) as any[]
     const [customers, setCustomers] = React.useState([]) as any[]
     const [plans, setPlans] = React.useState([]) as any[]
+    const [plan,setPlan] = React.useState([])
 
     const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
@@ -118,7 +119,6 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     }, [])
 
 
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -136,14 +136,20 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
     })
 
-    const fetchPlans = async (id: any) => {
-        alert(id)
-        console.log('sdhsdhdhsrhrherdh', form.watch("service"))
-        console.log('sdhsdhdhsrhrherdh', form.watch("period"))
 
-    }
+    const fetchPlans = async (service:any, period:any) => {
+        alert(service + period);
+    
+        const filteredPlans = plans.filter(plan => {
+            return plan.service._id === service && plan.periodPlan === period;
+        });
+        setPlan(filteredPlans[0])
+        form.setValue("item.name",filteredPlans[0]?.name)
+        console.log('filteredplan',filteredPlans);
+    };
+    
     React.useEffect(() => {
-        fetchPlans(form.watch("service"))
+        fetchPlans(form.watch("service"), form.watch("period"))
     }, [form.watch("service"), form.watch("period")])
 
 
@@ -151,33 +157,62 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log('Form values:', values);
-
+    
         setIsLoading(true);
-        console.log('values', values)
-        try {
+    
+        if (plan) {
+            const above12Price = plan?.above12?.amount || 0;
+            const below12Price = plan?.below12?.amount || 0;
+            
+            const adult_qty = values.above12qty || 0;
+            const kids_qty = values.below12qty || 0;
+    
+            const totalAbove12Amount = above12Price * adult_qty;
+            const totalBelow12Amount = below12Price * kids_qty;
+    
+            const totalAmount = totalAbove12Amount + totalBelow12Amount;
+    
+            console.log('Total Amount:', totalAmount);
+    
             const data = {
-                // name: values.name,
-                // service: values.service,
-                // periodPlan: values.period,
-                // below12: values.below12,
-                // above12: values.above12,
+                period,
+                interval,
+                item: {
+                    name: plan.name,
+                    amount: totalAmount, 
+                    description: plan.description,
+                },
+                kids_qty,
+                adult_qty,
+                plan.service._id,
+                user_id
+            };
+    
+            try { 
+                const response1 = await postData('/razorpaySubscription/createNewPlan', data);
+    
+                const responseData = {
+                    plan_id: response1.id, 
+                    total_count: response1.item.amount,
+                    notes: response1.notes
+                };
+    
+                const response2 = await postData('/razorpaySubscription/createSubscriptionCheckout', responseData);
+    
+                console.log('API Response:', response2);
+    
+                setIsLoading(false);
+                toast.success('Plan Pricing created successfully');
+                // Optionally, you can redirect the user or perform other actions upon successful submission.
+                // router.push('/services');
+            } catch (error) {
+                console.error('Error creating Item:', error);
+                setIsLoading(false);
+                toast.error('Error creating Item');
             }
-
-            const response = await postData('/planPricing/add', data);
-
-            console.log('API Response:', response);
-
-            setIsLoading(false);
-            toast.success('Plan Pricing created successfully');
-            // Optionally, you can redirect the user or perform other actions upon successful submission.
-            // router.push('/services');
-        } catch (error) {
-            console.error('Error creating Item:', error);
-            console.log('error', error)
-            setIsLoading(false);
-            toast.error('Error creating Item');
         }
     }
+    
 
 
 
@@ -377,8 +412,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
                                                                 onSelect={() => {
                                                                     form.setValue("service", data._id)
-
-                                                                    fetchPlans(data._id)
+ 
                                                                 }
                                                                 }
                                                             >

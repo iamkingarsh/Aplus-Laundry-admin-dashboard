@@ -15,15 +15,9 @@ const razorpaySubcriptionRouter = express.Router();
 
 
 razorpaySubcriptionRouter.post('/createNewPlan', authenticateToken, createPlan);
-
-
 razorpaySubcriptionRouter.get('/getallPlans', authenticateToken, getAllPlans);
-
 razorpaySubcriptionRouter.get('/getPlanById/:id', authenticateToken, getTransactionsById);
 razorpaySubcriptionRouter.post('/createSubscriptionCheckout', authenticateToken, createSubscriptionCheckout);
-
-
-
 razorpaySubcriptionRouter.delete('/delete/:id', adminAuthenticateToken, deleteTransactionById);
 razorpaySubcriptionRouter.delete('/deletePlan/:id', adminAuthenticateToken, deletePlan);
 
