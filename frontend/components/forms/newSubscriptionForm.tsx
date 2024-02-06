@@ -67,7 +67,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     const [services, setServices] = React.useState([]) as any[]
     const [customers, setCustomers] = React.useState([]) as any[]
     const [plans, setPlans] = React.useState([]) as any[]
-    const [plan,setPlan] = React.useState([])
+    const [plan, setPlan] = React.useState([]) as any[]
 
     const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
@@ -137,70 +137,77 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     })
 
 
-    const fetchPlans = async (service:any, period:any) => {
-        alert(service + period);
-    
-        const filteredPlans = plans.filter(plan => {
+    const fetchPlans = async (service: any, period: any) => {
+
+
+        const filteredPlans = plans.filter((plan: { service: { _id: any }; periodPlan: any }) => {
             return plan.service._id === service && plan.periodPlan === period;
         });
         setPlan(filteredPlans[0])
-        form.setValue("item.name",filteredPlans[0]?.name)
-        console.log('filteredplan',filteredPlans);
+
+        form.setValue("item.name", filteredPlans[0]?.name)
+        console.log('filteredplan', filteredPlans);
     };
-    
+
     React.useEffect(() => {
         fetchPlans(form.watch("service"), form.watch("period"))
-    }, [form.watch("service"), form.watch("period")])
+        const setTotalAmount = () => {
+            const above12Price = plan?.above12?.amount || 0;
+            const below12Price = plan?.below12?.amount || 0;
+
+            const adult_qty = form.watch("adults_qty") || 0 as any;
+            const kids_qty = form.watch("kids_qty") || 0 as any;
+
+            const totalAbove12Amount = above12Price * adult_qty;
+            const totalBelow12Amount = below12Price * kids_qty;
+
+            const totalAmount = totalAbove12Amount + totalBelow12Amount || 0 as any;
+            form.setValue("item.amount", totalAmount);
+        }
+        setTotalAmount()
+
+    }, [form.watch("service"), form.watch("period") || 0, form.watch("adults_qty") || 0, form.watch("kids_qty") || 0]);
 
 
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log('Form values:', values);
-    
+
         setIsLoading(true);
-    
+
         if (plan) {
-            const above12Price = plan?.above12?.amount || 0;
-            const below12Price = plan?.below12?.amount || 0;
-            
-            const adult_qty = values.above12qty || 0;
-            const kids_qty = values.below12qty || 0;
-    
-            const totalAbove12Amount = above12Price * adult_qty;
-            const totalBelow12Amount = below12Price * kids_qty;
-    
-            const totalAmount = totalAbove12Amount + totalBelow12Amount;
-    
-            console.log('Total Amount:', totalAmount);
-    
+
+
+
+
             const data = {
-                period,
-                interval,
+                period: values.period,
+                interval: '12',
                 item: {
-                    name: plan.name,
-                    amount: totalAmount, 
+                    name: values.item.name,
+                    amount: values.item.amount,
                     description: plan.description,
                 },
-                kids_qty,
-                adult_qty,
-                plan.service._id,
-                user_id
+                kids_qty: values.kids_qty,
+                adult_qty: values.adults_qty,
+                service_id: plan.service._id,
+                user_id: values.customer_id,
             };
-    
-            try { 
+
+            try {
                 const response1 = await postData('/razorpaySubscription/createNewPlan', data);
-    
+
                 const responseData = {
-                    plan_id: response1.id, 
+                    plan_id: response1.id,
                     total_count: response1.item.amount,
                     notes: response1.notes
                 };
-    
+
                 const response2 = await postData('/razorpaySubscription/createSubscriptionCheckout', responseData);
-    
+
                 console.log('API Response:', response2);
-    
+
                 setIsLoading(false);
                 toast.success('Plan Pricing created successfully');
                 // Optionally, you can redirect the user or perform other actions upon successful submission.
@@ -212,7 +219,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
             }
         }
     }
-    
+
 
 
 
@@ -412,7 +419,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
                                                                 onSelect={() => {
                                                                     form.setValue("service", data._id)
- 
+
                                                                 }
                                                                 }
                                                             >
@@ -655,6 +662,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                         {/* <div className="flex gap-2 items-center">
                             <Badge className='text-sm'>Total Plans: </Badge>
                         </div> */}
+                        {form.watch("item.amount") && <div className='text-sm'>Total Amount: {form.watch("item.amount")}</div>}
                     </div>
                 </CardHeader>
             </Card>
