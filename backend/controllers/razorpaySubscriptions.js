@@ -123,9 +123,9 @@ export const createPlan = async (req, res) => {
             },
             notes: {
                 service_id,
-
                 kids_qty,
-                adult_qty
+                adult_qty,
+                user_id
 
             },
         });
@@ -314,8 +314,7 @@ export const createSubscriptionCheckout = async (req, res) => {
             addons,
             addonQuantity,
             total_count,
-            customer_id,
-            service_id
+            notes
         } = req.body;
         console.log("req.body", req.body);
 
@@ -324,12 +323,8 @@ export const createSubscriptionCheckout = async (req, res) => {
             plan_id,
             quantity,
             total_count,
-            addons,
-            customer_id,
-            notes: {
-                customer_id,
-                service_id
-            },
+            addons, 
+            notes,
         };
         // Create subscription using Razorpay instance
         razorpay.subscriptions.create(
