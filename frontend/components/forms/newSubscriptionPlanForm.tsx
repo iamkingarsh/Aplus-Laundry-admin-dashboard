@@ -37,7 +37,7 @@ interface NewSubscriptionPlanFormProps extends React.HTMLAttributes<HTMLDivEleme
 
 const formSchema = z.object({
     service: z.string().min(3, { message: "Service name must be at least 3 characters long" }),
-    period: z.enum(["monthly", "quarterly", "yearly"]),
+    period: z.enum(["per month", "per 3 months", "per 6 months", "per 9 months", "per year"]),
     name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
     below12: z.string().min(1, { message: "Plan price must be at least 1" }),
     above12: z.string().min(1, { message: "Plan price must be at least 1" }),
@@ -53,7 +53,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [services, setServices] = React.useState([]) as any[]
 
-    const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
+    const period = [{ title: "per month" }, { title: "per 3 months" }, { title: "per 6 months" }, { title: "per 9 months" }, { title: "per year" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
 
     const getServices = async () => {
@@ -82,7 +82,7 @@ export function NewSubscriptionPlanForm({ className, gap, ...props }: NewSubscri
         resolver: zodResolver(formSchema),
         defaultValues: {
             service: "",
-            period: "monthly",
+            period: "per month",
             name: "",
             planfor: "above12",
             below12: "0",

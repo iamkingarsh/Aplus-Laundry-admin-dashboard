@@ -43,7 +43,8 @@ const formSchema = z.object({
     service_id: z.string().min(3, { message: "Service ID must be at least 3 characters long" }),
     kids_qty: z.string().min(1, { message: "Kids Quantity must be at least 1" }),
     adults_qty: z.string().min(1, { message: "Adults Quantity must be at least 1" }),
-    period: z.enum(["monthly", "quarterly", "yearly"]),
+    period: z.enum(["per month", "per 3 months", "per 6 months", "per 9 months", "per year"]),
+
 
     plan: z.string().min(3, { message: "Plan name must be at least 3 characters long" }),
 
@@ -69,7 +70,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     const [plans, setPlans] = React.useState([]) as any[]
     const [plan, setPlan] = React.useState([]) as any[]
 
-    const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
+    const period = [{ title: "per month" }, { title: "per 3 months" }, { title: "per 6 months" }, { title: "per 9 months" }, { title: "per year" }]
     const planfor = [{ title: "below12" }, { title: "above12" }]
 
     const getServices = async () => {
@@ -123,7 +124,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         resolver: zodResolver(formSchema),
         defaultValues: {
             service: "",
-            period: "monthly",
+            period: "per month",
             item: {
                 name: "",
                 amount: "",
@@ -182,8 +183,8 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
 
             const data = {
-                period: values.period,
-                interval: '12',
+                period: "monthly",
+                interval: values.period === "per month" ? 1 : values.period === "per 3 months" ? 3 : values.period === "per 6 months" ? 6 : values.period === "per 9 months" ? 9 : 12,
                 item: {
                     name: values.item.name,
                     amount: values.item.amount,
