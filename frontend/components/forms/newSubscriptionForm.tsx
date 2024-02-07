@@ -146,7 +146,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         });
         setPlan(filteredPlans[0])
 
-        form.setValue("item.name", filteredPlans[0]?.name)
+
         console.log('filteredplan', filteredPlans);
     };
 
@@ -221,6 +221,11 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         }
     }
 
+
+    React.useEffect(() => {
+        const customer_name = customers.find((data: any) => data._id === form.watch("customer_id"))?.fullName
+        form.setValue("item.name", customer_name && customer_name.charAt(0).toUpperCase() + customer_name.slice(1) + `'s Plan` || "")
+    }, [form.watch("customer_id")])
 
 
 
@@ -363,7 +368,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                 )}
                             /> */}
                             <FormField
-                                name="service_id"
+                                name="item.name"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
@@ -371,6 +376,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                         <FormControl>
                                             <Input
                                                 type="text"
+                                                disabled={true}
                                                 placeholder="eg. Basic Plan"
                                                 id="plan_name"  {...field} />
                                         </FormControl>
@@ -663,7 +669,13 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                         {/* <div className="flex gap-2 items-center">
                             <Badge className='text-sm'>Total Plans: </Badge>
                         </div> */}
-                        {form.watch("item.amount") && <div className='text-sm'>Total Amount: {form.watch("item.amount")}</div>}
+                        {form.watch("item.amount") && <div className='text-sm'>Total Amount: {new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR',
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2
+                        }).format(form.watch("item.amount"))} / {form.watch("period") === "per month" ? "Month" : form.watch("period") === "per 3 months" ? "3 Months" : form.watch("period") === "per 6 months" ? "6 months" : form.watch("period") === "per 9 months" ? "9 Months" : "Year"}</div>}
+
                     </div>
                 </CardHeader>
             </Card>
