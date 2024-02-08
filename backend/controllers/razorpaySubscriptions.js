@@ -136,7 +136,7 @@ export const createPlan = async (req, res) => {
             { new: true }
         );
 
- 
+
         return res.status(200).json({
             message: "Plan Created successfully",
             plan: plan,
@@ -323,7 +323,7 @@ export const createSubscriptionCheckout = async (req, res) => {
             plan_id,
             quantity,
             total_count,
-            addons, 
+            addons,
             notes,
         };
         // Create subscription using Razorpay instance
