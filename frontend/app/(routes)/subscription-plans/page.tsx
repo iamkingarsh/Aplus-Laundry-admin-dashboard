@@ -147,18 +147,41 @@ export default function Page() {
                         <Card onClick={() => handlePayment(plan.id)} key={index}>
                             <CardHeader>
                                 <div className="flex justify-between items-center">
-                                    <Heading className='leading-tight text-xl' title={plan?.name} />
-                                    <div className="flex gap-2 items-center">
-                                        <Badge variant='default' className='text-sm'>Plan Amount: {
-                                            new Intl.NumberFormat('en-IN', {
-                                                style: 'currency',
-                                                currency: 'INR',
-                                                maximumFractionDigits: 0
-                                            }).format(plan?.item?.amount / 100)
-                                        }</Badge>
+                                    <div className='flex flex-col gap-2 w-full'>
+
+                                        <div className='flex flex-col gap-1'>
+
+                                            <Heading className='leading-tight text-xl' title={plan?.name} />
+                                            <p className='text-sm'>{plan?.service?.serviceTitle}</p>
+                                            <p className='text-sm'>Plan Period: {plan?.periodPlan}</p>
+                                        </div>
+                                        <div className='flex flex-col gap-1'>
+                                            <p className='text-md font-semibold'>Plan Pricing: </p>
+
+                                            <div className="flex gap-2 items-center">
+                                                <Badge variant='default' className='text-sm'>Above 12: {
+                                                    new Intl.NumberFormat('en-IN', {
+                                                        style: 'currency',
+                                                        currency: 'INR',
+                                                        maximumFractionDigits: 2,
+                                                        minimumFractionDigits: 2,
+                                                    }).format(plan?.above12?.amount)
+                                                }</Badge>
+                                                <Badge variant='default' className='text-sm'>Below 12: {
+                                                    new Intl.NumberFormat('en-IN', {
+                                                        style: 'currency',
+                                                        currency: 'INR',
+                                                        maximumFractionDigits: 2,
+                                                        minimumFractionDigits: 2,
+                                                    }).format(plan?.below12?.amount)
+                                                }</Badge>
+
+                                            </div>
+                                        </div>
 
                                     </div>
-                                    <Trash onClick={() => handleDelete(plan._id)} className='w-4' />
+
+                                    {/* <Trash onClick={() => handleDelete(plan._id)} className='w-4' /> */}
                                 </div>
                             </CardHeader>
                             <CardContent>

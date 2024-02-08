@@ -29,6 +29,8 @@ import { useRouter } from "next/navigation"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import Heading from "../ui/heading"
+import { BrandName } from "@/lib/constants"
+import useRazorpay from "react-razorpay"
 
 
 
@@ -39,22 +41,15 @@ interface NewSubscriptionFormProps extends React.HTMLAttributes<HTMLDivElement> 
 const formSchema = z.object({
     service: z.string().min(3, { message: "Service name must be at least 3 characters long" }),
     customer_id: z.string().min(3, { message: "Customer ID must be at least 3 characters long" }),
-    interval: z.string().min(3, { message: "Interval must be at least 3 characters long" }),
-    service_id: z.string().min(3, { message: "Service ID must be at least 3 characters long" }),
-    kids_qty: z.string().min(1, { message: "Kids Quantity must be at least 1" }),
+    kids_qty: z.string(),
     adults_qty: z.string().min(1, { message: "Adults Quantity must be at least 1" }),
-    period: z.enum(["monthly", "quarterly", "yearly"]),
-
-    plan: z.string().min(3, { message: "Plan name must be at least 3 characters long" }),
-
-    item: z.object({
-        name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
-        amount: z.string().min(1, { message: "Item amount must be at least 1" }),
-        description: z.string().min(3, { message: "Item description must be at least 3 characters long" }),
-    }),
+    period: z.enum(["per month", "per 3 months", "per 6 months", "per 9 months", "per year"]),
+    // name: z.string().min(3, { message: "Item name must be at least 3 characters long" }),
+    // amount: z.string().min(1, { message: "Item amount must be at least 1" }),
 
 
-    // planfor: z.enum(["below12", "above12"]),
+
+
 
 })
 
@@ -68,9 +63,10 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
     const [customers, setCustomers] = React.useState([]) as any[]
     const [plans, setPlans] = React.useState([]) as any[]
     const [plan, setPlan] = React.useState([]) as any[]
+    const [name, setName] = React.useState([]) as any[]
+    const [amount, setAmount] = React.useState(0) as any[]
 
-    const period = [{ title: "monthly" }, { title: "quarterly" }, { title: "yearly" }]
-    const planfor = [{ title: "below12" }, { title: "above12" }]
+    const period = [{ title: "per month" }, { title: "per 3 months" }, { title: "per 6 months" }, { title: "per 9 months" }, { title: "per year" }]
 
     const getServices = async () => {
         setIsLoading(true)
@@ -123,18 +119,15 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         resolver: zodResolver(formSchema),
         defaultValues: {
             service: "",
-            period: "monthly",
-            item: {
-                name: "",
-                amount: "",
-                description: "",
-            },
+            // period: "per month",
+            kids_qty: "0",
 
 
 
         },
 
     })
+    const [Razorpay] = useRazorpay();
 
 
     const fetchPlans = async (service: any, period: any) => {
@@ -144,8 +137,8 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
             return plan.service._id === service && plan.periodPlan === period;
         });
         setPlan(filteredPlans[0])
-
-        form.setValue("item.name", filteredPlans[0]?.name)
+        // form.setValue("name", filteredPlans[0]?.planName || "")
+        setName(filteredPlans[0]?.name || "")
         console.log('filteredplan', filteredPlans);
     };
 
@@ -162,7 +155,9 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
             const totalBelow12Amount = below12Price * kids_qty;
 
             const totalAmount = totalAbove12Amount + totalBelow12Amount || 0 as any;
-            form.setValue("item.amount", totalAmount);
+            console.log("amount", totalAmount);
+            setAmount(parseInt(totalAmount))
+            console.log('totalAmount sfbdfb', parseInt(totalAmount))
         }
         setTotalAmount()
 
@@ -179,15 +174,13 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         if (plan) {
 
 
-
-
             const data = {
-                period: values.period,
-                interval: '12',
+                period: "monthly",
+                interval: values.period === "per month" ? 1 : values.period === "per 3 months" ? 3 : values.period === "per 6 months" ? 6 : values.period === "per 9 months" ? 9 : 12,
                 item: {
-                    name: values.item.name,
-                    amount: values.item.amount,
-                    description: plan.description,
+                    name: name || "",
+                    amount: amount * 100,
+
                 },
                 kids_qty: values.kids_qty,
                 adult_qty: values.adults_qty,
@@ -197,14 +190,70 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
             try {
                 const response1 = await postData('/razorpaySubscription/createNewPlan', data);
-
+                console.log('response1', response1);
                 const responseData = {
-                    plan_id: response1.id,
-                    total_count: response1.item.amount,
-                    notes: response1.notes
+                    plan_id: response1?.plan?.id,
+                    total_count: 12,
+                    quantity: 1,
+                    notes: response1?.plan.notes
                 };
 
                 const response2 = await postData('/razorpaySubscription/createSubscriptionCheckout', responseData);
+
+                console.log('response2', response2);
+                const data2 = {
+                    plan_id: response1.id,
+                    quantity: 1,
+                    total_count: 1,
+
+                }
+                // const response = await postData('/razorpaySubscription/createSubscriptionCheckout', data) as any
+
+                // console.log(response, 'teesr')
+                const options = {
+                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+                    amount: response2?.data?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    currency: "INR",
+                    name: BrandName,
+                    description: "Test Transaction",
+                    image: "https://example.com/your_logo",
+                    subscription_id: response2?.data?.id,
+                    redirect: true,
+                    recurring: true,
+                    handler: function (response: any) {
+                        // console.log('rajooor pay', response);
+                        // const reply = postData('/order/save', response)
+                        // console.log(reply)
+                        alert(response.razorpay_payment_id);
+                        alert(response.razorpay_order_id);
+                        alert(response.razorpay_signature);
+                        // instance.payments.fetch(paymentId)
+                    },
+                    // prefill: {
+                    //     name: CustomerData?.fullName,
+                    //     email: CustomerData?.email,
+                    //     contact: CustomerData?.mobileNumber,
+                    // },
+                    notes: {
+                        address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                        color: "#2E3190",
+                        // backdrop_color: "#2E3190"
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            alert("dismissed");
+                        },
+                        animation: "slide",
+                    },
+                    // callback_url: 'https://example.com/your_redirect_url',
+
+
+                } as any;
+
+                const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
+                rzp1?.open()
 
                 console.log('API Response:', response2);
 
@@ -220,6 +269,11 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
         }
     }
 
+
+    // React.useEffect(() => {
+    //     const customer_name = customers.find((data: any) => data._id === form.watch("customer_id"))?.fullName
+    //     form.setValue("item.name", customer_name && customer_name.charAt(0).toUpperCase() + customer_name.slice(1) + `'s Plan` || "")
+    // }, [form.watch("customer_id")])
 
 
 
@@ -298,71 +352,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                 )}
                             />
                             {/* <FormField
-                                name="plan"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col gap-2">
-                                        <FormLabel>Select a Plan</FormLabel>
-                                        <Popover>
-                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant="outline"
-                                                        role="combobox"
-                                                        className={cn(
-                                                            "w-full justify-between",
-                                                            !field.value && "text-muted-foreground"
-                                                        )}
-                                                    >
-                                                        {field.value
-                                                            ? plans.find(
-                                                                (data: any) => data._id === field.value
-                                                            ).name
-                                                            : "Select a Plan"}
-                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-full p-0">
-                                                <Command >
-                                                    <CommandInput
-                                                        placeholder="Search Plan..."
-                                                        className="h-9"
-                                                    />
-                                                    <CommandEmpty>No Plan Found </CommandEmpty>
-                                                    <CommandGroup>
-                                                        {plans.map((data: any) => (
-                                                            <CommandItem
-                                                                value={data._id}
-                                                                key={data._id}
-
-                                                                onSelect={() => {
-                                                                    form.setValue("plan", data._id)
-
-                                                                }
-                                                                }
-                                                            >
-                                                                {data.name}
-                                                                <CheckIcon
-                                                                    className={cn(
-                                                                        "ml-auto h-4 w-4",
-                                                                        data._id === field.value
-                                                                            ? "opacity-100"
-                                                                            : "opacity-0"
-                                                                    )}
-                                                                />
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
-                                                </Command>
-                                            </PopoverContent>
-                                        </Popover>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> */}
-                            <FormField
-                                name="service_id"
+                                name="name"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
@@ -370,6 +360,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                         <FormControl>
                                             <Input
                                                 type="text"
+                                                disabled={true}
                                                 placeholder="eg. Basic Plan"
                                                 id="plan_name"  {...field} />
                                         </FormControl>
@@ -377,7 +368,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
 
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                             <FormField
                                 name="service"
                                 control={form.control}
@@ -504,104 +495,6 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                     </FormItem>
                                 )}
                             />
-                            {/* <FormField
-                                name="planfor"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-col gap-2">
-                                        <FormLabel>Plan For</FormLabel>
-                                        <Popover>
-                                            <PopoverTrigger {...field} defaultValue={field.value} asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant="outline"
-                                                        role="combobox"
-                                                        className={cn(
-                                                            "w-full justify-between",
-                                                            !field.value && "text-muted-foreground"
-                                                        )}
-                                                    >
-                                                        {field.value
-                                                            ? planfor.find(
-                                                                (data: any) => data.title === field.value
-                                                            )?.title === "below12" ? "Below 12" : "Above 12"
-                                                            : "Select Plan for Age Group"}
-                                                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-full p-0">
-                                                <Command >
-                                                    <CommandInput
-                                                        placeholder="Search Age Group..."
-                                                        className="h-9"
-                                                    />
-                                                    <CommandEmpty>No Age Group Found </CommandEmpty>
-                                                    <CommandGroup>
-                                                        {planfor.map((data: any) => (
-                                                            <CommandItem
-                                                                value={data.title}
-                                                                key={data.title}
-                                                                onSelect={() => {
-                                                                    form.setValue("planfor", data.title)
-                                                                }}
-                                                            >
-                                                                {data.title === "below12" ? "Below 12" : "Above 12"}
-                                                                <CheckIcon
-                                                                    className={cn(
-                                                                        "ml-auto h-4 w-4",
-                                                                        data.title === field.value
-                                                                            ? "opacity-100"
-                                                                            : "opacity-0"
-                                                                    )}
-                                                                />
-                                                            </CommandItem>
-                                                        ))}
-                                                    </CommandGroup>
-                                                </Command>
-                                            </PopoverContent>
-                                        </Popover>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> */}
-                            {/* {form.watch("planfor") === "below12" && <FormField
-                                name="below12"
-                                control={form.control}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel htmlFor="plan_name">Plan Amount for Below 12</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type="text"
-                                                placeholder="eg. 599"
-                                                id="plan_name"  {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />}
-                            {form.watch("planfor") === "above12" &&
-                                <FormField
-                                    name="above12"
-                                    control={form.control}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="plan_name">Plan Amount for Above 12</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="eg. 599"
-                                                    id="plan_name"  {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />} */}
-
-                            {/* <Button >
-                                    <Minus className="w-4 h-4" />
-                                </Button> */}
                             <FormField
                                 name="kids_qty"
                                 control={form.control}
@@ -618,11 +511,6 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                     </FormItem>
                                 )}
                             />
-                            {/* <Button >
-                                    <Plus className="w-4 h-4" />
-                                </Button> */}
-
-
                             <FormField
                                 name="adults_qty"
                                 control={form.control}
@@ -659,10 +547,17 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <Heading className='leading-tight' title='Available Plans' />
-                        {/* <div className="flex gap-2 items-center">
-                            <Badge className='text-sm'>Total Plans: </Badge>
-                        </div> */}
-                        {form.watch("item.amount") && <div className='text-sm'>Total Amount: {form.watch("item.amount")}</div>}
+                        <div className="flex gap-2 items-center">
+                            {/* <Badge className='text-sm'>Total Plans: </Badge> */}
+                        </div>
+                        {amount && <div className='text-sm'>Total Amount: {new Intl.NumberFormat('en-IN', {
+                            style: 'currency',
+                            currency: 'INR',
+                            maximumFractionDigits: 0,
+                            minimumFractionDigits: 0
+                        }).format(amount)} / {form.watch("period") === "per month" ? "Month" : form.watch("period") === "per 3 months" ? "3 Months" : form.watch("period") === "per 6 months" ? "6 months" : form.watch("period") === "per 9 months" ? "9 Months" : "Year"}</div>}
+
+
                     </div>
                 </CardHeader>
             </Card>
