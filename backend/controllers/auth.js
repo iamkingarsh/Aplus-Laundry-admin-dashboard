@@ -16,6 +16,7 @@ import axios from 'axios'
 
 export const register = async (req, res, next) => {
   const {
+    id,
     fullName,
     mobileNumber,
     role,
@@ -39,16 +40,12 @@ export const register = async (req, res, next) => {
   };
 
   try {
-    // Check if the user already exists by email or mobileNumber
-    const existingUser = await User.findOne({
-      $or: [{ email }, { mobileNumber }]
-    });
-
-    if (existingUser) {
-      // Update existing user with the provided fields
-      await User.updateOne({ _id: existingUser._id }, { $set: userFields });
-      const updatedUser = await User.findById(existingUser._id);
-
+    if (id) {
+      // Update user if ID is provided
+      const updatedUser = await User.findByIdAndUpdate(id, { $set: userFields }, { new: true });
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
       const token = jwt.sign({
         id: updatedUser._id,
         role: updatedUser.role,
@@ -62,7 +59,16 @@ export const register = async (req, res, next) => {
       });
     }
 
-    // If the user does not exist, create a new user
+    // Check if user already exists by email or mobileNumber
+    const existingUser = await User.findOne({
+      $or: [{ email }, { mobileNumber }]
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists", user: existingUser });
+    }
+
+    // If the user does not exist and ID is not provided, create a new user
     const newUser = new User(userFields);
     await newUser.save();
 
@@ -81,6 +87,7 @@ export const register = async (req, res, next) => {
     next(err);
   }
 };
+
 
 export const signin = async (req, res, next) => {
   const {
