@@ -18,6 +18,7 @@ function checkIfOwner() {
             console.log(result.user)
             currentRole = result.user.role
 
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -27,7 +28,9 @@ function checkIfOwner() {
 
 
 
-    const isOwner = currentRole !== 'owner' ? false : true
+    const isOwner = currentRole === 'owner' ? false : true
+    console.log('isOwnerisOwnerisOwnerisOwnerisOwner',isOwner)
+
     return isOwner
 }
 

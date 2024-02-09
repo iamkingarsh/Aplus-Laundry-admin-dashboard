@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema({
     payment_id: { type: String, required: true },
+    customer_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User collection
+      },
     entity: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
