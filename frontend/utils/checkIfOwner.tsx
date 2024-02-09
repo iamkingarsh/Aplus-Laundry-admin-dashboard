@@ -27,7 +27,7 @@ function checkIfOwner() {
 
 
 
-    const isOwner = currentRole === 'owner' ? false : true
+    const isOwner = currentRole !== 'owner' ? false : true
     return isOwner
 }
 

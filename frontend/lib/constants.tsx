@@ -71,15 +71,16 @@ const sidebarTabs = [
     //     icon: <UsersIcon className="w-4 mr-2" />
     // },
     {
-        title: 'Settings',
-        path: '/settings',
-        icon: <CogIcon className="w-4 mr-2" />
-    },
-    {
         title: 'Subscriptions',
         path: '/subscription-plans',
         icon: <BadgeIndianRupee className="w-4 mr-2" />
     },
+    {
+        title: 'Settings',
+        path: '/settings',
+        icon: <CogIcon className="w-4 mr-2" />
+    },
+
 ]
 
 
