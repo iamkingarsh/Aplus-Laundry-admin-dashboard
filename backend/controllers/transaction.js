@@ -1,55 +1,59 @@
 import Transaction from "../models/transacation.js"
 
 
-// export const createOrUpdateTransaction = async (req, res) => {
-//     try {
-//         const {
-//         id,
-//         order,
-//         razorpay_payment_id,
-//         razorpay_order_id,
-//         razorpay_signature,
-//         status,
-//         } = req.body;
+export const createOrUpdateTransaction = async (req, res) => {
+    try {
+        const {
+        id,
+        order,
+        razorpay_payment_id,
+        razorpay_order_id,
+        razorpay_signature,
+        status,
+        customer_id
+        } = req.body;
 
-//         const existingTransaction = await Transaction.findById(id);
+        const existingTransaction = await Transaction.findById(id);
 
-//         if (existingTransaction) {
-//         existingTransaction.order = order;
-//         existingTransaction.razorpay_payment_id = razorpay_payment_id;
-//         existingTransaction.razorpay_order_id = razorpay_order_id;
-//         existingTransaction.razorpay_signature = razorpay_signature;
-//         existingTransaction.status = status;
+        if (existingTransaction) {
+        existingTransaction.order = order;
+        existingTransaction.razorpay_payment_id = razorpay_payment_id;
+        existingTransaction.razorpay_order_id = razorpay_order_id;
+        existingTransaction.razorpay_signature = razorpay_signature;
+        existingTransaction.customer_id =  customer_id;
 
-//         await existingTransaction.save();
+        existingTransaction.status = status;
 
-//         return res.status(200).json({
-//             message: "Transaction updated successfully",
-//             transaction: existingTransaction,
-//         });
-//         } else {
-//         const newTransaction = new Transaction({
-//             order,
-//             razorpay_payment_id,
-//             razorpay_order_id,
-//             razorpay_signature,
-//             status,
-//         });
+        await existingTransaction.save();
 
-//         await newTransaction.save();
+        return res.status(200).json({
+            message: "Transaction updated successfully",
+            transaction: existingTransaction,
+        });
+        } else {
+        const newTransaction = new Transaction({
+            order,
+            razorpay_payment_id,
+            razorpay_order_id,
+            razorpay_signature,
+            status,
+            customer_id
+        });
 
-//         return res.status(201).json({
-//             message: "Transaction created successfully",
-//             transaction: newTransaction,
-//         });
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500).json({
-//         error: "Internal Server Error",
-//         });
-//     }
-//     };
+        await newTransaction.save();
+
+        return res.status(201).json({
+            message: "Transaction created successfully",
+            transaction: newTransaction,
+        });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+        error: "Internal Server Error",
+        });
+    }
+    };
 
 
 export const getAllTransactions = async (req, res) => {
