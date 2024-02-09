@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import CreateNew from '@/components/create-new'
 import { RevenueGraph } from '@/components/revenue-graph'
 import StatsCard from '@/components/statscard'
@@ -10,14 +10,27 @@ import { DatePickerWithRange } from '@/components/date-range'
 import checkIfOwner from '@/utils/checkIfOwner'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { fetchData } from '@/axiosUtility/api'
 
 
 
-export default function page() {
-
+export default function Page() {
 
 
     const isOwner = checkIfOwner()
+
+    const [ordersData, setOrdersData] = useState([]) as any[]
+
+    const getOrdersData = async () => {
+        const response = await fetchData('/order/getall')
+        console.log('ytseyshdhs', response)
+        setOrdersData(response.orders)
+    }
+
+    useEffect(() => {
+        getOrdersData()
+    }, [])
 
     const StatsData = [
         {
@@ -30,7 +43,7 @@ export default function page() {
         },
         {
             title: 'Total Orders',
-            stat: 30,
+            stat: ordersData?.length,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
             desc: '+180.1% from last month',
@@ -117,7 +130,7 @@ export default function page() {
                             </div>
                         </CardHeader>
                         <CardContent>
-                            <RecentOrders />
+                            <RecentOrders data={ordersData} />
 
                         </CardContent>
                     </Card>

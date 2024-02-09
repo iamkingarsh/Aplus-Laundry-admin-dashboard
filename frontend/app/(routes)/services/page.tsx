@@ -44,6 +44,7 @@ export default function Page() {
                     laundrybykgprice: service.laundryByKG.price,
                     laundryperpair: service.laundryPerPair.active ? 'Active' : 'Deactive',
                     icon: <ServerIcon className="w-3 mr-2" />,
+                    isSubscriptionService: service?.isSubscriptionService
                 };
             });
 
