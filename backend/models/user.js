@@ -43,12 +43,7 @@ const userSchema = new mongoose.Schema({
         },
     },
     mobileNumber: {
-        type: Number,
-        required: function () {
-            // return ['customer', 'deliveryagent'].includes(this.role) || email === undefined;
-            return this.email === undefined;
-        },
-        unique: true
+        type: Number, 
     },
     address: {
         type: [addressSchema], 
