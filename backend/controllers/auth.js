@@ -31,15 +31,39 @@ export const register = async (req, res, next) => {
   const userFields = {
     ...(fullName && { fullName }),
     ...(profileImg && { profileImg }),
-    ...(mobileNumber && { mobileNumber }),
     ...(role && { role }),
     ...(email && { email }),
     ...(customerType && { customerType }),
     ...(address && { address }),
-    ...(pincode && { pincode }),
+    ...(pincode && { pincode }), 
+
   };
 
+  // Only include mobileNumber if it is provided and not null
+  if (mobileNumber !== undefined && mobileNumber !== null) {
+    userFields.mobileNumber = mobileNumber;
+  } else {
+    // Remove mobileNumber from userFields if it's not provided
+    delete userFields.mobileNumber;
+  }
+
   try {
+    let existingUser;
+
+    // Check if email is provided
+    if (email) {
+      existingUser = await User.findOne({ email });
+    }
+
+    // Check if mobile number is provided
+    if (!existingUser && mobileNumber !== undefined && mobileNumber !== null) {
+      existingUser = await User.findOne({ mobileNumber });
+    }
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists", user: existingUser });
+    }
+
     if (id) {
       // Update user if ID is provided
       const updatedUser = await User.findByIdAndUpdate(id, { $set: userFields }, { new: true });
@@ -59,41 +83,38 @@ export const register = async (req, res, next) => {
       });
     }
 
-    let existingUser;
-
-    // Check if both email and mobile number are provided
-    if (email && mobileNumber) {
-      existingUser = await User.findOne({ $or: [{ email }, { mobileNumber }] });
-    } else if (email) {
-      // Check if only email is provided
-      existingUser = await User.findOne({ email });
-    } else if (mobileNumber) {
-      // Check if only mobile number is provided
-      existingUser = await User.findOne({ mobileNumber });
-    }
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists", user: existingUser });
-    }
-
     // If the user does not exist and ID is not provided, create a new user
     const newUser = new User(userFields);
     await newUser.save();
 
-    const token = jwt.sign({
-      id: newUser._id,
-      role: newUser.role,
-    }, process.env.JWT_SECRETKEY);
+    sendOTPforverification()
 
-    res.cookie('accessToken', token, {
-      httpOnly: true
-    }).status(201).json({
+    // const token = jwt.sign({
+    //   id: newUser._id,
+    //   role: newUser.role,
+    // }, process.env.JWT_SECRETKEY);
+
+    // res.cookie('accessToken', token, {
+    //   httpOnly: true
+    // }).status(201).json({
+    //   message: "New user created",
+    //   user: token
+    // });
+    res.status(200).send({
+      ok: true,
       message: "New user created",
-      user: token
     });
   } catch (err) {
     next(err);
   }
 };
+
+
+  
+
+
+
+
 
 
 export const signin = async (req, res, next) => {
