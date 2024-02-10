@@ -383,20 +383,24 @@ export const createSubscriptionCheckout = async (req, res) => {
 
 
 
-export const verifySubscriptionPayment = async (req, res) => {
+export const saveSubscriptionPayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
+        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id,end_date } = req.body;
+
+       
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
-        console.log("Payment Details:", paymentDetails);
 
-        const transaction = new Transaction({
+        // Create a new subscription transaction
+        const transaction = new SubscriptionTransaction({
             payment_id: razorpay_payment_id,
+            customer_id,
+            razorpay_signature,
             entity: paymentDetails.entity,
             amount: paymentDetails.amount,
             currency: paymentDetails.currency,
             status: paymentDetails.status,
-            razorpay_order_id: paymentDetails.order_id,
+             razorpay_plan_id,
             method: paymentDetails.method,
             captured: paymentDetails.captured,
             card_id: paymentDetails.card_id,
@@ -415,22 +419,52 @@ export const verifySubscriptionPayment = async (req, res) => {
             upi: {
                 vpa: paymentDetails.upi.vpa,
             },
-
         });
 
+        // Save the transaction
         const savedTransaction = await transaction.save();
 
-        // Update the corresponding order document with the transaction ID
-        await Order.findOneAndUpdate(
-            { _id: orderid },
-            { $set: { transaction_id: savedTransaction._id } },
+        // Find the subscription document by its ID and update its subscriptionTransaction_id array
+        const updatedSubscription = await Subscription.findByIdAndUpdate(
+            subscription_id,
+            { $push: { subscriptionTransaction_id: savedTransaction._id } },
+            { new: true }
+        );
+         // Update the customerType of the user to 'subscriber'
+         const updatedUser = await User.findByIdAndUpdate(
+            customer_id,
+            { customerType: 'subscriber' },
             { new: true }
         );
 
-        res.status(200).json({ success: true, message: 'Payment details saved successfully' });
-
+        res.status(200).json({ success: true, message: 'Payment details saved successfully', subscription: updatedSubscription });
     } catch (error) {
         console.error('Error saving payment:', error);
         res.status(500).json({ success: false, message: 'Error saving payment' });
+    }
+};
+
+
+
+
+ 
+export const fetchSubscribers = async (req, res) => {
+    try {
+        // Set subscription end date
+        const subscriptionEndDate = new Date('2024-02-12T14:00:00');
+
+        // Update all users with role 'customer' to be subscribers and set subscriptionEndDate
+        await User.updateMany(
+            { role: 'customer' },
+            { $set: { customerType: 'subscriber', subscriptionEndDate: subscriptionEndDate } }
+        );
+
+        // Fetch all subscribers after update
+        const subscribers = await User.find({ customerType: 'subscriber' });
+
+        res.status(200).json({ success: true, subscribers });
+    } catch (error) {
+        console.error('Error fetching subscribers:', error);
+        res.status(500).json({ success: false, message: 'Error fetching subscribers' });
     }
 };
