@@ -59,11 +59,18 @@ export const register = async (req, res, next) => {
       });
     }
 
-    // Check if user already exists by email or mobileNumber
-    const existingUser = await User.findOne({
-      $or: [{ email }, { mobileNumber }]
-    });
+    let existingUser;
 
+    // Check if both email and mobile number are provided
+    if (email && mobileNumber) {
+      existingUser = await User.findOne({ $or: [{ email }, { mobileNumber }] });
+    } else if (email) {
+      // Check if only email is provided
+      existingUser = await User.findOne({ email });
+    } else if (mobileNumber) {
+      // Check if only mobile number is provided
+      existingUser = await User.findOne({ mobileNumber });
+    }
     if (existingUser) {
       return res.status(409).json({ message: "User already exists", user: existingUser });
     }
