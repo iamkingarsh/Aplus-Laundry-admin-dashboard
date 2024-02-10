@@ -195,7 +195,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                     plan_id: response1?.plan?.id,
                     total_count: 12,
                     quantity: 1,
-                    notes: response1?.plan.notes
+                    notes: response1?.fetchPlan.notes
                 };
 
                 const response2 = await postData('/razorpaySubscription/createSubscriptionCheckout', responseData);
