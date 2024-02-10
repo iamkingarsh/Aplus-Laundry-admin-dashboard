@@ -122,7 +122,7 @@ export const createPlan = async (req, res) => {
         const fetchPlan = await razorpay.plans.fetch(existingSubscription.razorpay_plan_id);
 
         if (existingSubscription) {
-            return res.status(409).json({
+            return res.status(200).json({
                 message: "Subscription already exists",
                 subscription: existingSubscription,
                 fetchPlan:fetchPlan
