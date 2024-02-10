@@ -3,6 +3,7 @@ import Razorpay from "razorpay";
 import Transaction from "../models/transacation.js";
 import Service from "../models/service.js";
 import User from "../models/user.js";
+import Subscription from "../models/subscription.js";
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -109,8 +110,21 @@ export const verifyPayment = async (req, res) => {
 export const createPlan = async (req, res) => {
     const { period, interval, item, service_id, kids_qty, adult_qty, user_id } = req.body;
 
-
     try {
+         // Check if a subscription with the provided details already exists
+         const existingSubscription = await Subscription.findOne({
+            period,
+            kids_qty,
+            adult_qty,
+            service_id
+        });
+
+        if (existingSubscription) {
+            return res.status(409).json({
+                message: "Subscription already exists",
+                subscription: existingSubscription
+            });
+        }
         // Create Razorpay plan
         const plan = await razorpay.plans.create({
             period: period,
@@ -125,22 +139,32 @@ export const createPlan = async (req, res) => {
                 service_id,
                 kids_qty,
                 adult_qty,
-                user_id
-
+                // user_id
             },
         });
 
-        const updatedUser = await User.findByIdAndUpdate(
-            user_id,
-            { customerType: 'subscriber' },
-            { new: true }
-        );
+        // Update the user's customerType to 'subscriber'
+        // const updatedUser = await User.findByIdAndUpdate(
+        //     user_id,
+        //     { customerType: 'subscriber' },
+        //     { new: true }
+        // );
 
+        // Create a new subscription record
+        const subscription = new Subscription({
+            period,
+            kids_qty,
+            adult_qty,
+            service_id,
+            razorpay_plan_id: plan.id,  
+        });
+        await subscription.save();
 
         return res.status(200).json({
             message: "Plan Created successfully",
             plan: plan,
             updatedUser: updatedUser,
+            subscription: subscription // Include the created subscription in the response
         });
     } catch (error) {
         console.error(error);
@@ -149,7 +173,6 @@ export const createPlan = async (req, res) => {
         });
     }
 };
-
 export const getAllPlans = async (req, res) => {
     //     try {
     //         const plans = await razorpay.plans.all();
