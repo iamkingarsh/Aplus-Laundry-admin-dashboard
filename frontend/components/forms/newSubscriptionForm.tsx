@@ -222,7 +222,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                     recurring: true,
                     handler: function (response: any) {
                         // console.log('rajooor pay', response);
-                        // const reply = postData('/order/save', response)
+                        const reply = postData('/order/save', response)
                         // console.log(reply)
                         alert(response.razorpay_payment_id);
                         alert(response.razorpay_order_id);
