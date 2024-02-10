@@ -142,7 +142,7 @@ export const createPlan = async (req, res) => {
                 service_id,
                 kids_qty,
                 adult_qty,
-                // user_id
+                user_id
             },
         });
 
