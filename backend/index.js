@@ -1,3 +1,5 @@
+// index.js
+
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -13,10 +15,7 @@ import categoryRouter from './routes/category.js';
 import transactionRouter from './routes/transaction.js';
 import razorpaySubcriptionRouter from './routes/razorpaysubcriptions.js';
 import planPricing from './routes/planPricing.js';
-
-// const bodyParser = require('body-parser');
-
-
+import checkSubscription from './task_scheduler/subscriptionCron.js'; // Import the task
 
 dotenv.config();
 
@@ -51,13 +50,6 @@ app.use('/coupon', couponRouter);
 app.use('/appBanner', appBannerRouter);
 app.use('/transaction', transactionRouter)
 app.use('/razorpaySubscription', razorpaySubcriptionRouter)
-app.use('/planPricing', planPricing)
-
-
-
-
-
-
-
-
+app.use('/planPricing', planPricing)  
+checkSubscription.start()
 app.use(errorHandler);
