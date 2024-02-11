@@ -27,25 +27,24 @@ export const register = async (req, res, next) => {
     pincode
   } = req.body;
 
-  // Filter out undefined or empty fields
-  const userFields = {
-    ...(fullName && { fullName }),
-    ...(profileImg && { profileImg }),
-    ...(role && { role }),
-    ...(email && { email }),
-    ...(customerType && { customerType }),
-    ...(address && { address }),
-    ...(pincode && { pincode }), 
+  // Initialize userFields object
+  const userFields = {};
 
-  };
+  // Add fields if they exist in the request body
+  if (fullName) userFields.fullName = fullName;
+  if (profileImg) userFields.profileImg = profileImg;
+  if (role) userFields.role = role;
+  if (email) userFields.email = email;
+  if (customerType) userFields.customerType = customerType;
+  if (address) userFields.address = address;
+  if (pincode) userFields.pincode = pincode;
+  console.log('hcfbvhhhhjbfhhj11');
 
   // Only include mobileNumber if it is provided and not null
   if (mobileNumber !== undefined && mobileNumber !== null) {
     userFields.mobileNumber = mobileNumber;
-  } else {
-    // Remove mobileNumber from userFields if it's not provided
-    delete userFields.mobileNumber;
   }
+  console.log('hcfbvhhhhjbfhhj2');
 
   try {
     if (id) {
@@ -66,41 +65,32 @@ export const register = async (req, res, next) => {
         user: token
       });
     }
-    let existingUser;
+    console.log('hcfbvhhhhjbfhhj3');
 
     // Check if email is provided
     if (email) {
-      existingUser = await User.findOne({ email });
+      const existingUserByEmail = await User.findOne({ email });
+      if (existingUserByEmail) {
+        return res.status(409).json({ message: "User already exists", user: existingUserByEmail });
+      }
     }
 
     // Check if mobile number is provided
-    if (!existingUser && mobileNumber !== undefined && mobileNumber !== null) {
-      existingUser = await User.findOne({ mobileNumber });
+    if (mobileNumber !== undefined && mobileNumber !== null) {
+      const existingUserByMobile = await User.findOne({ mobileNumber });
+      if (existingUserByMobile) {
+        return res.status(409).json({ message: "User already exists", user: existingUserByMobile });
+      }
     }
+    console.log('hcfbvhhhhjbfhhj4');
 
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists", user: existingUser });
-    }
-
-    
-
-    // If the user does not exist and ID is not provided, create a new user
+    // Create a new user if ID is not provided
     const newUser = new User(userFields);
+    console.log('hcfbvhhhhjbfhhj5',newUser,userFields);
     await newUser.save();
 
-
-    // const token = jwt.sign({
-    //   id: newUser._id,
-    //   role: newUser.role,
-    // }, process.env.JWT_SECRETKEY);
-
-    // res.cookie('accessToken', token, {
-    //   httpOnly: true
-    // }).status(201).json({
-    //   message: "New user created",
-    //   user: token
-    // });
-    res.status(200).send({
+    // Respond with success message
+    res.status(200).json({
       ok: true,
       message: "New user created",
     });
@@ -108,6 +98,7 @@ export const register = async (req, res, next) => {
     next(err);
   }
 };
+
 
 
   
