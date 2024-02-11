@@ -9,8 +9,7 @@ const addressSchema = new mongoose.Schema({
 
     },
     location: {
-        type: String,
-        required: true,
+        type: String, 
     },
     coordinates: {
         type: {
@@ -66,7 +65,19 @@ const userSchema = new mongoose.Schema({
             return this.role === 'customer';
         },
         enum: ['subscriber', 'nonsubscriber'],
-    }
+    },
+    subscriptionStartDate: {
+        type: Date,
+        required: function () {
+            return this.customerType === 'subscriber';
+        },
+    },
+    subscriptionEndDate: {
+        type: Date,
+        required: function () {
+            return this.customerType === 'subscriber';
+        },
+    },
 }, {
     timestamps: true
 });
