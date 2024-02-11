@@ -48,22 +48,6 @@ export const register = async (req, res, next) => {
   }
 
   try {
-    let existingUser;
-
-    // Check if email is provided
-    if (email) {
-      existingUser = await User.findOne({ email });
-    }
-
-    // Check if mobile number is provided
-    if (!existingUser && mobileNumber !== undefined && mobileNumber !== null) {
-      existingUser = await User.findOne({ mobileNumber });
-    }
-
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists", user: existingUser });
-    }
-
     if (id) {
       // Update user if ID is provided
       const updatedUser = await User.findByIdAndUpdate(id, { $set: userFields }, { new: true });
@@ -82,12 +66,28 @@ export const register = async (req, res, next) => {
         user: token
       });
     }
+    let existingUser;
+
+    // Check if email is provided
+    if (email) {
+      existingUser = await User.findOne({ email });
+    }
+
+    // Check if mobile number is provided
+    if (!existingUser && mobileNumber !== undefined && mobileNumber !== null) {
+      existingUser = await User.findOne({ mobileNumber });
+    }
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists", user: existingUser });
+    }
+
+    
 
     // If the user does not exist and ID is not provided, create a new user
     const newUser = new User(userFields);
     await newUser.save();
 
-    sendOTPforverification()
 
     // const token = jwt.sign({
     //   id: newUser._id,
