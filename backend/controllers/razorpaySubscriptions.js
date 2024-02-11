@@ -434,7 +434,7 @@ export const saveSubscriptionPayment = async (req, res) => {
             customer_id,
             { 
                 customerType: 'subscriber',
-                subscriptionEndDate: end_date, // Update subscription end date
+                subscription_id: subscription_id, // Update subscription end date
             },
             { new: true }
         );
