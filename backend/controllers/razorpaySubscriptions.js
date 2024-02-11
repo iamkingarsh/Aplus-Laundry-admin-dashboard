@@ -385,9 +385,7 @@ export const createSubscriptionCheckout = async (req, res) => {
 
 export const saveSubscriptionPayment = async (req, res) => {
     try {
-        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id,end_date } = req.body;
-
-       
+        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id, end_date } = req.body;
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 
@@ -400,7 +398,7 @@ export const saveSubscriptionPayment = async (req, res) => {
             amount: paymentDetails.amount,
             currency: paymentDetails.currency,
             status: paymentDetails.status,
-             razorpay_plan_id,
+            razorpay_plan_id,
             method: paymentDetails.method,
             captured: paymentDetails.captured,
             card_id: paymentDetails.card_id,
@@ -430,10 +428,14 @@ export const saveSubscriptionPayment = async (req, res) => {
             { $push: { subscriptionTransaction_id: savedTransaction._id } },
             { new: true }
         );
-         // Update the customerType of the user to 'subscriber'
-         const updatedUser = await User.findByIdAndUpdate(
+
+        // Update the customerType of the user to 'subscriber'
+        const updatedUser = await User.findByIdAndUpdate(
             customer_id,
-            { customerType: 'subscriber' },
+            { 
+                customerType: 'subscriber',
+                subscriptionEndDate: end_date, // Update subscription end date
+            },
             { new: true }
         );
 
@@ -443,6 +445,7 @@ export const saveSubscriptionPayment = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error saving payment' });
     }
 };
+
 
 
 
