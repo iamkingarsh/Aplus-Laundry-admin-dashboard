@@ -6,7 +6,7 @@ import { NewOrderModalProvider } from '@/components/providers/NewOrderModal-Prov
 import { ToastProvider } from '@/components/providers/toast-provider'
 import { useEffect, useState } from 'react'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: "--font-sans", })
 
 
 

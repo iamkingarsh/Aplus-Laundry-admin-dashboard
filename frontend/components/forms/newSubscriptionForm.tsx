@@ -185,7 +185,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                 kids_qty: values.kids_qty,
                 adult_qty: values.adults_qty,
                 service_id: plan.service._id,
-                user_id: values.customer_id,
+                // user_id: values.customer_id,
             };
 
             try {
@@ -220,12 +220,20 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                     subscription_id: response2?.data?.id,
                     redirect: true,
                     recurring: true,
-                    handler: function (response: any) {
+                    handler: async function (response: any) {
                         // console.log('rajooor pay', response);
-                        const reply = postData('/order/save', response)
-                        // console.log(reply)
+                        const data = {
+                            ...response,
+                            razorpay_plan_id: response1?.plan?.id,
+                            customer_id: values.customer_id,
+                            subscription_id: response1.subscription._id
+
+                        }
+
+                        const reply = await postData('/razorpaySubscription/subscriptionTransaction/save', data)
+                        console.log(reply)
                         alert(response.razorpay_payment_id);
-                        alert(response.razorpay_order_id);
+                        alert(response.razorpay_subscription_id);
                         alert(response.razorpay_signature);
                         // instance.payments.fetch(paymentId)
                     },
