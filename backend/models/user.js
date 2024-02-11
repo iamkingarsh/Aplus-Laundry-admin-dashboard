@@ -71,12 +71,19 @@ const userSchema = new mongoose.Schema({
     //         return this.customerType === 'subscriber';
     //     },
     // },
-    subscriptionEndDate: {
-        type: Date,
+    // subscriptionEndDate: {
+    //     type: Date,
+        // required: function () {
+        //     return this.customerType === 'subscriber';
+        // },
+    // },
+    subscription_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subscription', // Reference to the Subscription collection
         required: function () {
             return this.customerType === 'subscriber';
         },
-    },
+      },
 }, {
     timestamps: true
 });
