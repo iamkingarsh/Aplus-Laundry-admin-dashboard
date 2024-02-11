@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const addressSchema = new mongoose.Schema({
     addressType: {
         type: String,
-        unique: true,  
-        sparse: true,  
+        sparse: true,
     },
     location: {
         type: String,
@@ -41,12 +40,14 @@ const userSchema = new mongoose.Schema({
     },
     mobileNumber: {
         type: Number,
+        sparse: true,
+        required: false,
     },
     address: {
         type: [addressSchema],
-        required: function () {
-            return this.role === 'customer';
-        },
+        sparse: true,
+        required: false,
+
     },
     profileImg: {
         type: String,
@@ -64,12 +65,12 @@ const userSchema = new mongoose.Schema({
         },
         enum: ['subscriber', 'nonsubscriber'],
     },
-    subscriptionStartDate: {
-        type: Date,
-        required: function () {
-            return this.customerType === 'subscriber';
-        },
-    },
+    // subscriptionStartDate: {
+    //     type: Date,
+    //     required: function () {
+    //         return this.customerType === 'subscriber';
+    //     },
+    // },
     subscriptionEndDate: {
         type: Date,
         required: function () {
