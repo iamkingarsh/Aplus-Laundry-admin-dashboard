@@ -426,6 +426,8 @@ export const saveSubscriptionPayment = async (req, res) => {
         const savedTransaction = await transaction.save();
 
 
+        console.log('savedTransaction', savedTransaction)
+
 
         // Find the subscription document by its ID and update its subscriptionTransaction_id array
         const updatedSubscription = await Subscription.findByIdAndUpdate(
@@ -434,6 +436,7 @@ export const saveSubscriptionPayment = async (req, res) => {
             { new: true }
         );
 
+        console.log('updatedSubscription', updatedSubscription)
         // Update the customerType of the user to 'subscriber'
         const updatedUser = await User.findByIdAndUpdate(
             customer_id,
