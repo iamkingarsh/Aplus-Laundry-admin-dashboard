@@ -21,22 +21,46 @@ export default function Page() {
     const isOwner = checkIfOwner()
 
     const [ordersData, setOrdersData] = useState([]) as any[]
-
+    const [totalRevenue, setTotalRevenue] = useState(0) as any[]
+    const [totalSubscribers, setTotalSubscribers] = useState(0) as any[]
     const getOrdersData = async () => {
         const response = await fetchData('/order/getall')
         console.log('ytseyshdhs', response)
         setOrdersData(response.orders)
     }
 
+    const getTotalRevenue = async () => {
+        const response = await fetchData('/transaction/getall')
+        console.log('response', response.transactions)
+        const transactions = response.transactions
+        const totalRevenue = transactions.reduce((acc: any, transaction: any) => {
+            return acc + transaction.amount
+        }, 0)
+        setTotalRevenue(totalRevenue)
+
+        // setOrdersData(response.orders)
+    }
+
+    const getTotalSubscribers = async () => {
+        const response = await fetchData('/auth/getallcustomers')
+        console.log('response', response)
+        const customers = response
+        const totalSubscribedCustomers = customers?.filter((customer: any) => customer.customerType === 'subscriber').length
+        console.log('totalSubscribedCustomers', totalSubscribedCustomers)
+        setTotalSubscribers(totalSubscribedCustomers)
+    }
+
     useEffect(() => {
         getOrdersData()
+        getTotalRevenue()
+        getTotalSubscribers()
     }, [])
 
     const StatsData = [
         {
             title: 'Total Revenue',
-            stat: 2300,
-            statPrefix: '₹',
+            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue / 100),
+            // statPrefix: '₹',
             icon: <IndianRupeeIcon />,
             desc: '+180.1% from last month',
             href: '/revenue'
@@ -51,7 +75,7 @@ export default function Page() {
         },
         {
             title: 'Total Subscribers',
-            stat: 350,
+            stat: totalSubscribers,
             statPrefix: '+',
             icon: <Users />,
             desc: '+180.1% from last month',
