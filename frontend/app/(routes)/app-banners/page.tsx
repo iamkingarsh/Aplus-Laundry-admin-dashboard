@@ -9,20 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { columns } from './components/columns'
 import { fetchData } from '@/axiosUtility/api'
 
-// const BannersData = [
-//     {
-//         id: 'sdgsr95',
-//         title: "Flat 10% Off",
-//         desc: "Get 10% off use code 'Wel10' ",
-//         background: "/assets/bg.png"
-//     },
-//     {
-//         id: 'sdgeh59',
-//         title: "Flat 20% Off",
-//         desc: "Get 20% off use code 'Wel20' ",
-//         background: "/assets/bg.png "
-//     }
-// ] as any;
+
 
 export default function Page() {
   const [bannersData, setBannersData] = useState([])
@@ -31,15 +18,8 @@ export default function Page() {
     try {
       const result = await fetchData('/appBanner/getall'); // Replace 'your-endpoint' with the actual API endpoint
       setBannersData(result?.appBanners)
-      console.log(result?.appBanners)
-      //   if (result && result.categories) {
-      //     const categories = result.categories;
-      //     setCategories(categories);
-      //     setLoading(false)
-      //     // Now you can work with the 'categories' array
-      //   } else {
-      //     console.error('Response format is not as expected');
-      //   }
+
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
