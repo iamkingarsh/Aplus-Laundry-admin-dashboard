@@ -1,33 +1,31 @@
-import e from "express";
 import mongoose from "mongoose";
-
 
 const addressSchema = new mongoose.Schema({
     addressType: {
         type: String,
-        unique: true
-
+        unique: true,  
+        sparse: true,  
     },
     location: {
-        type: String, 
+        type: String,
     },
     coordinates: {
         type: {
             type: String,
-            default: "Point", 
+            default: "Point",
         },
         coordinates: {
             type: [Number],
             required: true,
-        },},
-      pincode: {
+        },
+    },
+    pincode: {
         type: String,
         required: function () {
-            return this.role === 'customer'; 
+            return this.role === 'customer';
         },
     },
 });
-
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -42,10 +40,10 @@ const userSchema = new mongoose.Schema({
         },
     },
     mobileNumber: {
-        type: Number, 
+        type: Number,
     },
     address: {
-        type: [addressSchema], 
+        type: [addressSchema],
         required: function () {
             return this.role === 'customer';
         },
@@ -85,8 +83,3 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 export default User;
-
- 
-
-
- 
