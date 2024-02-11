@@ -25,13 +25,12 @@ export default function Page() {
     const [totalSubscribers, setTotalSubscribers] = useState(0) as any[]
     const getOrdersData = async () => {
         const response = await fetchData('/order/getall')
-        console.log('ytseyshdhs', response)
+
         setOrdersData(response.orders)
     }
 
     const getTotalRevenue = async () => {
         const response = await fetchData('/transaction/getall')
-        console.log('response', response.transactions)
         const transactions = response.transactions
         const totalRevenue = transactions.reduce((acc: any, transaction: any) => {
             return acc + transaction.amount
@@ -43,10 +42,10 @@ export default function Page() {
 
     const getTotalSubscribers = async () => {
         const response = await fetchData('/auth/getallcustomers')
-        console.log('response', response)
+
         const customers = response
         const totalSubscribedCustomers = customers?.filter((customer: any) => customer.customerType === 'subscriber').length
-        console.log('totalSubscribedCustomers', totalSubscribedCustomers)
+
         setTotalSubscribers(totalSubscribedCustomers)
     }
 

@@ -2,7 +2,7 @@
 
 import { fetchData } from "@/axiosUtility/api";
 import { useEffect, useState } from "react";
-import { AreaChart, Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 const data = [
     {
@@ -80,7 +80,7 @@ export function RevenueGraph() {
                     return { date, total };
                 }) as any[];
 
-                console.log('Weekly Sales Array:', weeklySalesArray); // Log the weekly sales array
+
                 setWeeklySalesData(weeklySalesArray);
             } catch (error) {
                 console.error('Error fetching transaction data:', error);
