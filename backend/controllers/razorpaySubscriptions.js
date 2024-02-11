@@ -4,6 +4,8 @@ import Transaction from "../models/transacation.js";
 import Service from "../models/service.js";
 import User from "../models/user.js";
 import Subscription from "../models/subscription.js";
+import SubscriptionTransaction from "../models/subscriptionTransaction.js";
+import mongoose from "mongoose";
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -109,6 +111,7 @@ export const verifyPayment = async (req, res) => {
 
 export const createPlan = async (req, res) => {
     const { period, interval, item, service_id, kids_qty, adult_qty, user_id } = req.body;
+    console.log('req.body', req.body)
 
     try {
         // Check if a subscription with the provided details already exists
@@ -118,14 +121,14 @@ export const createPlan = async (req, res) => {
             adult_qty,
             service_id
         });
-
-        const fetchPlan = await razorpay.plans.fetch(existingSubscription.razorpay_plan_id);
+        console.log('existingSubscription', existingSubscription)
 
         if (existingSubscription) {
+            const fetchPlan = await razorpay.plans.fetch(existingSubscription.razorpay_plan_id);
             return res.status(200).json({
                 message: "Subscription already exists",
                 subscription: existingSubscription,
-                plan:fetchPlan
+                plan: fetchPlan
             });
         }
         // Create Razorpay plan
@@ -385,7 +388,7 @@ export const createSubscriptionCheckout = async (req, res) => {
 
 export const saveSubscriptionPayment = async (req, res) => {
     try {
-        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id, end_date } = req.body;
+        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id } = req.body;
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 
@@ -422,6 +425,8 @@ export const saveSubscriptionPayment = async (req, res) => {
         // Save the transaction
         const savedTransaction = await transaction.save();
 
+
+
         // Find the subscription document by its ID and update its subscriptionTransaction_id array
         const updatedSubscription = await Subscription.findByIdAndUpdate(
             subscription_id,
@@ -432,14 +437,14 @@ export const saveSubscriptionPayment = async (req, res) => {
         // Update the customerType of the user to 'subscriber'
         const updatedUser = await User.findByIdAndUpdate(
             customer_id,
-            { 
+            {
                 customerType: 'subscriber',
-                subscriptionEndDate: end_date, // Update subscription end date
+                // subscriptionEndDate: end_date, // Update subscription end date
             },
             { new: true }
         );
 
-        res.status(200).json({ success: true, message: 'Payment details saved successfully', subscription: updatedSubscription });
+        res.status(200).json({ success: true, message: 'Payment details saved successfully', updatedUser, subscription: updatedSubscription });
     } catch (error) {
         console.error('Error saving payment:', error);
         res.status(500).json({ success: false, message: 'Error saving payment' });
@@ -450,7 +455,7 @@ export const saveSubscriptionPayment = async (req, res) => {
 
 
 
- 
+
 export const fetchSubscribers = async (req, res) => {
     try {
         // Set subscription end date

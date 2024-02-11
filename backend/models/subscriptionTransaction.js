@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const subscriptionTransactionSchema = new mongoose.Schema({
     payment_id: { type: String, required: true },
@@ -6,7 +6,7 @@ const subscriptionTransactionSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'User', // Reference to the User collection
     },
-   
+
     razorpay_signature: { type: String, required: true },
 
     entity: { type: String, required: true },
