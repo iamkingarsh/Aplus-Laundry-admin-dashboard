@@ -185,7 +185,7 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                 kids_qty: values.kids_qty,
                 adult_qty: values.adults_qty,
                 service_id: plan.service._id,
-                user_id: values.customer_id,
+                // user_id: values.customer_id,
             };
 
             try {

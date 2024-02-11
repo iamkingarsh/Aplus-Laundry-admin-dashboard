@@ -111,8 +111,8 @@ export const createPlan = async (req, res) => {
     const { period, interval, item, service_id, kids_qty, adult_qty, user_id } = req.body;
 
     try {
-         // Check if a subscription with the provided details already exists
-         const existingSubscription = await Subscription.findOne({
+        // Check if a subscription with the provided details already exists
+        const existingSubscription = await Subscription.findOne({
             period,
             kids_qty,
             adult_qty,
@@ -147,11 +147,11 @@ export const createPlan = async (req, res) => {
         });
 
         // Update the user's customerType to 'subscriber'
-        // const updatedUser = await User.findByIdAndUpdate(
-        //     user_id,
-        //     { customerType: 'subscriber' },
-        //     { new: true }
-        // );
+        const updatedUser = await User.findByIdAndUpdate(
+            user_id,
+            { customerType: 'subscriber' },
+            { new: true }
+        );
 
         // Create a new subscription record
         const subscription = new Subscription({
@@ -159,7 +159,7 @@ export const createPlan = async (req, res) => {
             kids_qty,
             adult_qty,
             service_id,
-            razorpay_plan_id: plan.id,  
+            razorpay_plan_id: plan.id,
         });
         await subscription.save();
 
