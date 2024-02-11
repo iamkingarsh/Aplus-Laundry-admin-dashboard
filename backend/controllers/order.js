@@ -170,11 +170,12 @@ export const savePayment = async (req, res) => {
 
         const transaction = new Transaction({
             payment_id: razorpay_payment_id,
+            razorpay_signature,
             entity: paymentDetails.entity,
             amount: paymentDetails.amount,
             currency: paymentDetails.currency,
             status: paymentDetails.status,
-            razorpay_order_id: paymentDetails.order_id,
+            razorpay_order_id,
             method: paymentDetails.method,
             captured: paymentDetails.captured,
             card_id: paymentDetails.card_id,

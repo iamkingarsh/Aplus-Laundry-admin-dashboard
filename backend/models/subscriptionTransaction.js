@@ -1,17 +1,19 @@
 import mongoose from 'mongoose';
 
-const transactionSchema = new mongoose.Schema({
+const subscriptionTransactionSchema = new mongoose.Schema({
     payment_id: { type: String, required: true },
     customer_id: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User', // Reference to the User collection
-      },
+    },
+   
     razorpay_signature: { type: String, required: true },
+
     entity: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
     status: { type: String, required: true },
-    razorpay_order_id: { type: String, required: true },
+    razorpay_plan_id: { type: String, required: true },
     method: { type: String, required: true },
     captured: { type: Boolean, required: true },
     card_id: { type: String },
@@ -34,6 +36,6 @@ const transactionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const SubscriptionTransaction = mongoose.model('SubscriptionTransaction', subscriptionTransactionSchema);
 
-export default Transaction;
+export default SubscriptionTransaction;
