@@ -17,4 +17,5 @@ subscriptionTransactionRouter.get('/orders/user/:userId', getSubscriptionOrdersB
 
 subscriptionTransactionRouter.get('/data/', getAllSubscriptions);
 subscriptionTransactionRouter.get('/data/:id', getSubscriptionById);
+
 export default subscriptionTransactionRouter;
