@@ -12,6 +12,7 @@ export const createOrUpdateOrder = async (req, res) => {
         const {
             id,
             coupon_id,
+            address_id,
             order_type,
             service,
             products,
@@ -38,6 +39,9 @@ export const createOrUpdateOrder = async (req, res) => {
             existingOrder.cartWeight = cartWeight;
             existingOrder.cartWeightBy = cartWeightBy;
             existingOrder.coupon_id = coupon_id;
+            existingOrder.address_id = address_id;
+
+            
 
 
             await existingOrder.save();
@@ -61,7 +65,8 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartTotal,
                 cartWeight,
                 cartWeightBy,
-                coupon_id
+                coupon_id,
+                address_id
             });
 
             const options = {
@@ -223,11 +228,13 @@ export const getAllOrders = async (req, res) => {
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name')
             .populate('customer', 'fullName mobileNumber')
+            .populate('coupon_id', null, { _id: { $exists: true } }) // Populate coupon_id only if it exists
+            .populate('address_id') // Populate address_id
             .exec();
 
         const ordersWithCustomerNames = orders.map((order) => ({
             ...order.toObject(),
-            customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
+            customer_name: order.customer?.fullName || 'N/A',
             mobile: order.customer?.mobileNumber || 'N/A',
             payment_method: order.payment
         }));
@@ -247,6 +254,7 @@ export const getAllOrders = async (req, res) => {
 
 
 
+
 // Get a specific order by its ID
 export const getOrderById = async (req, res) => {
     try {
@@ -258,6 +266,8 @@ export const getOrderById = async (req, res) => {
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name priceperpair category ')
             .populate('customer', 'fullName mobileNumber')
+            .populate('coupon_id', null, { _id: { $exists: true } }) // Populate coupon_id only if it exists
+            .populate('address_id') // Populate address_id
             .exec();
         // .populate('customer', 'fullName')
         // .populate('delivery_agent', 'fullName')
