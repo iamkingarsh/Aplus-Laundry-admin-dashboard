@@ -393,6 +393,9 @@ export const saveSubscriptionPayment = async (req, res) => {
 
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
+        const SubscriptionTransactionDetails = await razorpay.subscriptions.fetch(razorpay_subscription_id);
+ console.log("paymentDetails ",paymentDetails)
+ console.log("SubscriptionTransactionDetails ",SubscriptionTransactionDetails)
 
         // Create a new subscription transaction
         const transaction = new SubscriptionTransaction({
