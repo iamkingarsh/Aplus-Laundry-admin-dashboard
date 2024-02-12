@@ -20,7 +20,7 @@ const subscriptionOrderSchema = new mongoose.Schema({
       quantity: {
         type: Number,
       },
-    },
+    }, 
   ],
   customer: {
     type: mongoose.Schema.Types.ObjectId,
