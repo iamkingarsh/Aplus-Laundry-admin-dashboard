@@ -61,7 +61,9 @@ export function RevenueGraph() {
         const getTotalRevenue = async () => {
             try {
                 const response = await fetchData('/transaction/getall');
+                const response2 = await fetchData('/subscription/transactions');
                 const transactions = response.transactions;
+                const transactions2 = response2.transactions;
 
                 // Get the last 7 days including today
                 const endDate = new Date();
@@ -77,7 +79,10 @@ export function RevenueGraph() {
                     const total = transactions
                         .filter((transaction: { createdAt: string; }) => transaction.createdAt && transaction.createdAt.slice(0, 10) === dateKey)
                         .reduce((acc: any, transaction: { amount: any; }) => acc + transaction.amount, 0);
-                    return { date, total };
+                    const total2 = transactions2
+                        .filter((transaction: { createdAt: string; }) => transaction.createdAt && transaction.createdAt.slice(0, 10) === dateKey)
+                        .reduce((acc: any, transaction: { amount: any; }) => acc + transaction.amount, 0);
+                    return { date, total: total + total2 };
                 }) as any[];
 
 

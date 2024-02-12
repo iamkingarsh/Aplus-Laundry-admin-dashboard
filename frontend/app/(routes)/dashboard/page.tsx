@@ -22,6 +22,7 @@ export default function Page() {
 
     const [ordersData, setOrdersData] = useState([]) as any[]
     const [totalRevenue, setTotalRevenue] = useState(0) as any[]
+    const [totalSubscriptionRevenue, setTotalSubscriptionRevenue] = useState(0) as any[]
     const [totalSubscribers, setTotalSubscribers] = useState(0) as any[]
     const getOrdersData = async () => {
         const response = await fetchData('/order/getall')
@@ -40,6 +41,17 @@ export default function Page() {
         // setOrdersData(response.orders)
     }
 
+    const getTotalSubscriptionRevenue = async () => {
+        const response = await fetchData('/subscription/transactions')
+        const transactions = response.transactions
+        const totalRevenue = transactions.reduce((acc: any, transaction: any) => {
+            return acc + transaction.amount
+        }, 0)
+        setTotalSubscriptionRevenue(totalRevenue)
+
+        // setOrdersData(response.orders)
+    }
+
     const getTotalSubscribers = async () => {
         const response = await fetchData('/auth/getallcustomers')
 
@@ -52,13 +64,14 @@ export default function Page() {
     useEffect(() => {
         getOrdersData()
         getTotalRevenue()
+        getTotalSubscriptionRevenue()
         getTotalSubscribers()
     }, [])
 
     const StatsData = [
         {
             title: 'Total Revenue',
-            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue / 100),
+            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue / 100 + totalSubscriptionRevenue / 100),
             // statPrefix: '₹',
             icon: <IndianRupeeIcon />,
             desc: '+180.1% from last month',
