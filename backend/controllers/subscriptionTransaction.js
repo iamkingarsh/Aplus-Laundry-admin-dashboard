@@ -1,6 +1,7 @@
 import Razorpay from "razorpay";
 import SubscriptionOrder from "../models/subscriptionOrder.js";
 import SubscriptionTransaction from "../models/subscriptionTransaction.js";
+import Subscription from "../models/subscription.js";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -162,14 +163,11 @@ export const getSubscriptionOrdersByCustomerId = async (req, res) => {
     try {
       const subscriptions = await Subscription.find();
   
-      // Fetch details for each subscription
       const subscriptionsWithDetails = await Promise.all(subscriptions.map(async (subscription) => {
         const { razorpay_plan_id } = subscription;
         
-        // Fetch details using razorpay_plan_id
         const planDetails = await razorpay.plans.fetch(razorpay_plan_id);
   
-        // Combine subscription details with plan details
         const subscriptionWithPlanDetails = {
           ...subscription.toObject(),
           planDetails
@@ -184,3 +182,30 @@ export const getSubscriptionOrdersByCustomerId = async (req, res) => {
       res.status(500).json({ success: false, message: 'Error fetching subscriptions' });
     }
   };
+
+
+
+  export const getSubscriptionById = async (req, res) => {
+    try {
+      const { id } = req.params; // Assuming the subscription ID is passed in the request params
+      const subscription = await Subscription.findById(id);
+  
+      if (!subscription) {
+        return res.status(404).json({ success: false, message: 'Subscription not found' });
+      }
+  
+      const { razorpay_plan_id } = subscription;
+      const planDetails = await razorpay.plans.fetch(razorpay_plan_id);
+  
+      const subscriptionWithPlanDetails = {
+        ...subscription.toObject(),
+        planDetails
+      };
+  
+      res.status(200).json({ success: true, subscription: subscriptionWithPlanDetails });
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+      res.status(500).json({ success: false, message: 'Error fetching subscription' });
+    }
+  };
+  
