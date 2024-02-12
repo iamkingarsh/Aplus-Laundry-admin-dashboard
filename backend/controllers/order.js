@@ -11,7 +11,7 @@ export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
             id,
-            coupon_id,
+
             order_type,
             service,
             products,
@@ -37,8 +37,6 @@ export const createOrUpdateOrder = async (req, res) => {
             existingOrder.cartTotal = cartTotal;
             existingOrder.cartWeight = cartWeight;
             existingOrder.cartWeightBy = cartWeightBy;
-            existingOrder.coupon_id = coupon_id;
-
 
             await existingOrder.save();
 
@@ -61,7 +59,6 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartTotal,
                 cartWeight,
                 cartWeightBy,
-                coupon_id
             });
 
             const options = {
@@ -256,12 +253,19 @@ export const getOrderById = async (req, res) => {
         } = req.params;
 
         const order = await Order.findById(id)
+            .populate('products.id')
+            .populate({
+                path: 'products.id',
+                populate: {
+                    path: 'category',
+                    model: 'Category'
+                }
+            })
             .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name')
             .populate('customer', 'fullName mobileNumber')
-            .exec();
+            .populate('delivery_agent', 'fullName')
+            .exec()
         // .populate('customer', 'fullName')
-        // .populate('delivery_agent', 'fullName')
         // .execPopulate();
         console.log(order);
 
