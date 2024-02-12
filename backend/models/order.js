@@ -68,6 +68,10 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Transaction', // Reference to the User collection for transaction_id
   },
+  coupon_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Coupon', // Reference to the Coupon collection
+  },
 }, {
   timestamps: true,
 });
