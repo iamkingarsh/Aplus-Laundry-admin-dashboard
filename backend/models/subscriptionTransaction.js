@@ -1,7 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose; // Import Schema from mongoose
 
-const subscriptionTransactionSchema = new mongoose.Schema({
-    payment_id: { type: String },
+const subscriptionTransactionSchema = new Schema({
+    payment_id: { type: String, required: true },
+// import mongoose, { Schema } from 'mongoose';
+
+// const subscriptionTransactionSchema = new mongoose.Schema({
+//     payment_id: { type: String },
     customer_id: {
         type: Schema.Types.ObjectId,
         ref: 'User', // Reference to the User collection
