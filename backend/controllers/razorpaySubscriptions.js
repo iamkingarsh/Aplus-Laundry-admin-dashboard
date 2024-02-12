@@ -385,7 +385,7 @@ export const createSubscriptionCheckout = async (req, res) => {
 
 export const saveSubscriptionPayment = async (req, res) => {
     try {
-        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id, end_date } = req.body;
+        const { razorpay_plan_id, razorpay_payment_id, razorpay_signature, subscription_id, customer_id, razorpay_subscription_id, } = req.body;
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 
@@ -399,6 +399,7 @@ export const saveSubscriptionPayment = async (req, res) => {
             currency: paymentDetails.currency,
             status: paymentDetails.status,
             razorpay_plan_id,
+            razorpay_subscription_id,
             method: paymentDetails.method,
             captured: paymentDetails.captured,
             card_id: paymentDetails.card_id,
