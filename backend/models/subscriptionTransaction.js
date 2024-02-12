@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose; // Import Schema from mongoose
 
-const subscriptionTransactionSchema = new mongoose.Schema({
+const subscriptionTransactionSchema = new Schema({
     payment_id: { type: String, required: true },
     customer_id: {
         type: Schema.Types.ObjectId,
