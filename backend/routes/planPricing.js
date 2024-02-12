@@ -21,6 +21,7 @@ router.get('/getall', getAllPlanPricingPopulated);
 // Get Below12 by ID (populated with service)
 router.get('/:id', getPlanPricingById);
 
+
 router.post('/fetch', fetchSubscribers);
 
 export default router;
