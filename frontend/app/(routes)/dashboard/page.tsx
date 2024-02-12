@@ -24,6 +24,7 @@ export default function Page() {
     const [totalRevenue, setTotalRevenue] = useState(0) as any[]
     const [totalSubscriptionRevenue, setTotalSubscriptionRevenue] = useState(0) as any[]
     const [totalSubscribers, setTotalSubscribers] = useState(0) as any[]
+    const [totalSubscriberOrders, setTotalSubscriberOrders] = useState(0) as any[]
     const getOrdersData = async () => {
         const response = await fetchData('/order/getall')
 
@@ -61,11 +62,20 @@ export default function Page() {
         setTotalSubscribers(totalSubscribedCustomers)
     }
 
+    const getTotalSubscriberOrders = async () => {
+        const response = await fetchData('/subscription/orders')
+        const orders = response.data
+        console.log('orders', orders)
+        const totalSubscriberOrders = orders.length
+        setTotalSubscriberOrders(totalSubscriberOrders)
+    }
+
     useEffect(() => {
         getOrdersData()
         getTotalRevenue()
         getTotalSubscriptionRevenue()
         getTotalSubscribers()
+        getTotalSubscriberOrders()
     }, [])
 
     const StatsData = [
@@ -95,7 +105,7 @@ export default function Page() {
         },
         {
             title: 'Total Subscriber Orders',
-            stat: 230,
+            stat: totalSubscriberOrders,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
             desc: '+180.1% from last month',
