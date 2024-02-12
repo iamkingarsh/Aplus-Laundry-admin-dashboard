@@ -3,12 +3,15 @@
 import cron from 'node-cron';
 import User from "../models/user.js";
 
-const checkSubscription = cron.schedule('* * * * * *', async () => { // Update the schedule to run every second
+ 
+const checkSubscription = cron.schedule('0 0 * * * *', async () => { // Update the schedule to run every second
+    // console.log('Customer types update started.');
+ 
 
     try {
         const usersToUpdate = await User.find({
             customerType: 'subscriber',
-            subscriptionEndDate: { $lte: new Date() } 
+            subscriptionEndDate: { $lte: new Date() }
         });
 
         await Promise.all(usersToUpdate.map(async (user) => {

@@ -149,8 +149,8 @@ export const verifyPayment = async (req, res) => {
 //         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 //         console.log("Payment Details:", paymentDetails);
 
-       
-       
+
+
 
 //         await transaction.save();
 
@@ -225,6 +225,7 @@ export const getAllOrders = async (req, res) => {
             .populate('customer', 'fullName mobileNumber')
             .exec();
 
+        // console.log(orders.products.map((product) => product));
         const ordersWithCustomerNames = orders.map((order) => ({
             ...order.toObject(),
             customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
@@ -256,12 +257,13 @@ export const getOrderById = async (req, res) => {
 
         const order = await Order.findById(id)
             .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name priceperpair category ')
+            .populate('products.id', 'product_name')
             .populate('customer', 'fullName mobileNumber')
             .exec();
         // .populate('customer', 'fullName')
         // .populate('delivery_agent', 'fullName')
         // .execPopulate();
+        console.log(order);
 
         if (!order) {
             return res.status(404).json({
