@@ -1,5 +1,11 @@
+import Razorpay from "razorpay";
 import SubscriptionOrder from "../models/subscriptionOrder.js";
 import SubscriptionTransaction from "../models/subscriptionTransaction.js";
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
 
 export const getAllTransactions = async (req, res) => {
     try {
@@ -144,5 +150,37 @@ export const getSubscriptionOrdersByCustomerId = async (req, res) => {
         success: false,
         message: 'Internal server error',
       });
+    }
+  };
+
+
+
+
+
+  
+  export const getAllSubscriptions = async (req, res) => {
+    try {
+      const subscriptions = await Subscription.find();
+  
+      // Fetch details for each subscription
+      const subscriptionsWithDetails = await Promise.all(subscriptions.map(async (subscription) => {
+        const { razorpay_plan_id } = subscription;
+        
+        // Fetch details using razorpay_plan_id
+        const planDetails = await razorpay.plans.fetch(razorpay_plan_id);
+  
+        // Combine subscription details with plan details
+        const subscriptionWithPlanDetails = {
+          ...subscription.toObject(),
+          planDetails
+        };
+  
+        return subscriptionWithPlanDetails;
+      }));
+  
+      res.status(200).json({ success: true, subscriptions: subscriptionsWithDetails });
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      res.status(500).json({ success: false, message: 'Error fetching subscriptions' });
     }
   };
