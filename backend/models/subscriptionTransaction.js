@@ -8,8 +8,8 @@ const subscriptionTransactionSchema = new Schema({
         ref: 'User', // Reference to the User collection
     },
    
-    razorpay_signature: { type: String, required: true },
-
+    razorpay_signature: { type: String, required: true },           
+    razorpay_subscription_id: { type: String, required: true },  
     entity: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },
