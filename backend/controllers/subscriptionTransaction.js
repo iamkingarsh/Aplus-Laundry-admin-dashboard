@@ -209,3 +209,16 @@ export const getSubscriptionOrdersByCustomerId = async (req, res) => {
     }
   };
   
+
+  export const fetchSubscribers = async (req, res) => {
+    try {
+        const {  razorpay_subscription_id } = req.body;
+         
+        const SubscriptionTransactionDetails = await razorpay.subscriptions.fetch(razorpay_subscription_id);
+
+        res.status(200).json({ success: true, SubscriptionTransactionDetails });
+    } catch (error) {
+        console.error('Error fetching subscribers:', error);
+        res.status(500).json({ success: false, message: 'Error fetching subscribers' });
+    }
+};
