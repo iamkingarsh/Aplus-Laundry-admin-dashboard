@@ -18,6 +18,8 @@ export default function Page() {
     const [subscriberOrders, setSubscriberOrders] = useState([]) as any
     const [loading, setLoading] = useState(false)
 
+
+
     const getAllOrdersData = async () => {
         setLoading(true)
         const response = await fetchData('/order/getall')
