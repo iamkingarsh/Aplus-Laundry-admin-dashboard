@@ -72,6 +72,10 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coupon', // Reference to the Coupon collection
   },
+  address_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User.address', // Reference to the specific address in the user's address array
+  },
 }, {
   timestamps: true,
 });
