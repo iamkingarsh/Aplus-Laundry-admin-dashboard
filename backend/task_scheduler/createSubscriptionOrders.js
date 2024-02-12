@@ -38,7 +38,7 @@ const createSubscriptionOrders = async () => {
           order_type: 'subscription',
           service: subscription.service_id,
           customer: user._id,
-          status: 'pending',
+          status: 'Scheduled Pickup',
           pickupDetails: pickupDetails,
           subscription_id: subscription._id
         });
