@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteTransactionById, getAllSubscriptionOrders, getAllSubscriptions, getAllTransactions, getSubscriptionById, getSubscriptionOrderById, getSubscriptionOrdersByCustomerId, getTransactionById, getTransactionsByUserId } from '../controllers/subscriptionTransaction.js';
+import { deleteTransactionById, fetchSubscribers, getAllSubscriptionOrders, getAllSubscriptions, getAllTransactions, getSubscriptionById, getSubscriptionOrderById, getSubscriptionOrdersByCustomerId, getTransactionById, getTransactionsByUserId } from '../controllers/subscriptionTransaction.js';
  
 
 const subscriptionTransactionRouter = express.Router();
@@ -17,5 +17,6 @@ subscriptionTransactionRouter.get('/orders/user/:userId', getSubscriptionOrdersB
 
 subscriptionTransactionRouter.get('/data/', getAllSubscriptions);
 subscriptionTransactionRouter.get('/data/:id', getSubscriptionById);
+subscriptionTransactionRouter.get('/fetchSubscribers', fetchSubscribers);
 
 export default subscriptionTransactionRouter;

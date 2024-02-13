@@ -33,6 +33,8 @@ const createSubscriptionOrders = async () => {
         }
         const customOrderId = `APLS${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
 
+        const customOrderId = `APLS${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
+
         const subscriptionOrder = new SubscriptionOrder({
           order_id: customOrderId,
           order_type: 'subscription',
@@ -54,28 +56,15 @@ const createSubscriptionOrders = async () => {
 };
 
 
-// const createSubscriptionOrdersCron = cron.schedule('* * * * *', () => {
-//   console.log('Running cron job every Tuesday and Saturday at 11 PM...');
+// Schedule cron job to run only once at 11 PM on Tuesdays and Saturdays
 
-//   createSubscriptionOrders();
-// });
 const createSubscriptionOrdersCron = cron.schedule('0 23 * * 2,6', () => {
   console.log('Running cron job every Tuesday and Saturday at 11 PM...');
 
   createSubscriptionOrders();
+}, {
+  scheduled: true,
+  timezone: 'Asia/Kolkata', // Replace 'Asia/Kolkata' with your desired timezone
 });
-
-// const generateOrderId = async () => {
-//   try {
-//     // Get the number of documents in the SubscriptionOrder collection
-//     const orderCount = await SubscriptionOrder.countDocuments();
-//     console.log('orderCount:', `APl_SUB_${orderCount}`);
-//     return `APl_SUB_${orderCount}`;
-//   } catch (error) {
-//     console.error('Error counting SubscriptionOrder documents:', error);
-//     return null;
-//   }
-// };
-
 
 export default createSubscriptionOrdersCron;
