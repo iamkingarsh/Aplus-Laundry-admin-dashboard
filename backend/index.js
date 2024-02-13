@@ -18,6 +18,7 @@ import planPricing from './routes/planPricing.js';
 import checkSubscription from './task_scheduler/subscriptionCron.js'; // Import the task
 import createSubscriptionOrdersCron from './task_scheduler/createSubscriptionOrders.js';
 import subscriptionTransactionRouter from './routes/subscriptionTransaction.js';
+import deviceTokenRouter from './routes/deviceToken.js';
 
 dotenv.config();
 
@@ -54,6 +55,8 @@ app.use('/transaction', transactionRouter)
 app.use('/razorpaySubscription', razorpaySubcriptionRouter)
 app.use('/planPricing', planPricing)  
 app.use('/subscription', subscriptionTransactionRouter)  
+app.use('/deviceToken', deviceTokenRouter)  
+
 
 checkSubscription.start()
 createSubscriptionOrdersCron.start()
