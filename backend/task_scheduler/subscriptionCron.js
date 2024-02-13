@@ -8,6 +8,7 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_SECRET,
 });
 
+
 const checkSubscription = cron.schedule('0 0 * * *', async () => {
   try {
     const users = await User.find({ customerType: 'subscriber' });
@@ -16,7 +17,7 @@ const checkSubscription = cron.schedule('0 0 * * *', async () => {
     // Iterate over each user
     for (const user of users) {
       let allInactive = true;  
-
+      
       // Find all subscription transactions for the current user
       const subscriptionTransactions = await SubscriptionTransaction.find({ customer_id: user._id });
 

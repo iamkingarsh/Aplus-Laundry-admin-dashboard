@@ -11,7 +11,7 @@ export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
             id,
-            coupon_id,
+
             order_type,
             service,
             products,
@@ -37,8 +37,6 @@ export const createOrUpdateOrder = async (req, res) => {
             existingOrder.cartTotal = cartTotal;
             existingOrder.cartWeight = cartWeight;
             existingOrder.cartWeightBy = cartWeightBy;
-            existingOrder.coupon_id = coupon_id;
-
 
             await existingOrder.save();
 
@@ -61,7 +59,6 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartTotal,
                 cartWeight,
                 cartWeightBy,
-                coupon_id
             });
 
             const options = {
@@ -149,8 +146,8 @@ export const verifyPayment = async (req, res) => {
 //         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 //         console.log("Payment Details:", paymentDetails);
 
-       
-       
+
+
 
 //         await transaction.save();
 
@@ -225,6 +222,7 @@ export const getAllOrders = async (req, res) => {
             .populate('customer', 'fullName mobileNumber')
             .exec();
 
+        // console.log(orders.products.map((product) => product));
         const ordersWithCustomerNames = orders.map((order) => ({
             ...order.toObject(),
             customer_name: order.customer?.fullName || 'N/A', // Handle undefined customer
@@ -255,13 +253,21 @@ export const getOrderById = async (req, res) => {
         } = req.params;
 
         const order = await Order.findById(id)
+            .populate('products.id')
+            .populate({
+                path: 'products.id',
+                populate: {
+                    path: 'category',
+                    model: 'Category'
+                }
+            })
             .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name priceperpair category ')
             .populate('customer', 'fullName mobileNumber')
-            .exec();
+            .populate('delivery_agent', 'fullName')
+            .exec()
         // .populate('customer', 'fullName')
-        // .populate('delivery_agent', 'fullName')
         // .execPopulate();
+        console.log(order);
 
         if (!order) {
             return res.status(404).json({
