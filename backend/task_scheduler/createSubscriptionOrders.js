@@ -33,7 +33,7 @@ const createSubscriptionOrders = async () => {
         }
         const customOrderId = `APLS${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
 
-        const customOrderId = `APLS${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
+
 
         const subscriptionOrder = new SubscriptionOrder({
           order_id: customOrderId,
