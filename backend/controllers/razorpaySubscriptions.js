@@ -423,6 +423,7 @@ export const saveSubscriptionPayment = async (req, res) => {
                 upi_transaction_id: paymentDetails.acquirer_data.upi_transaction_id,
             },
             created_at: paymentDetails.created_at,
+            short_url:SubscriptionTransactionDetails.short_url,
             upi: {
                 vpa: paymentDetails.upi.vpa,
             },
