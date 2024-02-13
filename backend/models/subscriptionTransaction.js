@@ -3,6 +3,10 @@ const { Schema } = mongoose; // Import Schema from mongoose
 
 const subscriptionTransactionSchema = new Schema({
     payment_id: { type: String, required: true },
+// import mongoose, { Schema } from 'mongoose';
+
+// const subscriptionTransactionSchema = new mongoose.Schema({
+//     payment_id: { type: String },
     customer_id: {
         type: Schema.Types.ObjectId,
         ref: 'User', // Reference to the User collection
@@ -20,9 +24,9 @@ const subscriptionTransactionSchema = new Schema({
     card_id: { type: String },
     bank: { type: String },
     wallet: { type: String },
-    vpa: { type: String, required: true },
-    fee: { type: Number, required: true },
-    tax: { type: Number, required: true },
+    vpa: { type: String },
+    fee: { type: Number },
+    tax: { type: Number },
     error_code: { type: String },
     error_description: { type: String },
     acquirer_data: {

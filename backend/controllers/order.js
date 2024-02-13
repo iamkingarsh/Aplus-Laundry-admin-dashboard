@@ -38,12 +38,11 @@ export const createOrUpdateOrder = async (req, res) => {
             existingOrder.cartTotal = cartTotal;
             existingOrder.cartWeight = cartWeight;
             existingOrder.cartWeightBy = cartWeightBy;
+
             existingOrder.coupon_id = coupon_id;
             existingOrder.address_id = address_id;
 
-            
-
-
+   
             await existingOrder.save();
 
             return res.status(200).json({
@@ -67,6 +66,7 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartWeightBy,
                 coupon_id,
                 address_id
+
             });
 
             const options = {
@@ -154,8 +154,8 @@ export const verifyPayment = async (req, res) => {
 //         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
 //         console.log("Payment Details:", paymentDetails);
 
-       
-       
+
+
 
 //         await transaction.save();
 
@@ -232,6 +232,7 @@ export const getAllOrders = async (req, res) => {
             .populate('address_id') // Populate address_id
             .exec();
 
+        // console.log(orders.products.map((product) => product));
         const ordersWithCustomerNames = orders.map((order) => ({
             ...order.toObject(),
             customer_name: order.customer?.fullName || 'N/A',
@@ -263,15 +264,24 @@ export const getOrderById = async (req, res) => {
         } = req.params;
 
         const order = await Order.findById(id)
+            .populate('products.id')
+            .populate({
+                path: 'products.id',
+                populate: {
+                    path: 'category',
+                    model: 'Category'
+                }
+            })
             .populate('service', 'serviceTitle')
-            .populate('products.id', 'product_name priceperpair category ')
             .populate('customer', 'fullName mobileNumber')
+
             .populate('coupon_id', null, { _id: { $exists: true } }) // Populate coupon_id only if it exists
             .populate('address_id') // Populate address_id
             .exec();
+
         // .populate('customer', 'fullName')
-        // .populate('delivery_agent', 'fullName')
         // .execPopulate();
+        console.log(order);
 
         if (!order) {
             return res.status(404).json({

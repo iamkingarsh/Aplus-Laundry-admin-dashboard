@@ -144,7 +144,7 @@ export default function Page() {
             const nonSubscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'nonsubscriber');
 
             const subscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'subscriber');
-
+            console.log(nonSubscribedUsers)
             setNonSubscribeddata(nonSubscribedUsers);
             setSubscribeddata(subscribedUsers);
 

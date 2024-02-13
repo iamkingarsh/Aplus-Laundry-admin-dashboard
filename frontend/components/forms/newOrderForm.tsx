@@ -155,7 +155,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         // Add submit logic here
 
         setIsLoading(true)
-        console.log('valuesvaluesvaluesvalues', values)
 
         const params = {
             order_type: values.order_type,
@@ -168,9 +167,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             cartTotal: values.cartTotal,
             cartWeight: values.cartWeight,
             cartWeightBy: values.cartWeightBy,
-
-
         }
+
         const initialResponse = await postData('/order/addorupdate', params)
 
         console.log('response', initialResponse)
