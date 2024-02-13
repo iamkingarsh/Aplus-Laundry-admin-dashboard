@@ -84,6 +84,10 @@ const userSchema = new mongoose.Schema({
             return this.customerType === 'subscriber';
         },
       },
+      deviceToken: {
+        type: String,
+        default: undefined
+    }
 }, {
     timestamps: true
 });
