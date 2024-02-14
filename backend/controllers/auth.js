@@ -86,7 +86,7 @@ export const register = async (req, res, next) => {
 
     // Create a new user if ID is not provided
     const newUser = new User(userFields);
-    console.log('hcfbvhhhhjbfhhj5',newUser,userFields);
+    console.log('hcfbvhhhhjbfhhj5', newUser, userFields);
     await newUser.save();
 
     // Respond with success message
@@ -101,7 +101,7 @@ export const register = async (req, res, next) => {
 
 
 
-  
+
 
 
 
@@ -190,7 +190,7 @@ export const sendOTPforverification = async (req, res) => {
 
     console.log('email email', email);
     // Continue with other operations, such as sending an email
-    emailVerificationEmail(email, OTP);
+    await emailVerificationEmail(email, OTP);
 
     // Send the response
     res.status(200).send({
@@ -349,7 +349,7 @@ export const verifyotp = async (req, res) => {
     await UserOTP.deleteMany({
       email: email
     });
-    emailVerificationSuccess(email)
+   await emailVerificationSuccess(email)
     res.status(200).send({
       msg: "Email verified",
       ok: true,
@@ -604,9 +604,9 @@ export const getCurrentUser = async (req, res, next) => {
 export const addOrUpdateAddress = async (req, res) => {
   try {
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);
 
-    const userId = decodedToken.id;  
+    const userId = decodedToken.id;
 
     const { addressId, addressType, location, coordinates, city, pincode } = req.body;
 
@@ -625,7 +625,7 @@ export const addOrUpdateAddress = async (req, res) => {
     }
 
     const existingAddress = user.address.id(addressId);
-    
+
     if (existingAddress) {
       // Update only specific fields (e.g., location, coordinates)
       existingAddress.location = location;
@@ -650,9 +650,9 @@ export const addOrUpdateAddress = async (req, res) => {
 export const deleteAddress = async (req, res) => {
   try {
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);
 
-    const userId = decodedToken.id;  
+    const userId = decodedToken.id;
     const { addressId } = req.params;
 
     const user = await User.findById(userId);
