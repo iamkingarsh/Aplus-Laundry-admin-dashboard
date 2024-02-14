@@ -42,7 +42,7 @@ export const createOrUpdateOrder = async (req, res) => {
             existingOrder.coupon_id = coupon_id;
             existingOrder.address_id = address_id;
 
-   
+
             await existingOrder.save();
 
             return res.status(200).json({
@@ -145,28 +145,6 @@ export const verifyPayment = async (req, res) => {
 }
 
 
-// export const savePayment = async (req, res) => {
-//     try {
-//         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
-//         // const body = razorpay_order_id + "|" + razorpay_payment_id;
-//         console.log("id==", razorpay_order_id, razorpay_payment_id, razorpay_signature);
-
-//         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
-//         console.log("Payment Details:", paymentDetails);
-
-
-
-
-//         await transaction.save();
-
-
-//         res.status(200).json({ success: true, message: 'Payment details saved successfully' });
-
-//     } catch (error) {
-//         console.error('Error saving payment:', error);
-//         res.status(500).json({ success: false, message: 'Error saving payment' });
-//     }
-// };
 
 
 export const savePayment = async (req, res) => {
@@ -369,6 +347,37 @@ export const updateOrderStatusById = async (req, res) => {
     }
 };
 
+export const getUserOrders = async (req, res) => {
+    try {
+        const {
+            userId
+        } = req.params;
+
+        const orders = await Order.find({
+            customer: userId
+        })
+            .populate('service', 'serviceTitle')
+            .populate('products.id', 'product_name')
+            .populate('coupon_id', null, {
+                _id: {
+                    $exists: true
+                }
+            }) // Populate coupon_id only if it exists
+            .populate('address_id') // Populate address_id
+            .exec();
+
+        return res.status(200).json({
+            orders,
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+            ok: false
+        });
+    }
+}
 
 
 
