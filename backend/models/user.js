@@ -1,29 +1,56 @@
 import mongoose from "mongoose";
 
+const addressSchema = new mongoose.Schema({
+    addressType: {
+        type: String,
+        sparse: true,
+    },
+    location: {
+        type: String,
+    },
+    coordinates: {
+        type: {
+            type: String,
+            default: "Point",
+        },
+        coordinates: {
+            type: [Number],
+            required: true,
+        },
+    },
+    pincode: {
+        type: String,
+        required: function () {
+            return this.role === 'customer';
+        },
+    },
+});
+
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: true,
     },
     email: {
-        type: String, 
+        type: String,
         unique: true,
         required: function () {
             return ['owner', 'admin'].includes(this.role);
         },
     },
     mobileNumber: {
-        type: Number, 
-        required: function () {
-            return ['customer', 'deliveryagent'].includes(this.role);
-        },
-        unique: true
+        type: Number,
+        sparse: true,
+        required: false,
     },
     address: {
-        type: String, 
+        type: [addressSchema],
+        sparse: true,
+        required: false,
+
     },
     profileImg: {
-        type: String, 
+        type: String,
         default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
     },
     role: {
@@ -38,16 +65,33 @@ const userSchema = new mongoose.Schema({
         },
         enum: ['subscriber', 'nonsubscriber'],
     },
-    pincode: {
-        type: String,
+    // subscriptionStartDate: {
+    //     type: Date,
+    //     required: function () {
+    //         return this.customerType === 'subscriber';
+    //     },
+    // },
+    // subscriptionEndDate: {
+    //     type: Date,
+        // required: function () {
+        //     return this.customerType === 'subscriber';
+        // },
+    // },
+    subscription_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subscription', // Reference to the Subscription collection
         required: function () {
-            return this.role === 'customer';
+            return this.customerType === 'subscriber';
         },
-    },
+      },
+      deviceToken: {
+        type: String,
+        default: undefined
+    }
 }, {
     timestamps: true
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 export default User;

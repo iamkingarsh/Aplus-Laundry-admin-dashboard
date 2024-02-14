@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import React,{ useEffect, useLayoutEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { fetchData } from '@/axiosUtility/api';
+import { fetchData, postData ,activateCoupon} from '@/axiosUtility/api';
 
 
 interface Props {
@@ -39,12 +39,14 @@ interface Props {
 
 export default function CouponPage({ params }: Props) {
     const [CouponCodeData, setCouponsData] = useState([])
+    const router = useRouter()
 
     const getData = async () => {
 
         try {
             const result = await fetchData('/coupon/'+params?.couponIds); // Replace 'your-endpoint' with the actual API endpoint
             setCouponsData(result?.coupon)
+            setChecked(result?.coupon?.active)
  
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -57,7 +59,26 @@ export default function CouponPage({ params }: Props) {
     useEffect(() => {
         getData()
     }, [])
-    const [checked, setChecked] = React.useState(CouponCodeData.active)
+
+    
+    const [checked, setChecked] = React.useState(null)
+    
+    const statusChange = async () => {
+        setChecked((prevChecked) => !prevChecked); // Update the state
+        try {
+            const data = {
+                active: !checked // Use the updated state value
+            };
+            
+            // console.log( !CouponCodeData.active,data ,checked,'checkedcheckedcheckedcheckedcheckedcheckedcheckedchecked')
+            const response = await activateCoupon(`/coupon/${params?.couponIds}/activate`, data);
+            toast.success('Coupon status changed successfully');
+        } catch (error) {
+            console.error('Error changing coupon status:', error);
+            toast.error('Error changing coupon status');
+        }
+    };
+
 
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
@@ -83,7 +104,7 @@ export default function CouponPage({ params }: Props) {
                                 <p className='text-xl font-semibold'>{CouponCodeData.discount_code?.toUpperCase()}</p>
                                 <Clipboard className='h-4 w-4 cursor-pointer' onClick={() => { navigator.clipboard.writeText(CouponCodeData.discount_code?.toUpperCase()); toast.success("Copied to Clipboard") }} />
                             </div>
-                            <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={() => setChecked(!CouponCodeData.active)} />
+                            <Switch checked={checked} className=" data-[state=checked]:bg-green-500" onCheckedChange={statusChange} />
 
                         </div>
                         <div>

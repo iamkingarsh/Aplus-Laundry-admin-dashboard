@@ -18,7 +18,7 @@ const serviceSchema = new mongoose.Schema({
     items: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'product',
       },
     ],
   },
@@ -36,10 +36,22 @@ const serviceSchema = new mongoose.Schema({
     items: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'product',
       },
     ],
   },
+  isSubscriptionService: {
+    type: Boolean,
+    required: true,
+
+  },
+  // arrayOfrazorpaySubscriptionPlans: [
+  //   {
+  //     type: array,
+  //     required: function () {
+  //       return this.isSubscriptionService;
+  //   },
+  // ],
 });
 
 const Service = mongoose.model('Service', serviceSchema);

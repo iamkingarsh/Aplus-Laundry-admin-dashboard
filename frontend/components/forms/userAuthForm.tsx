@@ -52,7 +52,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         setIsLoading(true)
         try {
             // Make a POST request to the "/auth/emailOtpSend" endpoint
-            const response = await api.post('/auth/emailOtpSend', {
+            const response = await api.post('/auth/adminEmailOtpSend', {
                 email: email,
 
             });

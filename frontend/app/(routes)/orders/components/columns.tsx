@@ -18,15 +18,18 @@ import { MobileIcon } from "@radix-ui/react-icons"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import CellAction from "./cell-action"
 import { OrderStatusChanger } from "./order-status-changer"
+import format from "date-fns/format"
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type OrdersColumns = {
+    _id: string,
     order_id: string
     customer_name: string
     customer_id: string
     mobile: string
     status: "onhold" | "pending" | "picked" | "onway" | "delivered" | "cancelled"
-    order_date: string
+    orderDate: string
     payment_method: "cod" | "payment gateway"
     channel: "manual" | "Mobile App"
 }
@@ -61,6 +64,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
     {
         accessorKey: "order_id",
         header: "Order ID",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full mr-2" />
+                <span >#{row.original.order_id}</span>
+            </div>
+        ),
     },
     {
         accessorKey: "customer_name",
@@ -81,7 +90,7 @@ export const columns: ColumnDef<OrdersColumns>[] = [
         header: "Mobile No.",
     },
     {
-        accessorKey: "order_date",
+        accessorKey: "orderDate",
         header: ({ column }) => {
             return (
                 <Button
@@ -93,6 +102,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {new Date(row.original.orderDate).toDateString()}
+            </div>
+        ),
+        // cell: ({ row }) => <div>{new Date(row.original.orderDate).toDateString()}</div>,
     },
     {
         accessorKey: "status",

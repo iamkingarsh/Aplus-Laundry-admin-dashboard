@@ -134,14 +134,14 @@ export const deleteCouponById = async (req, res) => {
 // Update the active status of a coupon by its ID
 export const updateCouponActiveStatusById = async (req, res) => {
     try {
-        const {
-            id
-        } = req.params;
-        const {
-            active
-        } = req.body;
+        const { id } = req.params;
+        const { active } = req.body;
 
-        const existingCoupon = await Coupon.findById(id);
+        const existingCoupon = await Coupon.findByIdAndUpdate(
+            id,
+            { active },
+            { new: true }
+        );
 
         if (!existingCoupon) {
             return res.status(404).json({
@@ -149,9 +149,6 @@ export const updateCouponActiveStatusById = async (req, res) => {
                 ok: false
             });
         }
-
-        existingCoupon.active = active;
-        await existingCoupon.save();
 
         return res.status(200).json({
             message: 'Coupon status updated successfully',

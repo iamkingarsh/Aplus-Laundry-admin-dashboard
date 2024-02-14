@@ -1,27 +1,30 @@
 // serviceRoutes.js
 
 import express from 'express';
- 
+
 import {
   createOrUpdateService,
-    getAllServicesWithItems,
-    getServiceByIdWithItems,
-    deleteServiceById,
-  } from '../controllers/service.js';
+  getAllServicesWithItems,
+  getServiceByIdWithItems,
+  deleteServiceById,
+  deleteServiceByIds,
+} from '../controllers/service.js';
 import { authenticateToken } from '../middleware/authToken.js';
 
 const serviceRouter = express.Router();
 
 
-serviceRouter.post('/adorupdate', authenticateToken, createOrUpdateService);
+serviceRouter.post('/addorupdate', authenticateToken, createOrUpdateService);
 
 
 serviceRouter.get('/allwithitems', authenticateToken, getAllServicesWithItems);
 
 
-serviceRouter.get('/:id/withitems', authenticateToken, getServiceByIdWithItems);
+serviceRouter.get('/id/:id/withitems', authenticateToken, getServiceByIdWithItems);
 
 
-serviceRouter.delete('/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/id/:id', authenticateToken, deleteServiceById);
+serviceRouter.delete('/ids', authenticateToken, deleteServiceByIds);
+
 
 export default serviceRouter;

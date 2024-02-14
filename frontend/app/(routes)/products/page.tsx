@@ -1,4 +1,4 @@
-"use client" // @mujahed change it to "'use server'" when implementing backend if required
+"use client"
 import { DataTable } from '@/components/ui/data-table'
 import Heading from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
@@ -224,7 +224,6 @@ export default function Page() {
                             bulkDeleteIdName='_id'
                             bulkDeleteTitle='Are you sure you want to delete the selected items?'
                             bulkDeleteDescription='This will delete the selected items, and they will not be recoverable.'
-                            apiRouteForBulkDelete='/api/products/bulk-delete'
                             deleteRoute="/product/ids"
                             bulkDeleteToastMessage='Selected items deleted successfully'
                             searchKey='product_name' columns={columns} data={LaundryProducts} />

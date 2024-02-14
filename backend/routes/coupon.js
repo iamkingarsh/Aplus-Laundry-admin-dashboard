@@ -1,13 +1,13 @@
 import express from 'express';
- 
-import  {
-    createOrUpdateCoupon,
-    getAllCoupons,
-    getCouponById,
-    deleteCouponById,
-    updateCouponActiveStatusById,
-  }  from '../controllers/coupon.js';
-import { adminAuthenticateToken } from '../middleware/authToken.js';
+
+import {
+  createOrUpdateCoupon,
+  getAllCoupons,
+  getCouponById,
+  deleteCouponById,
+  updateCouponActiveStatusById,
+} from '../controllers/coupon.js';
+import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 
 const couponRouter = express.Router();
 
@@ -15,10 +15,10 @@ const couponRouter = express.Router();
 couponRouter.post('/addorupdate', adminAuthenticateToken, createOrUpdateCoupon);
 
 // Get all coupons
-couponRouter.get('/all', adminAuthenticateToken, getAllCoupons);
+couponRouter.get('/all', authenticateToken, getAllCoupons);
 
 // Get a specific coupon by its ID
-couponRouter.get('/id/:id', adminAuthenticateToken, getCouponById);
+couponRouter.get('/id/:id', authenticateToken, getCouponById);
 
 // Delete a coupon by its ID
 couponRouter.delete('/id/:id', adminAuthenticateToken, deleteCouponById);

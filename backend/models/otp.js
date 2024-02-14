@@ -7,6 +7,7 @@ const otpSchema = mongoose.Schema({
   },
   email: String,
   otp: String,
+  mobileNumber:Number,
   createdAt: Date,
   expiredAt: Date,
 });

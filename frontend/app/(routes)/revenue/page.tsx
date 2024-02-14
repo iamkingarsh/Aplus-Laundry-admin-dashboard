@@ -1,3 +1,4 @@
+"use client"
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
@@ -6,12 +7,30 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DownloadIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { columns } from './components/columns';
+import { fetchData } from '@/axiosUtility/api';
 
 
-export default function page() {
+export default function Page() {
 
+    const [transactionData, setTransactionData] = useState([])
+
+    const getTransactionData = async () => {
+        try {
+            const res = await fetchData('/transaction/getall')
+            const transactions = res.transactions
+            console.log(transactions)
+            setTransactionData(transactions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getTransactionData()
+        console.log('tykty', transactionData)
+    }, [])
 
     const TransactionData = [
         {
@@ -300,9 +319,8 @@ export default function page() {
                     bulkDeleteIdName='couponid'
                     bulkDeleteTitle='Are you sure you want to delete these Coupons?'
                     bulkDeleteDescription='This will delete the selected Coupons, and they will not be recoverable.'
-                    apiRouteForBulkDelete='/api/coupons/bulk-delete'
                     bulkDeleteToastMessage='Selected Coupons Deleted Successfully'
-                    searchKey='id' columns={columns} data={TransactionData} />
+                    searchKey='amount' columns={columns} data={TransactionData} />
 
 
             </div>

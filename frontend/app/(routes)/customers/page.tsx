@@ -144,7 +144,7 @@ export default function Page() {
             const nonSubscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'nonsubscriber');
 
             const subscribedUsers = result.filter((user: { customerType: string; }) => user.customerType === 'subscriber');
-
+            console.log(nonSubscribedUsers)
             setNonSubscribeddata(nonSubscribedUsers);
             setSubscribeddata(subscribedUsers);
 
@@ -156,7 +156,6 @@ export default function Page() {
     useEffect(() => {
         getData()
     }, [])
-
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between items-center">
