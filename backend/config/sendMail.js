@@ -3,17 +3,22 @@ import dotenv from 'dotenv';
 dotenv.config();
 // Create a Nodemailer transporter using the Mandrill transport
 
-const mailSend = (toEmail, subject, text) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.NODEMAILER_EMAIL,
-      pass: process.env.GMAIL_PASS,
-    },
-  });
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.email',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.NODEMAILER_EMAIL,
+    pass: process.env.GMAIL_PASS,
+  },
+});
+
+
+const mailSend = async (toEmail, subject, text) => {
+
 
   // Define email content
   const mailOptions = {
@@ -59,16 +64,15 @@ ${text}
   };
 
   // Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Error sending email:", error);
-    } else {
-      console.log("Email sent:", info.response);
-    }
-  });
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.response);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 };
 
-export const managerInviteMail = (
+export const managerInviteMail = async (
   managerName,
   managerEmail,
   adminName,
@@ -80,10 +84,10 @@ export const managerInviteMail = (
   <a class="btn" href="${link}">Create Account</a>
   <p>Thank you for your contribution.</p>  `;
 
-  mailSend(managerEmail, subject, body);
+  await mailSend(managerEmail, subject, body);
 };
 
-export const emailVerificationEmail = (email, otp) => {
+export const emailVerificationEmail = async (email, otp) => {
   const subject = "Your One Time Password for email verification";
   const body = `<!DOCTYPE html>
   <html lang="en">
@@ -172,10 +176,10 @@ export const emailVerificationEmail = (email, otp) => {
   </html>
   `;
 
-  mailSend(email, subject, body);
+  await mailSend(email, subject, body);
 };
 
-export const emailVerificationSuccess = (email) => {
+export const emailVerificationSuccess = async (email) => {
 
   const subject = "Account Successfully Verified";
 
@@ -192,7 +196,7 @@ export const emailVerificationSuccess = (email) => {
     </html>
   `;
 
-  mailSend(email, subject, body);
+  await mailSend(email, subject, body);
 };
 
 
