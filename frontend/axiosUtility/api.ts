@@ -104,5 +104,6 @@ export const activateCoupon = async (endpoint: any, data: any, config = {}) => {
       throw error;
     }
   };
+  
 
 export default instance;

@@ -1,3 +1,5 @@
+"use client"
+import instance, { postData } from '@/axiosUtility/api'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -7,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CheckIcon } from 'lucide-react'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
     data: any
@@ -15,6 +18,17 @@ interface Props {
 export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
     const [currentStatus, setCurrentStatus] = React.useState(data.status)
     const modal = useGlobalModal()
+
+    const handleStatusChange = async (status: string) => {
+        setCurrentStatus(status)
+        const response = await instance.put(`/order/${data._id}/status`, { status: status }) as any
+        toast.success("Order Status Changed")
+        if (response) {
+            console.log(response)
+        }
+
+    }
+
     return (
         <>
             <Popover>
@@ -41,7 +55,6 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                                             } ${currentStatus === "Delivered" && "bg-blue-500"
                                             }`}
                                     >
-
                                     </div>
                                     {OrdersStatuses.find(
                                         (data) => data.title === currentStatus
@@ -73,7 +86,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                                             <div className="flex justify-end gap-2">
                                                 <Button variant="outline" onClick={() => modal.onClose()}>Cancel</Button>
                                                 <Button onClick={() => {
-                                                    setCurrentStatus(data.title)
+                                                    handleStatusChange(data.title)
                                                     modal.onClose()
                                                 }}>Change</Button>
                                             </div>
