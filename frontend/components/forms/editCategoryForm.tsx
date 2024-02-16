@@ -84,8 +84,9 @@ console.log(values)
                 router.push('/categories');
               } catch (error) {
                 console.error('Error creating/updating category:', error);
-                setIsLoading(false);
-                toast.error(`Error creating/updating category: ${error.message}`);
+setIsLoading(false);
+toast.error(`Error creating/updating category: ${(error as Error).message}`);
+
               }
         }
        
