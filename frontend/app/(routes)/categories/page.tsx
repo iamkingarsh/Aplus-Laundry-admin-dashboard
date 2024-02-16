@@ -1,36 +1,19 @@
 'use client'
-import { NewCustomerForm } from '@/components/forms/newCustomerForm';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import Heading from '@/components/ui/heading';
-import { Icons } from '@/components/ui/icons';
 import { Separator } from '@/components/ui/separator';
 import { PlusIcon } from 'lucide-react';
-import { Metadata } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { columns } from './components/columns';
-import Data from './Data';
-import api, { fetchData } from '../../../axiosUtility/api'
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { fetchDataWithToken } from '@/axiosUtility/data.api';
-import GetData from './Data';
-
-// export const metadata: Metadata = {
-//   title: 'Categories | APLus Laundry',
-//   description: ' Manage your categories here! ',
-// }
-
-
-
+import { fetchData } from '../../../axiosUtility/api'
+import { useEffect, useState } from 'react';
 
 
 
 export default function CategoriesPage() {
 
   const [loading, setLoading] = useState(true)
-
-
 
   const [categories, setCategories] = useState([])
   const getData = async () => {
@@ -54,20 +37,6 @@ export default function CategoriesPage() {
     getData()
   }, [])
 
-
-
-  // useEffect(() => {
-
-  //   setLoading(true)
-  //   const data = GetData().then((data) => { return data }) as any
-  //   setCategories(data)
-  //   setLoading(false)
-  // }, [])
-
-
-
-
-  console.log(categories)
 
 
   return (
