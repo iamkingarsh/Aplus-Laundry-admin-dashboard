@@ -89,13 +89,14 @@ export function NewCouponsForm({ className, gap, ...props }: NewCouponsFormProps
 
         try {
 
-            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
-                return acc;
-            }, {});
+                  // Convert values to lowercase
+                //   const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                //     acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
+                //     return acc;
+                // }, {});
 
             const data = {
-                ...lowercaseValues,
+                ...values,
                 role: 'customer'
             };
 
