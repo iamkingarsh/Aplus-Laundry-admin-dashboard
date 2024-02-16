@@ -74,10 +74,12 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
             const downloadURL = await uploadImageToFirebase(bannerImageFile);
 
             // Convert values to lowercase
-            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
                 return acc;
             }, {});
+
+
 
             // Combine form values with the uploaded banner image URL
             const data = {
