@@ -1,3 +1,5 @@
+"use client"
+import instance, { postData } from '@/axiosUtility/api'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -7,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { CheckIcon } from 'lucide-react'
 import React from 'react'
+import toast from 'react-hot-toast'
 
 interface Props {
     data: any
@@ -15,6 +18,17 @@ interface Props {
 export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
     const [currentStatus, setCurrentStatus] = React.useState(data.status)
     const modal = useGlobalModal()
+
+    const handleStatusChange = async (status: string) => {
+        setCurrentStatus(status)
+        const response = await instance.put(`/order/${data._id}/status`, { status: status }) as any
+        toast.success("Order Status Changed")
+        if (response) {
+            console.log(response)
+        }
+
+    }
+
     return (
         <>
             <Popover>
@@ -31,19 +45,21 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                         {currentStatus
                             ? (
                                 <>
+                                    <div
+                                        className={`w-2 h-2 rounded-full mr-2 ${currentStatus === "Scheduled Pickup" && "bg-yellow-500"
+                                            } ${currentStatus === "Picked Up" && "bg-blue-500"
+                                            } ${currentStatus === "picked" && "bg-green-500"
+                                            } ${currentStatus === "Reached to the hub" && "bg-purple-500"
+                                            } ${currentStatus === "Laundry in Process" && "bg-green-500"
+                                            } ${currentStatus === "Out for Delivery" && "bg-red-500"
+                                            } ${currentStatus === "Delivered" && "bg-blue-500"
+                                            }`}
+                                    >
+                                    </div>
                                     {OrdersStatuses.find(
                                         (data) => data.title === currentStatus
                                     )?.title}
-
-                                    <div
-                                        className={`w-2 h-2 rounded-full mr-2 ${currentStatus === "onhold" && "bg-yellow-500"
-                                            } ${currentStatus === "pending" && "bg-blue-500"
-                                            } ${currentStatus === "picked" && "bg-green-500"
-                                            } ${currentStatus === "onway" && "bg-purple-500"
-                                            } ${currentStatus === "delivered" && "bg-green-500"
-                                            } ${currentStatus === "cancelled" && "bg-red-500"
-                                            }`}
-                                    />
+                                    {/* {currentStatus} */}
                                 </>
                             )
                             : "Select Order Status"}
@@ -70,7 +86,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                                             <div className="flex justify-end gap-2">
                                                 <Button variant="outline" onClick={() => modal.onClose()}>Cancel</Button>
                                                 <Button onClick={() => {
-                                                    setCurrentStatus(data.title)
+                                                    handleStatusChange(data.title)
                                                     modal.onClose()
                                                 }}>Change</Button>
                                             </div>
@@ -82,13 +98,13 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                                 >
                                     {data.title}
                                     <div
-                                        className={`w-2 h-2 rounded-full mr-2 ${data.title === "onhold" && "bg-yellow-500"
-                                            } ${data.title === "pending" && "bg-blue-500"
+                                        className={`w-2 h-2 rounded-full mr-2 ${data.title === "Scheduled Pickup" && "bg-yellow-500"
+                                            } ${data.title === "Picked Up" && "bg-blue-500"
                                             } ${data.title === "picked" && "bg-green-500"
-                                            } ${data.title === "onway" && "bg-purple-500"
-                                            } ${data.title === "delivered" && "bg-green-500"
-                                            } ${data.title === "cancelled" && "bg-red-500"
-                                            } ${data.title === "processing" && "bg-blue-500"
+                                            } ${data.title === "Reached to the hub" && "bg-purple-500"
+                                            } ${data.title === "Laundry in Process" && "bg-green-500"
+                                            } ${data.title === "Out for Delivery" && "bg-red-500"
+                                            } ${data.title === "Delivered" && "bg-blue-500"
                                             }`}
                                     />
                                     <CheckIcon
