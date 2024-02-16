@@ -38,8 +38,8 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                     Edit Team Member</DropdownMenuItem>
                 <DropdownMenuItem
                     onSelect={() => {
-                        GlobalModal.title = `Remove ${data.fullname}`
-                        GlobalModal.description = `Are you sure you want to remove ${data.fullname} from Team?`
+                        GlobalModal.title = `Remove ${data.fullName}`
+                        GlobalModal.description = `Are you sure you want to remove ${data.fullName} from Team?`
                         GlobalModal.children = <Alert onConfirm={deleteOrder} />
                         GlobalModal.onOpen()
                     }
