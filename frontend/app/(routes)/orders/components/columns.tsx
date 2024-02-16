@@ -23,7 +23,8 @@ import format from "date-fns/format"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type OrdersColumns = {
-    _id: string
+    _id: string,
+    order_id: string
     customer_name: string
     customer_id: string
     mobile: string
@@ -61,12 +62,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "_id",
+        accessorKey: "order_id",
         header: "Order ID",
         cell: ({ row }) => (
             <div className="flex items-center">
                 <div className="w-2 h-2 rounded-full mr-2" />
-                <span >#{row.original._id?.toUpperCase().slice(0, 7)}</span>
+                <span >#{row.original.order_id}</span>
             </div>
         ),
     },
