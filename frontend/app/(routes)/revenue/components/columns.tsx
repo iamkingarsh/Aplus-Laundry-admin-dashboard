@@ -202,7 +202,7 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
     // },
     {
         id: "actions",
-        cell: ({ row }) => <CellAction data={row.original} />
+        // cell: ({ row }) => <CellAction data={row.original} />
     },
 
 ]
