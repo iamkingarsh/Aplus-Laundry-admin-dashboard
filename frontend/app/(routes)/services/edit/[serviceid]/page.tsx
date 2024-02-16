@@ -45,8 +45,8 @@ export default function EditServiceDetailsPage({ params }: Props) {
     const router = useRouter()
 
 
-    const deleteService = async () => {
-
+    const deleteService = async (id:any) => {
+const Id = id
         try {
             const result = await deleteData(`/service/id/${serviceData._id}`); // Replace 'your-delete-endpoint' with the actual DELETE endpoint
             console.log('Success:', result);
