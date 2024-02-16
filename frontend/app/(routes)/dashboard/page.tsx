@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
-import { DatePickerWithRange } from '@/components/date-range'
+// import { DatePickerWithRange } from '@/components/date-range.d'
 import checkIfOwner from '@/utils/checkIfOwner'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { fetchData } from '@/axiosUtility/api'
+import { DatePickerWithRange } from '@/components/date-range'
 
 
 

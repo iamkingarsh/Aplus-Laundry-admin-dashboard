@@ -14,10 +14,11 @@ export type ProductsColumns = {
     product_name: string
     active: boolean
     priceperpair: number
-    category: string
-
-
+    category: {
+        title: string // Assuming `title` is the property you want to access
+    }
 }
+
 
 
 
