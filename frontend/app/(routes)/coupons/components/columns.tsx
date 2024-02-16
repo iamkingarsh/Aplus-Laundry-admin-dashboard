@@ -20,7 +20,9 @@ import CellAction from "./cell-action"
 import toast from "react-hot-toast"
 import { useState } from "react"
 import SwitchComponent from "./switch"
+// import format from "date-fns/format"
 import format from "date-fns/format"
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type CouponsColumns = {
@@ -173,6 +175,8 @@ export const columns: ColumnDef<CouponsColumns>[] = [
                     className={`w-2 h-2 rounded-full mr-2 `}
                 />
                 {format(new Date(row.original.discount_expiry_date), 'PP')}
+
+
             </div>
         ),
 
