@@ -59,18 +59,19 @@ export default function EditCouponsPage({ params }: Props) {
         getData()
     }, []);
 
-    const [checked, setChecked] = React.useState(null)
     const useModal = useGlobalModal()
     const router = useRouter()
-
+    
     const deleteCoupon = async (couponid: string) => {
         // delete logic here
         useModal.onClose()
         toast.success('Coupon Deleted Successfully')
         router.push('/coupons')
     }
-
-
+    
+    
+    
+    const [checked, setChecked] = React.useState(false);
 
     const statusChange = async () => {
         setChecked((prevChecked) => !prevChecked); // Update the state
@@ -79,9 +80,10 @@ export default function EditCouponsPage({ params }: Props) {
                 active: !checked // Use the updated state value
             };
 
-            console.log(!CouponCodeData.active, data, checked, 'checkedcheckedcheckedcheckedcheckedcheckedcheckedchecked')
+            // console.log(!CouponCodeData.active, data, checked, 'checkedcheckedcheckedcheckedcheckedcheckedcheckedchecked')
             const response = await activateCoupon(`/coupon/${params?.couponid}/activate`, data);
-            toast.success('Coupon status changed successfully', data, checked);
+            // toast.success('Coupon status changed successfully', data, checked);
+            toast.success('Coupon status changed successfully');
         } catch (error) {
             console.error('Error changing coupon status:', error);
             toast.error('Error changing coupon status');
