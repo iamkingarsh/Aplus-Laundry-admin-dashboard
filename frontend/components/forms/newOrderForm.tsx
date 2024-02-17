@@ -486,7 +486,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                     {field.value
                                                         ? AllData.find(
                                                             (data) => data._id === field.value
-                                                        )?.email
+                                                        )?.mobileNumber + " (" + AllData.find(
+                                                            (data) => data._id === field.value
+                                                        )?.fullName + ")"
                                                         : "Select Customer"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -513,13 +515,13 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 <CommandGroup>
                                                     {AllData.map((data) => (
                                                         <CommandItem
-                                                            value={data._id}
-                                                            key={data.email}
+                                                            value={data.mobileNumber}
+                                                            key={data.mobileNumber}
                                                             onSelect={() => {
                                                                 form.setValue("customer", data._id)
                                                             }}
                                                         >
-                                                            {data.email}
+                                                            {data.mobileNumber} {data.fullName}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
