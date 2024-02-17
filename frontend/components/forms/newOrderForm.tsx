@@ -135,7 +135,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             order_type: 'Laundry per pair',
             serviceId: '',
             customer: '',
-            status: 'onhold',
+            status: 'Scheduled Pickup',
             payment: 'Via Store (Cash/Card/UPI)',
             delivery_agent: '',
             cartTotal: 0,
@@ -971,7 +971,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
 
-                                                        <TableCell className="text-left">{key}</TableCell>
+                                                        <TableCell>{services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.items.find((value: any) => value._id === key)?.product_name}</TableCell>
+
 
 
                                                         <TableCell className="text-left"><Button onClick={() => {
