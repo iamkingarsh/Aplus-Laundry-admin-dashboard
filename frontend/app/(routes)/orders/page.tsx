@@ -10,6 +10,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { columns } from './components/columns';
 import { fetchData } from '@/axiosUtility/api';
+import { get } from 'http';
 
 
 export default function Page() {
@@ -28,16 +29,25 @@ export default function Page() {
         setLoading(false)
     }
 
+    // const getSubscriberOrders = async () => {
+    //     setLoading(true)
+    //     const response = await fetchData('/order/getall')
+    //     console.log('ytseyshdhs', response)
+    //     setSubscriberOrders(response.orders)
+    //     setLoading(false)
+    // }
+
     const getSubscriberOrders = async () => {
         setLoading(true)
-        const response = await fetchData('/order/getall')
-        console.log('ytseyshdhs', response)
-        setSubscriberOrders(response.orders)
+        const response = await fetchData('/subscription/orders')
+        const orders = response.orders
+        setSubscriberOrders(orders)
         setLoading(false)
     }
 
     useEffect(() => {
         getAllOrdersData()
+        getSubscriberOrders()
     }, [])
 
     const OnHoldOrderData = [
@@ -78,7 +88,7 @@ export default function Page() {
                 <Tabs defaultValue="all" className="w-full">
                     <TabsList className='gap-3'>
                         <TabsTrigger className='gap-2' value="all">All <Badge className='text-bg-primary-foreground ' variant="outline">{allOrdersData?.length}</Badge> </TabsTrigger>
-                        <TabsTrigger className='gap-2' value="subscribed">Subscribed <Badge className='text-bg-primary-foreground' variant="outline">{OnHoldOrderData?.length}</Badge> </TabsTrigger>
+                        <TabsTrigger className='gap-2' value="subscribed">Subscribed <Badge className='text-bg-primary-foreground' variant="outline">{subscriberOrders?.length}</Badge> </TabsTrigger>
                     </TabsList>
                     <TabsContent value="all">
                         <Tabs defaultValue="all" className="w-full">
@@ -157,7 +167,80 @@ export default function Page() {
                         </Tabs>
                     </TabsContent>
                     <TabsContent value="subscribed">
+                        <Tabs defaultValue="all" className="w-full">
+                            <TabsList className='gap-3'>
+                                <TabsTrigger className='gap-2' value="all">All <Badge className='text-bg-primary-foreground ' variant="outline">{allOrdersData?.length}</Badge> </TabsTrigger>
+                                <TabsTrigger className='gap-2' value="on-hold">On Hold <Badge className='text-bg-primary-foreground' variant="outline">{OnHoldOrderData?.length}</Badge> </TabsTrigger>
+                                <TabsTrigger className='gap-2' value="pending">Pending <Badge className='text-bg-primary-foreground' variant="outline">{PendingOrderData?.length}</Badge> </TabsTrigger>
+                                <TabsTrigger className='gap-2' value="picked">Picked <Badge className='text-bg-primary-foreground' variant="outline"> {PickedOrderData?.length}</Badge></TabsTrigger>
+                                <TabsTrigger className='gap-2' value="onway">On Way <Badge className='text-bg-primary-foreground' variant="outline"> {OnWayOrderData?.length}</Badge></TabsTrigger>
+                                <TabsTrigger className='gap-2' value="cancelled">Cancelled <Badge className='text-bg-primary-foreground' variant="outline">{CancelledOrderData?.length}</Badge> </TabsTrigger>
+                                <TabsTrigger className='gap-2' value="delivered">Delivered <Badge className='text-bg-primary-foreground' variant="outline">{DeliveredOrderData?.length}</Badge> </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="all">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
 
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={allOrdersData} />
+                            </TabsContent>
+                            <TabsContent value="on-hold">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={OnHoldOrderData} />
+                            </TabsContent>
+                            <TabsContent value="pending">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={PendingOrderData} />
+                            </TabsContent>
+                            <TabsContent value="picked">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={PickedOrderData} />
+                            </TabsContent>
+                            <TabsContent value="onway">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={OnWayOrderData} />
+                            </TabsContent>
+                            <TabsContent value="delivered">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={DeliveredOrderData} />
+                            </TabsContent>
+                            <TabsContent value="cancelled">
+                                <DataTable
+                                    bulkDeleteIdName='order_id'
+                                    bulkDeleteTitle='Are you sure you want to delete the selected orders?'
+                                    bulkDeleteDescription='This will delete the selected orders, and they will not be recoverable.'
+
+                                    bulkDeleteToastMessage='Selected orders deleted successfully'
+                                    searchKey='customer_name' columns={columns} data={CancelledOrderData} />
+                            </TabsContent>
+                        </Tabs>
                     </TabsContent>
                 </Tabs>
 

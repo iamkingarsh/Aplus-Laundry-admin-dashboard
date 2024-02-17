@@ -98,10 +98,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
             console.log(result)
             if (result && result.services) {
-                const products = result.services;
-                setServices(products);
+                const products = result.services
+                console.log('products', products.filter((service: any) => service.isSubscriptionService === false))
+                setServices(products.filter((service: any) => service.isSubscriptionService === false || service.isSubscriptionService === undefined || service.isSubscriptionService === null))
                 setIsLoading(false)
-                console.log('products', products)
+                // console.log('products', products)
 
                 // Now you can work with the 'categories' array
             } else {
@@ -134,7 +135,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             order_type: 'Laundry per pair',
             serviceId: '',
             customer: '',
-            status: 'onhold',
+            status: 'Scheduled Pickup',
             payment: 'Via Store (Cash/Card/UPI)',
             delivery_agent: '',
             cartTotal: 0,
@@ -486,7 +487,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                     {field.value
                                                         ? AllData.find(
                                                             (data) => data._id === field.value
-                                                        )?.email
+                                                        )?.mobileNumber + " (" + AllData.find(
+                                                            (data) => data._id === field.value
+                                                        )?.fullName + ")"
                                                         : "Select Customer"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -513,13 +516,13 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 <CommandGroup>
                                                     {AllData.map((data) => (
                                                         <CommandItem
-                                                            value={data._id}
-                                                            key={data.email}
+                                                            value={data.mobileNumber}
+                                                            key={data.mobileNumber}
                                                             onSelect={() => {
                                                                 form.setValue("customer", data._id)
                                                             }}
                                                         >
-                                                            {data.email}
+                                                            {data.mobileNumber} {data.fullName}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
@@ -968,7 +971,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
 
-                                                        <TableCell className="text-left">{key}</TableCell>
+                                                        <TableCell>{services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.items.find((value: any) => value._id === key)?.product_name}</TableCell>
+
 
 
                                                         <TableCell className="text-left"><Button onClick={() => {
