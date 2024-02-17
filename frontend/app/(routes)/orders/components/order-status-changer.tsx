@@ -38,7 +38,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                            "w-[90%] gap-2 flex items-center justify-between",
+                            "gap-2 flex items-center justify-between",
                             !currentStatus && "text-muted-foreground"
                         )}
                     >
@@ -46,7 +46,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                             ? (
                                 <>
                                     <div
-                                        className={`w-2 h-2 rounded-full mr-2 ${currentStatus === "Scheduled Pickup" && "bg-yellow-500"
+                                        className={`w-2 h-2 rounded-full ${currentStatus === "Scheduled Pickup" && "bg-yellow-500"
                                             } ${currentStatus === "Picked Up" && "bg-blue-500"
                                             } ${currentStatus === "picked" && "bg-green-500"
                                             } ${currentStatus === "Reached to the hub" && "bg-purple-500"
