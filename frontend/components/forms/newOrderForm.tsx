@@ -98,10 +98,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
             console.log(result)
             if (result && result.services) {
-                const products = result.services;
-                setServices(products);
+                const products = result.services
+                console.log('products', products.filter((service: any) => service.isSubscriptionService === false))
+                setServices(products.filter((service: any) => service.isSubscriptionService === false || service.isSubscriptionService === undefined || service.isSubscriptionService === null))
                 setIsLoading(false)
-                console.log('products', products)
+                // console.log('products', products)
 
                 // Now you can work with the 'categories' array
             } else {
