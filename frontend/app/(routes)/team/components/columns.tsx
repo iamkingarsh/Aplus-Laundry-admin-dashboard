@@ -20,7 +20,7 @@ export type CustomersColumns = {
     profileImg: string
     fullName: string
     email: string
-    address: string
+    address: Array<{ location: string }>
     role: string
     allowedAccess: Array<string>
     mobileNumber: string
@@ -102,6 +102,11 @@ export const columns: ColumnDef<CustomersColumns>[] = [
     {
         accessorKey: "address",
         header: "Address",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {row.original.address[0]?.location}
+            </div>
+        ),
     },
     {
         id: "actions",
