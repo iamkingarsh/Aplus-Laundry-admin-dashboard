@@ -15,7 +15,7 @@ const addressSchema = new mongoose.Schema({
         },
         coordinates: {
             type: [Number],
-            required: true,
+            default: [0, 0],
         },
     },
     pincode: {
@@ -73,9 +73,9 @@ const userSchema = new mongoose.Schema({
     // },
     // subscriptionEndDate: {
     //     type: Date,
-        // required: function () {
-        //     return this.customerType === 'subscriber';
-        // },
+    // required: function () {
+    //     return this.customerType === 'subscriber';
+    // },
     // },
     subscription_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -83,8 +83,8 @@ const userSchema = new mongoose.Schema({
         required: function () {
             return this.customerType === 'subscriber';
         },
-      },
-      deviceToken: {
+    },
+    deviceToken: {
         type: String,
         default: undefined
     }
