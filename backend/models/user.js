@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const addressSchema = new mongoose.Schema({
     addressType: {
         type: String,
-        sparse: true,
+        default: "home",
     },
     location: {
         type: String,

@@ -72,15 +72,23 @@ export function NewDeliveryAgentForm({ className, gap, ...props }: NewDeliveryAg
         // Add submit logic here
         try {
 
-              // Convert values to lowercase
+            // Convert values to lowercase
             const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
                 acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
                 return acc;
             }, {});
 
             const data = {
-                ...lowercaseValues,
 
+                ...lowercaseValues,
+                address: {
+                    addressType: 'home',
+                    location: values.address,
+                    pincode: values.pincode,
+                    coordinates: {
+                        coordinates: null,
+                    }
+                },
             };
 
             const response = await postData('/auth/register', data);
