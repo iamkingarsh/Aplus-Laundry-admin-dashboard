@@ -18,7 +18,7 @@ import CellAction from "./cell-action"
 export type DeliveryAgentsColumns = {
     id: string
     fullName: string
-    address: string
+    address: Array<{ location: string }>
     mobileNumber: string
     status: "active" | "inactive"
     email: string
@@ -97,6 +97,11 @@ export const columns: ColumnDef<DeliveryAgentsColumns>[] = [
     {
         accessorKey: "address",
         header: "Address",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {row.original.address[0]?.location}
+            </div>
+        ),
     },
     {
         accessorKey: "status",

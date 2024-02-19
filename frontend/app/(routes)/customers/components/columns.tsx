@@ -11,7 +11,7 @@ import format from "date-fns/format"
 export type CustomersColumns = {
     _id: string
     fullName: string
-    address: string
+    address: Array<{ location: string }>
     mobileNumber: string
     createdAt: string
     email: string
@@ -89,6 +89,11 @@ export const columns: ColumnDef<CustomersColumns>[] = [
     {
         accessorKey: "address",
         header: "Address",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {row.original.address[0]?.location}
+            </div>
+        ),
     },
     {
         accessorKey: "dateCreated",

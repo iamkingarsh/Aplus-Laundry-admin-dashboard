@@ -86,6 +86,7 @@ export const register = async (req, res, next) => {
 
     // Create a new user if ID is not provided
     const newUser = new User(userFields);
+    const customUserId = `APL${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
     console.log('hcfbvhhhhjbfhhj5', newUser, userFields);
     await newUser.save();
 
@@ -349,7 +350,7 @@ export const verifyotp = async (req, res) => {
     await UserOTP.deleteMany({
       email: email
     });
-   await emailVerificationSuccess(email)
+    await emailVerificationSuccess(email)
     res.status(200).send({
       msg: "Email verified",
       ok: true,
