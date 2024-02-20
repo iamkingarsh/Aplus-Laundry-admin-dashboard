@@ -22,6 +22,7 @@ import { OrderStatusChanger } from "./order-status-changer"
 // You can use a Zod schema here if you want.
 export type TransactionsColumns = {
     id: string
+    transaction_id: string
     status: "queued" | "pending" | "processing" | "processed" | "reversed" | "cancelled" | "rejected"
     source: {
         id: string
