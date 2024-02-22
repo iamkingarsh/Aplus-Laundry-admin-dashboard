@@ -242,23 +242,6 @@ export const sendOTPforMobileverification = async (req, res) => {
 
     // Save the OTP to the database
     await otp.save();
-    // // Send OTP via 2factor.in API
-    // const response = await axios.post(
-    //   `https://2factor.in/API/V1/f7a67a1f-b7d4-11ee-8cbb-0200cd936042/SMS/${mobileNumber}/${OTP}/GROMER`
-    // );
-    // const response = await axios.post(
-    //   `https://www.fast2sms.com/dev/bulkV2?authorization=eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A&variables_values=5599&route=otp&numbers=7013396624`
-    // );
-
-    // const res = await axios.post(
-    //   `https://www.fast2sms.com/dev/bulkV2`
-    //   , {
-    //     authorization: 'eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A',
-    //     variables_values: `34664`,
-    //     route: 'otp',
-    //     numbers: `7013396624`
-    //   }
-    // );
 
 
     var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
