@@ -12,6 +12,8 @@ import {
 } from "../config/sendMail.js";
 import { sendVerificationCode } from "../config/sendSms.js";
 import axios from 'axios'
+import unirest from 'unirest'
+// var unirest = require("unirest");
 
 
 export const register = async (req, res, next) => {
@@ -244,9 +246,42 @@ export const sendOTPforMobileverification = async (req, res) => {
     // const response = await axios.post(
     //   `https://2factor.in/API/V1/f7a67a1f-b7d4-11ee-8cbb-0200cd936042/SMS/${mobileNumber}/${OTP}/GROMER`
     // );
-    const response = await axios.post(
-      `https://www.fast2sms.com/dev/bulkV2?authorization=1JcVxYU9KvAom5lyFLzuBEZX6TCRD82I4fqkpwtG07WanrhSd3NLHWqVaeblARCutfszUkF73wSch4Zm&variables_values=5599&route=otp&numbers=7013396624`
-    );
+    // const response = await axios.post(
+    //   `https://www.fast2sms.com/dev/bulkV2?authorization=eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A&variables_values=5599&route=otp&numbers=7013396624`
+    // );
+
+    // const res = await axios.post(
+    //   `https://www.fast2sms.com/dev/bulkV2`
+    //   , {
+    //     authorization: 'eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A',
+    //     variables_values: `34664`,
+    //     route: 'otp',
+    //     numbers: `7013396624`
+    //   }
+    // );
+
+
+    var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
+
+    req.headers({
+      "authorization": "eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A"
+    });
+
+    req.form({
+      "variables_values": OTP,
+      "route": "otp",
+      "numbers": mobileNumber,
+    });
+
+    req.end(function (res) {
+      if (res.error) throw new Error(res.error);
+
+      console.log(res.body);
+    });
+
+    console.log('res', res.data);
+
+
     // const verification = await sendVerificationCode(`+91${mobileNumber}`);
     console.log("OTP is saved in the database");
 
