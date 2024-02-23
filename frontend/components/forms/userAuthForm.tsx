@@ -29,7 +29,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     const [countDown, setCountDown] = React.useState<number>(60)
 
-    const validEmail = "mohammedarshad.arsh@gmail.com"
+
 
     async function onSubmit(event: React.SyntheticEvent) {
         event.preventDefault()
