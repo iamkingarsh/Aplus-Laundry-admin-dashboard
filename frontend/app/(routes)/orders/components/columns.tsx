@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Banknote, BoxIcon, CreditCard, Delete, Edit, Edit2, Eye, Globe2, IndianRupee, MoreHorizontal, ShipIcon, ToggleLeft, Trash, User, UserCheck, UserCog } from "lucide-react"
+import { ArrowUpDown, Banknote, BoxIcon, CreditCard, Delete, Edit, Edit2, Eye, Globe2, IndianRupee, MoreHorizontal, ShipIcon, Store, ToggleLeft, Trash, User, UserCheck, UserCog } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -18,17 +18,20 @@ import { MobileIcon } from "@radix-ui/react-icons"
 import { useGlobalModal } from "@/hooks/GlobalModal"
 import CellAction from "./cell-action"
 import { OrderStatusChanger } from "./order-status-changer"
+import format from "date-fns/format"
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type OrdersColumns = {
+    _id: string,
     order_id: string
     customer_name: string
     customer_id: string
     mobile: string
-    status: "onhold" | "pending" | "picked" | "onway" | "delivered" | "cancelled"
-    order_date: string
-    payment_method: "cod" | "payment gateway"
-    channel: "manual" | "Mobile App"
+    status: "Scheduled Pickup" | "Picked Up" | "Reached to the hub" | "Laundry in Process" | "Out for Delivery" | "Delivered" | "Cancelled"
+    orderDate: string
+    payment_method: "Via Store (Cash/Card/UPI)" | "Mobile App"
+    // channel: "manual" | "Mobile App"
 }
 
 
@@ -61,6 +64,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
     {
         accessorKey: "order_id",
         header: "Order ID",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <div className="w-2 h-2 rounded-full mr-2" />
+                <span >#{row.original.order_id}</span>
+            </div>
+        ),
     },
     {
         accessorKey: "customer_name",
@@ -81,7 +90,7 @@ export const columns: ColumnDef<OrdersColumns>[] = [
         header: "Mobile No.",
     },
     {
-        accessorKey: "order_date",
+        accessorKey: "orderDate",
         header: ({ column }) => {
             return (
                 <Button
@@ -93,6 +102,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {new Date(row.original.orderDate).toDateString()}
+            </div>
+        ),
+        // cell: ({ row }) => <div>{new Date(row.original.orderDate).toDateString()}</div>,
     },
     {
         accessorKey: "status",
@@ -131,30 +146,6 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Payment Method
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => (
-            <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 `}
-                />
-                {row.original.payment_method === "cod" && <Banknote className="mr-2 text-green-500 h-4 w-4" />}
-                {row.original.payment_method === "payment gateway" && <CreditCard className="mr-2 text-purple-800 dark:text-purple-400 h-4 w-4" />}
-                {row.original.payment_method}
-            </div>
-        ),
-    },
-    {
-        accessorKey: "channel",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
                     Channel
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
@@ -165,12 +156,36 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                 <div
                     className={`w-2 h-2 rounded-full mr-2 `}
                 />
-                {row.original.channel === "manual" && <UserCheck className="mr-2 text-yellow-500 h-4 w-4" />}
-                {row.original.channel === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
-                {row.original.channel}
+                {row.original.payment_method === "Via Store (Cash/Card/UPI)" && <Store className="mr-2 text-yellow-500 h-4 w-4" />}
+                {row.original.payment_method === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
+                {row.original.payment_method}
             </div>
         ),
     },
+    // {
+    //     accessorKey: "channel",
+    //     header: ({ column }) => {
+    //         return (
+    //             <Button
+    //                 variant="ghost"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //             >
+    //                 Channel
+    //                 <ArrowUpDown className="ml-2 h-4 w-4" />
+    //             </Button>
+    //         )
+    //     },
+    //     cell: ({ row }) => (
+    //         <div className="flex items-center">
+    //             <div
+    //                 className={`w-2 h-2 rounded-full mr-2 `}
+    //             />
+    //             {row.original.channel === "manual" && <UserCheck className="mr-2 text-yellow-500 h-4 w-4" />}
+    //             {row.original.channel === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
+    //             {row.original.channel}
+    //         </div>
+    //     ),
+    // },
     {
         id: "actions",
         cell: ({ row }) => <CellAction data={row.original} />

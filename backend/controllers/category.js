@@ -1,58 +1,152 @@
 import Category from "../models/category.js";
+ 
+import mongoose from 'mongoose';
 
-// Create or update a category
+
 export const createOrUpdateCategory = async (req, res) => {
-  try {
-    const { title, id } = req.body;
+    try {
+        const {
+            id,
+            title
+        } = req.body;
 
-    // Check if the title is provided
-    if (!title) {
-      return res.status(400).json({ success: false, error: 'Title is required' });
+        const existingCategory = await Category.findById(id);
+
+        if (existingCategory) {
+            existingCategory.title = title;
+            await existingCategory.save();
+            return res.status(200).json({
+                message: 'Category updated successfully',
+                category: existingCategory
+            });
+        } else {
+            const newCategory = new Category({
+                title
+            });
+            await newCategory.save();
+            return res.status(201).json({
+                message: 'Category created successfully',
+                category: newCategory
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
     }
+};
 
-    const existingCategory = await Category.findOne({ title });
+export const getCategoryById = async (req, res) => { 
 
-    if (existingCategory) {
-      if (id) {
-        const updatedCategory = await Category.findByIdAndUpdate(id, { title }, { new: true });
-        return res.json({ success: true, data: updatedCategory });
-      } else {
-        return res.status(400).json({ success: false, error: 'Category already exists' });
-      }
+
+    try {
+        const {
+            categoryId
+        } = req.params;
+        const category = await Category.findById(categoryId);
+
+        if (!category) {
+            return res.status(404).json({
+                message: 'Category not found',
+                ok: false
+            });
+        }
+
+        return res.status(200).json({
+            category,
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
     }
-
-    if (!id) {
-      const newCategory = new Category({ title });
-      await newCategory.save();
-      return res.status(201).json({ success: true, data: newCategory });
-    }
-
-    return res.status(404).json({ success: false, error: 'Category not found' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: 'Server Error' });
-  }
 };
 
 
-// Delete a category by ID
-export const deleteCategory = async (req, res) => {
+export const deleteCategoriesByIds = async (req, res) => {
     try {
-      const { id } = req.params;
-  
-      if (!id) {
-        return res.status(400).json({ success: false, error: 'Category ID is required' });
-      }
-  
-      const deletedCategory = await Category.findByIdAndDelete(id);
-  
-      if (deletedCategory) {
-        return res.json({ success: true, data: deletedCategory });
-      }
-  
-      return res.status(404).json({ success: false, error: 'Category not found' });
+        const categoryIds  = req.body;
+
+        if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
+            return res.status(400).json({
+                message: 'Invalid category IDs provided 1',
+                ok: false,
+            });
+        }
+
+        // Validate each category ID
+        if (!categoryIds.every(mongoose.Types.ObjectId.isValid)) {
+            return res.status(400).json({
+                message: 'Invalid category IDs provided',
+                ok: false,
+            });
+        }
+
+        // Delete categories by their IDs
+        const deletionResult = await Category.deleteMany({ _id: { $in: categoryIds } });
+
+        if (deletionResult.deletedCount > 0) {
+            return res.status(200).json({
+                message: 'Categories deleted successfully',
+                ok: true,
+            });
+        } else {
+            return res.status(404).json({
+                message: 'No categories found for deletion',
+                ok: false,
+            });
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, error: 'Server Error' });
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error',
+        });
     }
-  };
+};
+
+
+export const getAllCategories = async (req, res) => {
+    try {
+        const categories = await Category.find();
+
+        return res.status(200).json({
+            categories,
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
+    }
+};
+
+
+export const deleteCategoryById = async (req, res) => {
+    try {
+        const {
+            categoryId
+        } = req.params;
+        const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+        if (!deletedCategory) {
+            return res.status(404).json({
+                message: 'Category not found',
+                ok: false
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Category deleted successfully',
+            ok: true
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal Server Error'
+        });
+    }
+}; 

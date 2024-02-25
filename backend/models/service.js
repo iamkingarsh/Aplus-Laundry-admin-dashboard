@@ -1,37 +1,59 @@
 import mongoose from 'mongoose';
 
 const serviceSchema = new mongoose.Schema({
-  title: {
+ 
+  serviceTitle: {
     type: String,
     required: true,
-    minlength: 2,
-  },
-  laundryByKg: {
-    status: {
-      type: String,
-      enum: ['Active', 'Deactivated'],
-      default: 'Active',
-    },
-    price: {
-      type: Number,
-      default: 0,
-    },
-    items: {
-      type: [String],
-      default: [],
+    minlength: 3,
+    validate: {
+      validator: (value) => value.length >= 3,
+      message: 'Service title must be at least 3 characters long',
     },
   },
   laundryPerPair: {
-    status: {
-      type: String,
-      enum: ['Active', 'Deactivated'],
-      default: 'Active',
+    active: {
+      type: Boolean,
+      default: true,
     },
-    items: {
-      type: [String],
-      default: [],
-    },
+    items: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product',
+      },
+    ],
   },
+  laundryByKG: {
+    active: {
+      type: Boolean,
+      default: true,
+    },
+    price: {
+      type: Number,
+      required: function () {
+        return this.laundryByKG.active;
+      },
+    },
+    items: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product',
+      },
+    ],
+  },
+  isSubscriptionService: {
+    type: Boolean,
+    required: true,
+
+  },
+  // arrayOfrazorpaySubscriptionPlans: [
+  //   {
+  //     type: array,
+  //     required: function () {
+  //       return this.isSubscriptionService;
+  //   },
+  // ],
+ 
 });
 
 const Service = mongoose.model('Service', serviceSchema);

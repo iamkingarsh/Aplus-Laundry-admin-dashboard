@@ -2,27 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Delete, Edit, Edit2, MoreHorizontal, ToggleLeft, Trash, User } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import CellAction from "./cell-action"
+import format from "date-fns/format"
 
 export type CustomersColumns = {
-    id: string
-    fullname: string
-    address: string
-    mobile: string
-    status: "active" | "inactive"
+    _id: string
+    fullName: string
+    address: Array<{ location: string }>
+    mobileNumber: string
+    createdAt: string
     email: string
-    profilepic: string
+    profileImg: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -49,20 +42,20 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "profilepic",
+        accessorKey: "profileImg",
         header: "Profile",
         cell: ({ row }) => (
             <div className="flex items-center">
                 <Avatar className='w-8 h-8'>
-                    <AvatarImage src={row.original.profilepic} alt="@shadcn" />
-                    <AvatarFallback> {row.original.fullname[0]} </AvatarFallback>
+                    <AvatarImage src={row.original.profileImg} alt="@shadcn" />
+                    <AvatarFallback> {row.original.fullName} </AvatarFallback>
                 </Avatar>
 
             </div>
         ),
     },
     {
-        accessorKey: "fullname",
+        accessorKey: "fullName",
         header: ({ column }) => {
             return (
                 <Button
@@ -90,33 +83,34 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "mobile",
+        accessorKey: "mobileNumber",
         header: "Mobile No.",
     },
     {
         accessorKey: "address",
         header: "Address",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {row.original.address[0]?.location}
+            </div>
+        ),
     },
     {
-        accessorKey: "status",
+        accessorKey: "dateCreated",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
                 >
-                    Status
+                    Date Created
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
         cell: ({ row }) => (
             <div className="flex items-center">
-                <div
-                    className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "active" ? "bg-green-500" : "bg-red-500"
-                        }`}
-                />
-                {row.original.status}
+                {format(new Date(row.original.createdAt), "PP")}
             </div>
         ),
     },

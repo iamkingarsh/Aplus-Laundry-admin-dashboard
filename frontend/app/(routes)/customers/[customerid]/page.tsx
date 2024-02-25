@@ -1,13 +1,14 @@
 import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { AllData } from '../page';
+// import { AllData } from '../page';
 import { Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { AllOrdersData } from '../../orders/page';
+import React from 'react';
+// import { AllOrdersData } from '../../orders/page';
 
 interface Props {
     params: {
@@ -17,51 +18,56 @@ interface Props {
 }
 
 
-const customerDetails = [
+// const customerDetails = [
 
-    AllData[0].status = 'Active',
-    AllData[0].emailVerified = true,
-    AllData[0].mobileVerified = true,
-    AllData[0].city = 'Hyderabad',
-    AllData[0].pincode = '500050',
-    AllData[0].state = 'Telangana',
-    AllData[0].orders = [
-        {
-            order_id: '#a2855',
+//     AllData[0].status = 'Active',
+//     AllData[0].emailVerified = true,
+//     AllData[0].mobileVerified = true,
+//     AllData[0].city = 'Hyderabad',
+//     AllData[0].pincode = '500050',
+//     AllData[0].state = 'Telangana',
+//     AllData[0].orders = [
+//         {
+//             order_id: '#a2855',
 
-        },
-        {
+//         },
+//         {
 
-            order_id: '#fa725',
-
-
-        },
-        {
-            order_id: '#ee055',
-
-        },
-        {
-            order_id: '#0a133',
+//             order_id: '#fa725',
 
 
-        }
-    ]
-]
-const customerData = { ...AllData[0], ...customerDetails };
+//         },
+//         {
+//             order_id: '#ee055',
+
+//         },
+//         {
+//             order_id: '#0a133',
 
 
-const orderIDs = customerData.orders.map((order: any) => order.order_id)
+//         }
+//     ]
+// ]
+// const customerData = { ...AllData[0], ...customerDetails };
+
+
 
 
 
 
 
 export default function CustomerPage({ params }: Props) {
+    
+    const [customerData, setCustomerData] = React.useState<any>(null);
+    const [AllOrdersData, setAllOrdersData] = React.useState<any>(null);
+    
+    const orderIDs = customerData.orders.map((order: any) => order.order_id)
+    
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
-                    <Heading className='leading-tight' title={`Customer Details - ${customerData.fullname}`} />
+                    <Heading className='leading-tight' title={`Customer Details - ${customerData?.fullname}`} />
                     <p className='text-muted-foreground text-sm'>Customer ID: {params.customerid}</p>
                 </div>
                 <Link href={`/customers/edit/${params.customerid}`}>
@@ -84,12 +90,12 @@ export default function CustomerPage({ params }: Props) {
                                     <User className='w-6 h-6 mr-3' />
                                     <div className="flex flex-col">
                                         <span className="text-muted-foreground  text-sm">Name</span>
-                                        <span className="text-md">{customerData.fullname}</span>
+                                        <span className="text-md">{customerData?.fullname}</span>
                                     </div>
                                 </div>
                                 <Avatar className='w-8  border-muted border-2 h-8 mr-2'>
-                                    <AvatarImage src={customerData.profilepic} alt="@shadcn" />
-                                    <AvatarFallback>{customerData.fullname[0]}</AvatarFallback>
+                                    <AvatarImage src={customerData?.profilepic} alt="@shadcn" />
+                                    <AvatarFallback>{customerData?.fullname[0]}</AvatarFallback>
                                 </Avatar>
                             </div>
                             <Separator orientation='horizontal' />
@@ -100,7 +106,7 @@ export default function CustomerPage({ params }: Props) {
                                     <span className="text-muted-foreground  text-sm">Email</span>
                                     <div className='flex gap-2'>
 
-                                        <Link href={`mailto:${customerData.email}`} className="text-md">{customerData.email}</Link> {customerData.emailVerified === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary" >Unverified</Badge>}
+                                        <Link href={`mailto:${customerData?.email}`} className="text-md">{customerData?.email}</Link> {customerData?.emailVerified === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary" >Unverified</Badge>}
                                     </div>
                                 </div>
                             </div>
@@ -112,8 +118,8 @@ export default function CustomerPage({ params }: Props) {
                                     <span className=" text-muted-foreground  text-sm">Mobile</span>
                                     <div className='flex gap-2'>
 
-                                        <Link href={`tel:${customerData.mobile}`} className="text-md">{customerData.mobile}</Link>
-                                        {customerData.mobile === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>}
+                                        <Link href={`tel:${customerData?.mobile}`} className="text-md">{customerData?.mobile}</Link>
+                                        {customerData?.mobile === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>}
                                     </div>
                                 </div>
                             </div>
@@ -124,23 +130,23 @@ export default function CustomerPage({ params }: Props) {
                                 <div className='flex flex-col gap-2'>
                                     <div className="flex flex-col">
                                         <span className=" text-muted-foreground  text-sm">Address</span>
-                                        <Link href={``} className="text-md">{customerData.address}</Link>
+                                        <Link href={``} className="text-md">{customerData?.address}</Link>
 
                                     </div>
                                     <div className='flex gap-6'>
 
                                         <div className="flex flex-col">
                                             <span className=" text-muted-foreground  text-sm">City</span>
-                                            <Link href={``} className="text-md">{customerData.city}</Link>
+                                            <Link href={``} className="text-md">{customerData?.city}</Link>
 
                                         </div>
                                         <div className="flex flex-col">
                                             <span className=" text-muted-foreground  text-sm">State</span>
-                                            <Link href={``} className="text-md">{customerData.state}</Link>
+                                            <Link href={``} className="text-md">{customerData?.state}</Link>
                                         </div>
                                         <div className="flex flex-col">
                                             <span className=" text-muted-foreground  text-sm">Pincode</span>
-                                            <Link href={``} className="text-md">{customerData.pincode}</Link>
+                                            <Link href={``} className="text-md">{customerData?.pincode}</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +214,7 @@ export default function CustomerPage({ params }: Props) {
 
                             }
                             <CardFooter className='flex justify-center items-center gap-2'>
-                                <span className='text-sm text-center'>Showing recent {AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length > 5 ? '5 ' : AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length} orders of {customerData.fullname}</span>
+                                <span className='text-sm text-center'>Showing recent {AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length > 5 ? '5 ' : AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length} orders of {customerData?.fullname}</span>
                             </CardFooter>
                         </CardContent>
 
@@ -221,7 +227,15 @@ export default function CustomerPage({ params }: Props) {
 
     )
 }
+ 
 
-export { customerData }
+
+
+
+
+
+
+
+
 
 

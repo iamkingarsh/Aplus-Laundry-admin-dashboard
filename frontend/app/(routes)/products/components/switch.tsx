@@ -1,18 +1,45 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { ProductsColumns } from './columns'
 import { Switch } from "@/components/ui/switch"
 import { Button } from '@/components/ui/button'
 import { useGlobalModal } from '@/hooks/GlobalModal'
+import api, { fetchData } from "@/axiosUtility/api"
 
 interface Props {
     data: ProductsColumns
 }
 
 export const SwitchComponent: React.FC<Props> = ({ data }) => {
-    const [checked, setChecked] = React.useState(data.status === 'Active' ? true : false)
+ const [checked, setChecked] = useState(data?.active);
+
+ useEffect(() => {
+   setChecked(data?.active);
+ }, [data?.active]);  
+ 
     const modal = useGlobalModal()
+    const changeStatus = async (value: any) => {
+        try {
+            console.log('id', data.active)
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+
+
+            const response = await api.put(`/product/id/${data._id}/active`, {
+                active: data.active
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log(response.data)
+            setChecked(value);
+            modal.onClose()
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     return (
         <div>
@@ -22,7 +49,7 @@ export const SwitchComponent: React.FC<Props> = ({ data }) => {
                     modal.description = 'you can undo this action later'
                     modal.children = <>
                         <div className='flex flex-row justify-end gap-2'>
-                            <Button onClick={() => { setChecked(value); modal.onClose() }}>Yes</Button>
+                            <Button onClick={() => changeStatus(value)}>Yes</Button>
                             <Button onClick={() => modal.onClose()}>No</Button>
                         </div>
                     </>

@@ -17,6 +17,10 @@ import toast from "react-hot-toast"
 import { Textarea } from "../ui/textarea"
 import { Card } from "../ui/card"
 import Image from "next/image"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { storage } from "@/lib/firebase"
+import api, { fetchData, postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 
 
 interface NewAppBannerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,6 +34,8 @@ const formSchema = z.object({
 })
 
 export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormProps) {
+    const router = useRouter()
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -42,39 +48,79 @@ export function NewAppBannerForm({ className, gap, ...props }: NewAppBannerFormP
 
     })
 
+    const [bannerImage, setBannerImage] = React.useState("" as any)
+    const [bannerImageFile, setBannerImageFile] = React.useState("" as any)
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const uploadImageToFirebase = async (file: any) => {
+        try {
+            const storageRef = ref(storage, `app-banners/${file.name}`);
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
+        } catch (error) {
+            console.log('Error in uploadImageToFirebase:', error);
+        }
+    };
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
+        setIsLoading(true);
+        console.log('AppBanner values', values);
 
-        setIsLoading(true)
+        try {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+
+            // Upload the image and get the download URL
+            const downloadURL = await uploadImageToFirebase(bannerImageFile);
+
+            // Convert values to lowercase
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
+                return acc;
+            }, {});
 
 
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
+
+            // Combine form values with the uploaded banner image URL
+            const data = {
+                ...lowercaseValues,
+                banner_image: downloadURL,
+            };
+            const response = await postData('/appBanner/addorupdate', data);
+            console.log('API Response:', data);
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            router.push('/app-banners')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
+
+
 
     }
-
-    const [bannerImage, setBannerImage] = React.useState("" as any) // @ mujahed Replace this by creating a cloudinary image upload component
 
 
     const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] as any;
-
+        setBannerImageFile(file)
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setBannerImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            reader.onload = (event: any) => {
+                const imageUrl = event.target.result;
+                form.setValue('banner_image', imageUrl);
+                setBannerImage(imageUrl);
 
-            // Use the field.onChange from useForm
-            form.setValue("banner_image", file);
+            };
+
+            reader.readAsDataURL(file); // change the logic during backend integration, use cloudinary
         } else {
             setBannerImage(null);
         }
     };
+
+
 
     return (
         <div className={cn("grid gap-6 ", className)} {...props}>

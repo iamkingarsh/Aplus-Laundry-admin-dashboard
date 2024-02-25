@@ -17,7 +17,10 @@ import toast from "react-hot-toast"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
-import { categories } from "@/lib/constants"
+import api, { fetchData, postData } from "@/axiosUtility/api"
+import { useRouter } from 'next/navigation';
+
+// import { categories } from "@/lib/constants"
 
 
 interface EditLaundryItemFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,31 +37,99 @@ const formSchema = z.object({
 })
 
 export function EditLaundryItemForm({ className, laundryItemData, gap, ...props }: EditLaundryItemFormProps) {
-    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const router= useRouter()
 
+    const [categories, setCategories] = React.useState([])
+    const getData = async () => {
+        setIsLoading(true)
+        try {
+            const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+
+            if (result && result.categories) {
+                let categories = result.categories;
+                setCategories(categories)
+                setIsLoading(false)
+                // Now you can work with the 'categories' array
+            } else {
+                console.error('Response format is not as expected');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    React.useEffect(() => {
+        getData()
+    }, [])
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    
+    console.log('laundryItemData1', laundryItemData);
+  
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            product_name: laundryItemData.product_name,
-            priceperpair: laundryItemData.priceperpair,
-            category: laundryItemData.category,
-        },
-
-    })
+    });
+    
+    React.useEffect(() => {
+        form.reset({
+            product_name: laundryItemData?.product_name || '',
+            priceperpair: laundryItemData?.priceperpair || '',
+            category: laundryItemData?.category?.title || '',
+        });
+    }, [laundryItemData]);
+    console.log('laundryItemData', laundryItemData?.category?.title);
 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-
+        // console.log('categories categories categories',categories.find(
+        //     (data:any) => data.title === values.category
+        // )?._id)
+ 
         setIsLoading(true)
+        const editData = async() =>{
+            try {
+                const lowercaseValues = Object.fromEntries(
+                  Object.entries(values).map(([key, value]) => [key, typeof value === 'string' ? value.toLowerCase() : value])
+                );
+              
+            
+                const category = categories.find((data: any) => data.title === lowercaseValues.category) as { _id: string } | undefined;
+                const categoryId = category ? category._id : null;
+                const payload = {
+                    ...lowercaseValues,
+                    category: categoryId,
+                    id: laundryItemData ? laundryItemData._id : null,
+                };
+                
+                
+                  
+                console.log('payload',payload)
+                const response =  await postData('/product/adorupdate', payload);
+                console.log('API Response:', response);
+              
+                setIsLoading(false);
+                toast.success('Category updated successfully');
+                router.push('/products');
+              } catch (error) {
+                console.error('Error creating/updating category:', error);
+                setIsLoading(false);
+                toast.error(`Error creating/updating category: ${(error as Error).message}`);
 
+              }
+        }
+       
+          
+        editData()
 
         setTimeout(() => {
             setIsLoading(false)
-            toast.success('Customer created successfully')
+
+            toast.success('Customer created successfully ;fldkjg')
+            
         }, 3000) // remove this timeout and add submit logic
 
     }
+    
 
 
     return (
@@ -109,11 +180,10 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
                                                         !field.value && "text-muted-foreground"
                                                     )}
                                                 >
-                                                    {field.value
-                                                        ? categories.find(
-                                                            (data) => data.title === field.value
-                                                        )?.title
-                                                        : "Select Category"}
+                                                  {field.value
+    ? (categories.find((data: any) => data.title === field.value) as { title: string } | undefined)?.title
+    : "Select Category"}
+
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </FormControl>
@@ -137,7 +207,7 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
 
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {categories.map((data) => (
+                                                    {categories.map((data:any) => (
                                                         <CommandItem
                                                             value={data.title}
                                                             key={data.title}

@@ -1,6 +1,6 @@
 "use client"
-import { AllData } from '@/app/(routes)/customers/page'
-import { AllOrdersData } from '@/app/(routes)/orders/page'
+// import { AllData } from '@/app/(routes)/customers/page'
+// import { AllOrdersData } from '@/app/(routes)/orders/page'
 import React from 'react'
 import {
     Table,
@@ -13,40 +13,33 @@ import {
 } from "@/components/ui/table"
 import { Avatar, AvatarFallback } from './ui/avatar'
 
+interface RecentOrdersProps {
+    data: any
+}
 
-export default function RecentOrders() {
+
+export default function RecentOrders({ data }: RecentOrdersProps) {
     //@mujahed bro get the actual data from the dashboard page and pass it here as props as this is a client side component
 
-    const Data = AllOrdersData.slice(0, 6)
-    const CustomersData = AllData.slice(0, 6)
-
-
-
-    //append customers data in recent orders data
-    const appendCustomersData = (Data: any, CustomersData: any) => {
-        return Data.map((data: any, index: number) => {
-            return {
-                ...data,
-                name: CustomersData[index].fullname,
-                email: CustomersData[index].email,
-                date: CustomersData[index].date,
-                profilepic: CustomersData[index].profilepic,
-            }
-        })
-    }
-
-    const pending = Data.filter((data: any) => data.status === 'pending')
-    const processing = Data.filter((data: any) => data.status === 'processing')
-    const delivered = Data.filter((data: any) => data.status === 'delivered')
-    const cancelled = Data.filter((data: any) => data.status === 'cancelled')
-    const onway = Data.filter((data: any) => data.status === 'onway')
+    const Data = data?.slice(0, 6)
 
 
 
 
 
 
-    const RecentOrders = appendCustomersData(Data, CustomersData)
+    const pending = Data?.filter((data: any) => data.status === 'pending')
+    const processing = Data?.filter((data: any) => data.status === 'processing')
+    const delivered = Data?.filter((data: any) => data.status === 'delivered')
+    const cancelled = Data?.filter((data: any) => data.status === 'cancelled')
+    const onway = Data?.filter((data: any) => data.status === 'onway')
+
+
+
+
+
+
+    const RecentOrders = [...Data]
 
     return (
         <div className='flex flex-col gap-2'>
@@ -65,15 +58,16 @@ export default function RecentOrders() {
                         {
                             RecentOrders.map((data: any, index: any) => (
                                 <TableRow key={index}>
-                                    <TableCell> {data.order_id}</TableCell>
+                                    <TableCell> #{data?._id.toUpperCase().slice(0, 7)}</TableCell>
                                     <TableCell>
                                         <div className='flex flex-col  gap-0'>
-                                            <span className='font-medium leading-tight'>{data.name}</span>
-                                            <span className='text-xs text-muted-foreground'>{data.email}</span>
+                                            <span className='font-medium leading-tight'>{data.customer.fullName}</span>
+                                            <span className='text-xs text-muted-foreground'>{data.customer.email}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell className='text-sm text-muted-foreground'>
-                                        6 days ago</TableCell>
+                                        {new Date(data.orderDate).toDateString()}
+                                    </TableCell>
                                     <TableCell className="flex items-center justify-start gap-2">
 
                                         <div className="flex items-center">

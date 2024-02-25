@@ -1,13 +1,16 @@
 import Order from '../models/order.js';
 import Razorpay from 'razorpay';
 import Transaction from '../models/transacation.js';
+ 
 import { orderConfirmationEmail } from '../config/sendMail.js';
+ 
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
 });
 // Add or update an order
+ 
 export const createOrUpdateOrderRazorpay = async (req, res) => {
     try {
         const { 
@@ -34,6 +37,7 @@ export const createOrUpdateOrderRazorpay = async (req, res) => {
 };
 
 
+ 
 export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
@@ -50,6 +54,7 @@ export const createOrUpdateOrder = async (req, res) => {
             cartTotal,
             cartWeight,
             cartWeightBy,
+ 
             razorpayOrderId,
             order_id
         } = req.body;
@@ -134,6 +139,7 @@ const sendOrderConfirmationEmail = async (id) => {
     } catch (error) {
         console.error('Error sending order confirmation email:', error);
         // Handle the error accordingly (e.g., log it, send a notification, etc.)
+ 
     }
 };
 

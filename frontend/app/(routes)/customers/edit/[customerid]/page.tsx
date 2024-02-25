@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
-import { customerData } from '../../[customerid]/page';
+// import { customerData } from '../../[customerid]/page';
 import { EditCustomerForm } from '@/components/forms/editCustomerForm';
 
 
@@ -24,10 +24,12 @@ interface Props {
 
 
 
-const customerdata = customerData;
+// const customerdata = customerData;
 
 
 export default function EditCustomerPage({ params }: Props) {
+    const [customerdata, setCustomerData] = React.useState<any>(null);
+
     const [checked, setChecked] = React.useState(customerdata.status === 'Active' ? true : false)
     const useModal = useGlobalModal()
     const router = useRouter()

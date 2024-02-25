@@ -28,7 +28,13 @@ import { Textarea } from "../ui/textarea"
 import toast, { Toast } from "react-hot-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Upload } from "lucide-react"
-import { url } from "inspector"
+import { storage } from "@/lib/firebase"
+import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from "react"
+import { postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
+import { Icons } from "../ui/icons"
+
 
 const profileFormSchema = z.object({
     profilepic: z.string(),
@@ -53,9 +59,9 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API.
 const defaultValues: Partial<ProfileFormValues> = {
-    profilepic: "https://github.com/shadcn.png",
-    FullName: "Arshad",
-    email: "contact@mohammedarshad.com",
+    profilepic: "",
+    FullName: "",
+    email: "",
 }
 
 export function ProfileForm() {
@@ -65,13 +71,96 @@ export function ProfileForm() {
         mode: "onChange",
     })
 
+    const [currentUserData, setCurrentUserData] = useState(null as any)
+    const getCurrentData = async () => {
 
+        try {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
 
-    function onSubmit(data: ProfileFormValues) {
-
-
-        toast.success("Profile updated.")
+            const result = await postData('/auth/currentuser',
+                {
+                    token: token
+                }
+            ); // Replace 'your-endpoint' with the actual API endpoint
+            console.log(result.user)
+            setCurrentUserData(result.user)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
+    useEffect(() => {
+        getCurrentData()
+    }, [])
+
+    const [profilepic, setProfilepic] = useState<string | null>(null)
+    const [profilepicUrl, setProfilepicUrl] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+
+
+    const uploadImageToFirebase = async (file: any) => {
+        try {
+            const storageRef = ref(storage, `profile-pics/${file.name}`);
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            console.log('File available at', downloadURL);
+            setProfilepicUrl(downloadURL)
+            form.setValue('profilepic', downloadURL);
+            toast.success('Profile Picture added successfully!');
+            return downloadURL;
+        } catch (error) {
+            console.log('Error in uploadImageToFirebase:', error);
+        }
+    };
+
+
+
+    async function onSubmit(data: ProfileFormValues) {
+        setLoading(true)
+        if (profilepic !== form.watch('profilepic')) {
+            uploadImageToFirebase(profilepic);
+        }
+        try {
+            if (
+                currentUserData?.profileImg !== profilepicUrl ||
+                currentUserData?.fullName !== form.getValues('FullName') ||
+                currentUserData?.email !== form.getValues('email')
+            ) {
+                const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
+
+                const result = await postData('/auth/register',
+                    {
+                        token: token,
+                        profileImg: profilepicUrl,
+                        fullName: form.getValues('FullName'),
+                        email: form.getValues('email')
+                    }
+                );
+                router.refresh()
+                toast.success("Profile updated.")
+
+                console.log('result resukt', result);
+                setCurrentUserData(result.user)
+                setLoading(false)
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setLoading(false)
+        }
+
+
+
+
+    }
+
+    useEffect(() => {
+        form.reset({
+            profilepic: currentUserData?.profileImg,
+            FullName: currentUserData?.fullName,
+            email: currentUserData?.email,
+        })
+    }, [currentUserData])
+
 
     return (
         <Form {...form}>
@@ -99,13 +188,15 @@ export function ProfileForm() {
                                     <Input
                                         onChange={(e: any) => {
                                             const file = e.target.files[0];
-
+                                            console.log('env file', process.env.FIREBASE_STORAGE_BUCKET);
+                                            setProfilepic(file);
                                             if (file) {
                                                 const reader = new FileReader();
                                                 reader.onload = (event: any) => {
                                                     const imageUrl = event.target.result;
                                                     form.setValue('profilepic', imageUrl);
                                                     console.log(imageUrl);
+
                                                 };
 
                                                 reader.readAsDataURL(file); // change the logic during backend integration, use cloudinary
@@ -113,6 +204,7 @@ export function ProfileForm() {
                                         }}
                                         id="upload"
                                         className="hidden"
+                                        disabled={loading}
                                         hidden
                                         type="file"
                                     />
@@ -132,7 +224,7 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input disabled={loading} placeholder="shadcn" {...field} />
                             </FormControl>
 
                             <FormMessage />
@@ -146,7 +238,7 @@ export function ProfileForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl >
-                                <Input disabled placeholder="example@example.com " />
+                                <Input {...field} disabled placeholder="example@example.com " />
                             </FormControl>
 
 
@@ -156,7 +248,11 @@ export function ProfileForm() {
                 />
 
 
-                <Button type="submit">Update profile</Button>
+                <Button type="submit">
+                    {loading &&
+                        <Icons.spinner className='w-4 h-4 animate-spin' />
+                    }
+                    Update profile</Button>
             </form>
         </Form>
     )

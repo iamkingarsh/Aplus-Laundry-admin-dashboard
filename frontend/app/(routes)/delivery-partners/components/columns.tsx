@@ -17,12 +17,12 @@ import CellAction from "./cell-action"
 
 export type DeliveryAgentsColumns = {
     id: string
-    fullname: string
-    address: string
-    mobile: string
+    fullName: string
+    address: Array<{ location: string }>
+    mobileNumber: string
     status: "active" | "inactive"
     email: string
-    profilepic: string
+    profileImg: string
 }
 
 export const columns: ColumnDef<DeliveryAgentsColumns>[] = [
@@ -49,20 +49,21 @@ export const columns: ColumnDef<DeliveryAgentsColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "profilepic",
+        accessorKey: "profileImg",
         header: "Profile",
         cell: ({ row }) => (
             <div className="flex items-center">
                 <Avatar className='w-8 h-8'>
-                    <AvatarImage src={row.original.profilepic} alt="@shadcn" />
-                    <AvatarFallback> {row.original.fullname[0]} </AvatarFallback>
+                    <AvatarImage src={row.original.profileImg} alt="@shadcn" />
+                    <AvatarFallback> {row.original.fullName[0]
+                    } </AvatarFallback>
                 </Avatar>
 
             </div>
         ),
     },
     {
-        accessorKey: "fullname",
+        accessorKey: "fullName",
         header: ({ column }) => {
             return (
                 <Button
@@ -90,12 +91,17 @@ export const columns: ColumnDef<DeliveryAgentsColumns>[] = [
         },
     },
     {
-        accessorKey: "mobile",
+        accessorKey: "mobileNumber",
         header: "Mobile No.",
     },
     {
         accessorKey: "address",
         header: "Address",
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                {row.original.address[0]?.location}
+            </div>
+        ),
     },
     {
         accessorKey: "status",

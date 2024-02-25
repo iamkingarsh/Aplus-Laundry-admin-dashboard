@@ -1,11 +1,32 @@
 import express from 'express';
-import { createOrUpdateCategory , deleteCategory} from '../controllers/category.js';
-import { authenticateToken } from '../middleware/authToken.js';
-const router = express.Router();
-// Route to create or update a category
-router.post('/create-or-update', createOrUpdateCategory);
+ 
+ 
+ // Adjust the path based on your project structure
+import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
+import {
+  createOrUpdateCategory,
+  getCategoryById,
+  getAllCategories,
+  deleteCategoryById,
+  deleteCategoriesByIds
+} from '../controllers/category.js';
 
-// Route to delete a category by ID
-router.delete('/delete', deleteCategory);
+const categoryRouter = express.Router();
 
-export default router
+// Route: /category/createorupdate
+categoryRouter.post('/createorupdate', adminAuthenticateToken, createOrUpdateCategory);
+
+// Route: /category/all
+categoryRouter.get('/all', authenticateToken, getAllCategories);
+
+// Route: /category/:categoryId
+categoryRouter.get('/id/:categoryId', authenticateToken, getCategoryById);
+
+// Route: /category/:categoryId
+categoryRouter.delete('/id/:categoryId', adminAuthenticateToken, deleteCategoryById);
+
+categoryRouter.delete('/ids', adminAuthenticateToken, deleteCategoriesByIds);
+
+
+export default categoryRouter;
+ 

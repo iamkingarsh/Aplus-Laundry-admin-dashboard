@@ -153,6 +153,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+ 
         setIsLoading(true);
     
         try {
@@ -220,9 +221,6 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         }
     }
     
-
-
-
 
 
 

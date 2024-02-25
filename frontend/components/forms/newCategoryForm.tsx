@@ -12,6 +12,9 @@ import { useForm } from "react-hook-form"
 import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import toast from "react-hot-toast"
+import  {postData} from '../../axiosUtility/api'
+import { useRouter } from 'next/navigation';
+
 
 
 interface NewCategoryFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,6 +31,7 @@ const formSchema = z.object({
 
 export function NewCategoryForm({ className, gap, ...props }: NewCategoryFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const router= useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -39,18 +43,29 @@ export function NewCategoryForm({ className, gap, ...props }: NewCategoryFormPro
     })
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-
-        setIsLoading(true)
-
-
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
-
-    }
+        setIsLoading(true); 
+      try {
+       
+      // Convert values to lowercase
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
+                return acc;
+            }, {});
+      
+        const response = await postData('/category/createorupdate', lowercaseValues); 
+        console.log('API Response:', response);
+      
+        setIsLoading(false);
+        toast.success('Category created/updated successfully');
+        router.push('/categories')
+      } catch (error) {
+        console.error('Error creating/updating category:', error);
+        setIsLoading(false);
+        toast.error('Error creating/updating category');
+      }
+      }
 
 
     return (

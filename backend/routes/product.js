@@ -1,15 +1,33 @@
-import express from 'express';
-import { addOrUpdateProduct , updateProductStatus ,deleteProduct} from '../controllers/product.js';
+ 
+// productController.js
+
+  import {
+        createOrUpdateProduct,
+        getAllProductsWithCategories,
+        updateProductActiveStatus,
+        deleteProductById,
+        deleteProductByIds,
+      } from '../controllers/product.js';
 import { authenticateToken } from '../middleware/authToken.js';
-const router = express.Router();
+import express from 'express';
+  const productRouter = express.Router();
+  
+  // Route for creating or updating a product
+  productRouter.post('/adorupdate', authenticateToken, createOrUpdateProduct);
+  
+  // Route for getting all products with categories
+  productRouter.get('/getall', authenticateToken, getAllProductsWithCategories);
+  productRouter.get('/getid/:id', authenticateToken, getAllProductsWithCategories);
 
-// Create or Update product
-router.post('/create-or-update', addOrUpdateProduct);
+  
+  // Route for updating the active status of a product
+  productRouter.put('/id/:id/active', authenticateToken, updateProductActiveStatus);
+  
+  // Route for deleting a product by ID    
+  productRouter.delete('/id/:id', authenticateToken, deleteProductById);
+  productRouter.delete('/ids', authenticateToken, deleteProductByIds);
 
-// Update product status by ID
-router.put('/update/status', updateProductStatus);
-
-// Delete product by ID
-router.delete('/delete', deleteProduct);
-
-export default router
+  
+  export default productRouter;
+  
+ 

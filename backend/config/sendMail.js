@@ -200,7 +200,7 @@ export const emailVerificationSuccess = async (email) => {
 };
 
 
-
+ 
 export const orderConfirmationEmail = async (email, orderDetails) => {
   const subject = "Order Confirmation";
 
@@ -234,5 +234,6 @@ export const orderConfirmationEmail = async (email, orderDetails) => {
 
   await mailSend(email, subject, body);
 };
+ 
 
 

@@ -18,6 +18,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { categories } from "@/lib/constants"
+import api, { fetchData, postData } from "@/axiosUtility/api"
+import { set } from "date-fns"
+import { useRouter } from "next/navigation"
 
 
 interface NewLaundryItemFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,34 +31,75 @@ const formSchema = z.object({
     product_name: z.string().min(3, { message: "Product name must be atleast 3 characters long" }),
     category: z.string().min(3, { message: "Category must be atleast 3 characters long" }),
     priceperpair: z.string().min(1, { message: "Price per pair must be atleast Rs. 1" }),
-
+    status: z.boolean().default(true)
 
 })
 
 export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
+    const [categories, setCategories] = React.useState([])
+    const getData = async () => {
+        setIsLoading(true)
+        try {
+            const result = await fetchData('/category/all'); // Replace 'your-endpoint' with the actual API endpoint
+
+            if (result && result.categories) {
+                let categories = result.categories;
+                setCategories(categories)
+                setIsLoading(false)
+                // Now you can work with the 'categories' array
+            } else {
+                console.error('Response format is not as expected');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    React.useEffect(() => {
+        getData()
+    }, [])
+
+
+    const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             product_name: "",
             priceperpair: "0",
             category: ""
+
         },
 
     })
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
 
         setIsLoading(true)
+        try {
+
+               // Convert values to lowercase
+const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+    const value = values[key as keyof typeof values];
+    acc[key] = typeof value === 'string' ? value.toLowerCase() : value;
+    return acc;
+}, {});
 
 
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
-        }, 3000) // remove this timeout and add submit logic
+            const response = await postData('/product/adorupdate', lowercaseValues);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            router.push('/products')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
     }
 
@@ -100,21 +144,20 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                     <Popover>
                                         <PopoverTrigger {...field} defaultValue={field.value} asChild>
                                             <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    role="combobox"
-                                                    className={cn(
-                                                        "w-full justify-between",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value
-                                                        ? categories.find(
-                                                            (data) => data.title === field.value
-                                                        )?.title
-                                                        : "Select Category"}
-                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                </Button>
+                                            <Button
+    variant="outline"
+    role="combobox"
+    className={cn(
+        "w-full justify-between",
+        !field.value && "text-muted-foreground"
+    )}
+>
+    {field.value
+        ? (categories.find((data: any) => data._id === field.value) as any)?.title
+        : "Select Category"}
+    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+</Button>
+
                                             </FormControl>
                                         </PopoverTrigger>
                                         <PopoverContent side="right" className="w-full p-0">
@@ -125,7 +168,7 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                                 />
                                                 <CommandEmpty>
                                                     <div>
-                                                        No Customer found.
+                                                        No Categories Found
                                                     </div>
                                                     {/* <div>
                                                         <Button onClick={OpenNewCustomerModal} variant="ghost" className="mt-2">
@@ -136,25 +179,30 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
 
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {categories.map((data) => (
+                                                    {categories.map((data: any) => (
                                                         <CommandItem
                                                             value={data.title}
                                                             key={data.title}
                                                             onSelect={() => {
-                                                                form.setValue("category", data.title)
+                                                                form.setValue("category", data._id)
                                                             }}
                                                         >
                                                             {data.title}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
-                                                                    data.title === field.value
+                                                                    data._id === field.value
                                                                         ? "opacity-100"
                                                                         : "opacity-0"
                                                                 )}
                                                             />
                                                         </CommandItem>
                                                     ))}
+                                                    {/* {
+                                                        categories.length > 0 && <CommandItem onSelect={() => {
+                                                            router.push('/categories/new')
+                                                        }}> <div className="flex flex-row items-center"> <Plus className="h-4 w-4 mr-2" /> Add Category</div></CommandItem>
+                                                    } */}
                                                     {/* <CommandItem onSelect={OpenNewCustomerModal}> <div className="flex flex-row items-center"> <Plus className="h-4 w-4 mr-2" /> Add Customer</div></CommandItem> */}
                                                 </CommandGroup>
                                             </Command>

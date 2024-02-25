@@ -10,14 +10,15 @@ import CellAction from "./cell-action"
 import SwitchComponent from "./switch"
 
 export type ProductsColumns = {
-    product_id: string
+    _id: string
     product_name: string
-    status: string
+    active: boolean
     priceperpair: number
-    category: string
-
-
+    category: {
+        title: string // Assuming `title` is the property you want to access
+    }
 }
+
 
 
 
@@ -83,9 +84,17 @@ export const columns: ColumnDef<ProductsColumns>[] = [
                 </Button>
             )
         },
+        cell: ({ row }) => (
+            <div className="flex items-center">
+                <div
+                    className={`w-2 h-2 rounded-full mr-2 `}
+                />
+                {row.original.category?.title}
+            </div>
+        ),
     },
     {
-        accessorKey: "status",
+        accessorKey: "active",
         header: ({ column }) => {
             return (
                 <Button

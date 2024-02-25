@@ -4,11 +4,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
-import { OrdersColumns } from './columns'
+// import { OrdersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 
 interface Props {
-    data: OrdersColumns
+    // data: OrdersColumns
+    data:  string 
+
 }
 
 export const CellAction: React.FC<Props> = ({ data }) => {

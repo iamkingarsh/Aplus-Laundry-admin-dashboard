@@ -17,10 +17,10 @@ import CellAction from "./cell-action"
 import ImageModal from "./imageModal"
 
 export type CustomersColumns = {
-    id: string
-    title: string
-    desc: string
-    bannerImg: string
+    _id: string
+    banner_title: string
+    banner_description: string
+    banner_image: string
 }
 
 export const columns: ColumnDef<CustomersColumns>[] = [
@@ -47,7 +47,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "title",
+        accessorKey: "banner_title",
         header: ({ column }) => {
             return (
                 <Button
@@ -61,7 +61,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "desc",
+        accessorKey: "banner_description",
         header: ({ column }) => {
             return (
                 <Button
@@ -75,7 +75,7 @@ export const columns: ColumnDef<CustomersColumns>[] = [
         },
     },
     {
-        accessorKey: "bannerImg",
+        accessorKey: "banner_image",
         header: "Banner Image",
         cell: ({ row }) => <ImageModal data={row.original} />,
 

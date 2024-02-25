@@ -1,13 +1,27 @@
+// index.js
+
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoute from './routes/auth.js';
-import CategoryRouter from './routes/category.js';
-import ProductRouter from './routes/product.js';
-import ServiceRouter from './routes/services.js';
+ 
 import errorHandler from './middleware/error.js';
-// const bodyParser = require('body-parser');
+import orderRouter from './routes/order.js';
+import productRouter from './routes/product.js';
+import serviceRouter from './routes/service.js';
+import couponRouter from './routes/coupon.js';
+import appBannerRouter from './routes/appBanner.js';
+import categoryRouter from './routes/category.js';
+import transactionRouter from './routes/transaction.js';
+import razorpaySubcriptionRouter from './routes/razorpaysubcriptions.js';
+import planPricing from './routes/planPricing.js';
+import checkSubscription from './task_scheduler/subscriptionCron.js'; // Import the task
+import createSubscriptionOrdersCron from './task_scheduler/createSubscriptionOrders.js';
+import subscriptionTransactionRouter from './routes/subscriptionTransaction.js';
+import deviceTokenRouter from './routes/deviceToken.js';
+
+ 
 dotenv.config();
 
 mongoose
@@ -32,9 +46,22 @@ app.listen(process.env.PORT, () => {
 app.get("/", (req, res) => {
   res.send("home");
 });
-app.use('/auth',authRoute);  
-app.use('/category',CategoryRouter);
-app.use('/product',ProductRouter);
-app.use('/service',ServiceRouter);
+ 
+app.use('/auth', authRoute);
+app.use('/category', categoryRouter)
+app.use('/order', orderRouter);
+app.use('/product', productRouter);
+app.use('/service', serviceRouter);
+app.use('/coupon', couponRouter);
+app.use('/appBanner', appBannerRouter);
+app.use('/transaction', transactionRouter)
+app.use('/razorpaySubscription', razorpaySubcriptionRouter)
+app.use('/planPricing', planPricing)  
+app.use('/subscription', subscriptionTransactionRouter)  
+app.use('/deviceToken', deviceTokenRouter)  
 
+
+checkSubscription.start()
+createSubscriptionOrdersCron.start()
+ 
 app.use(errorHandler);

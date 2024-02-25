@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useGlobalModal } from '@/hooks/GlobalModal';
 import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ServicesColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -12,7 +12,8 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import SwitchComponent from './Switch';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
-import { categories } from '@/lib/constants';
+import { fetchData } from '@/axiosUtility/api';
+// import { categories } from '@/lib/constants';
 
 
 interface Props {
@@ -21,20 +22,49 @@ interface Props {
 
 
 export const ItemsSheet: React.FC<Props> = ({ data }) => {
-    const Items = Object.keys(data.laundry_items as any).filter((item: any) => item.category === item.title).map((item: any, index) => {
-        return data.laundry_items[item]
-    }) as any
 
-    // Get categories that have the same category as the title
-    const Categories = categories.filter((category: any) =>
-        Items.map((item: any) => item.category).includes(category.title)
-    ) as any;
+    const [loading, setLoading] = useState(true) as any
 
-    // Get items that have the same category as the title
-    const ItemsByCategory = Items.filter((item: any) =>
-        Categories.map((category: any) => category.title).includes(item.category)
-    ) as any;
+    const laundryByKgItems = data?.laundry_items?.laundryByKG?.items
+    const laundryPerPairItems = data.laundry_items.laundryPerPair?.items
 
+
+    console.log(laundryByKgItems, 'laundryBy KgItems')
+
+
+
+    const productsByCategoryKG = {} as any;
+    laundryByKgItems.forEach((product: any) => {
+        if (!productsByCategoryKG[product.item.category?.title]) {
+            productsByCategoryKG[product.item.category?.title] = [];
+        }
+        productsByCategoryKG[product.item.category?.title].push(product.item);
+    });
+
+    const productsByCategoryPerPair = {} as any;
+    laundryPerPairItems.forEach((product: any) => {
+        if (!productsByCategoryPerPair[product.item.category?.title]) {
+            productsByCategoryPerPair[product.item.category?.title] = [];
+        }
+        productsByCategoryPerPair[product.item.category?.title].push(product.item);
+    });
+
+    const laundryByKGFilteredItems = Object.entries(productsByCategoryKG).map(([key, value]) => {
+        return {
+            category: key,
+            products: value,
+        };
+    });
+    console.log(laundryByKGFilteredItems, 'laundryByKGFilteredItems')
+
+    const laundryPerPairFilteredItems = Object.entries(productsByCategoryPerPair).map(([key, value]) => {
+        return {
+            category: key,
+            products: value,
+        };
+    });
+
+    console.log(laundryPerPairFilteredItems, 'laundryPerPairFilteredItems')
 
 
 
@@ -52,105 +82,82 @@ export const ItemsSheet: React.FC<Props> = ({ data }) => {
 
                     <Tabs className='w-full'>
                         <TabsList className='flex w-full gap-2'>
+                            {
+                                laundryByKGFilteredItems.length > 0 && <TabsTrigger className='w-full' value='laundrybykg'  >Laundry By KG</TabsTrigger>}
+                            {laundryPerPairFilteredItems.length > 0 && <TabsTrigger className='w-full' value='laundryperpair' >Laundry Per Pair</TabsTrigger>
+                            }
 
-                            <TabsTrigger className='w-full' value='laundrybykg'  >Laundry By KG</TabsTrigger>
-                            <TabsTrigger className='w-full' value='laundryperpair'  >Laundry Per Pair</TabsTrigger>
                         </TabsList>
                         <TabsContent value='laundrybykg' className='w-full'>
                             <ScrollArea>
                                 <div
-                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
+                                    className='flex flex-col gap-4  h-[80vh] py-4 pr-4 '
                                 >
-                                    {
-                                        Categories.map((item: any, index: any) => {
+                                    <>
+
+                                        {laundryByKGFilteredItems.map((item: any, index: any) => {
                                             return (
-                                                <>
-                                                    <Card key={index}
+                                                <Card key={index}
+                                                    className='flex flex-col h-fit w-full px-4  py-4'>
+                                                    <span className='text-lg font-bold mb-2'> {item.category} </span>
+                                                    <Separator orientation='horizontal' />
+                                                    <div key={index}
                                                         className='flex flex-col w-full p-3 justify-between '
 
                                                     >
-                                                        <span className='text-lg font-bold mb-2'>
-                                                            Category - {item.title}
-                                                        </span>
-                                                        <Separator orientation='horizontal' />
-                                                        {ItemsByCategory.map((item: any, index: any) => {
+                                                        {item.products.map((items: any, index: any) => {
                                                             return (
-                                                                <>
-                                                                    <div key={index}
-                                                                        className='flex w-full p-3 justify-between '
+                                                                <div key={index} className='flex w-full py-2 justify-between '>
+                                                                    <span className='text-md'>
+                                                                        {items.product_name}
+                                                                    </span>
 
-                                                                    >
-                                                                        <span className='text-md'>
-
-                                                                            {item.product_name}
-                                                                        </span>
-
-                                                                        <SwitchComponent data={item.status} />
-                                                                    </div>
-                                                                </>
+                                                                    <SwitchComponent data={items.active} />
+                                                                </div>
 
                                                             )
                                                         })}
+                                                    </div>
 
-                                                    </Card>
-                                                </>
-                                            )
-                                        })
-
-
-
-
-                                    }
-
+                                                </Card>)
+                                        })}
+                                    </>
                                 </div>
                             </ScrollArea>
                         </TabsContent>
                         <TabsContent value='laundryperpair' className='w-full'>
                             <ScrollArea>
-                                <div
-                                    className='grid gap-4  h-[80vh] py-4 pr-4 '
-                                >
-                                    {
-                                        Categories.map((item: any, index: any) => {
+                                <div className='flex flex-col gap-4  h-[80vh] py-4 pr-4 '>
+                                    <>
+                                        {laundryPerPairFilteredItems.map((item: any, index: any) => {
                                             return (
-                                                <>
-                                                    <Card key={index}
+                                                <Card key={index}
+                                                    className='flex flex-col w-full px-4  py-4'>
+                                                    <span className='text-lg font-bold mb-2'>
+                                                        {item.category}
+                                                    </span>
+                                                    <Separator orientation='horizontal' />
+                                                    <div key={index}
                                                         className='flex flex-col w-full p-3 justify-between '
 
                                                     >
-                                                        <span className='text-lg font-bold mb-2'>
-                                                            Category - {item.title}
-                                                        </span>
-                                                        <Separator orientation='horizontal' />
-                                                        {ItemsByCategory.map((item: any, index: any) => {
+                                                        {item.products.map((items: any, index: any) => {
                                                             return (
-                                                                <>
-                                                                    <div key={index}
-                                                                        className='flex w-full p-3 justify-between '
+                                                                <div key={index} className='flex w-full py-2 justify-between '>
+                                                                    <span className='text-md'>
+                                                                        {items.product_name}
+                                                                    </span>
 
-                                                                    >
-                                                                        <span className='text-md'>
-
-                                                                            {item.product_name}
-                                                                        </span>
-
-                                                                        <SwitchComponent data={item.status} />
-                                                                    </div>
-                                                                </>
+                                                                    <SwitchComponent data={items.active} />
+                                                                </div>
 
                                                             )
                                                         })}
+                                                    </div>
 
-                                                    </Card>
-                                                </>
-                                            )
-                                        })
-
-
-
-
-                                    }
-
+                                                </Card>)
+                                        })}
+                                    </>
                                 </div>
                             </ScrollArea>
                         </TabsContent>

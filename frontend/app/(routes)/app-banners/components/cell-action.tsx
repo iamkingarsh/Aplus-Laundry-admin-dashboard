@@ -10,6 +10,9 @@ import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { deleteData } from '@/axiosUtility/api';
+import { storage } from '@/lib/firebase';
+import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
 
 interface Props {
     data: CustomersColumns
@@ -18,10 +21,33 @@ interface Props {
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
     const router = useRouter()
-    const deleteOrder = () => {
-        console.log('delete banner')
+
+    const deleteBanner = async () => {
+        try {
+            const urlParts = data.banner_image.split('/');
+            const encodedFileName = urlParts[urlParts.length - 1].split('?')[0];
+            const decodedFileName = decodeURIComponent(encodedFileName);
+            const imageRef = ref(storage, `${decodedFileName}`);
+
+
+            await deleteObject(imageRef).then(() => {
+                toast.success('Banner Deleted Successfully')
+                router.refresh()
+                window.location.reload()
+                GlobalModal.onClose()
+            }).catch((error: any) => {
+                toast.error('Error deleting image')
+                console.log(error)
+            }).finally(async () => {
+                await deleteData(`/appBanner/id/${data._id}`)
+            });
+
+        } catch (error) {
+            toast.error('Error deleting data')
+            console.error('Error deleting data:', error);
+        }
         GlobalModal.onClose()
-        toast.success('banner deleted successfully')
+
     }
     return (
         <DropdownMenu>
@@ -34,37 +60,12 @@ export const CellAction: React.FC<Props> = ({ data }) => {
             <DropdownMenuContent className="gap-2" align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                    onSelect={() => {
-                        GlobalModal.title = 'Banner Preview'
-                        GlobalModal.description = '  '
-                        GlobalModal.children = <Card className="w-[400px] relative m-auto h-48 overflow-hidden flex border-2  items-center">
 
-                            <Image src={data.background} width={400} height={192} alt="banner image" objectFit="contain" className=" absolute" />
-                            <div className="absolute text-white text-left p-4 ">
-                                <h1 className="text-2xl font-bold">{data.title}</h1>
-                                <p className="text-sm">{data.desc}</p>
-                            </div>
-                        </Card>
-                        GlobalModal.onOpen()
-                    }
-                    }
-                >
-                    <User className="mr-2 h-4 w-4" />
-                    Banner Preview</DropdownMenuItem>
-                <DropdownMenuItem
-                    onSelect={() => {
-                        router.push(`/app-banners/edit/${data.id}`)
-                    }
-                    }
-                >
-                    <Edit2 className="mr-2 h-4 w-4" />
-                    Edit Banner Details</DropdownMenuItem>
                 <DropdownMenuItem
                     onSelect={() => {
                         GlobalModal.title = 'Delete Customer'
                         GlobalModal.description = 'Are you sure you want to delete this banner?'
-                        GlobalModal.children = <Alert onConfirm={deleteOrder} />
+                        GlobalModal.children = <Alert onConfirm={deleteBanner} />
                         GlobalModal.onOpen()
                     }
                     }
