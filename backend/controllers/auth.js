@@ -156,6 +156,58 @@ export const signin = async (req, res, next) => {
 //   }
 // };
 
+export const sendOTPforAdminVerification = async (req, res) => {
+  try {
+    let user = req.body;
+    console.log('req', req.body);
+    const email = user.email;
+
+    const validEmailUser = await User.findOne({ email });
+
+    if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
+      return res.status(403).json({
+        msg: "User not authorized",
+        ok: false
+      });
+    }
+
+    let OTP = Math.floor(Math.random() * 900000) + 100000;
+
+    console.log("OTP is generated", OTP);
+
+    // Create a new UserOTP instance
+    let otp = new UserOTP({
+      email: email,
+      otp: OTP,
+      createdAt: new Date(),
+      expireAt: new Date() + 86400000,
+    });
+
+    console.log("OTP is about to be saved");
+
+    // Save the OTP to the database
+    await otp.save();
+
+    console.log("OTP is saved in the database");
+
+    console.log('email email', email); 
+    // Continue with other operations, such as sending an email
+    await emailVerificationEmail(email, OTP);
+
+    // Send the response
+    res.status(200).send({
+      ok: true,
+      msg: "email sent"
+    });
+  } catch (error) {
+    console.error("Error in sendOTPforverification:", error);
+    res.status(500).send({
+      msg: error.message
+    });
+  }
+};
+
+
 export const sendOTPforverification = async (req, res) => {
   try {
     let user = req.body;
