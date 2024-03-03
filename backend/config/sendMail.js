@@ -543,8 +543,7 @@ export const emailVerificationSuccess = async (email) => {
 
 
  
-export const orderConfirmationEmail = async (email, orderDetails) => {
-  const subject = "Order Confirmation";
+ 
  
 export const orderConfirmationEmail = async (email, orderDetails) => {
   const subject = "Order Confirmation";
@@ -639,34 +638,5 @@ export const orderStatusUpdateEmail = async (email, orderDetails) => {
 
  
 
-  const body = `
-    <html>
-      <body>
-        <p>Dear Customer,</p>
-        <p>Thank you for placing your order with Aplus Laundry. Below are the details of your order:</p>
-        <p><strong>Order ID:</strong> ${orderDetails.orderId}</p>  
-        <p><strong>Order Type:</strong> ${orderDetails.orderType}</p>  
-
-        <p><strong>Order Date:</strong> ${orderDetails.orderDate}</p>
-        <p><strong>Service:</strong> ${orderDetails.service}</p>
-        <p><strong>Laundry Items:</strong></p>
-        <ul>
-        ${laundryItems }
-        </ul>
-        <p><strong>Total Amount:</strong> ${orderDetails.totalAmount}</p>
-        <p><strong>Total Amount Paid:</strong> ${orderDetails.totalAmountPaid}</p>
-
-        <p>Your order is being processed and will be delivered soon. We will keep you updated on the status of your order.</p>
-        <p>If you have any questions or concerns, please feel free to contact us.</p>
-        <p>Thank you for choosing Aplus Laundry.</p>
-        <p>Best regards,</p>
-        <p>Aplus Laundry Team</p>
-      </body>
-    </html>
-  `;
-
-  await mailSend(email, subject, body);
-};
- 
-
+   
 
