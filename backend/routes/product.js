@@ -15,8 +15,8 @@ import express from 'express';
   productRouter.post('/adorupdate', authenticateToken, createOrUpdateProduct);
   
   // Route for getting all products with categories
-  productRouter.get('/getall', authenticateToken, getAllProductsWithCategories);
-  productRouter.get('/getid/:id', authenticateToken, getAllProductsWithCategories);
+  productRouter.get('/getall', getAllProductsWithCategories);
+  productRouter.get('/getid/:id', getAllProductsWithCategories);
 
   
   // Route for updating the active status of a product
