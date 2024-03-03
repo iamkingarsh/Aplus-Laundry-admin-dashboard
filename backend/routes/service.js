@@ -17,10 +17,10 @@ const serviceRouter = express.Router();
 serviceRouter.post('/addorupdate', authenticateToken, createOrUpdateService);
 
 
-serviceRouter.get('/allwithitems', authenticateToken, getAllServicesWithItems);
+serviceRouter.get('/allwithitems', getAllServicesWithItems);
 
 
-serviceRouter.get('/id/:id/withitems', authenticateToken, getServiceByIdWithItems);
+serviceRouter.get('/id/:id/withitems', getServiceByIdWithItems);
 
 
 serviceRouter.delete('/id/:id', authenticateToken, deleteServiceById);
