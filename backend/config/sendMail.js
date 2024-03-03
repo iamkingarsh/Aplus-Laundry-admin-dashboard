@@ -29,35 +29,380 @@ const mailSend = async (toEmail, subject, text) => {
     <html>
     <head>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-            }
-            .container {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            .btn {
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #007BFF;
-                color: #fff;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-            .img{
-                width: 200px;
-                height: 300px;
-            }
+            // body {
+            //     font-family: Arial, sans-serif;
+            //     background-color: #f4f4f4;
+            // }
+            // .container {
+            //     max-width: 600px;
+            //     margin: 0 auto;
+            //     padding: 20px;
+            // }
+            // .btn {
+            //     display: inline-block;
+            //     padding: 10px 20px;
+            //     background-color: #007BFF;
+            //     color: #fff;
+            //     text-decoration: none;
+            //     border-radius: 5px;
+            // }
+            // .img{
+            //     width: 200px;
+            //     height: 300px;
+            // }
         </style>
-    </head>
-    <body>
-        <div class="container">
-${text}
+        </head>
+        <body>
+        <table class="m_-5049272237331082851table--wrapper" align="center" cellpadding="0" cellspacing="0" border="0"
+        width="700">
+        <tbody>
+            <tr>
+                <td align="center" bgcolor="#2E3190" valign="top" style="
+                
+              background-color: #2E3190
+            ">
+                    <div>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" style="width: 600px"
+                            class="m_-5049272237331082851table--content">
+                            <tbody>
+                                <tr>
+                                    <td align="center" valign="top" style="padding: 30px"
+                                        class="m_-5049272237331082851logo">
+                                        <table align="center" cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="m_-5049272237331082851newLine">
+                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/jz26jqlzqcio2632CraNccBtOIc=144"
+                                                            target="_blank" style="display: flex;flex-wrap: wrap; text-align: center;align-items: center;gap: 16px;width: fit-content;margin: 0 auto;
+                                                            text-decoration: none;"
+                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/jz26jqlzqcio2632CraNccBtOIc%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1Qe6efbKK1yI6JA5XSt9w1">
+                                                            <img alt="Aplus Logo"
+                                                                src="https://firebasestorage.googleapis.com/v0/b/aplus-laundry-storage.appspot.com/o/apluslaundry%2FSymbolWhite.svg?alt=media&token=0cd389ea-c6af-481d-b4f8-274a5ea8f1ba"
+                                                                 width="70" style="
+                                    display: block;
+                                    font-family: Helvetica, Arial, sans-serif;
+                                    color: #ffffff;
+                                    font-size: 16px; 
+                                  " border="0" class="CToWUd" data-bit="iit" /> <p style="
+                                    font-family: Helvetica, Arial, sans-serif;
+                                    height: fit-content;
+                                    color: #ffffff;
+                                    font-size: 20px; 
+                                    font-weight: 900;
+                                    
+                                  " >A Plus Laundry</p> 
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+      
+      
+            <tr>
+                
+                <td align="center"
+                    bgcolor="#F6F6F6" valign="top" style="
             
-        </div>
-        <footer> <img src='/images/fullLogo.svg'   />  </footer>
+            ">
+            
+                    <div>
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" style="width: 600px;margin: -1000px 0"
+                            class="m_-5049272237331082851table--content">
+                            <tbody>
+                                <tr>
+                                    <td bgcolor="#fff" align="left" valign="top"
+                                        class="m_-5049272237331082851table--content--details"
+                                        style="border-radius: 4px; padding: 40px; margin: 0 auto" >
+                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                            <tbody>
+        ${text}                                                
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" class="m_-5049272237331082851table--footer" valign="middle"
+                                        style="padding-top: 50px">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding-bottom: 40px">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td align="left" style="padding-bottom: 24px">
+                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fgetsimpl.com%2F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/CkW1-5nWKFf0LV94IwazHnW6peI=144"
+                                                                            target="_blank"
+                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fgetsimpl.com%252F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/CkW1-5nWKFf0LV94IwazHnW6peI%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0nMPfUp6Izm5r5PUKGolCY" style="text-decoration: none;"> <p>A Plus</p> </a>
+                                                                    </td>
+                                                                    <td align="right" style="padding-bottom: 24px">
+                                                                        <table style="
+                                          list-style: none;
+                                          margin: 0;
+                                          overflow: hidden;
+                                          padding: 0;
+                                        ">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="padding-right: 16px">
+                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Ftwitter.com%2Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/NwBpeEPMShI3uEwI35k8YJVh6lA=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Ftwitter.com%252Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/NwBpeEPMShI3uEwI35k8YJVh6lA%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0lSkYNKiEjZyZpjDHaJcxZ"><img
+                                                                                                alt="Simpl on Twitter"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NYAcYKW6PzhuexeijoIs7aiMufK9aBQdStFaJkbJU3DearKayDEapR60K-RdWlSXQ_DnOzo1hcRltcTBXW_biaSU0A1DEZ9BcA5F6bxiDDWBVspSiSE7twtRA=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-twitter.png"
+                                                                                                width="20"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                    <td style="padding-right: 16px">
+                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fwww.facebook.com%2Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/6bOz42ceZJLwQrtzwY3LiUqH82E=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fwww.facebook.com%252Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/6bOz42ceZJLwQrtzwY3LiUqH82E%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2KHY6BN2rYT9PL1MqbYz7g"><img
+                                                                                                alt="Simpl on Facebook"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NYoQfU8D-y84Pfi-wn5hQchI2BFlacfLRNmvd3Wk2YjV2CqlKOxps5cm5j1_j-sHImKKggl1jK0C3OonhJ8IbTgUqRLvnE_deI4OTAUJQKlVTQvfywjY5HNS8g=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-facebook.png"
+                                                                                                width="17"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                    <td style="padding-right: 16px">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Finstagram.com%2Fgetsimpl%2F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/TL2JjWxP-FW4WgN59-Guagc5c5A=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Finstagram.com%252Fgetsimpl%252F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/TL2JjWxP-FW4WgN59-Guagc5c5A%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2okwRMyazFFVkkNWH0uYdY"><img
+                                                                                                alt="Simpl on Instagram"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NZX0lknWQLRiBxtRLXhagocpcWiQcO5I2DUJD1qZ44GM9G20BdF8adSRxlVyzEfF6M6W6ZIlS5TFRlYd2tBYSTSjfZrcSCzZ_ys0m6rjesIGdxLANFgjSXaPZQJ=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-instagram.png"
+                                                                                                width="17"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fwww.linkedin.com%2Fcompany%2Fget-simpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/z42X55i2BOU10O6yZAxMpsd0Gvs=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fwww.linkedin.com%252Fcompany%252Fget-simpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/z42X55i2BOU10O6yZAxMpsd0Gvs%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2uaixkUd3X6Uh9-_h4uUzm"><img
+                                                                                                alt="Simpl on LinkedIn"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_Nac5sMMJ70BcLbGYZWnpfzzeMxmghY4gQeHEUZTrV871PuS1CdWW64Isr8DfSDTCn3ITYdtir9pVUOS2Kf8RHG-IOf-Pr6uBzyUYK2iUudbI-J7Q4OBHKymI-E=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-linkedin.png"
+                                                                                                width="17"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <hr style="background: #888; border: 0; height: 1px" />
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td align="left" valign="top" style="
+                                        padding-bottom: 24px;
+                                        padding-top: 24px;
+                                      ">
+                                                                        <table style="
+                                          list-style: none;
+                                          margin: 0;
+                                          padding: 0;
+                                          font-family: Source Sans Pro,
+                                            Helvetica, Arial, sans-serif;
+                                          font-size: 16px;
+                                          font-weight: 600;
+                                          line-height: 20px;
+                                        ">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="m_-5049272237331082851siteLink"
+                                                                                        style="
+                                                font-size: 16px;
+                                                font-weight: normal;
+                                                line-height: 18px;
+                                                padding-right: 16px;
+                                              ">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fdashboard/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/dvFpd3LulY_22AKR-1ZIAypFOLM=144"
+                                                                                            style="
+                                                  color: #888 !important;
+                                                  display: block;
+                                                  text-decoration: none;
+                                                  text-transform: uppercase;
+                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fdashboard/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/dvFpd3LulY_22AKR-1ZIAypFOLM%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2Bgxn2c8kOPJ2bu3dGyxXn">View
+                                                                                            Dashboard</a>
+                                                                                    </td>
+                                                                                    <td class="m_-5049272237331082851siteLink"
+                                                                                        style="
+                                                font-size: 16px;
+                                                font-weight: normal;
+                                                line-height: 18px;
+                                                padding-right: 16px;
+                                              ">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fhelp/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/05Dxc0UuHUxDLqRsuPolPU4_Kqc=144"
+                                                                                            style="
+                                                  color: #888 !important;
+                                                  display: block;
+                                                  text-decoration: none;
+                                                  text-transform: uppercase;
+                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fhelp/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/05Dxc0UuHUxDLqRsuPolPU4_Kqc%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0dOHNArZMVJbSFWhNmmJOR">Read
+                                                                                            FAQs</a>
+                                                                                    </td>
+                                                                                    <td class="m_-5049272237331082851siteLink"
+                                                                                        style="
+                                                font-size: 16px;
+                                                font-weight: normal;
+                                                line-height: 18px;
+                                                padding-right: 16px;
+                                              ">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fterms-and-conditions/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/00B3R2PLc9LvgeCjsNR2rgivr3I=144"
+                                                                                            style="
+                                                  color: #888 !important;
+                                                  display: block;
+                                                  text-decoration: none;
+                                                  text-transform: uppercase;
+                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fterms-and-conditions/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/00B3R2PLc9LvgeCjsNR2rgivr3I%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw109cZ4mA8fq2U8SbzlmGhc">Terms
+                                                                                            and Conditions</a>
+                                                                                    </td>
+                                                                                    <td class="m_-5049272237331082851siteLink"
+                                                                                        style="
+                                                font-size: 16px;
+                                                font-weight: normal;
+                                                line-height: 18px;
+                                              ">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fprivacy-policy/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/A9QlWrl5D0o7Rin_W-JdUQUgqrI=144"
+                                                                                            style="
+                                                  color: #888 !important;
+                                                  display: block;
+                                                  text-decoration: none;
+                                                  text-transform: uppercase;
+                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fprivacy-policy/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/A9QlWrl5D0o7Rin_W-JdUQUgqrI%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1n-LG7dlMTXHiaEeJYE1uD">Privacy
+                                                                                            Policy</a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="left" valign="top"
+                                                                        style="padding-bottom: 24px">
+                                                                        <table style="
+                                          list-style: none;
+                                          margin: 0;
+                                          overflow: hidden;
+                                        ">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td valign="top" style="
+                                                height: 24px;
+                                                padding: 0;
+                                                padding-right: 12px;
+                                              ">
+                                                                                        <h3 style="
+                                                  margin: 0;
+                                                  padding: 0;
+                                                  color: #888;
+                                                  font-family: Source Sans Pro,
+                                                    Helvetica, Arial, sans-serif;
+                                                  font-size: 14px;
+                                                  font-weight: normal;
+                                                  line-height: 18px;
+                                                ">
+                                                                                            Get the app:
+                                                                                        </h3>
+                                                                                    </td>
+                                                                                    <td valign="top"
+                                                                                        style="padding-right: 14px">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fapp.getsimpl.com%2FHJNm%2FC42CCjis4s/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/erDYQmIFP4nMprkDzIjby0Bn7tA=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fapp.getsimpl.com%252FHJNm%252FC42CCjis4s/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/erDYQmIFP4nMprkDzIjby0Bn7tA%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw3WUkh4YVkCSc605s6s3R1p"><img
+                                                                                                alt="Simpl on Twitter"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NYVhoknEzvPIYlDJnU0v6rhZg2kEgG64mBQWinPQoEFaVhv8Zq8OgJ0if5dTeOj_4_jseXCD6sReXqfQCnZmilWu_xjXiDQDfaTq6an9JaHjhkBOc-fW3M=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/get-android.png"
+                                                                                                width="16"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                    <td valign="top">
+                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fapp.getsimpl.com%2FHJNm%2FC42CCjis4s/2/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/f-Hwx6LWkxmpakyAUWy2Q3KagNE=144"
+                                                                                            target="_blank"
+                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fapp.getsimpl.com%252FHJNm%252FC42CCjis4s/2/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/f-Hwx6LWkxmpakyAUWy2Q3KagNE%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1Y2DB9y0-dCZZT2UXK_pSt"><img
+                                                                                                alt="Simpl on Twitter"
+                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NZ-11NtmZCuZvIc1rxYZhFctYCSaImL-NCHZeUuo0aYPoslqZUiSqDsMkQIMGxWVw53tJJ6NlgIVoWqv4BEySwUkOP9QjXgmYFe8SnvuvjDDY8maFlH=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/get-apple.png"
+                                                                                                width="15"
+                                                                                                class="CToWUd"
+                                                                                                data-bit="iit" /></a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <p style="
+      margin: 0;
+      padding: 8px 0 16px;
+      font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      color: #888;
+      width: 80%;
+      ">
+      © A Plus 2024. 1-1211/12, Main Road, Revenue Ward No. 1, Near Universal Shop, Kurnool Road, Chimakurthy, Andhra Pradesh-523226
+      </p>
+      
+      <p style="
+      margin: 0;
+      padding: 8px 0 16px;
+      font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      color: #888;
+      width: 80%;
+      ">
+      Developed and maintained by DesignerDudes Pvt. Ltd.
+      </p>
+      
+      <p style="
+      margin: 0;
+      padding: 8px 0 16px;
+      font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      color: #888;
+      ">
+      For any queries, reach out to us at
+      <a href="https://www.getsimpl.com/help" style="color: #444;" title="Link: getsimpl.com/help" target="_blank">
+        getsimpl.com/help
+      </a>
+      </p>
+      
+      
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div align="center" bgcolor="#2E3190" valign="top" style="
+                
+            background-color: #2E3190;width:100%;padding: 20px 0;
+          "></div>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+    
+        
     </body>
     </html>
     `,
@@ -89,91 +434,88 @@ export const managerInviteMail = async (
 
 export const emailVerificationEmail = async (email, otp) => {
   const subject = "Your One Time Password for email verification";
-  const body = `<!DOCTYPE html>
-  <html lang="en">
-  
-  <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Email Verification OTP</title>
-      <style>
-          body {
-              font-family: Arial, sans-serif;
-              background-color: #f5f5f5;
-              margin: 0;
-              padding: 0;
-          }
-  
-          .container {
-              max-width: 600px;
-              margin: 20px auto;
-              padding: 20px;
-              background-color: #fff;
-              border-radius: 10px;
-              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          }
-  
-          h1 {
-              color: #333;
-          }
-  
-          p {
-              color: #666;
-          }
-  
-          .otp {
-              font-size: 32px;
-              font-weight: bold;
-              color: #007bff;
-              margin: 10px 0;
-          }
-  
-          .footer {
-              margin-top: 20px;
-              padding-top: 20px;
-              border-top: 1px solid #ddd;
-              text-align: center;
-          }
-  
-          .footer p {
-              color: #888;
-              font-size: 12px;
-              opacity: 0.7;
-              margin-bottom: 5px;
-          }
-  
-          .branding-logo {
-              max-width: 100px;
-              margin-bottom: 10px;
-          }
-  
-          .branding-text {
-              font-size: 14px;
-              color: #888;
-              opacity: 0.7;
-          }
-      </style>
-  </head>
-  
-  <body>
-      <div class="container">
-          <h1>Your One Time Password for Email Verification</h1>
-          <p>Dear User,</p>
-          <p>Your one-time password is:</p>
-          <p class="otp">${otp}</p>
-          <p>Please use this OTP to verify your email address.</p>
-          <p>If you didn't request this OTP, please ignore this email. Your account is secure.</p>
-      </div>
-      <div class="footer">
-          <img src="aplus_laundry_logo.png" alt="APlus Laundry Logo" class="branding-logo">
-          <p class="branding-text">APlus Laundry Branding</p>
-          <img src="designerdudes_logo.png" alt="DesignerDudes Logo" class="branding-logo">
-          <p class="branding-text">Developed & Managed By DesignerDudes</p>
-      </div>
-  </body>
-  
-  </html>
+  const body = ` 
+  <tr>
+                  <td align="left" valign="middle"
+                      class="m_-5049272237331082851newLine m_-5049272237331082851resetPadding"
+                      style="
+color: #888;
+font-family: Source Sans Pro, Helvetica, Arial,
+sans-serif;
+font-weight: normal;
+font-size: 16px;
+line-height: 20px;
+margin: 0;
+padding: 0;
+">
+                      <h1 class="m_-5049272237331082851headerText" style="
+display: block;
+margin: 0;
+color: #000000;
+font-family: Source Sans Pro, Helvetica, Arial,
+  sans-serif;
+font-size: 18px;
+font-weight: normal;
+line-height: 28px;
+">
+                          Hey Arshad,
+                      </h1>
+                      <p style="
+display: block;
+font-family: Source Sans Pro, Helvetica, Arial,
+  sans-serif;
+font-size: 18px;
+font-weight: normal;
+color: #000000;
+line-height: 28px;
+margin: 0;
+padding: 16px 0 0;
+">
+                          The OTP to verify this email id is
+                      </p>
+                      <p style="margin: 0; padding: 16px 0 0">
+                          <b style="
+  background: #F6F6F6;
+  border-radius: 8px;
+  color: #000;
+  display: inline-block;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 44px;
+  letter-spacing: 1px;
+  padding: 8px 32px;
+">${otp}</b>
+                      </p>
+                      <p style="
+display: block;
+font-family: Source Sans Pro, Helvetica, Arial,
+  sans-serif;
+font-size: 18px;
+font-weight: normal;
+color: #000000;
+line-height: 24px;
+margin: 0;
+padding: 16px 0 0;
+">
+                          In case there’s been a mistake, hit reply and
+                          let us know right away.
+                      </p>
+                      <p style="
+display: block;
+font-family: Source Sans Pro, Helvetica, Arial,
+  sans-serif;
+font-size: 18px;
+font-weight: normal;
+color: #000000;
+line-height: 24px;
+margin: 0;
+padding: 32px 0 0;
+">
+                          Thanks, <br />Team A Plus 
+                      </p>
+                  </td>
+              </tr>
+             
   `;
 
   await mailSend(email, subject, body);
@@ -200,6 +542,97 @@ export const emailVerificationSuccess = async (email) => {
 };
 
 
+
+export const orderConfirmationEmail = async (email, orderDetails) => {
+  const subject = "Order Confirmation";
+
+  const laundryItemsTable = `
+  <table style="border-collapse: collapse; width: 100%;">
+      <thead>
+          <tr>
+              <th style="border: 1px solid #ddd; padding: 8px;">Item Name</th>
+              <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
+              <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+              <th style="border: 1px solid #ddd; padding: 8px;">Total</th>
+
+          </tr>
+      </thead>
+      <tbody>
+          ${orderDetails.laundryItems.map(item => `
+              <tr>
+                  <td style="border: 1px solid #ddd; padding: 8px;">${item.name}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px;">${item.price}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px;">${ item.quantity * item.price}</td>
+
+              </tr>
+          `).join('')}
+      </tbody>
+  </table>
+  `;
+
+  const body = `
+  <html>
+    <body>
+        <div style="background-color: #2E3190; padding: 10px; width: 100%;"></div>
+        <img src="https://firebasestorage.googleapis.com/v0/b/aplus-laundry-storage.appspot.com/o/apluslaundry%2FSymbol.svg?alt=media&token=b111fdce-3866-4757-abf3-6fe2384e5430" alt="Aplus Laundry Logo" style="max-width: 100%;">
+        <h1>Aplus Laundry</h1>
+        <p>Dear Customer,</p>
+        <p>Thank you for placing your order with Aplus Laundry. Below are the details of your order:</p>
+        <p><strong>Order ID:</strong> ${orderDetails.orderId}</p>
+        <p><strong>Order Type:</strong> ${orderDetails.orderType}</p>
+        <p><strong>Order Date:</strong> ${new Date(orderDetails.orderDate).toLocaleDateString()}</p>
+        <p><strong>Service:</strong> ${orderDetails.service}</p>
+        <p><strong>Laundry Items:</strong></p>
+        ${laundryItemsTable}
+        <p><strong>Total Amount:</strong> ${orderDetails.totalAmount}</p>
+        <p><strong>Total Amount Paid:</strong> ${orderDetails.totalAmountPaid}</p>
+        <p><strong>Status:</strong> ${orderDetails.status}</p>
+
+        <p>Your order is being processed and will be delivered soon. We will keep you updated on the status of your order.</p>
+        <p>If you have any questions or concerns, please feel free to contact us.</p>
+        <p>Thank you for choosing Aplus Laundry.</p>
+        <p>Best regards,</p>
+        <p>Aplus Laundry Team</p>
+        <div style="background-color: #2E3190; padding: 6px; width: 100%;"></div>
+    </body>
+</html>
+
+  `;
+
+  await mailSend(email, subject, body);
+};
+
+
+
+export const orderStatusUpdateEmail = async (email, orderDetails) => {
+  const subject = "Order Status Update";
+ 
+
+  const body = `
+  
+<html>
+<body>
+    <div style="background-color: #2E3190; padding: 10px; width: 100%;"></div>
+    <img src="https://firebasestorage.googleapis.com/v0/b/aplus-laundry-storage.appspot.com/o/apluslaundry%2FSymbol.svg?alt=media&token=b111fdce-3866-4757-abf3-6fe2384e5430" alt="Aplus Laundry Logo" style="max-width: 100%;">
+    <h1>Aplus Laundry</h1>
+    <p>Dear Customer,</p>
+    <p>We are writing to inform you about the status update of your order with Aplus Laundry. Below are the updated details:</p>
+    <p><strong>Order ID:</strong> ${orderDetails.orderId}</p>
+    <p><strong>Updated Order Status:</strong> ${orderDetails.status}</p>
+    <p>Your order is being processed and will be delivered soon. We will keep you updated on the status of your order.</p>
+    <p>If you have any questions or concerns, please feel free to contact us.</p>
+    <p>Thank you for choosing Aplus Laundry.</p>
+    <p>Best regards,</p>
+    <p>Aplus Laundry Team</p>
+    <div style="background-color: #2E3190; padding: 6px; width: 100%;"></div>
+</body>
+</html>
+
+  `;
+
+  await mailSend(email, subject, body);
+};
 
 
 
