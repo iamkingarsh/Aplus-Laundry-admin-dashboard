@@ -1,12 +1,39 @@
 import Order from '../models/order.js';
 import Razorpay from 'razorpay';
 import Transaction from '../models/transacation.js';
+import { orderConfirmationEmail, orderStatusUpdateEmail } from '../config/sendMail.js';
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
 });
 // Add or update an order
+export const createOrUpdateOrderRazorpay = async (req, res) => {
+    try {
+        const { 
+            cartTotal, 
+        } = req.body;
+
+        const options = {
+            amount: cartTotal * 100, // Amount in paise
+            currency: 'INR',
+            // receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
+        };
+        // Create a new Razorpay order
+        const order = await razorpay.orders.create(options);
+        
+
+        return res.status(201).json({
+            message: 'Razorpay Order created successfully', 
+            razorpayOrder: order,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+
 export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
@@ -23,79 +50,118 @@ export const createOrUpdateOrder = async (req, res) => {
             cartTotal,
             cartWeight,
             cartWeightBy,
+            razorpayOrderId,
+            order_id
         } = req.body;
 
-        const existingOrder = await Order.findById(id);
+        let updatedOrder;
 
-        if (existingOrder) {
-            existingOrder.order_type = order_type;
-            existingOrder.service = service;
-            existingOrder.products = products;
-            existingOrder.customer = customer;
-            existingOrder.status = status;
-            existingOrder.payment = payment;
-            existingOrder.delivery_agent = delivery_agent;
-            existingOrder.cartTotal = cartTotal;
-            existingOrder.cartWeight = cartWeight;
-            existingOrder.cartWeightBy = cartWeightBy;
-
-            existingOrder.coupon_id = coupon_id;
-            existingOrder.address_id = address_id;
-
-
-            await existingOrder.save();
-
-            return res.status(200).json({
-                message: 'Order updated successfully',
-                order: existingOrder,
-            });
-        } else {
-            //generate cutsom order id of 8 digits eg AL + Year + random 4 digit number
-            const customOrderId = `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`;
-            const newOrder = new Order({
-                order_id: customOrderId,
+        if (id) {
+            // Update existing document
+            const update = {
                 order_type,
                 service,
                 products,
                 customer,
                 status,
                 payment,
-                delivery_agent,
                 cartTotal,
                 cartWeight,
                 cartWeightBy,
                 coupon_id,
-                address_id
-
-            });
-
-            const options = {
-                amount: cartTotal * 100, // Amount in paise
-                currency: 'INR',
-                receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
+                address_id,
+                razorpayOrderId,
+                order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
             };
 
-            try {
-                // Create a new Razorpay order
-                const order = await razorpay.orders.create(options);
-                newOrder.razorpayOrderId = order.id; // Save Razorpay order ID in your Order model
-                await newOrder.save();
-
-                return res.status(201).json({
-                    message: 'Order created successfully',
-                    order: newOrder,
-                    razorpayOrder: order,
-                });
-            } catch (error) {
-                console.error(error);
-                return res.status(500).json({ error: error.message });
+            // Conditionally include the delivery_agent field if it's provided
+            if (delivery_agent) {
+                update.delivery_agent = delivery_agent;
             }
+
+            const options = {
+                new: true, // Return the modified document rather than the original
+                upsert: true // Create a new document if no document matches the query
+            };
+
+            updatedOrder = await Order.findByIdAndUpdate(id, update, options);
+        } else {
+            // Create new document
+            updatedOrder = new Order({
+                order_type,
+                service,
+                products,
+                customer,
+                status,
+                payment,
+                cartTotal,
+                cartWeight,
+                cartWeightBy,
+                coupon_id,
+                address_id,
+                razorpayOrderId,
+                order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
+            });
+
+            await updatedOrder.save();
         }
+
+        console.log('updatedOrder', updatedOrder);
+        sendOrderConfirmationEmail(updatedOrder, cartTotal, status);
+        res.status(id ? 200 : 201).json({
+            message: id ? 'Order updated successfully' : 'Order created successfully',
+            order: updatedOrder
+        });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error',
-        });
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
+ 
+ 
+
+const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
+    try {
+        // Fetch the order details from the database and populate related fields
+        const order = await Order.findById(updatedOrder_id)
+            .populate({
+                path: 'service',
+                select: 'serviceTitle'
+            })
+            .populate('customer', 'fullName email')
+            .populate('coupon_id')
+            .populate('address_id')
+            .populate('products.id')
+            .exec(); 
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        // Prepare order details for the email
+        const orderDetails = {
+            orderId: order.order_id,
+            orderDate: order.orderDate,
+            service: order.service?.serviceTitle,
+            laundryItems: order.products.map(item => ({
+                name: item.id.product_name,
+                quantity: item.quantity,
+                price: item.id.priceperpair
+            })),
+            totalAmount: cartTotal,
+            orderType: order.order_type ,
+            totalAmountPaid: cartTotal ,
+            status,
+        };
+
+        // Send order confirmation email
+        await orderConfirmationEmail(order.customer.email, orderDetails);
+    } catch (error) {
+        console.error('Error sending order confirmation email:', error);
+        // Handle the error accordingly (e.g., log it, send a notification, etc.)
     }
 };
 
@@ -322,7 +388,9 @@ export const updateOrderStatusById = async (req, res) => {
             status
         } = req.body;
 
-        const existingOrder = await Order.findById(id);
+        const existingOrder = await Order.findById(id)
+        .populate('customer', 'fullName email') 
+        .exec(); 
 
         if (!existingOrder) {
             return res.status(404).json({
@@ -334,10 +402,17 @@ export const updateOrderStatusById = async (req, res) => {
         existingOrder.status = status;
         await existingOrder.save();
 
+        const orderDetails = {
+            orderId: existingOrder.order_id, 
+            status,
+        };
 
+        orderStatusUpdateEmail(existingOrder.customer.email,orderDetails)
+
+        
         return res.status(200).json({
             message: 'Order status updated successfully',
-            order: updatedOrder
+            order: existingOrder
         });
     } catch (error) {
         console.error(error);
