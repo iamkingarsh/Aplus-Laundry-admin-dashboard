@@ -39,9 +39,11 @@ const userSchema = new mongoose.Schema({
         },
     },
     mobileNumber: {
+ 
         type: Number,
         sparse: true,
         required: false,
+ 
     },
     address: {
         type: [addressSchema],
@@ -56,6 +58,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
+ 
         enum: ['owner', 'admin', 'deliveryagent', 'customer'],
     },
     customerType: {
@@ -87,6 +90,7 @@ const userSchema = new mongoose.Schema({
     deviceToken: {
         type: String,
         default: undefined
+ 
     }
 }, {
     timestamps: true

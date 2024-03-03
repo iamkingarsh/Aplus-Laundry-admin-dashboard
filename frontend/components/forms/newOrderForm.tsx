@@ -153,6 +153,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+ 
         setIsLoading(true);
     
         try {
@@ -219,14 +220,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             toast.error('Error occurred while processing the order');
         }
     }
-    
-
-
-
-
-
-
-
+ 
     const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
         setProductQuantity((prev) => prev + 1);

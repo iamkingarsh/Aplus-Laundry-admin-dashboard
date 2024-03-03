@@ -189,9 +189,10 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
+ 
 
 
-    console.log('email email', email);
+    console.log('email email', email); 
     // Continue with other operations, such as sending an email
     await emailVerificationEmail(email, OTP);
 
