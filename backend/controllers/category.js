@@ -1,4 +1,5 @@
 import Category from "../models/category.js";
+ 
 import mongoose from 'mongoose';
 
 
@@ -148,4 +149,4 @@ export const deleteCategoryById = async (req, res) => {
             error: 'Internal Server Error'
         });
     }
-};
+}; 

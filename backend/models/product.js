@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
+ 
   product_name: {
     type: String,
     required: true,
@@ -26,7 +27,7 @@ const productSchema = new mongoose.Schema({
       validator: (value) => parseFloat(value) >= 1,
       message: 'Price per pair must be at least Rs. 1',
     },
-  },
+  }, 
 });
 
 const Product = mongoose.model('Product', productSchema);

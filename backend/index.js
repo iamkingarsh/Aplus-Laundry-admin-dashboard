@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoute from './routes/auth.js';
+ 
 import errorHandler from './middleware/error.js';
 import orderRouter from './routes/order.js';
 import productRouter from './routes/product.js';
@@ -20,6 +21,7 @@ import createSubscriptionOrdersCron from './task_scheduler/createSubscriptionOrd
 import subscriptionTransactionRouter from './routes/subscriptionTransaction.js';
 import deviceTokenRouter from './routes/deviceToken.js';
 
+ 
 dotenv.config();
 
 mongoose
@@ -44,6 +46,7 @@ app.listen(process.env.PORT, () => {
 app.get("/", (req, res) => {
   res.send("home");
 });
+ 
 app.use('/auth', authRoute);
 app.use('/category', categoryRouter)
 app.use('/order', orderRouter);
@@ -60,4 +63,5 @@ app.use('/deviceToken', deviceTokenRouter)
 
 checkSubscription.start()
 createSubscriptionOrdersCron.start()
+ 
 app.use(errorHandler);

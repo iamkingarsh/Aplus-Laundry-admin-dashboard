@@ -1,3 +1,4 @@
+ 
 import mongoose from 'mongoose';
 
 const categorySchema = new mongoose.Schema({
@@ -10,10 +11,13 @@ const categorySchema = new mongoose.Schema({
       validator: (value) => value.length >= 3,
       message: 'Category title must be at least 3 characters long',
     },
+ 
   },
 
 });
 
 const Category = mongoose.model('Category', categorySchema);
 
+ 
 export default Category;
+ 

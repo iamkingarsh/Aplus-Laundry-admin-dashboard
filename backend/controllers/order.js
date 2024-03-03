@@ -1,12 +1,43 @@
 import Order from '../models/order.js';
 import Razorpay from 'razorpay';
 import Transaction from '../models/transacation.js';
+ 
+import { orderConfirmationEmail } from '../config/sendMail.js';
+ 
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
 });
 // Add or update an order
+ 
+export const createOrUpdateOrderRazorpay = async (req, res) => {
+    try {
+        const { 
+            cartTotal, 
+        } = req.body;
+
+        const options = {
+            amount: cartTotal * 100, // Amount in paise
+            currency: 'INR',
+            receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
+        };
+        // Create a new Razorpay order
+        const order = await razorpay.orders.create(options);
+        
+
+        return res.status(201).json({
+            message: 'Razorpay Order created successfully', 
+            razorpayOrder: order,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+
+ 
 export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
@@ -23,79 +54,92 @@ export const createOrUpdateOrder = async (req, res) => {
             cartTotal,
             cartWeight,
             cartWeightBy,
+ 
+            razorpayOrderId,
+            order_id
         } = req.body;
 
-        const existingOrder = await Order.findById(id);
+        const update = {
+            order_type,
+            service,
+            products,
+            customer,
+            status,
+            payment,
+            delivery_agent,
+            cartTotal,
+            cartWeight,
+            cartWeightBy,
+            coupon_id,
+            address_id,
+            razorpayOrderId,
+            order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
+        };
 
-        if (existingOrder) {
-            existingOrder.order_type = order_type;
-            existingOrder.service = service;
-            existingOrder.products = products;
-            existingOrder.customer = customer;
-            existingOrder.status = status;
-            existingOrder.payment = payment;
-            existingOrder.delivery_agent = delivery_agent;
-            existingOrder.cartTotal = cartTotal;
-            existingOrder.cartWeight = cartWeight;
-            existingOrder.cartWeightBy = cartWeightBy;
+        const options = {
+            new: true, // Return the modified document rather than the original
+            upsert: true // Create a new document if no document matches the query
+        };
 
-            existingOrder.coupon_id = coupon_id;
-            existingOrder.address_id = address_id;
+        const updatedOrder = await Order.findByIdAndUpdate(id, update, options);
+
+        sendOrderConfirmationEmail(updatedOrder_id)
+        res.status(id ? 200 : 201).json({
+            message: id ? 'Order updated successfully' : 'Order created successfully',
+            order: updatedOrder
+        });
 
 
-            await existingOrder.save();
-
-            return res.status(200).json({
-                message: 'Order updated successfully',
-                order: existingOrder,
-            });
-        } else {
-            //generate cutsom order id of 8 digits eg AL + Year + random 4 digit number
-            const customOrderId = `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`;
-            const newOrder = new Order({
-                order_id: customOrderId,
-                order_type,
-                service,
-                products,
-                customer,
-                status,
-                payment,
-                delivery_agent,
-                cartTotal,
-                cartWeight,
-                cartWeightBy,
-                coupon_id,
-                address_id
-
-            });
-
-            const options = {
-                amount: cartTotal * 100, // Amount in paise
-                currency: 'INR',
-                receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
-            };
-
-            try {
-                // Create a new Razorpay order
-                const order = await razorpay.orders.create(options);
-                newOrder.razorpayOrderId = order.id; // Save Razorpay order ID in your Order model
-                await newOrder.save();
-
-                return res.status(201).json({
-                    message: 'Order created successfully',
-                    order: newOrder,
-                    razorpayOrder: order,
-                });
-            } catch (error) {
-                console.error(error);
-                return res.status(500).json({ error: error.message });
-            }
-        }
     } catch (error) {
         console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error',
-        });
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+ 
+ 
+
+const sendOrderConfirmationEmail = async (id) => {
+    try {
+        // Fetch the order details from the database and populate related fields
+        const order = await Order.findById(id)
+            .populate({
+                path: 'service',
+                select: 'serviceTitle'
+            })
+            .populate('customer', 'fullName email')
+            .populate('coupon_id')
+            .populate('address_id')
+            .populate('products.id')
+            .exec();
+
+        // If order is not found, return early
+        if (!order) {
+            throw new Error('Order not found');
+        }
+
+        // Prepare order details for the email
+        const orderDetails = {
+            orderId: order.order_id,
+            orderDate: order._created_at,
+            service: order.service?.serviceTitle,
+            laundryItems: order.products.map(item => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price
+            })),
+            totalAmount: order.cartTotal,
+            orderType: order. order_type ,
+            totalAmountPaid: order.cartTotal  
+        };
+
+        // Send order confirmation email
+        await orderConfirmationEmail(order.customer.email, orderDetails);
+    } catch (error) {
+        console.error('Error sending order confirmation email:', error);
+        // Handle the error accordingly (e.g., log it, send a notification, etc.)
+ 
     }
 };
 
