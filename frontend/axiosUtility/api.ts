@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const instance = axios.create({
 
-  baseURL: 'https://apis.apluslaundry.in/',
+  baseURL: 'https://aplus-laundry-backend.vercel.app/',
   // baseURL: 'http://localhost:4040/',
 });
 
