@@ -221,7 +221,7 @@ export const verifyPayment = async (req, res) => {
 
 export const savePayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid } = req.body;
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid, customer_id } = req.body;
 
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
         console.log("Payment Details:", paymentDetails);
@@ -229,6 +229,7 @@ export const savePayment = async (req, res) => {
         const transaction = new Transaction({
             payment_id: razorpay_payment_id,
             razorpay_signature,
+            customer_id,
             entity: paymentDetails.entity,
             amount: paymentDetails.amount,
             currency: paymentDetails.currency,
