@@ -14,6 +14,7 @@ interface Props {
 
 export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
     const [currentStatus, setCurrentStatus] = React.useState(data.status)
+    console.log('currentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatus',currentStatus)
     const modal = useGlobalModal()
     return (
         <>
@@ -24,11 +25,12 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                            "w-[90%] gap-2 flex items-center justify-between",
+                            "w-[90%] gap-2 flex items-center justify-between text-green-500",
                             !currentStatus && "text-muted-foreground"
                         )}
                     >
-                        {currentStatus
+{ currentStatus === "captured" ? "Payment Successful" : "Payment Failed"}
+                        {/* {currentStatus
                             ? (
                                 <>
                                     {OrdersStatuses.find(
@@ -46,7 +48,7 @@ export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
                                     />
                                 </>
                             )
-                            : "Select Order Status"}
+                            : "Select Order Status"} */}
                         <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
 
