@@ -186,7 +186,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                     console.log('rajooor pay', response);
                     const post1 = await postData('/order/addorupdate', params);
                     const orderid = post1?.order?._id;
-                    const newResponse = { ...response, orderid };
+                    const customer_id = post1?.order?.customer;
+                    const newResponse = { ...response, orderid, customer_id };
                     const post2 = await postData('/order/save', newResponse);
                     console.log(post2);
                     // Handle success or failure of the payment
