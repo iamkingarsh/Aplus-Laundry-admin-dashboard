@@ -14,7 +14,6 @@ interface Props {
 
 export const OrderStatusChanger: React.FC<Props> = ({ data }) => {
     const [currentStatus, setCurrentStatus] = React.useState(data.status)
-    console.log('currentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatuscurrentStatus',currentStatus)
     const modal = useGlobalModal()
     return (
         <>
