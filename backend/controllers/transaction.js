@@ -58,7 +58,7 @@ export const createOrUpdateTransaction = async (req, res) => {
 
 export const getAllTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find();
+        const transactions = await Transaction.find().populate('customer_id');
         return res.status(200).json({
             transactions,
         });
@@ -76,7 +76,7 @@ export const getTransactionsById = async (req, res) => {
             id
         } = req.params;
 
-        const existingTransaction = await Transaction.findById(id);
+        const existingTransaction = await Transaction.findById(id).populate('customer_id');
 
         if (!existingTransaction) {
             return res.status(404).json({
