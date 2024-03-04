@@ -4,7 +4,7 @@ const transactionSchema = new mongoose.Schema({
     payment_id: { type: String, required: true },
     customer_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User collection
+        ref: 'User',  
       },
     razorpay_signature: { type: String, required: true },
     entity: { type: String, required: true },
