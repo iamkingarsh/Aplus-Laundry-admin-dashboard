@@ -12,6 +12,7 @@ import { useGlobalModal } from '@/hooks/GlobalModal'
 import { NewTeamMemberForm } from './forms/newTeamMemberForm'
 import toast from 'react-hot-toast'
 import { postData } from '@/axiosUtility/api'
+import Cookies from 'js-cookie';
 
 
 
@@ -42,6 +43,15 @@ function TopBar() {
     useEffect(() => {
         getCurrentData()
     }, [])
+
+
+    const handleLogout = () => {
+        Cookies.remove('AplusToken');
+        
+        router.push('/login');
+        toast.success('Logged Out Successfully!')
+      };
+      
 
     return (
         <div className='py-3 bg-primary-foreground sticky z-40 top-0 overflow-hidden px-6 border-b-2 flex justify-between'>
@@ -97,7 +107,7 @@ function TopBar() {
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                            onSelect={() => { router.push('/login'); toast.success('Logged Out Successfully!') }}
+                            onSelect={handleLogout}
 
                         >
                             <LogOutIcon className="mr-2 h-4 w-4" />
