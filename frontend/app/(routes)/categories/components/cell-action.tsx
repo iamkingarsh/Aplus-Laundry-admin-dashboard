@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useGlobalModal } from '@/hooks/GlobalModal';
-import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
+import { Edit2, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
 import { CouponsColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
