@@ -21,30 +21,32 @@ import { OrderStatusChanger } from "./order-status-changer"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type TransactionsColumns = {
-    id: string
-    transaction_id: string
-    status: "queued" | "pending" | "processing" | "processed" | "reversed" | "cancelled" | "rejected"
+    id: string;
+    payment_id: string;
+    status: string
     source: {
-        id: string
-        payer_name: string
-        payer_account: string
-        payer_ifsc: string
-        mode: string
-        entity: string
-        bank_reference: string
-    }
-    amount: number
-    credit: number
-    debit: number
-    created_at: string
+        id: string;
+        payer_name: string;
+        payer_account: string;
+        payer_ifsc: string;
+        mode: string;
+        entity: string;
+        bank_reference: string;
+    };
+    amount: number;
+    credit: number;
+    debit: number;
+    created_at: string;
+};
 
-}
 
 
 
 
 
 export const columns: ColumnDef<TransactionsColumns>[] = [
+
+    
     {
         id: "select",
         header: ({ table }) => (
@@ -133,7 +135,7 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Status
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4" /> 
                 </Button>
             )
         },
@@ -173,37 +175,15 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
                         } ${row.original.source.entity === "payout" && "bg-red-500"
                         }`}
                 />
-                {row.original.source.entity === "bank_transfer" ? "Credit" : "Debit"}
+                {row.original.source.entity === "payment" ? "Credit" : "Debit"}
             </div>
         ),
     },
-    // {
-    //     accessorKey: "channel",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Channel
-    //                 <ArrowUpDown className="ml-2 h-4 w-4" />
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="flex items-center">
-    //             <div
-    //                 className={`w-2 h-2 rounded-full mr-2 `}
-    //             />
-    //             {row.original.channel === "manual" && <UserCheck className="mr-2 text-yellow-500 h-4 w-4" />}
-    //             {row.original.channel === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
-    //             {row.original.channel}
-    //         </div>
-    //     ),
-    // },
+   
     {
         id: "actions",
         // cell: ({ row }) => <CellAction data={row.original} />
     },
 
 ]
+

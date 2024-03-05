@@ -18,14 +18,36 @@ export default function Page() {
 
     const getTransactionData = async () => {
         try {
-            const res = await fetchData('/transaction/getall')
-            const transactions = res.transactions
-            console.log(transactions)
-            setTransactionData(transactions)
+            const res = await fetchData('/transaction/getall');
+            const transactions = res.transactions.map((transaction: any) => {
+                const createdAtDate = new Date(transaction.created_at);
+                const formattedDate = createdAtDate.toLocaleDateString(); // Adjust the formatting as needed
+    
+                return {
+                    id: transaction._id,
+                    payment_id: transaction.payment_id,
+                    status: transaction.status,
+                    source: {
+                        id: transaction.customer_id._id,
+                        payer_name: transaction.customer_id.fullName,
+                        payer_account: transaction.vpa,
+                        payer_ifsc: '', // You need to provide the appropriate value for this field
+                        mode: transaction.method,
+                        entity: transaction.entity,
+                        bank_reference: transaction.razorpay_order_id, // or any other appropriate field
+                    },
+                    amount: transaction.amount,
+                    credit: transaction.amount || 0, // Ensure to handle cases where credit might be missing
+                    debit: transaction.debit || 0, // Ensure to handle cases where debit might be missing
+                    created_at: formattedDate,
+                };
+            });
+            setTransactionData(transactions);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+    
 
     useEffect(() => {
         getTransactionData()

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const serviceSchema = new mongoose.Schema({
+ 
   serviceTitle: {
     type: String,
     required: true,
@@ -52,6 +53,7 @@ const serviceSchema = new mongoose.Schema({
   //       return this.isSubscriptionService;
   //   },
   // ],
+ 
 });
 
 const Service = mongoose.model('Service', serviceSchema);

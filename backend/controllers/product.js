@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+ 
 import mongoose from 'mongoose';
 
 
@@ -216,4 +217,4 @@ export const deleteProductByIds = async (req, res) => {
             error: 'Internal Server Error',
         });
     }
-};
+}; 

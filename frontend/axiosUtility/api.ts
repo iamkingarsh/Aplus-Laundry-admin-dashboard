@@ -2,8 +2,11 @@ import axios from 'axios';
 
 const instance = axios.create({
 
+ 
+  baseURL: 'https://apis.apluslaundry.in/',
   // baseURL: 'https://aplus-admin-backend.vercel.app/',
-  baseURL: 'http://localhost:4040/',
+  
+  // baseURL: 'http://localhost:4040/',
 });
 
 
@@ -14,7 +17,7 @@ export const fetchData = async (endpoint:any, config = {}) => {
       url: endpoint,
       headers: {
         Authorization: `Bearer ${token}`,
-        // Add other headers if needed
+        
       },
       ...config,
     });
@@ -33,7 +36,7 @@ const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*
     const response = await instance.post(endpoint, data, {
       headers: {
         Authorization: `Bearer ${token}`,
-        // Add other headers if needed
+        
       },
       ...config,
     });
@@ -45,13 +48,32 @@ const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*
   }
 };
 
+
+export const putData = async (endpoint: any, data: any, config = {}) => {
+  const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
+  try {
+      const response = await instance.put(endpoint, data, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+              
+            },
+          ...config,
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Axios PUT request error:', error);
+      throw error;
+  }
+};
+
 export const deleteData = async (endpoint: string, config = {}) => {
   const token = document.cookie.replace(/(?:(?:^|.*;\s*)AplusToken\s*=\s*([^;]*).*$)|^.*$/, '$1') as string;
   try {
     const response = await instance.delete(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
-        // Add other headers if needed
+        
       },
       ...config,
     });
@@ -70,7 +92,7 @@ export const deleteAllData = async (endpoint: string, data: any, config = {}) =>
     const response = await instance.delete(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
-        // Add other headers if needed
+        
       },
       ...config,
       data, // Assuming Axios expects the data to be passed in the 'data' property for DELETE requests
@@ -94,7 +116,7 @@ export const activateCoupon = async (endpoint: any, data: any, config = {}) => {
       const response = await instance.put(endpoint, data, {
         headers: {
           Authorization: `Bearer ${token}`,
-          // Add other headers if needed
+          
         },
         ...config,
       });

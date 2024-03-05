@@ -2,12 +2,17 @@ import express from 'express';
 
 
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
-import { createOrUpdateOrder, deleteOrderById, getAllOrders, getOrderById, getUserOrders, savePayment, updateOrderStatusById } from '../controllers/order.js';
+ 
+import { createOrUpdateOrder, createOrUpdateOrderRazorpay, deleteOrderById, getAllOrders, getOrderById, getUserOrders, savePayment, updateOrderStatusById } from '../controllers/order.js';
+ 
 
 
 const orderRouter = express.Router();
 
-orderRouter.post('/addorupdate', authenticateToken, createOrUpdateOrder);
+ 
+orderRouter.post('/addorupdate', authenticateToken, createOrUpdateOrder); 
+orderRouter.post('/addorupdaterazorpay', authenticateToken, createOrUpdateOrderRazorpay);  
+ 
 orderRouter.post('/save', authenticateToken, savePayment);
 
 orderRouter.get('/getall', authenticateToken, getAllOrders);

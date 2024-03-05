@@ -153,88 +153,75 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Add submit logic here
-
-        setIsLoading(true)
-
-        const params = {
-            order_type: values.order_type,
-            service: values.serviceId,
-            products: values.products,
-            customer: values.customer,
-            status: values.status,
-            payment: values.payment,
-            delivery_agent: values.delivery_agent,
-            cartTotal: values.cartTotal,
-            cartWeight: values.cartWeight,
-            cartWeightBy: values.cartWeightBy,
-        }
-
-        const initialResponse = await postData('/order/addorupdate', params)
-
-        console.log('response', initialResponse)
-
-        const orderid = initialResponse?.order?._id
-
-        const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-            amount: initialResponse?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            currency: "INR",
-            name: BrandName,
-            description: "Test Transaction",
-            image: "https://example.com/your_logo",
-            order_id: initialResponse?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
-            handler: function (response: any) {
-                console.log('rajooor pay', response);
-                const newResponse = { ...response, orderid }
-                console.log('newResponse', newResponse)
-                const reply = postData('/order/save', newResponse)
-                console.log(reply)
-                // alert(response.razorpay_payment_id);
-                // alert(response.razorpay_order_id);
-                // alert(response.razorpay_signature);
-                // instance.payments.fetch(paymentId)
-            },
-            prefill: {
-                name: CustomerData?.fullName,
-                email: CustomerData?.email,
-                contact: CustomerData?.mobileNumber,
-            },
-            notes: {
-                address: "Razorpay Corporate Office",
-            },
-            theme: {
-                color: "#2E3190",
-                // backdrop_color: "#2E3190"
-            },
-            modal: {
-                ondismiss: function () {
-                    alert("dismissed");
+ 
+        setIsLoading(true);
+    
+        try {
+            const params = {
+                order_type: values.order_type,
+                service: values.serviceId,
+                products: values.products,
+                customer: values.customer,
+                status: values.status,
+                payment: values.payment,
+                delivery_agent: values.delivery_agent,
+                cartTotal: values.cartTotal,
+                cartWeight: values.cartWeight,
+                cartWeightBy: values.cartWeightBy,
+            };
+    
+            const initialResponse = await postData('/order/addorupdaterazorpay', params);
+    
+            console.log('response', initialResponse);
+    
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                amount: initialResponse?.amount_due,
+                currency: "INR",
+                name: BrandName,
+                description: "Test Transaction",
+                image: "https://example.com/your_logo",
+                order_id: initialResponse?.razorpayOrder?.id,
+                handler: async function (response: any) {
+                    console.log('rajooor pay', response);
+                    const post1 = await postData('/order/addorupdate', params);
+                    const orderid = post1?.order?._id;
+                    const customer_id = post1?.order?.customer;
+                    const newResponse = { ...response, orderid, customer_id };
+                    const post2 = await postData('/order/save', newResponse);
+                    console.log(post2);
+                    // Handle success or failure of the payment
                 },
-                animation: "slide",
-            },
-            // callback_url: 'https://example.com/your_redirect_url',
-
-
-        } as any;
-
-        const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
-        rzp1.open();
-
-
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Order created successfully')
-        }, 3000) // remove this timeout and add submit logic
-
+                prefill: {
+                    name: CustomerData?.fullName,
+                    email: CustomerData?.email,
+                    contact: CustomerData?.mobileNumber,
+                },
+                notes: {
+                    address: "Razorpay Corporate Office",
+                },
+                theme: {
+                    color: "#2E3190",
+                },
+                modal: {
+                    ondismiss: function () {
+                        alert("dismissed");
+                    },
+                    animation: "slide",
+                },
+            } as any;
+    
+            const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
+            rzp1.open();
+    
+            // Do not set isLoading to false until the payment handler completes
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+            toast.error('Error occurred while processing the order');
+        }
     }
-
-
-
-
-
-
-
+ 
     const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
         setProductQuantity((prev) => prev + 1);
