@@ -106,6 +106,7 @@ export const createOrUpdateOrder = async (req, res) => {
                 address_id,
                 razorpayOrderId,
                 order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
+                orderDate: new Date()
             });
 
             await updatedOrder.save();
