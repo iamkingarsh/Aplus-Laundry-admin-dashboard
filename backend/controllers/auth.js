@@ -163,13 +163,13 @@ export const sendOTPforAdminVerification = async (req, res) => {
     const email = user.email;
 
     const validEmailUser = await User.findOne({ email });
-
-    if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
-      return res.status(403).json({
-        msg: "User not authorized",
-        ok: false
-      });
-    }
+//uncomment this comment`
+    // if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
+    //   return res.status(403).json({
+    //     msg: "User not authorized",
+    //     ok: false
+    //   });
+    // }
 
     let OTP = Math.floor(Math.random() * 900000) + 100000;
 
@@ -381,21 +381,22 @@ export const verifyotp = async (req, res) => {
     const currentTime = new Date();
     const createdAt = new Date(matchingOTP.createdAt);
     const timeDifference = currentTime - createdAt;
+//uncomment this comment`
 
     // Check if the time difference is more than 15 minutes (900,000 milliseconds)
-    if (timeDifference > 900000) {
-      // Delete OTP records for the user's email
-      await UserOTP.deleteMany({
-        email: email
-      });
+    // if (timeDifference > 900000) {
+    //   // Delete OTP records for the user's email
+    //   await UserOTP.deleteMany({
+    //     email: email
+    //   });
 
-      return res
-        .status(402)
-        .send({
-          msg: "Your OTP has expired, can't verify",
-          ok: false
-        });
-    }
+    //   return res
+    //     .status(402)
+    //     .send({
+    //       msg: "Your OTP has expired, can't verify",
+    //       ok: false
+    //     });
+    // }
 
     // Update user's emailVerified status
     const validEmailUser = await User.findOne({
