@@ -2,11 +2,10 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useGlobalModal } from '@/hooks/GlobalModal';
-import { Edit2, Eye, EyeIcon, MoreHorizontal, Trash, User } from 'lucide-react'
+import { EyeIcon } from 'lucide-react'
 import React from 'react'
 import { CustomersColumns } from './columns'
-import { Alert } from '@/components/forms/Alert';
-import toast from 'react-hot-toast';
+
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 
