@@ -105,7 +105,7 @@ export const createOrUpdateOrder = async (req, res) => {
                 coupon_id,
                 address_id,
                 razorpayOrderId,
-                order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
+                order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`,
                 orderDate: new Date()
             });
 
