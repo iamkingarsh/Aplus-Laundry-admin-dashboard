@@ -24,8 +24,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import { set } from "date-fns"
-import { fetchData } from "@/axiosUtility/api"
-import { useRouter } from "next/router"
+import { fetchData,postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 // import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
 
 
@@ -49,9 +49,11 @@ const formSchema = z.object({
 })
 
 export function EditServiceForm({ className, data, gap, ...props }: EditServiceFormProps) {
+    const router = useRouter();
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [LaundryProducts, setLaundryProducts] = React.useState([]) as any[]
-    // const router = useRouter()
+   
 
     console.log(data, 'data')
     const form = useForm<z.infer<typeof formSchema>>({
@@ -157,9 +159,37 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        console.log(values)
+        console.log('valuesvaluesvaluesvalues',values)
         setIsLoading(true)
         console.log(values)
+
+        try {
+            const update_data = {
+                id:data._id,
+                serviceTitle: values.serviceTitle,
+                laundryPerPair: {
+                    active: values.laundryperpair === "Activated",
+                    items: values.laundryitems.laundryperpair_items
+                },
+                laundryByKG: {
+                    active: values.laundrybykg === "Activated",
+                    price: values.laundrybykgprice ? parseFloat(values.laundrybykgprice) : 0,
+                    items: values.laundryitems.laundrybykg_items
+                }
+            };
+
+            const response = postData('/service/addorupdate', update_data);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            // Optionally, you can redirect the user or perform other actions upon successful submission.
+            router.push('/services');
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
         setTimeout(() => {
             setIsLoading(false)
@@ -168,15 +198,12 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
 
     }
 
-    console.log('selectedItemsForLPKsgsdgd', data?.laundryByKG.items.map((item: any) => item._id) ?? [])
 
     const SelectedItemsForLPK = data?.laundryByKG.items.map((item: any) => item._id) ?? []
     const SelectedItemsForLPP = data?.laundryPerPair.items.map((item: any) => item._id) ?? []
 
     const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
-
-    console.log('selectedItemsForLPK', selectedItemsForLPK)
 
     const isOptionSelected = (value: string, laundrytype: string): any => {
         return laundrytype === "laundrybykg" ? selectedItemsForLPK?.includes(value) : selectedItemsForLPP.includes(value);
@@ -230,7 +257,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
                                             id="title"
                                             type="text"
                                             autoComplete="off"
-                                            disabled={isLoading}
+                                            disabled
                                             {...field}
                                             placeholder="eg. Laundry"
                                         />
