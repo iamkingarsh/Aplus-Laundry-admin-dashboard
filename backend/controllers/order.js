@@ -75,7 +75,6 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartWeightBy,
                 coupon_id,
                 address_id,
-                razorpayOrderId,
                 order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`
             };
 
@@ -83,6 +82,12 @@ export const createOrUpdateOrder = async (req, res) => {
             if (delivery_agent) {
                 update.delivery_agent = delivery_agent;
             }
+
+              // Conditionally include the razorpayOrderId field if it's provided
+        if (razorpayOrderId) {
+            updateFields.razorpayOrderId = razorpayOrderId;
+        }
+
 
             const options = {
                 new: true, // Return the modified document rather than the original
@@ -104,9 +109,9 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartWeightBy,
                 coupon_id,
                 address_id,
-                razorpayOrderId,
                 order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`,
-                orderDate: new Date()
+                orderDate: new Date(),
+        createdAt: new Date() 
             });
 
             await updatedOrder.save();
@@ -254,6 +259,41 @@ export const savePayment = async (req, res) => {
             upi: {
                 vpa: paymentDetails.upi.vpa,
             },
+
+        });
+
+        const savedTransaction = await transaction.save();
+
+        // Update the corresponding order document with the transaction ID
+        await Order.findOneAndUpdate(
+            { _id: orderid },
+            { $set: { transaction_id: savedTransaction._id } },
+            { new: true }
+        );
+
+        res.status(200).json({ success: true, message: 'Payment details saved successfully' });
+
+    } catch (error) {
+        console.error('Error saving payment:', error);
+        res.status(500).json({ success: false, message: 'Error saving payment' });
+    }
+};
+
+export const saveOfflinePayment = async (req, res) => {
+    try { 
+        
+        const {   orderid, customer , cartTotal,payment } = req.body;
+
+         
+
+        const transaction = new Transaction({
+             
+            customer_id: customer,
+            entity: "payment",
+            amount: cartTotal,
+            status: "captured",
+            method: payment,
+             
 
         });
 
