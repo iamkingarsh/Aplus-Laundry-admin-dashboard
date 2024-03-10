@@ -42,16 +42,16 @@ export default function EditLaundryItemPage({ params }: Props) {
     const getData = async () => {
         try {
             const result = await fetchData(`/product/getid/${params.productid}`);
-            console.log('result', result)
+            console.log('resultergdgdxfgbfdh', result.product)
 
-            if (result && result.products
+            if (result && result.product
             ) {
-                const products = result.products;
-                setLaundryItemData(products[0]);
-                console.log('hi', products)
+                const product = result.product;
+                setLaundryItemData(product);
+                console.log('hi', product)
 
             } else {
-                console.error('Response format is not as expected:', result.products.title);
+                console.error('Response format is not as expected:' );
                 // You might want to set an error state or show a message to the user
             }
 
