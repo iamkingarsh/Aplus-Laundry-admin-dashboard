@@ -164,12 +164,12 @@ export const sendOTPforAdminVerification = async (req, res) => {
 
     const validEmailUser = await User.findOne({ email });
 //uncomment this comment`
-    // if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
-    //   return res.status(403).json({
-    //     msg: "User not authorized",
-    //     ok: false
-    //   });
-    // }
+    if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
+      return res.status(403).json({
+        msg: "User not authorized",
+        ok: false
+      });
+    }
 
     let OTP = Math.floor(Math.random() * 900000) + 100000;
 
@@ -192,7 +192,7 @@ export const sendOTPforAdminVerification = async (req, res) => {
 
     console.log('email email', email); 
     // Continue with other operations, such as sending an email
-    await emailVerificationEmail(email, OTP);
+    await emailVerificationEmail(email, OTP,validEmailUser.fullName);
 
     // Send the response
     res.status(200).send({
@@ -246,7 +246,7 @@ export const sendOTPforverification = async (req, res) => {
 
     console.log('email email', email); 
     // Continue with other operations, such as sending an email
-    await emailVerificationEmail(email, OTP);
+    await emailVerificationEmail(email, OTP,validEmailUser.fullName);
 
     // Send the response
     res.status(200).send({
