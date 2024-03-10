@@ -128,14 +128,14 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        console.log('valuesvaluesvaluesvalues',values)
+        console.log('valuesvaluesvaluesvalues65465465465465',values)
         setIsLoading(true)
         console.log(values)
 
         try {
             const update_data = {
                 id:data._id,
-                serviceTitle: values.serviceTitle,
+                serviceTitle: values?.title,
                 laundryPerPair: {
                     active: values.laundryperpair === "Activated",
                     items: values.laundryitems.laundryperpair_items
@@ -161,8 +161,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
         }
 
         setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
+            setIsLoading(false) 
         }, 3000) // remove this timeout and add submit logic
 
     }
@@ -175,7 +174,6 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
 
     const isOptionSelected = (value: string, laundrytype: string): any => {
-        console.log( value, selectedItemsForLPP?.includes(value),laundrytype)
         return laundrytype === "laundrybykg" ? selectedItemsForLPK?.includes(value) : selectedItemsForLPP.includes(value);
     };
 
