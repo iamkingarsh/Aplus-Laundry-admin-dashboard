@@ -29,8 +29,6 @@ interface Props {
 
 
 
-
-
 export default function EditServiceDetailsPage({ params }: Props) {
     const [serviceData, setServiceData] = React.useState<any>(null)
     // const ServiceData = Services.filter((item: any) => item.service_id === params.serviceid)[0] as any

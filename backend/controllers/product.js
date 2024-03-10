@@ -82,7 +82,7 @@ export const getProductById = async (req, res) => {
 
         console.log('Product:', product);
         return res.status(200).json({
-            product: product[0], // Send only the first element as a single object
+            product: product, // Send only the first element as a single object
             ok: true
         });
     } catch (error) {
