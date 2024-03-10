@@ -136,7 +136,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             serviceId: '',
             customer: '',
             status: 'Scheduled Pickup',
-            payment: 'Via Store (Cash/Card/UPI)',
+            payment: 'Via Store (Card/UPI)',
             delivery_agent: '',
             cartTotal: 0,
             cartWeight: weight,
@@ -169,51 +169,62 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                 cartWeight: values.cartWeight,
                 cartWeightBy: values.cartWeightBy,
             };
+            if(values.payment === 'Via Store (Card/UPI)'){
+                const initialResponse = await postData('/order/addorupdaterazorpay', params);
     
-            const initialResponse = await postData('/order/addorupdaterazorpay', params);
-    
-            console.log('response', initialResponse);
-    
-            const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-                amount: initialResponse?.amount_due,
-                currency: "INR",
-                name: BrandName,
-                description: "Test Transaction",
-                image: "https://example.com/your_logo",
-                order_id: initialResponse?.razorpayOrder?.id,
-                handler: async function (response: any) {
-                    console.log('rajooor pay', response);
-                    const post1 = await postData('/order/addorupdate', params);
-                    const orderid = post1?.order?._id;
-                    const customer_id = post1?.order?.customer;
-                    const newResponse = { ...response, orderid, customer_id };
-                    const post2 = await postData('/order/save', newResponse);
-                    console.log(post2);
-                    // Handle success or failure of the payment
-                },
-                prefill: {
-                    name: CustomerData?.fullName,
-                    email: CustomerData?.email,
-                    contact: CustomerData?.mobileNumber,
-                },
-                notes: {
-                    address: "Razorpay Corporate Office",
-                },
-                theme: {
-                    color: "#2E3190",
-                },
-                modal: {
-                    ondismiss: function () {
-                        alert("dismissed");
+                console.log('response', initialResponse);
+        
+                const options = {
+                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                    amount: initialResponse?.amount_due,
+                    currency: "INR",
+                    name: BrandName,
+                    description: "Test Transaction",
+                    image: "https://example.com/your_logo",
+                    order_id: initialResponse?.razorpayOrder?.id,
+                    handler: async function (response: any) {
+                        console.log('rajooor pay', response);
+                        const post1 = await postData('/order/addorupdate', params);
+                        const orderid = post1?.order?._id;
+                        const customer_id = post1?.order?.customer;
+                        const newResponse = { ...response, orderid, customer_id };
+                        const post2 = await postData('/order/save', newResponse);
+                        console.log(post2);
+                        // Handle success or failure of the payment
                     },
-                    animation: "slide",
-                },
-            } as any;
+                    prefill: {
+                        name: CustomerData?.fullName,
+                        email: CustomerData?.email,
+                        contact: CustomerData?.mobileNumber,
+                    },
+                    notes: {
+                        address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                        color: "#2E3190",
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            alert("dismissed");
+                        },
+                        animation: "slide",
+                    },
+                } as any;
+        
+                const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
+                rzp1.open();
+        
+            
+            }else  if(values.payment === 'Via Store (Cash)'){
+                const response = await postData('/order/addorupdate', params);
+            const orderid = response?.order?._id;
+            const newParam= { ...params, orderid };
+            const response2 = await postData('/order/saveOffline', newParam);
+
+            }
+          
     
-            const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
-            rzp1.open();
-    
+            
             // Do not set isLoading to false until the payment handler completes
         } catch (error) {
             console.error(error);
@@ -609,7 +620,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem disabled value="Via Store (Cash/Card/UPI)">Via Store (Cash/Card/UPI)</SelectItem>
+                                            <SelectItem  value="Via Store (Card/UPI)">Via Store (Card/UPI)</SelectItem>
+                                            <SelectItem  value="Via Store (Cash)">Via Store (Cash)</SelectItem>
+
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />

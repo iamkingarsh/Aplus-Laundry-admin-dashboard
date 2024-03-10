@@ -3,7 +3,7 @@ import express from 'express';
 
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
  
-import { createOrUpdateOrder, createOrUpdateOrderRazorpay, deleteOrderById, getAllOrders, getOrderById, getUserOrders, savePayment, updateOrderStatusById } from '../controllers/order.js';
+import { createOrUpdateOrder, createOrUpdateOrderRazorpay, deleteOrderById, getAllOrders, getOrderById, getUserOrders, saveOfflinePayment, savePayment, updateOrderStatusById } from '../controllers/order.js';
  
 
 
@@ -14,6 +14,10 @@ orderRouter.post('/addorupdate', authenticateToken, createOrUpdateOrder);
 orderRouter.post('/addorupdaterazorpay', authenticateToken, createOrUpdateOrderRazorpay);  
  
 orderRouter.post('/save', authenticateToken, savePayment);
+orderRouter.post('/saveOffline', authenticateToken, saveOfflinePayment);
+
+
+
 
 orderRouter.get('/getall', authenticateToken, getAllOrders);
 orderRouter.get('/:id', authenticateToken, getOrderById);
