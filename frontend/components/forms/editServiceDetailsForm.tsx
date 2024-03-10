@@ -111,51 +111,20 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
             laundrybykg: data?.laundryByKG.active === true ? "Activated" : "Deactivated",
             laundryperpair: data?.laundryPerPair.active === true ? "Activated" : "Deactivated",
             laundrybykgprice: data?.laundryByKG?.price.toString(),
+            // Reset laundrybykg_items and laundryperpair_items separately
             laundryitems: {
-                laundrybykg_items: data?.laundryByKG.items.map((item: any) => item),
-                laundryperpair_items: data?.laundryPerPair.items.map((item: any) => item),
+                laundrybykg_items: data?.laundryByKG?.items.map((item: any) => item) || [],
+                laundryperpair_items: data?.laundryPerPair?.items.map((item: any) => item) || [],
             }
-            // {
-            //     "laundryPerPair": {
-            //         "active": true,
-            //         "items": [
-            //             {
-            //                 "_id": "65aa69011bb672959354aad9",
-            //                 "product_name": "shirts",
-            //                 "category": {
-            //                     "_id": "65a51ddb9c904bad1780eda5",
-            //                     "title": "men",
-            //                     "__v": 0
-            //                 },
-            //                 "active": true,
-            //                 "priceperpair": "70",
-            //                 "__v": 0
-            //             },
-            //             {
-            //                 "_id": "65aa69091bb672959354aae4",
-            //                 "product_name": "pant",
-            //                 "category": {
-            //                     "_id": "65a51ddb9c904bad1780eda5",
-            //                     "title": "men",
-            //                     "__v": 0
-            //                 },
-            //                 "active": true,
-            //                 "priceperpair": "70",
-            //                 "__v": 0
-            //             }
-            //         ]
-            //     },
-            //     "laundryByKG": {
-            //         "active": false,
-            //         "price": 0,
-            //         "items": []
-            //     },
-            //     "_id": "65ab94c2fe884bef62ac94b0",
-            //     "serviceTitle": "Hello ",
-            //     "__v": 0
-            // }
         });
+
+        const selectedLPKItems = data?.laundryByKG.items.map((item: any) => item._id) ?? [];
+    setSelectedItemsForLPK(selectedLPKItems);
+
+    const selectedLPPItems = data?.laundryPerPair.items.map((item: any) => item._id) ?? [];
+    setSelectedItemsForLPP(selectedLPPItems);
     }, [data]);
+    
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
@@ -206,6 +175,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
 
     const isOptionSelected = (value: string, laundrytype: string): any => {
+        console.log( value, selectedItemsForLPP?.includes(value),laundrytype)
         return laundrytype === "laundrybykg" ? selectedItemsForLPK?.includes(value) : selectedItemsForLPP.includes(value);
     };
 
@@ -559,7 +529,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
                                                                                     </div>
                                                                                     <div className="flex gap-2 items-center justify-end">
 
-                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundrybykg")} onCheckedChange={() => handleSelectChange(product._id, "laundrybykg")} id="laundrybykg" />
+                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundryperpair")} onCheckedChange={() => handleSelectChange(product._id, "laundryperpair")} id="laundryperpair" />
                                                                                     </div>
                                                                                 </div>)
                                                                             }
