@@ -20,17 +20,18 @@ export default function Page() {
         try {
             const res = await fetchData('/transaction/getall');
             const transactions = res.transactions.map((transaction: any) => {
+                console.log('transactiontransactiontransaction',transaction)
                 const createdAtDate = new Date(transaction.created_at);
                 const formattedDate = createdAtDate.toLocaleDateString(); // Adjust the formatting as needed
     
                 return {
                     id: transaction._id,
-                    payment_id: transaction.payment_id,
+                    payment_id: transaction.payment_id || 0,
                     status: transaction.status,
                     source: {
-                        id: transaction.customer_id._id,
+                        id: transaction.customer_id,
                         payer_name: transaction.customer_id.fullName,
-                        payer_account: transaction.vpa,
+                        payer_account: transaction.vpa || "0",
                         payer_ifsc: '', // You need to provide the appropriate value for this field
                         mode: transaction.method,
                         entity: transaction.entity,
@@ -43,6 +44,7 @@ export default function Page() {
                 };
             });
             setTransactionData(transactions);
+            
         } catch (error) {
             console.log(error);
         }
