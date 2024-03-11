@@ -35,6 +35,7 @@ import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
 import axios from "axios"
 
+
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
 }
@@ -59,6 +60,7 @@ const formSchema = z.object({
 const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
+
     const [Razorpay] = useRazorpay();
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
@@ -73,8 +75,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [selectedId, setSelectedId] = React.useState<string | null>(null)
     const [DeliveryAgentsData, setDeliveryAgentsData] = React.useState([])
 
-
-
+ 
+ 
 
     const getCustomersData = async () => {
         try {
@@ -187,7 +189,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                         const post1 = await postData('/order/addorupdate', params);
                         const orderid = post1?.order?._id;
                         const customer_id = post1?.order?.customer;
-                        const newResponse = { ...response, orderid, customer_id };
+                        const newResponse = { ...response, orderid, customer_id,params };
                         const post2 = await postData('/order/save', newResponse);
                         console.log(post2);
                         // Handle success or failure of the payment
@@ -220,10 +222,10 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             const orderid = response?.order?._id;
             const newParam= { ...params, orderid };
             const response2 = await postData('/order/saveOffline', newParam);
+            
 
             }
           
-    
             
             // Do not set isLoading to false until the payment handler completes
         } catch (error) {

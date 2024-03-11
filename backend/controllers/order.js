@@ -225,15 +225,14 @@ export const verifyPayment = async (req, res) => {
 
 export const savePayment = async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid, customer_id } = req.body;
-
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderid, customer, customer_id,params } = req.body;
         const paymentDetails = await razorpay.payments.fetch(razorpay_payment_id);
         console.log("Payment Details:", paymentDetails);
 
         const transaction = new Transaction({
             payment_id: razorpay_payment_id,
             razorpay_signature,
-            customer_id,
+            customer_id: customer_id, 
             entity: paymentDetails.entity,
             amount: paymentDetails.amount,
             currency: paymentDetails.currency,
@@ -314,15 +313,19 @@ export const saveOfflinePayment = async (req, res) => {
 // Get all orders
 export const getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find()
+        let query = Order.find()
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name')
             .populate('customer', 'fullName mobileNumber')
-            .populate('coupon_id', null, { _id: { $exists: true } }) // Populate coupon_id only if it exists
-            .populate('address_id') // Populate address_id
-            .exec();
+            .populate('coupon_id', null, { _id: { $exists: true } });
 
-        // console.log(orders.products.map((product) => product));
+        // Check if the address query parameter is provided
+        if (req.query.populateAddress === 'true') {
+            query = query.populate('address_id');
+        }
+
+        const orders = await query.exec();
+
         const ordersWithCustomerNames = orders.map((order) => ({
             ...order.toObject(),
             customer_name: order.customer?.fullName || 'N/A',
@@ -342,6 +345,7 @@ export const getAllOrders = async (req, res) => {
         });
     }
 };
+
 
 
 
