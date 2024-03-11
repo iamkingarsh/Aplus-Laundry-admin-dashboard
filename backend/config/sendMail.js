@@ -72,10 +72,10 @@ const mailSend = async (toEmail, subject, text) => {
                                             <tbody>
                                                 <tr>
                                                     <td class="m_-5049272237331082851newLine">
-                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/jz26jqlzqcio2632CraNccBtOIc=144"
+                                                        <a href="https://www.apluslaundry.in/
                                                             target="_blank" style="display: flex;flex-wrap: wrap; text-align: center;align-items: center;gap: 16px;width: fit-content;margin: 0 auto;
                                                             text-decoration: none;"
-                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/jz26jqlzqcio2632CraNccBtOIc%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1Qe6efbKK1yI6JA5XSt9w1">
+                                                            data-saferedirecturl="https://www.apluslaundry.in/">
                                                             <img alt="Aplus Logo"
                                                                 src="https://firebasestorage.googleapis.com/v0/b/aplus-laundry-storage.appspot.com/o/apluslaundry%2FSymbolWhite.svg?alt=media&token=0cd389ea-c6af-481d-b4f8-274a5ea8f1ba"
                                                                  width="70" style="
@@ -138,9 +138,9 @@ const mailSend = async (toEmail, subject, text) => {
                                                             <tbody>
                                                                 <tr>
                                                                     <td align="left" style="padding-bottom: 24px">
-                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fgetsimpl.com%2F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/CkW1-5nWKFf0LV94IwazHnW6peI=144"
+                                                                        <a href="https://www.apluslaundry.in/"
                                                                             target="_blank"
-                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fgetsimpl.com%252F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/CkW1-5nWKFf0LV94IwazHnW6peI%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0nMPfUp6Izm5r5PUKGolCY" style="text-decoration: none;"> <p>A Plus</p> </a>
+                                                                            data-saferedirecturl="https://www.apluslaundry.in/" style="text-decoration: none;"> <p>A Plus</p> </a>
                                                                     </td>
                                                                     <td align="right" style="padding-bottom: 24px">
                                                                         <table style="
@@ -150,47 +150,28 @@ const mailSend = async (toEmail, subject, text) => {
                                           padding: 0;
                                         ">
                                                                             <tbody>
-                                                                                <tr>
+                                                                                <tr> 
                                                                                     <td style="padding-right: 16px">
-                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Ftwitter.com%2Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/NwBpeEPMShI3uEwI35k8YJVh6lA=144"
+                                                                                        <a href="https://www.facebook.com/6300207721@Aplus6300"
                                                                                             target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Ftwitter.com%252Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/NwBpeEPMShI3uEwI35k8YJVh6lA%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0lSkYNKiEjZyZpjDHaJcxZ"><img
-                                                                                                alt="Simpl on Twitter"
-                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NYAcYKW6PzhuexeijoIs7aiMufK9aBQdStFaJkbJU3DearKayDEapR60K-RdWlSXQ_DnOzo1hcRltcTBXW_biaSU0A1DEZ9BcA5F6bxiDDWBVspSiSE7twtRA=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-twitter.png"
-                                                                                                width="20"
-                                                                                                class="CToWUd"
-                                                                                                data-bit="iit" /></a>
-                                                                                    </td>
-                                                                                    <td style="padding-right: 16px">
-                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fwww.facebook.com%2Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/6bOz42ceZJLwQrtzwY3LiUqH82E=144"
-                                                                                            target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fwww.facebook.com%252Fgetsimpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/6bOz42ceZJLwQrtzwY3LiUqH82E%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2KHY6BN2rYT9PL1MqbYz7g"><img
-                                                                                                alt="Simpl on Facebook"
+                                                                                            data-saferedirecturl="https://www.facebook.com/6300207721@Aplus6300"><img
+                                                                                                alt="A Plus on Facebook"
                                                                                                 src="https://ci3.googleusercontent.com/meips/ADKq_NYoQfU8D-y84Pfi-wn5hQchI2BFlacfLRNmvd3Wk2YjV2CqlKOxps5cm5j1_j-sHImKKggl1jK0C3OonhJ8IbTgUqRLvnE_deI4OTAUJQKlVTQvfywjY5HNS8g=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-facebook.png"
                                                                                                 width="17"
                                                                                                 class="CToWUd"
                                                                                                 data-bit="iit" /></a>
                                                                                     </td>
                                                                                     <td style="padding-right: 16px">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Finstagram.com%2Fgetsimpl%2F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/TL2JjWxP-FW4WgN59-Guagc5c5A=144"
+                                                                                        <a href="https://www.instagram.com/apluslaundry.in/"
                                                                                             target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Finstagram.com%252Fgetsimpl%252F/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/TL2JjWxP-FW4WgN59-Guagc5c5A%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2okwRMyazFFVkkNWH0uYdY"><img
-                                                                                                alt="Simpl on Instagram"
+                                                                                            data-saferedirecturl="https://www.instagram.com/apluslaundry.in/"><img
+                                                                                                alt="A Plus on Instagram"
                                                                                                 src="https://ci3.googleusercontent.com/meips/ADKq_NZX0lknWQLRiBxtRLXhagocpcWiQcO5I2DUJD1qZ44GM9G20BdF8adSRxlVyzEfF6M6W6ZIlS5TFRlYd2tBYSTSjfZrcSCzZ_ys0m6rjesIGdxLANFgjSXaPZQJ=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-instagram.png"
                                                                                                 width="17"
                                                                                                 class="CToWUd"
                                                                                                 data-bit="iit" /></a>
                                                                                     </td>
-                                                                                    <td>
-                                                                                        <a href="https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%2F%2Fwww.linkedin.com%2Fcompany%2Fget-simpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/z42X55i2BOU10O6yZAxMpsd0Gvs=144"
-                                                                                            target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=https://p75s2kt4.r.ap-south-1.awstrack.me/L0/https:%252F%252Fwww.linkedin.com%252Fcompany%252Fget-simpl/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/z42X55i2BOU10O6yZAxMpsd0Gvs%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2uaixkUd3X6Uh9-_h4uUzm"><img
-                                                                                                alt="Simpl on LinkedIn"
-                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_Nac5sMMJ70BcLbGYZWnpfzzeMxmghY4gQeHEUZTrV871PuS1CdWW64Isr8DfSDTCn3ITYdtir9pVUOS2Kf8RHG-IOf-Pr6uBzyUYK2iUudbI-J7Q4OBHKymI-E=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/simpl-linkedin.png"
-                                                                                                width="17"
-                                                                                                class="CToWUd"
-                                                                                                data-bit="iit" /></a>
-                                                                                    </td>
+                                                                                   
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -225,13 +206,13 @@ const mailSend = async (toEmail, subject, text) => {
                                                 line-height: 18px;
                                                 padding-right: 16px;
                                               ">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fdashboard/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/dvFpd3LulY_22AKR-1ZIAypFOLM=144"
+                                                                                        <a href="https://www.apluslaundry.in/"
                                                                                             style="
                                                   color: #888 !important;
                                                   display: block;
                                                   text-decoration: none;
                                                   text-transform: uppercase;
-                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fdashboard/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/dvFpd3LulY_22AKR-1ZIAypFOLM%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw2Bgxn2c8kOPJ2bu3dGyxXn">View
+                                                " target="_blank" data-saferedirecturl="https://www.apluslaundry.in/">View
                                                                                             Dashboard</a>
                                                                                     </td>
                                                                                     <td class="m_-5049272237331082851siteLink"
@@ -241,14 +222,14 @@ const mailSend = async (toEmail, subject, text) => {
                                                 line-height: 18px;
                                                 padding-right: 16px;
                                               ">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fhelp/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/05Dxc0UuHUxDLqRsuPolPU4_Kqc=144"
+                                                                                        <a href="https://www.apluslaundry.in/refund-&-returns"
                                                                                             style="
                                                   color: #888 !important;
                                                   display: block;
                                                   text-decoration: none;
                                                   text-transform: uppercase;
-                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fhelp/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/05Dxc0UuHUxDLqRsuPolPU4_Kqc%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw0dOHNArZMVJbSFWhNmmJOR">Read
-                                                                                            FAQs</a>
+                                                " target="_blank" data-saferedirecturl="https://www.apluslaundry.in/refund-&-returns">
+                                                Refunds & Returns</a>
                                                                                     </td>
                                                                                     <td class="m_-5049272237331082851siteLink"
                                                                                         style="
@@ -257,14 +238,14 @@ const mailSend = async (toEmail, subject, text) => {
                                                 line-height: 18px;
                                                 padding-right: 16px;
                                               ">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fterms-and-conditions/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/00B3R2PLc9LvgeCjsNR2rgivr3I=144"
+                                                                                        <a href="https://www.apluslaundry.in/terms-and-conditions"
                                                                                             style="
                                                   color: #888 !important;
                                                   display: block;
                                                   text-decoration: none;
                                                   text-transform: uppercase;
-                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fterms-and-conditions/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/00B3R2PLc9LvgeCjsNR2rgivr3I%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw109cZ4mA8fq2U8SbzlmGhc">Terms
-                                                                                            and Conditions</a>
+                                                " target="_blank" data-saferedirecturl="https://www.apluslaundry.in/terms-and-conditions">Terms
+                                                                                            & Conditions</a>
                                                                                     </td>
                                                                                     <td class="m_-5049272237331082851siteLink"
                                                                                         style="
@@ -272,13 +253,13 @@ const mailSend = async (toEmail, subject, text) => {
                                                 font-weight: normal;
                                                 line-height: 18px;
                                               ">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fgetsimpl.com%2Fprivacy-policy/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/A9QlWrl5D0o7Rin_W-JdUQUgqrI=144"
+                                                                                        <a href="https://www.apluslaundry.in/privacy-policy"
                                                                                             style="
                                                   color: #888 !important;
                                                   display: block;
                                                   text-decoration: none;
                                                   text-transform: uppercase;
-                                                " target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fgetsimpl.com%252Fprivacy-policy/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/A9QlWrl5D0o7Rin_W-JdUQUgqrI%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1n-LG7dlMTXHiaEeJYE1uD">Privacy
+                                                " target="_blank" data-saferedirecturl="https://www.apluslaundry.in/privacy-policy">Privacy
                                                                                             Policy</a>
                                                                                     </td>
                                                                                 </tr>
@@ -314,27 +295,7 @@ const mailSend = async (toEmail, subject, text) => {
                                                                                             Get the app:
                                                                                         </h3>
                                                                                     </td>
-                                                                                    <td valign="top"
-                                                                                        style="padding-right: 14px">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fapp.getsimpl.com%2FHJNm%2FC42CCjis4s/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/erDYQmIFP4nMprkDzIjby0Bn7tA=144"
-                                                                                            target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fapp.getsimpl.com%252FHJNm%252FC42CCjis4s/1/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/erDYQmIFP4nMprkDzIjby0Bn7tA%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw3WUkh4YVkCSc605s6s3R1p"><img
-                                                                                                alt="Simpl on Twitter"
-                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NYVhoknEzvPIYlDJnU0v6rhZg2kEgG64mBQWinPQoEFaVhv8Zq8OgJ0if5dTeOj_4_jseXCD6sReXqfQCnZmilWu_xjXiDQDfaTq6an9JaHjhkBOc-fW3M=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/get-android.png"
-                                                                                                width="16"
-                                                                                                class="CToWUd"
-                                                                                                data-bit="iit" /></a>
-                                                                                    </td>
-                                                                                    <td valign="top">
-                                                                                        <a href="http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%2F%2Fapp.getsimpl.com%2FHJNm%2FC42CCjis4s/2/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/f-Hwx6LWkxmpakyAUWy2Q3KagNE=144"
-                                                                                            target="_blank"
-                                                                                            data-saferedirecturl="https://www.google.com/url?q=http://p75s2kt4.r.ap-south-1.awstrack.me/L0/http:%252F%252Fapp.getsimpl.com%252FHJNm%252FC42CCjis4s/2/0109018defcbf2d6-8478affe-4453-4470-8dfd-ffad7ac09bf3-000000/f-Hwx6LWkxmpakyAUWy2Q3KagNE%3D144&amp;source=gmail&amp;ust=1709246064048000&amp;usg=AOvVaw1Y2DB9y0-dCZZT2UXK_pSt"><img
-                                                                                                alt="Simpl on Twitter"
-                                                                                                src="https://ci3.googleusercontent.com/meips/ADKq_NZ-11NtmZCuZvIc1rxYZhFctYCSaImL-NCHZeUuo0aYPoslqZUiSqDsMkQIMGxWVw53tJJ6NlgIVoWqv4BEySwUkOP9QjXgmYFe8SnvuvjDDY8maFlH=s0-d-e1-ft#https://cdn.getsimpl.com/images/email/transactions/get-apple.png"
-                                                                                                width="15"
-                                                                                                class="CToWUd"
-                                                                                                data-bit="iit" /></a>
-                                                                                    </td>
+                                                                                   
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -378,8 +339,8 @@ const mailSend = async (toEmail, subject, text) => {
       color: #888;
       ">
       For any queries, reach out to us at
-      <a href="https://www.getsimpl.com/help" style="color: #444;" title="Link: getsimpl.com/help" target="_blank">
-        getsimpl.com/help
+      <a href="https://www.apluslaundry.in/contactUs" style="color: #444;" title="Link: apluslaundry.in/contactUs" target="_blank">
+      apluslaundry.in/contactUs
       </a>
       </p>
       
