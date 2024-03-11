@@ -30,7 +30,7 @@ export default function Page() {
                     status: transaction.status,
                     source: {
                         id: transaction.customer_id,
-                        payer_name: transaction.customer_id.fullName,
+                        payer_name: transaction?.customer_id?.fullName || "",
                         payer_account: transaction.vpa || "0",
                         payer_ifsc: '', // You need to provide the appropriate value for this field
                         mode: transaction.method,
