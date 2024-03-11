@@ -569,23 +569,16 @@ export const orderStatusUpdateEmail = async (email, orderDetails) => {
 
   const body = `
   
-<html>
-<body>
-    <div style="background-color: #2E3190; padding: 10px; width: 100%;"></div>
-    <img src="https://firebasestorage.googleapis.com/v0/b/aplus-laundry-storage.appspot.com/o/apluslaundry%2FSymbol.svg?alt=media&token=b111fdce-3866-4757-abf3-6fe2384e5430" alt="Aplus Laundry Logo" style="max-width: 100%;">
-    <h1>Aplus Laundry</h1>
+ 
+ 
     <p>Dear Customer,</p>
     <p>We are writing to inform you about the status update of your order with Aplus Laundry. Below are the updated details:</p>
     <p><strong>Order ID:</strong> ${orderDetails.orderId}</p>
     <p><strong>Updated Order Status:</strong> ${orderDetails.status}</p>
     <p>Your order is being processed and will be delivered soon. We will keep you updated on the status of your order.</p>
     <p>If you have any questions or concerns, please feel free to contact us.</p>
-    <p>Thank you for choosing Aplus Laundry.</p>
-    <p>Best regards,</p>
-    <p>Aplus Laundry Team</p>
-    <div style="background-color: #2E3190; padding: 6px; width: 100%;"></div>
-</body>
-</html>
+    <p>Thank you for choosing Aplus Laundry.</p> 
+ 
 
   `;
 
