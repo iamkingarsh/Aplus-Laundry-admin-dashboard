@@ -46,7 +46,7 @@ export type TransactionsColumns = {
 
 export const columns: ColumnDef<TransactionsColumns>[] = [
 
-    
+
     {
         id: "select",
         header: ({ table }) => (
@@ -135,25 +135,20 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Status
-                    <ArrowUpDown className="ml-2 h-4 w-4" /> 
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
 
-        cell: ({ row }) => <OrderStatusChanger data={row.original} />
-        //     <div className="flex items-center">
-        //         <div
-        //             className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "onhold" && "bg-yellow-500"
-        //                 } ${row.original.status === "pending" && "bg-blue-500"
-        //                 } ${row.original.status === "picked" && "bg-green-500"
-        //                 } ${row.original.status === "onway" && "bg-purple-500"
-        //                 } ${row.original.status === "delivered" && "bg-green-500"
-        //                 } ${row.original.status === "cancelled" && "bg-red-500"
-        //                 }`}
-        //         />
-        //         {row.original.status}
-        //     </div>
-        // ),
+        cell: ({ row }) => (
+            <div className="flex items-center py-1">
+                <div
+                    className={`w-2 h-2 rounded-full mr-2  ${row.original.status === "captured" ? "bg-green-500"
+                        : "bg-red-500"}`}
+                />
+                {row.original.status === 'captured' ? 'Payment Successful' : 'Failed'}
+            </div>
+        ),
     },
     {
         accessorKey: "source.entity",
@@ -179,7 +174,7 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
             </div>
         ),
     },
-   
+
     {
         id: "actions",
         // cell: ({ row }) => <CellAction data={row.original} />
