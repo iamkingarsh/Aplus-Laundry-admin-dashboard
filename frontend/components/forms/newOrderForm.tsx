@@ -34,6 +34,7 @@ import { Badge } from "../ui/badge"
 import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,8 +43,7 @@ interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 
 const formSchema = z.object({
-    order_type: z.string().min(1, { message: "Please select an order type" })
-    ,
+    order_type: z.string().min(1, { message: "Please select an order type" }),
     serviceId: z.string().min(1, { message: "Please select a service" }),
     products: z.array(z.object({
         id: z.string().min(1, { message: "Please select a product" }),
@@ -60,7 +60,7 @@ const formSchema = z.object({
 const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
-
+    const router = useRouter()
     const [Razorpay] = useRazorpay();
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
@@ -75,8 +75,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [selectedId, setSelectedId] = React.useState<string | null>(null)
     const [DeliveryAgentsData, setDeliveryAgentsData] = React.useState([])
 
- 
- 
+
+
 
     const getCustomersData = async () => {
         try {
@@ -155,9 +155,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
- 
+
         setIsLoading(true);
-    
+
         try {
             const params = {
                 order_type: values.order_type,
@@ -171,11 +171,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                 cartWeight: values.cartWeight,
                 cartWeightBy: values.cartWeightBy,
             };
-            if(values.payment === 'Via Store (Card/UPI)'){
+            if (values.payment === 'Via Store (Card/UPI)') {
                 const initialResponse = await postData('/order/addorupdaterazorpay', params);
-    
+
                 console.log('response', initialResponse);
-        
+
                 const options = {
                     key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
                     amount: initialResponse?.amount_due,
@@ -186,11 +186,14 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                     order_id: initialResponse?.razorpayOrder?.id,
                     handler: async function (response: any) {
                         console.log('rajooor pay', response);
+                        toast.loading('Processing Payment');
                         const post1 = await postData('/order/addorupdate', params);
                         const orderid = post1?.order?._id;
                         const customer_id = post1?.order?.customer;
-                        const newResponse = { ...response, orderid, customer_id,params };
+                        const newResponse = { ...response, orderid, customer_id, params };
                         const post2 = await postData('/order/save', newResponse);
+                        toast.success('Payment Successful');
+                        router.push('/orders')
                         console.log(post2);
                         // Handle success or failure of the payment
                     },
@@ -212,21 +215,21 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                         animation: "slide",
                     },
                 } as any;
-        
+
                 const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
                 rzp1.open();
-        
-            
-            }else  if(values.payment === 'Via Store (Cash)'){
+
+
+            } else if (values.payment === 'Via Store (Cash)') {
                 const response = await postData('/order/addorupdate', params);
-            const orderid = response?.order?._id;
-            const newParam= { ...params, orderid };
-            const response2 = await postData('/order/saveOffline', newParam);
-            
+                const orderid = response?.order?._id;
+                const newParam = { ...params, orderid };
+                const response2 = await postData('/order/saveOffline', newParam);
+
 
             }
-          
-            
+
+
             // Do not set isLoading to false until the payment handler completes
         } catch (error) {
             console.error(error);
@@ -234,7 +237,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             toast.error('Error occurred while processing the order');
         }
     }
- 
+
     const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
         setProductQuantity((prev) => prev + 1);
@@ -622,8 +625,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem  value="Via Store (Card/UPI)">Via Store (Card/UPI)</SelectItem>
-                                            <SelectItem  value="Via Store (Cash)">Via Store (Cash)</SelectItem>
+                                            <SelectItem value="Via Store (Card/UPI)">Via Store (Card/UPI)</SelectItem>
+                                            <SelectItem value="Via Store (Cash)">Via Store (Cash)</SelectItem>
 
                                         </SelectContent>
                                     </Select>
