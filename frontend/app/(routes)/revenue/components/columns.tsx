@@ -2,22 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Banknote, BoxIcon, CreditCard, Delete, Edit, Edit2, Eye, Globe2, IndianRupee, MoreHorizontal, ShipIcon, ToggleLeft, Trash, User, UserCheck, UserCog } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Switch } from "@/components/ui/switch"
-import { MobileIcon } from "@radix-ui/react-icons"
-import { useGlobalModal } from "@/hooks/GlobalModal"
-import CellAction from "./cell-action"
-import { OrderStatusChanger } from "./order-status-changer"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type TransactionsColumns = {
