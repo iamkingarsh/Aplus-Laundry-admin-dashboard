@@ -145,8 +145,7 @@ const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
                 select: 'serviceTitle'
             })
             .populate('customer', 'fullName email')
-            .populate('coupon_id')
-            .populate('address_id')
+            .populate('coupon_id') 
             .populate('products.id')
             .exec(); 
         if (!order) {
