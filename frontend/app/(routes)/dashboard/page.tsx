@@ -82,7 +82,7 @@ export default function Page() {
     const StatsData = [
         {
             title: 'Total Revenue',
-            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue / 100 + totalSubscriptionRevenue / 100),
+            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue + totalSubscriptionRevenue),
             // statPrefix: '₹',
             icon: <IndianRupeeIcon />,
             desc: '+180.1% from last month',
