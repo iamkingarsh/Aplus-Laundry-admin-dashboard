@@ -68,6 +68,11 @@ const userSchema = new mongoose.Schema({
         required: function () {
             return this.customerType === 'subscriber';
         },
+    },customerId: {   
+        type: String,
+        required: function () {
+            return this.role === 'customer';  
+        },
     },
     deviceToken: String,
 }, {
