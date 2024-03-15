@@ -227,7 +227,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                 const orderid = response?.order?._id;
                 const newParam = { ...params, orderid };
                 const response2 = await postData('/order/saveOffline', newParam);
-
+                router.push('/orders')
+                toast.success('Order Created Successfully');
 
             }
 
