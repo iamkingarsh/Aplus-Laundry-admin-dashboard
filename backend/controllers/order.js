@@ -135,6 +135,7 @@ export const createOrUpdateOrder = async (req, res) => {
 
 const sendOrderConfirmationEmail = async (updatedOrder_id, cartTotal, status) => {
     try {
+        console.log('Sending order confirmation email')
         // Fetch the order details from the database and populate related fields
         const order = await Order.findById(updatedOrder_id)
             .populate({
@@ -142,8 +143,7 @@ const sendOrderConfirmationEmail = async (updatedOrder_id, cartTotal, status) =>
                 select: 'serviceTitle'
             })
             .populate('customer', 'fullName email')
-            .populate('coupon_id')
-            .populate('address_id')
+            .populate('coupon_id') 
             .populate('products.id')
             .exec();
         if (!order) {
@@ -317,6 +317,7 @@ export const getAllOrders = async (req, res) => {
             .populate('service', 'serviceTitle')
             .populate('products.id', 'product_name')
             .populate('customer', 'fullName mobileNumber')
+            .populate('transaction_id')
             .populate('coupon_id', null, { _id: { $exists: true } });
 
         // Check if the address query parameter is provided
