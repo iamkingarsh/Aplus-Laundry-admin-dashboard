@@ -40,13 +40,11 @@ export const register = async (req, res, next) => {
   if (customerType) userFields.customerType = customerType;
   if (address) userFields.address = address;
   if (pincode) userFields.pincode = pincode;
-  console.log('hcfbvhhhhjbfhhj11');
 
   // Only include mobileNumber if it is provided and not null
   if (mobileNumber !== undefined && mobileNumber !== null) {
     userFields.mobileNumber = mobileNumber;
   }
-  console.log('hcfbvhhhhjbfhhj2');
 
   try {
     if (id) {
@@ -67,7 +65,6 @@ export const register = async (req, res, next) => {
         user: token
       });
     }
-    console.log('hcfbvhhhhjbfhhj3');
 
     // Check if email is provided
     if (email) {
@@ -84,12 +81,13 @@ export const register = async (req, res, next) => {
         return res.status(409).json({ message: "User already exists", user: existingUserByMobile });
       }
     }
-    console.log('hcfbvhhhhjbfhhj4');
 
     // Create a new user if ID is not provided
-    const newUser = new User(userFields);
-    const customUserId = `APL${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}`;
-    console.log('hcfbvhhhhjbfhhj5', newUser, userFields);
+    const newUserFields = {
+      ...userFields,
+      customerId: role === 'customer' ? `APL-${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}` : undefined
+    };
+    const newUser = new User(newUserFields);
     await newUser.save();
 
     // Respond with success message
@@ -101,6 +99,7 @@ export const register = async (req, res, next) => {
     next(err);
   }
 };
+
 
 
 
