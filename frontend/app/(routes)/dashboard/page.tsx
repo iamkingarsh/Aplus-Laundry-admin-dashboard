@@ -93,7 +93,7 @@ export default function Page() {
             stat: ordersData?.length,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month',
+            desc: `You made ${ordersData?.length} orders so far`,
             href: '/orders'
         },
         {
@@ -101,7 +101,7 @@ export default function Page() {
             stat: totalSubscribers,
             statPrefix: '+',
             icon: <Users />,
-            desc: '+180.1% from last month',
+            desc: `You made  ${totalSubscribers} subscribers so far`,
             href: '/customers'
         },
         {
@@ -109,7 +109,7 @@ export default function Page() {
             stat: totalSubscriberOrders,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month',
+            desc: `You made ${totalSubscriberOrders} orders so far`,
             href: '/customers'
         },
     ]
