@@ -371,7 +371,7 @@ export const getOrderById = async (req, res) => {
             })
             .populate('service', 'serviceTitle')
             .populate('customer', 'fullName mobileNumber')
-
+            .populate('transaction_id')
             .populate('coupon_id', null, { _id: { $exists: true } }) // Populate coupon_id only if it exists
             .populate('address_id') // Populate address_id
             .exec();
@@ -403,30 +403,29 @@ export const getOrderById = async (req, res) => {
 // Delete an order by its ID
 export const deleteOrderById = async (req, res) => {
     try {
-        const {
-            id
-        } = req.params;
+        const { id } = req.params;
 
-        // Find the Order by ID and remove it
-        const deletedOrder = await Order.findByIdAndDelete(id);
-
-        if (!deletedOrder) {
-            return res.status(404).json({
-                message: 'Order not found',
-                ok: false
-            });
+        // Find the Order by ID
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found', ok: false });
         }
 
-        return res.status(200).json({
-            message: 'Order deleted successfully',
-            ok: true
-        });
+        // Delete the associated transaction
+        if (order.transaction_id) {
+            await Transaction.findByIdAndDelete(order.transaction_id);
+        }
+
+        // Remove the order
+        const deletedOrder = await Order.findByIdAndDelete(id);
+        if (!deletedOrder) {
+            return res.status(404).json({ message: 'Order not found', ok: false });
+        }
+
+        return res.status(200).json({ message: 'Order deleted successfully', ok: true });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({
-            error: 'Internal Server Error',
-            ok: false
-        });
+        return res.status(500).json({ error: 'Internal Server Error', ok: false });
     }
 };
 
