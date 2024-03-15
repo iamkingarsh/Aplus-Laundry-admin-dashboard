@@ -57,7 +57,6 @@ const formSchema = z.object({
     cartWeight: z.number().optional(),
     cartWeightBy: z.string().optional(),
 })
-const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const router = useRouter()
@@ -76,6 +75,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [DeliveryAgentsData, setDeliveryAgentsData] = React.useState([])
 
 
+    const priceperkg = services.filter((_id: any) => {
+
+    })
 
 
     const getCustomersData = async () => {
@@ -138,7 +140,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             serviceId: '',
             customer: '',
             status: 'Scheduled Pickup',
-            payment: 'Via Store (Card/UPI)',
+            payment: 'Via Store (Payment Gateway)',
             delivery_agent: '',
             cartTotal: 0,
             cartWeight: weight,
@@ -171,7 +173,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                 cartWeight: values.cartWeight,
                 cartWeightBy: values.cartWeightBy,
             };
-            if (values.payment === 'Via Store (Card/UPI)') {
+            if (values.payment === 'Via Store (Payment Gateway)') {
                 const initialResponse = await postData('/order/addorupdaterazorpay', params);
 
                 console.log('response', initialResponse);
@@ -625,7 +627,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="Via Store (Card/UPI)">Via Store (Card/UPI)</SelectItem>
+                                            <SelectItem value="Via Store (Payment Gateway)">Via Store (Payment Gateway)</SelectItem>
                                             <SelectItem value="Via Store (Cash)">Via Store (Cash)</SelectItem>
 
                                         </SelectContent>

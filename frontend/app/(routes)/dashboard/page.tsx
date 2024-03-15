@@ -85,7 +85,7 @@ export default function Page() {
             stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue + totalSubscriptionRevenue),
             // statPrefix: '₹',
             icon: <IndianRupeeIcon />,
-            desc: '+180.1% from last month',
+            desc: `${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue)} from orders and ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSubscriptionRevenue)} from subscriptions`,
             href: '/revenue'
         },
         {
@@ -126,7 +126,7 @@ export default function Page() {
                 <div className="topbar w-full flex justify-between">
                     <Heading className='leading-tight' title='Dashboard' />
                     <div className='flex gap-2'>
-                        <DatePickerWithRange />
+                        {/* <DatePickerWithRange /> */}
                         <CreateNew />
                     </div>
                 </div>
@@ -155,7 +155,7 @@ export default function Page() {
                             <CardHeader>
                                 <div className='flex flex-col gap-0'>
                                     <Heading className='text-xl' title='Overview' />
-                                    <p className='text-muted-foreground text-sm'>You Made ₹ 2300 in the last 30 days</p>
+                                    <p className='text-muted-foreground text-sm'>You Made {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue + totalSubscriptionRevenue)} so far!</p>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -169,7 +169,7 @@ export default function Page() {
                             <div className='flex gap-0 justify-between items-center'>
                                 <div className='flex flex-col gap-0'>
                                     <Heading className='text-xl' title='Recent Orders' />
-                                    <p className='text-muted-foreground text-sm'>You Made 30 Orders in the last 30 days</p>
+                                    <p className='text-muted-foreground text-sm'>You Made {ordersData?.length} orders so far! </p>
                                 </div>
                                 <Link href="/orders">
                                     <Button variant='link'>View All</Button>
