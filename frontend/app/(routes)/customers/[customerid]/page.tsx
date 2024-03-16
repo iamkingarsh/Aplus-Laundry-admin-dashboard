@@ -1,3 +1,4 @@
+"use client"; // Add this directive at the top of the file
 import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 // import { AllData } from '../page';
