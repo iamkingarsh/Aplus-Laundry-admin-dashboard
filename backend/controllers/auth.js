@@ -16,9 +16,97 @@ import unirest from 'unirest'
 // var unirest = require("unirest");
 
 
+// export const register = async (req, res, next) => {
+//   const {
+//     id,
+//     fullName,
+//     mobileNumber,
+//     role,
+//     email,
+//     customerType,
+//     address,
+//     profileImg,
+//     pincode
+//   } = req.body;
+
+//   // Initialize userFields object
+//   const userFields = {};
+
+//   // Add fields if they exist in the request body
+//   if (fullName) userFields.fullName = fullName;
+//   if (profileImg) userFields.profileImg = profileImg;
+//   if (role) userFields.role = role;
+//   if (email) userFields.email = email;
+//   if (customerType) userFields.customerType = customerType;
+//   if (address) userFields.address = address;
+//   if (pincode) userFields.pincode = pincode;
+
+//   // Only include mobileNumber if it is provided and not null
+//   if (mobileNumber !== undefined && mobileNumber !== null) {
+//     userFields.mobileNumber = mobileNumber;
+// console.log('hi1')
+
+//   }
+
+//   try {
+// console.log('hi2')
+
+// if (id) {
+//   // Find the existing user
+//   const existingUser = await User.findById(id);
+//   if (!existingUser) {
+//     return res.status(404).json({ message: "User not found" });
+//   }
+
+//   // Remove fields that should not be updated
+//   delete userFields.customerId;
+//   delete userFields.subscription_id;
+
+//   // Update only the provided fields
+//   Object.assign(existingUser, userFields);
+
+//   // Save the updated user
+//   const updatedUser = await existingUser.save();
+
+//   // Respond with success message and token
+//   return res.status(200).json({ message: "User updated "});
+// }
+//     // Check if email is provided
+//     if (email) {
+//       const existingUserByEmail = await User.findOne({ email });
+//       if (existingUserByEmail) {
+//         return res.status(409).json({ message: "User already exists", user: existingUserByEmail });
+//       }
+//     }
+
+//     // Check if mobile number is provided
+//     if (mobileNumber !== undefined && mobileNumber !== null) {
+//       const existingUserByMobile = await User.findOne({ mobileNumber });
+//       if (existingUserByMobile) {
+//         return res.status(409).json({ message: "User already exists", user: existingUserByMobile });
+//       }
+//     }
+
+//     // Create a new user if ID is not provided
+//     const newUserFields = {
+//       ...userFields,
+//       customerId: role === 'customer' ? `APL-${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}` : undefined
+//     };
+//     const newUser = new User(newUserFields);
+//     await newUser.save();
+
+//     // Respond with success message
+//     res.status(200).json({
+//       ok: true,
+//       message: "New user created",
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 export const register = async (req, res, next) => {
   const {
-    id,
     fullName,
     mobileNumber,
     role,
@@ -47,25 +135,6 @@ export const register = async (req, res, next) => {
   }
 
   try {
-    if (id) {
-      // Update user if ID is provided
-      const updatedUser = await User.findByIdAndUpdate(id, { $set: userFields }, { new: true });
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      const token = jwt.sign({
-        id: updatedUser._id,
-        role: updatedUser.role,
-      }, process.env.JWT_SECRETKEY);
-
-      return res.cookie('accessToken', token, {
-        httpOnly: true
-      }).status(200).json({
-        message: "User updated",
-        user: token
-      });
-    }
-
     // Check if email is provided
     if (email) {
       const existingUserByEmail = await User.findOne({ email });
@@ -82,7 +151,7 @@ export const register = async (req, res, next) => {
       }
     }
 
-    // Create a new user if ID is not provided
+    // Create a new user
     const newUserFields = {
       ...userFields,
       customerId: role === 'customer' ? `APL-${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}` : undefined
@@ -101,6 +170,31 @@ export const register = async (req, res, next) => {
 };
 
 
+
+export const updateUser = async (req, res, next) => {
+  const { id } = req.body;
+  const userFieldsToUpdate = { ...req.body };
+  delete userFieldsToUpdate.id; // Remove the 'id' field from the update object
+
+  try {
+    // Find the existing user
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update only the provided fields
+    Object.assign(existingUser, userFieldsToUpdate);
+
+    // Save the updated user
+    const updatedUser = await existingUser.save();
+
+    // Respond with success message and token
+    return res.status(200).json({ message: "User updated "});
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 
