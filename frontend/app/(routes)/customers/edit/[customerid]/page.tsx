@@ -30,7 +30,7 @@ interface Props {
 export default function EditCustomerPage({ params }: Props) {
     const [customerdata, setCustomerData] = React.useState<any>(null);
 
-    const [checked, setChecked] = React.useState(customerdata.status === 'Active' ? true : false)
+    const [checked, setChecked] = React.useState(customerdata?.status === 'Active' ? true : false)
     const useModal = useGlobalModal()
     const router = useRouter()
 
