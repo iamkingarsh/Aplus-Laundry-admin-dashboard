@@ -2,7 +2,7 @@
 import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 // import { AllData } from '../page';
-import { Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
+import { Copy, Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import React, { useEffect } from 'react';
 import api, { fetchData } from '../../../../axiosUtility/api'
+import toast from 'react-hot-toast';
 
 // import { AllOrdersData } from '../../orders/page';
 
@@ -60,7 +61,7 @@ interface Props {
 
 
 export default function CustomerPage({ params }: Props) {
-    
+
     const [customerData, setCustomerData] = React.useState<any>(null);
 
     const [AllOrdersData, setAllOrdersData] = React.useState<any>(null);
@@ -68,13 +69,13 @@ export default function CustomerPage({ params }: Props) {
     useEffect(() => {
         getData()
     }, [])
-    
+
     const getData = async () => {
         try {
             const result1 = await fetchData(`/order/getuserorders/${params.customerid}`);
             const result = await fetchData(`/auth/id/${params.customerid}`);
-            
-            console.log("result1",result1.orders,AllOrdersData)
+
+            console.log("result1", result1.orders, AllOrdersData)
 
             setCustomerData(result.user);
             setAllOrdersData(result1.orders)
@@ -82,15 +83,24 @@ export default function CustomerPage({ params }: Props) {
             console.error('Error fetching data:', error);
         }
     };
-    
+
     const orderIDs = AllOrdersData?.map((order: any) => order.order_id)
-    
+
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
                     <Heading className='leading-tight' title={`Customer Details - ${customerData?.fullName}`} />
-                    <p className='text-muted-foreground text-sm'>Customer ID: {params.customerid}</p>
+                    <div className='flex gap-2 items-center'>
+                        <p className='text-muted-foreground text-sm'>Customer ID: {customerData?.customerId}</p>
+                        <Copy
+                            onClick={() => {
+                                navigator.clipboard.writeText(customerData?.customerId)
+                                toast.success('Customer ID Copied to Clipboard')
+                            }
+                            }
+                            className='w-4 h-4 cursor-pointer' />
+                    </div>
                 </div>
                 <Link href={`/customers/edit/${params.customerid}`}>
                     <Button variant='default'>Edit Customer Details <Pencil className='w-4 ml-2' /></Button>
@@ -128,7 +138,7 @@ export default function CustomerPage({ params }: Props) {
                                     <span className="text-muted-foreground  text-sm">Email</span>
                                     <div className='flex gap-2'>
 
-                                        <Link href={`mailto:${customerData?.email}`} className="text-md">{customerData?.email}</Link> {customerData?.emailVerified === true ? <Badge className='ml-2' variant="secondary" >Unverified</Badge>  :  <Badge className='ml-2' variant="default" >Verified</Badge>}
+                                        <Link href={`mailto:${customerData?.email}`} className="text-md">{customerData?.email}</Link> {customerData?.emailVerified === true ? <Badge className='ml-2' variant="secondary" >Unverified</Badge> : <Badge className='ml-2' variant="default" >Verified</Badge>}
                                     </div>
                                 </div>
                             </div>
@@ -142,39 +152,39 @@ export default function CustomerPage({ params }: Props) {
 
                                         <Link href={`tel:${customerData?.mobileNumber}`} className="text-md">{customerData?.mobileNumber}</Link>
                                         {/* {customerData?.mobileNumber === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>} */}
-                                        {customerData?.mobileNumber === true ? <Badge className='ml-2' variant="secondary"  >Unverified</Badge> :  <Badge className='ml-2' variant="default" >Verified</Badge> }
-                                    
+                                        {customerData?.mobileNumber === true ? <Badge className='ml-2' variant="secondary"  >Unverified</Badge> : <Badge className='ml-2' variant="default" >Verified</Badge>}
+
                                     </div>
                                 </div>
                             </div>
                             <Separator orientation='horizontal' />
                             {customerData?.address[0] && (
-  <div className='flex items-start'>
-    <MapPin className='w-6 h-6 mr-3' />
-    <div className='flex flex-col gap-2'>
-      <div className="flex flex-col">
-        <span className="text-muted-foreground text-sm">Address</span>
-        <Link href={``} className="text-md">{customerData.address[0].location}</Link>
-      </div>
-      <div className='flex gap-6'>  
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-sm">City</span>
-          <Link href={``} className="text-md">Ongole</Link>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-sm">State</span>
-          <Link href={``} className="text-md">Andhra Pradesh</Link>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-sm">Pincode</span>
-          <Link href={``} className="text-md">{customerData.address[0].pincode}</Link>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+                                <div className='flex items-start'>
+                                    <MapPin className='w-6 h-6 mr-3' />
+                                    <div className='flex flex-col gap-2'>
+                                        <div className="flex flex-col">
+                                            <span className="text-muted-foreground text-sm">Address</span>
+                                            <Link href={``} className="text-md">{customerData.address[0].location}</Link>
+                                        </div>
+                                        <div className='flex gap-6'>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">City</span>
+                                                <Link href={``} className="text-md">Ongole</Link>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">State</span>
+                                                <Link href={``} className="text-md">Andhra Pradesh</Link>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">Pincode</span>
+                                                <Link href={``} className="text-md">{customerData.address[0].pincode}</Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
-                            
+
                         </div>
 
 
@@ -252,7 +262,7 @@ export default function CustomerPage({ params }: Props) {
 
     )
 }
- 
+
 
 
 
