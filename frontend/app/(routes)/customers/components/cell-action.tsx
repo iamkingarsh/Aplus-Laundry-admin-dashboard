@@ -24,9 +24,13 @@ export const CellAction: React.FC<Props> = ({ data }) => {
             <DropdownMenuContent className="gap-2" align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {/* <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => {
+                        router.push(`/customers/${data._id}`)
+                    }}
+                >
                     <User className="mr-2 h-4 w-4" />
-                    View Customer Details</DropdownMenuItem> */}
+                    View Customer Details</DropdownMenuItem>
                 <DropdownMenuItem
                     onClick={() => {
                         router.push(`/customers/edit/${data._id}`)
