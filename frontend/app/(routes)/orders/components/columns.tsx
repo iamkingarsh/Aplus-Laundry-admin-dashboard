@@ -31,6 +31,7 @@ export type OrdersColumns = {
     status: "Scheduled Pickup" | "Picked Up" | "Reached to the hub" | "Laundry in Process" | "Out for Delivery" | "Delivered" | "Cancelled"
     orderDate: string
     payment_method: "Via Store (Cash/Card/UPI)" | "Mobile App"
+    transaction_id: Object
     // channel: "manual" | "Mobile App"
 }
 
@@ -88,6 +89,29 @@ export const columns: ColumnDef<OrdersColumns>[] = [
     {
         accessorKey: "mobile",
         header: "Mobile No.",
+    },
+    {
+        accessorKey: "transaction_id",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Order value
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => (
+            <div className="flex justify-center items-center text-center">
+                {new Intl.NumberFormat('en-IN', {
+                    style: 'currency', currency: 'INR',
+                    maximumFractionDigits: 0
+                }).format((row.original.transaction_id as { amount: number })?.amount)}
+            </div>
+        ),
+        // cell: ({ row }) => <div>{new Date(row.original.orderDate).toDateString()}</div>,
     },
     {
         accessorKey: "orderDate",

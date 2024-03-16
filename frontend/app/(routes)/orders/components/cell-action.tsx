@@ -6,6 +6,8 @@ import { Edit2, Eye, MoreHorizontal, Trash } from 'lucide-react'
 import React from 'react'
 import { OrdersColumns } from './columns'
 import { Alert } from '@/components/forms/Alert';
+import { deleteData } from '@/axiosUtility/api';
+import toast from 'react-hot-toast';
 
 interface Props {
     data: OrdersColumns
@@ -13,8 +15,13 @@ interface Props {
 
 export const CellAction: React.FC<Props> = ({ data }) => {
     const GlobalModal = useGlobalModal();
-    const deleteOrder = () => {
-        console.log('delete')
+    const deleteOrder = async () => {
+        try {
+            await deleteData(`/order/${data._id}`)
+            toast.success("Order Deleted Successfully!")
+        } catch (error) {
+            console.error(error)
+        }
         GlobalModal.onClose()
     }
     return (
@@ -29,18 +36,18 @@ export const CellAction: React.FC<Props> = ({ data }) => {
                 <DropdownMenuContent className="gap-2" align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    {/* <DropdownMenuItem>
                         <Eye className="mr-2 h-4 w-4" />
                         View Customer Details</DropdownMenuItem>
                     <DropdownMenuItem>
                         <Eye className="mr-2 h-4 w-4" />
-                        View Order Details</DropdownMenuItem>
-                    <DropdownMenuItem>
+                        View Order Details</DropdownMenuItem> */}
+                    {/* <DropdownMenuItem>
                         <Eye className="mr-2 h-4 w-4" />
-                        View Order Photos</DropdownMenuItem>
-                    <DropdownMenuItem>
+                        View Order Photos</DropdownMenuItem> */}
+                    {/* <DropdownMenuItem>
                         <Edit2 className="mr-2 h-4 w-4" />
-                        Edit Order Details</DropdownMenuItem>
+                        Edit Order Details</DropdownMenuItem> */}
                     <DropdownMenuItem
                         onSelect={() => {
                             GlobalModal.title = "Delete Order"

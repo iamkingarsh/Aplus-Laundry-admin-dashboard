@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, Copy } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import CellAction from "./cell-action"
 import format from "date-fns/format"
+import toast from "react-hot-toast"
 
 export type CustomersColumns = {
     _id: string
@@ -15,6 +16,7 @@ export type CustomersColumns = {
     mobileNumber: string
     createdAt: string
     email: string
+    customerId: string
     profileImg: string
 }
 
@@ -53,6 +55,35 @@ export const columns: ColumnDef<CustomersColumns>[] = [
 
             </div>
         ),
+    },
+    {
+        accessorKey: "customerId",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Customer ID
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell(props) {
+            return (
+                <div className="flex items-center">
+                    <div className="w-2 h-2 rounded-full mr-2" />
+                    <span >{props.row.original.customerId}</span>
+                    <Copy
+                        onClick={() => {
+                            navigator.clipboard.writeText(props.row.original.customerId)
+                            toast.success("Copied to clipboard")
+                        }
+                        }
+                        className="ml-2 h-4 w-4 cursor-pointer" />
+                </div>
+            )
+        },
     },
     {
         accessorKey: "fullName",

@@ -536,15 +536,10 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                                 )}
                             />
                         </div>
-
-
                         <Button type="submit" className="w-fit" disabled={isLoading} >
                             {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                             Create
                         </Button>
-
-
-
                     </div>
 
 
@@ -564,8 +559,6 @@ export function NewSubscriptionForm({ className, gap, ...props }: NewSubscriptio
                             maximumFractionDigits: 0,
                             minimumFractionDigits: 0
                         }).format(amount)} / {form.watch("period") === "per month" ? "Month" : form.watch("period") === "per 3 months" ? "3 Months" : form.watch("period") === "per 6 months" ? "6 months" : form.watch("period") === "per 9 months" ? "9 Months" : "Year"}</div>}
-
-
                     </div>
                 </CardHeader>
             </Card>

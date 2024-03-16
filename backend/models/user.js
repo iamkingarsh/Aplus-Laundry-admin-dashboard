@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const addressSchema = new mongoose.Schema({
     addressType: {
         type: String,
-        default: 'home',
     },
     location: String,
     coordinates: {

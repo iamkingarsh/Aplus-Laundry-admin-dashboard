@@ -2,33 +2,33 @@ import Order from '../models/order.js';
 import Razorpay from 'razorpay';
 import Transaction from '../models/transacation.js';
 import { orderConfirmationEmail, orderStatusUpdateEmail } from '../config/sendMail.js';
- 
+
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
 });
 // Add or update an order
- 
+
 export const createOrUpdateOrderRazorpay = async (req, res) => {
     try {
-        const { 
-            cartTotal, 
+        const {
+            cartTotal,
         } = req.body;
 
         const options = {
             amount: cartTotal * 100, // Amount in paise
             currency: 'INR',
- 
+
             // receipt: 'order_receipt_' + newOrder._id, // You can customize the receipt ID as needed
- 
+
         };
         // Create a new Razorpay order
         const order = await razorpay.orders.create(options);
-        
+
 
         return res.status(201).json({
-            message: 'Razorpay Order created successfully', 
+            message: 'Razorpay Order created successfully',
             razorpayOrder: order,
         });
     } catch (error) {
@@ -37,7 +37,7 @@ export const createOrUpdateOrderRazorpay = async (req, res) => {
     }
 };
 
- 
+
 export const createOrUpdateOrder = async (req, res) => {
     try {
         const {
@@ -53,12 +53,12 @@ export const createOrUpdateOrder = async (req, res) => {
             delivery_agent,
             cartTotal,
             cartWeight,
-            cartWeightBy, 
+            cartWeightBy,
             razorpayOrderId,
             order_id
         } = req.body;
 
- 
+
         let updatedOrder;
 
         if (id) {
@@ -109,9 +109,11 @@ export const createOrUpdateOrder = async (req, res) => {
                 cartWeightBy,
                 coupon_id,
                 address_id,
+ 
                 order_id: order_id || `AL${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`,
                 orderDate: new Date(),
         createdAt: new Date() 
+ 
             });
 
             await updatedOrder.save();
@@ -131,11 +133,7 @@ export const createOrUpdateOrder = async (req, res) => {
 
 
 
-
- 
- 
-
-const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
+const sendOrderConfirmationEmail = async (updatedOrder_id, cartTotal, status) => {
     try {
         console.log('Sending order confirmation email')
         // Fetch the order details from the database and populate related fields
@@ -147,7 +145,7 @@ const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
             .populate('customer', 'fullName email')
             .populate('coupon_id') 
             .populate('products.id')
-            .exec(); 
+            .exec();
         if (!order) {
             throw new Error('Order not found');
         }
@@ -163,8 +161,8 @@ const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
                 price: item.id.priceperpair
             })),
             totalAmount: cartTotal,
-            orderType: order.order_type ,
-            totalAmountPaid: cartTotal ,
+            orderType: order.order_type,
+            totalAmountPaid: cartTotal,
             status,
         };
 
@@ -173,7 +171,7 @@ const sendOrderConfirmationEmail = async (updatedOrder_id,cartTotal,status) => {
     } catch (error) {
         console.error('Error sending order confirmation email:', error);
         // Handle the error accordingly (e.g., log it, send a notification, etc.)
- 
+
     }
 };
 
@@ -441,8 +439,8 @@ export const updateOrderStatusById = async (req, res) => {
         } = req.body;
 
         const existingOrder = await Order.findById(id)
-        .populate('customer', 'fullName email') 
-        .exec(); 
+            .populate('customer', 'fullName email')
+            .exec();
 
         if (!existingOrder) {
             return res.status(404).json({
@@ -455,13 +453,13 @@ export const updateOrderStatusById = async (req, res) => {
         await existingOrder.save();
 
         const orderDetails = {
-            orderId: existingOrder.order_id, 
+            orderId: existingOrder.order_id,
             status,
         };
 
-        orderStatusUpdateEmail(existingOrder.customer.email,orderDetails)
+        orderStatusUpdateEmail(existingOrder.customer.email, orderDetails)
 
-        
+
         return res.status(200).json({
             message: 'Order status updated successfully',
             order: existingOrder

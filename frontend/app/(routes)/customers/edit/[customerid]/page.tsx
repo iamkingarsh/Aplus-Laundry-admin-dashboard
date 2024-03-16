@@ -28,6 +28,7 @@ export default function EditCustomerPage({ params }: Props) {
 
     const [customerdata, setCustomerData] = React.useState<any>(null);
 
+
     useEffect(() => {
         getData()
     }, [])
@@ -46,6 +47,7 @@ export default function EditCustomerPage({ params }: Props) {
 
     const useModal = useGlobalModal();
     const router = useRouter();
+
 
     const deleteCustomer = async (customerid: string) => {
         // delete logic here
