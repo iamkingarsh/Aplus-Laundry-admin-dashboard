@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.email',
   port: 587,
-  secure: false,
+  secure: true,
   auth: {
     user: process.env.NODEMAILER_EMAIL,
     pass: process.env.GMAIL_PASS,
@@ -393,7 +393,7 @@ export const managerInviteMail = async (
   await mailSend(managerEmail, subject, body);
 };
 
-export const emailVerificationEmail = async (email, otp,fullName) => {
+export const emailVerificationEmail = async (email, otp, fullName) => {
   const subject = "Your One Time Password for email verification";
   const body = ` 
   <tr>
@@ -503,9 +503,9 @@ export const emailVerificationSuccess = async (email) => {
 };
 
 
- 
- 
- 
+
+
+
 export const orderConfirmationEmail = async (email, orderDetails) => {
   const subject = "Order Confirmation";
 
@@ -526,7 +526,7 @@ export const orderConfirmationEmail = async (email, orderDetails) => {
                   <td style="border: 1px solid #ddd; padding: 8px;">${item.name}</td>
                   <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
                   <td style="border: 1px solid #ddd; padding: 8px;">${item.price}</td>
-                  <td style="border: 1px solid #ddd; padding: 8px;">${ item.quantity * item.price}</td>
+                  <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity * item.price}</td>
 
               </tr>
           `).join('')}
@@ -556,16 +556,16 @@ export const orderConfirmationEmail = async (email, orderDetails) => {
         
         
         `;
-        
-        await mailSend(email, subject, body);
-    };
-    
-    // <p><strong>Total Amount Paid:</strong> ${orderDetails.totalAmountPaid}</p>
+
+  await mailSend(email, subject, body);
+};
+
+// <p><strong>Total Amount Paid:</strong> ${orderDetails.totalAmountPaid}</p>
 
 
 export const orderStatusUpdateEmail = async (email, orderDetails) => {
   const subject = "Order Status Update";
- 
+
 
   const body = `
   
@@ -585,7 +585,7 @@ export const orderStatusUpdateEmail = async (email, orderDetails) => {
   await mailSend(email, subject, body);
 };
 
- 
 
-   
+
+
 
