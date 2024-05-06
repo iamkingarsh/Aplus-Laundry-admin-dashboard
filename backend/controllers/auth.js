@@ -190,7 +190,7 @@ export const updateUser = async (req, res, next) => {
     const updatedUser = await existingUser.save();
 
     // Respond with success message and token
-    return res.status(200).json({ message: "User updated "});
+    return res.status(200).json({ message: "User updated " });
   } catch (err) {
     next(err);
   }
@@ -256,7 +256,7 @@ export const sendOTPforAdminVerification = async (req, res) => {
     const email = user.email;
 
     const validEmailUser = await User.findOne({ email });
-//uncomment this comment`
+    //uncomment this comment`
     if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
       return res.status(403).json({
         msg: "User not authorized",
@@ -283,9 +283,9 @@ export const sendOTPforAdminVerification = async (req, res) => {
 
     console.log("OTP is saved in the database");
 
-    console.log('email email', email); 
+    console.log('email email', email);
     // Continue with other operations, such as sending an email
-    await emailVerificationEmail(email, OTP,validEmailUser.fullName);
+    await emailVerificationEmail(email, OTP, validEmailUser.fullName);
 
     // Send the response
     res.status(200).send({
@@ -334,12 +334,12 @@ export const sendOTPforverification = async (req, res) => {
     await otp.save();
 
     console.log("OTP is saved in the database");
- 
 
 
-    console.log('email email', email); 
+
+    console.log('email email', email);
     // Continue with other operations, such as sending an email
-    await emailVerificationEmail(email, OTP,validEmailUser.fullName);
+    await emailVerificationEmail(email, OTP, validEmailUser.fullName);
 
     // Send the response
     res.status(200).send({
@@ -372,41 +372,47 @@ export const sendOTPforMobileverification = async (req, res) => {
     }
 
 
-    let OTP = Math.floor(Math.random() * 900000) + 100000;
+    // let OTP = Math.floor(Math.random() * 900000) + 100000;
 
-    console.log("OTP is generated", OTP);
+    // console.log("OTP is generated", OTP);
 
     // Create a new UserOTP instance
-    let otp = new UserOTP({
-      mobileNumber: mobileNumber,
-      otp: OTP,
-      createdAt: new Date(),
-      expireAt: new Date() + 86400000,
-    });
+    // let otp = new UserOTP({
+    //   mobileNumber: mobileNumber,
+    //   otp: OTP,
+    //   createdAt: new Date(),
+    //   expireAt: new Date() + 86400000,
+    // });
 
-    console.log("OTP is about to be saved");
+    // console.log("OTP is about to be saved");
 
     // Save the OTP to the database
-    await otp.save();
+    // await otp.save();
 
 
-    var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
+    // var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
 
-    req.headers({
-      "authorization": "eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A"
-    });
+    var req = unirest('GET', `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/${mobileNumber}/AUTOGEN/OTP_Template2`)
+      .end(function (res) {
+        if (res.error) throw new Error(res.error);
+        console.log(res.raw_body);
+      });
 
-    req.form({
-      "variables_values": OTP,
-      "route": "otp",
-      "numbers": mobileNumber,
-    });
+    // req.headers({
+    //   "authorization": "eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A"
+    // });
 
-    req.end(function (res) {
-      if (res.error) throw new Error(res.error);
+    // req.form({
+    //   "variables_values": OTP,
+    //   "route": "otp",
+    //   "numbers": mobileNumber,
+    // });
 
-      console.log(res.body);
-    });
+    // req.end(function (res) {
+    //   if (res.error) throw new Error(res.error);
+
+    //   console.log(res.body);
+    // });
 
     console.log('res', res.data);
 
@@ -421,7 +427,8 @@ export const sendOTPforMobileverification = async (req, res) => {
     // Send the response
     res.status(200).send({
       ok: true,
-      msg: "mobileNumber sent"
+      msg: "mobileNumber sent",
+      data: res.data
     });
   } catch (error) {
     console.error("Error in sendOTPforverification:", error);
@@ -474,7 +481,7 @@ export const verifyotp = async (req, res) => {
     const currentTime = new Date();
     const createdAt = new Date(matchingOTP.createdAt);
     const timeDifference = currentTime - createdAt;
-//uncomment this comment`
+    //uncomment this comment`
 
     // Check if the time difference is more than 15 minutes (900,000 milliseconds)
     // if (timeDifference > 900000) {
