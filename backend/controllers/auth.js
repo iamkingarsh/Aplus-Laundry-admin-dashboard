@@ -13,6 +13,7 @@ import {
 import { sendVerificationCode } from "../config/sendSms.js";
 import axios from 'axios'
 import unirest from 'unirest'
+import { stringify } from "qs";
 // var unirest = require("unirest");
 
 
@@ -392,44 +393,35 @@ export const sendOTPforMobileverification = async (req, res) => {
 
     // var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
 
-    var req = unirest('GET', `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/${mobileNumber}/AUTOGEN/OTP_Template2`)
-      .end(function (res) {
-        if (res.error) throw new Error(res.error);
-        console.log(res.raw_body);
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/${mobileNumber}/AUTOGEN/OTP_Template2`,
+      headers: {}
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log('res' + stringify(response.data));
+        if (response.data.Status === "Success") {
+          return res.status(200).send({
+            ok: true,
+            msg: "mobileNumber sent",
+            data: response.data
+          });
+        }
+
+      })
+      .catch(function (error) {
+        console.log(error);
       });
 
-    // req.headers({
-    //   "authorization": "eRQO6sBudTDi8gtqCIboSG1Z3fEvJYPahWy9pxjXKzVw2l50HUaLsFVcx5dXJoGMwWe32ImyHYSNTk4A"
-    // });
-
-    // req.form({
-    //   "variables_values": OTP,
-    //   "route": "otp",
-    //   "numbers": mobileNumber,
-    // });
-
-    // req.end(function (res) {
-    //   if (res.error) throw new Error(res.error);
-
-    //   console.log(res.body);
-    // });
-
-    console.log('res', res.data);
 
 
-    // const verification = await sendVerificationCode(`+91${mobileNumber}`);
-    console.log("OTP is saved in the database");
 
 
-    console.log('mobileNumber mobileNumber', mobileNumber);
-    // Continue with other operations, such as sending an mobileNumber
 
-    // Send the response
-    res.status(200).send({
-      ok: true,
-      msg: "mobileNumber sent",
-      data: res.data
-    });
+
   } catch (error) {
     console.error("Error in sendOTPforverification:", error);
     res.status(500).send({
@@ -557,81 +549,110 @@ export const verifymobileotp = async (req, res) => {
       otp
     } = req.body;
 
-    // Find OTP records for the user's mobileNumber
-    const databaseotp = await UserOTP.find({
-      mobileNumber: mobileNumber
-    });
+    // // Find OTP records for the user's mobileNumber
+    // const databaseotp = unirest('GET', `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/VERIFY3/${mobileNumber}/${otp}`)
+    //   .end(async function (res) {
+    //     if (res.error) throw new Error(res.error);
+    //     console.log("test" + res.raw_body);
 
-    if (!databaseotp || databaseotp.length === 0) {
-      return res.status(404).send({
-        msg: "No OTP records found",
-        ok: false
-      });
-    }
+    //     const matchingOTP = res.raw_body.Details === "OTP Matched";
 
-    // Check if the provided OTP matches any of the OTP records
-    const matchingOTP = databaseotp.find((record) => record.otp == otp);
 
-    if (!matchingOTP) {
-      return res.status(401).send({
-        msg: "Wrong OTP!",
-        ok: false
-      });
-    }
 
-    // Calculate the time difference
-    const currentTime = new Date();
-    const createdAt = new Date(matchingOTP.createdAt);
-    const timeDifference = currentTime - createdAt;
 
-    // Check if the time difference is more than 15 minutes (900,000 milliseconds)
-    if (timeDifference > 900000) {
-      // Delete OTP records for the user's mobileNumber
-      await otp.deleteMany({
-        mobileNumber: mobileNumber
-      });
+    //     // Update user's mobileNumberVerified status
+    //     const validmobileNumberUser = await User.findOne({
+    //       mobileNumber
+    //     });
+    //     console.log(mobileNumber, validmobileNumberUser)
+    //     if (!validmobileNumberUser) {
+    //       return res.status(404).send({
+    //         msg: "User not found",
+    //         ok: false
+    //       });
+    //     }
 
-      return res
-        .status(402)
-        .send({
-          msg: "Your OTP has expired, can't verify",
-          ok: false
-        });
-    }
+    //     if (matchingOTP) {
+    //       // Include user ID and role in the JWT token payload
+    //       const tokenPayload = {
+    //         id: validmobileNumberUser._id,
+    //         role: validmobileNumberUser.role,
+    //       };
 
-    // Update user's mobileNumberVerified status
-    const validmobileNumberUser = await User.findOne({
-      mobileNumber
-    });
-    console.log(mobileNumber, validmobileNumberUser)
-    if (!validmobileNumberUser) {
-      return res.status(404).send({
-        msg: "User not found",
-        ok: false
-      });
-    }
+    //       const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
+    //       res.cookie('accessToken', Token, {
+    //         httpOnly: true
+    //       });
 
-    // Include user ID and role in the JWT token payload
-    const tokenPayload = {
-      id: validmobileNumberUser._id,
-      role: validmobileNumberUser.role,
+    //       // Delete OTP records for the user's mobileNumber
+
+    //       // emailVerificationSuccess(email)
+    //       return res.status(200).send({
+    //         msg: "Mobile Number verified",
+    //         ok: true,
+    //         token: Token
+    //       });
+    //     }
+    //   })
+
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/VERIFY3/${mobileNumber}/${otp}`,
+      headers: {}
     };
 
-    const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
-    res.cookie('accessToken', Token, {
-      httpOnly: true
-    });
+    axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+        if (response.data.Status === "Success") {
+          return res.status(200).send({
+            ok: true,
+            msg: "mobileNumber Verified",
+            data: response.data
+          });
+        }
+        if (response.data.Status === "Error") {
+          return res.status(401).send({
+            ok: false,
+            msg: "Wrong OTP!",
+            data: response.data
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        // return res.status(500).send({
+        //   msg: error.message
+        // });
+        if (error) throw new Error(error);
+      });
 
-    // Delete OTP records for the user's mobileNumber
-    await UserOTP.deleteMany({
-      mobileNumber: mobileNumber
-    });
-    // emailVerificationSuccess(email)
-    res.status(200).send({
-      msg: "Mobile Number verified",
-      ok: true,
-      token: Token
-    });
+
+
+    // Check if the provided OTP matches any of the OTP records
+
+
+    // Calculate the time difference
+    // const currentTime = new Date();
+    // const createdAt = new Date(matchingOTP.createdAt);
+    // const timeDifference = currentTime - createdAt;
+
+    // Check if the time difference is more than 15 minutes (900,000 milliseconds)
+    // if (timeDifference > 900000) {
+    //   // Delete OTP records for the user's mobileNumber
+    //   await otp.deleteMany({
+    //     mobileNumber: mobileNumber
+    //   });
+
+    //   return res
+    //     .status(402)
+    //     .send({
+    //       msg: "Your OTP has expired, can't verify",
+    //       ok: false
+    //     });
+    // }
+
   } catch (error) {
     console.error(error);
     res.status(500).send({
