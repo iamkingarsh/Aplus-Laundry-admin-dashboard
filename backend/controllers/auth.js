@@ -603,13 +603,36 @@ export const verifymobileotp = async (req, res) => {
     };
 
     axios(config)
-      .then(function (response) {
+      .then(async function (response) {
         console.log(JSON.stringify(response.data));
         if (response.data.Status === "Success") {
+          const validMobileNumber = await User.findOne({
+            mobileNumber
+          });
+          console.log(mobileNumber, validMobileNumber)
+          if (!validMobileNumber) {
+            return res.status(404).send({
+              msg: "User not found",
+              ok: false
+            });
+          }
+
+          // Include user ID and role in the JWT token payload
+          const tokenPayload = {
+            id: validMobileNumber._id,
+            role: validMobileNumber.role,
+          };
+
+          const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
+          res.cookie('accessToken', Token, {
+            httpOnly: true
+          });
+
           return res.status(200).send({
             ok: true,
             msg: "mobileNumber Verified",
-            data: response.data
+            data: response.data,
+            token: Token
           });
         }
         if (response.data.Status === "Error") {
