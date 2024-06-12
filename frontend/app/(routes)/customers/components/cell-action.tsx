@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Edit2, MoreHorizontal, User } from 'lucide-react'
 import React from 'react'
 import { CustomersColumns } from './columns'
+import { useRouter } from 'next/navigation'
 
 interface Props {
     data: CustomersColumns
@@ -11,7 +12,7 @@ interface Props {
 
 export const CellAction: React.FC<Props> = ({ data }) => {
 
-
+    const router = useRouter()
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -23,10 +24,19 @@ export const CellAction: React.FC<Props> = ({ data }) => {
             <DropdownMenuContent className="gap-2" align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => {
+                        router.push(`/customers/${data._id}`)
+                    }}
+                >
                     <User className="mr-2 h-4 w-4" />
                     View Customer Details</DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => {
+                        router.push(`/customers/edit/${data._id}`)
+                    }}
+                >
+
                     <Edit2 className="mr-2 h-4 w-4" />
                     Edit Customer Details</DropdownMenuItem>
 

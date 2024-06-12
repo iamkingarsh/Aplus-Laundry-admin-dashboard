@@ -2,48 +2,37 @@
 
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, Banknote, BoxIcon, CreditCard, Delete, Edit, Edit2, Eye, Globe2, IndianRupee, MoreHorizontal, ShipIcon, ToggleLeft, Trash, User, UserCheck, UserCog } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Switch } from "@/components/ui/switch"
-import { MobileIcon } from "@radix-ui/react-icons"
-import { useGlobalModal } from "@/hooks/GlobalModal"
-import CellAction from "./cell-action"
-import { OrderStatusChanger } from "./order-status-changer"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type TransactionsColumns = {
-    id: string
-    status: "queued" | "pending" | "processing" | "processed" | "reversed" | "cancelled" | "rejected"
+    id: string;
+    payment_id: string;
+    status: string
     source: {
-        id: string
-        payer_name: string
-        payer_account: string
-        payer_ifsc: string
-        mode: string
-        entity: string
-        bank_reference: string
-    }
-    amount: number
-    credit: number
-    debit: number
-    created_at: string
+        id: string;
+        payer_name: string;
+        payer_account: string;
+        payer_ifsc: string;
+        mode: string;
+        entity: string;
+        bank_reference: string;
+    };
+    amount: number;
+    credit: number;
+    debit: number;
+    created_at: string;
+};
 
-}
 
 
 
 
 
 export const columns: ColumnDef<TransactionsColumns>[] = [
+
+
     {
         id: "select",
         header: ({ table }) => (
@@ -137,20 +126,15 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
             )
         },
 
-        cell: ({ row }) => <OrderStatusChanger data={row.original} />
-        //     <div className="flex items-center">
-        //         <div
-        //             className={`w-2 h-2 rounded-full mr-2 ${row.original.status === "onhold" && "bg-yellow-500"
-        //                 } ${row.original.status === "pending" && "bg-blue-500"
-        //                 } ${row.original.status === "picked" && "bg-green-500"
-        //                 } ${row.original.status === "onway" && "bg-purple-500"
-        //                 } ${row.original.status === "delivered" && "bg-green-500"
-        //                 } ${row.original.status === "cancelled" && "bg-red-500"
-        //                 }`}
-        //         />
-        //         {row.original.status}
-        //     </div>
-        // ),
+        cell: ({ row }) => (
+            <div className="flex items-center py-1">
+                <div
+                    className={`w-2 h-2 rounded-full mr-2  ${row.original.status === "captured" ? "bg-green-500"
+                        : "bg-red-500"}`}
+                />
+                {row.original.status === 'captured' ? 'Payment Successful' : 'Failed'}
+            </div>
+        ),
     },
     {
         accessorKey: "source.entity",
@@ -172,37 +156,15 @@ export const columns: ColumnDef<TransactionsColumns>[] = [
                         } ${row.original.source.entity === "payout" && "bg-red-500"
                         }`}
                 />
-                {row.original.source.entity === "bank_transfer" ? "Credit" : "Debit"}
+                {row.original.source.entity === "payment" ? "Credit" : "Debit"}
             </div>
         ),
     },
-    // {
-    //     accessorKey: "channel",
-    //     header: ({ column }) => {
-    //         return (
-    //             <Button
-    //                 variant="ghost"
-    //                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //             >
-    //                 Channel
-    //                 <ArrowUpDown className="ml-2 h-4 w-4" />
-    //             </Button>
-    //         )
-    //     },
-    //     cell: ({ row }) => (
-    //         <div className="flex items-center">
-    //             <div
-    //                 className={`w-2 h-2 rounded-full mr-2 `}
-    //             />
-    //             {row.original.channel === "manual" && <UserCheck className="mr-2 text-yellow-500 h-4 w-4" />}
-    //             {row.original.channel === "Mobile App" && <MobileIcon className="mr-2 text-green-500 h-4 w-4" />}
-    //             {row.original.channel}
-    //         </div>
-    //     ),
-    // },
+
     {
         id: "actions",
-        cell: ({ row }) => <CellAction data={row.original} />
+        // cell: ({ row }) => <CellAction data={row.original} />
     },
 
 ]
+

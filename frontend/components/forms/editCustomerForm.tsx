@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import  React ,  { useEffect } from "react"
 import * as z from "zod"
 
 import { cn } from "@/lib/utils"
@@ -14,6 +14,8 @@ import { Form } from "../ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import toast from "react-hot-toast"
+import { postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 
 
 interface EditCustomerFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,37 +32,64 @@ const formSchema = z.object({
     ),
     email: z.string().email(),
     phoneno: z.string().min(10).max(10),
-    address: z.string().min(10).max(100),
-    city: z.string().min(2).max(50),
-    state: z.string().min(2).max(50),
-    pincode: z.string().min(6).max(6),
-    country: z.string().min(2).max(50),
+
 
 })
 
 export function EditCustomerForm({ className, gap, customerData, ...props }: EditCustomerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
+    const router = useRouter()
+   console.log('customerDatacustomerDatacustomerDatacustomerDatacustomerDatacustomerDatacustomerDatacustomerData',customerData)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fullname: customerData.fullname,
-            email: customerData.email,
-            phoneno: customerData.mobile,
-            address: customerData.address,
-            pincode: customerData.pincode,
-            country: "India",
-            state: customerData.state,
-            city: customerData.city,
+            fullname: customerData?.fullName,
+            email: customerData?.email,
+            phoneno: customerData?.mobileNumber,
         },
 
     })
 
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    useEffect(() => {
+        form.reset({
+            fullname: customerData?.fullName,
+            email: customerData?.email,
+            phoneno: customerData?.mobileNumber.toString(),
+           
+        });
+    }, [customerData]);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         // Add  update logic here
 
         setIsLoading(true)
+        try {
+
+            const { fullname, email, phoneno } = values;
+
+            // Convert values to lowercase
+            const lowercaseValues = {
+                fullname: fullname?.toLowerCase(),
+                phoneno: phoneno?.toLowerCase(),
+            };
+    
+            const data = {
+                ...lowercaseValues,
+                id: customerData?._id
+            };
+
+
+            const response = await postData('/auth/updateUser', data);
+            // const response2 = await postData(`/auth/editAddress`, data)
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('User Updated successfully');
+            router.push('/customers')
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
 
 
         setTimeout(() => {
@@ -104,14 +133,8 @@ export function EditCustomerForm({ className, gap, customerData, ...props }: Edi
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            name="email"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="email">Email</FormLabel>
-                                    <FormControl>
-
+                        <FormItem>
+                     <FormLabel htmlFor="email">Email</FormLabel>
                                         <Input
                                             id="email"
                                             placeholder="eg. john@example.com "
@@ -119,16 +142,11 @@ export function EditCustomerForm({ className, gap, customerData, ...props }: Edi
                                             autoCapitalize="none"
                                             autoComplete="email"
                                             autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
+                                            disabled={true}
+                                            value={form.watch("email")}
                                         />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.email?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
+                               
+                               </FormItem>
 
                         <FormField
                             name="phoneno"
@@ -141,7 +159,7 @@ export function EditCustomerForm({ className, gap, customerData, ...props }: Edi
                                         <Input
                                             id="phoneno"
                                             placeholder="eg. +91 9876543210"
-                                            type="tel"
+                                            type="text"
                                             autoCapitalize="none"
                                             autoComplete="phoneno"
                                             autoCorrect="off"
@@ -156,135 +174,11 @@ export function EditCustomerForm({ className, gap, customerData, ...props }: Edi
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            name="address"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="address">Address</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="address"
-                                            placeholder="eg. 1234 Main St"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="address"
-                                            required={false}
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.address?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="city"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="city">City</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="city"
-                                            placeholder="eg. Mumbai"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="city"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.city?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="state"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="state">State</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="state"
-                                            placeholder="eg. Maharashtra"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="state"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors.state?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )} />
-                        <FormField
-                            name="pincode"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="pincode">Pincode</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="pincode"
-                                            placeholder="eg. 400001"
-                                            type="number"
-                                            autoCapitalize="none"
-                                            autoComplete="pincode"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors?.pincode?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="country"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="country">Country</FormLabel>
-                                    <FormControl>
-
-                                        <Input
-                                            id="country"
-                                            placeholder="eg. India"
-                                            type="text"
-                                            autoCapitalize="none"
-                                            autoComplete="country"
-                                            autoCorrect="off"
-                                            disabled={isLoading}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage>
-                                        {form.formState.errors?.country?.message}
-                                    </FormMessage>
-                                </FormItem>
-                            )}
-                        />
+                        
                     </div>
                     <div className={`${gap === 2 ? 'w-full' : 'grid gap-3 grid-cols-3'}`} >
                         {
-                            form.watch().fullname === customerData.fullname && form.watch().email === customerData.email && form.watch().phoneno === customerData.mobile && form.watch().address === customerData.address && form.watch().city === customerData.city && form.watch().state === customerData.state && form.watch().pincode === customerData.pincode && form.watch().country === 'India'
+                            form.watch().fullname === customerData?.fullName && form.watch().email === customerData?.email && form.watch().phoneno === customerData?.mobileNumber 
                                 ? <Button type="submit" className="w-full" disabled>
                                     Update
                                 </Button>

@@ -34,6 +34,8 @@ import { Badge } from "../ui/badge"
 import { fetchData, postData } from "@/axiosUtility/api"
 import useRazorpay from "react-razorpay";
 import axios from "axios"
+import { useRouter } from "next/navigation"
+
 
 interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
     gap: number
@@ -41,8 +43,7 @@ interface NewOrderFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 
 const formSchema = z.object({
-    order_type: z.string().min(1, { message: "Please select an order type" })
-    ,
+    order_type: z.string().min(1, { message: "Please select an order type" }),
     serviceId: z.string().min(1, { message: "Please select a service" }),
     products: z.array(z.object({
         id: z.string().min(1, { message: "Please select a product" }),
@@ -56,9 +57,9 @@ const formSchema = z.object({
     cartWeight: z.number().optional(),
     cartWeightBy: z.string().optional(),
 })
-const priceperkg = 50;
 
 export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
+    const router = useRouter()
     const [Razorpay] = useRazorpay();
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [cartTotal, setCartTotal] = React.useState<number>(0)
@@ -73,6 +74,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const [selectedId, setSelectedId] = React.useState<string | null>(null)
     const [DeliveryAgentsData, setDeliveryAgentsData] = React.useState([])
 
+    const [pricePerKg, setPricePerKg] = React.useState(0 as any)
 
 
 
@@ -98,10 +100,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             const result = await fetchData('/service/allwithitems'); // Replace 'your-endpoint' with the actual API endpoint
             console.log(result)
             if (result && result.services) {
-                const products = result.services;
-                setServices(products);
+                const products = result.services
+                console.log('products', products.filter((service: any) => service.isSubscriptionService === false))
+                setServices(products.filter((service: any) => service.isSubscriptionService === false || service.isSubscriptionService === undefined || service.isSubscriptionService === null))
                 setIsLoading(false)
-                console.log('products', products)
+                // console.log('products', products)
 
                 // Now you can work with the 'categories' array
             } else {
@@ -131,11 +134,11 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            order_type: 'Laundry per pair',
+            order_type: 'Laundry per piece',
             serviceId: '',
             customer: '',
-            status: 'onhold',
-            payment: 'Via Store (Cash/Card/UPI)',
+            status: 'Scheduled Pickup',
+            payment: 'Via Store (Payment Gateway)',
             delivery_agent: '',
             cartTotal: 0,
             cartWeight: weight,
@@ -143,6 +146,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         },
 
     })
+
+
 
     const OpenNewCustomerModal = () => {
         GlobalModal.title = "Create New Customer"
@@ -152,87 +157,89 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // Add submit logic here
 
-        setIsLoading(true)
+        setIsLoading(true);
 
-        const params = {
-            order_type: values.order_type,
-            service: values.serviceId,
-            products: values.products,
-            customer: values.customer,
-            status: values.status,
-            payment: values.payment,
-            delivery_agent: values.delivery_agent,
-            cartTotal: values.cartTotal,
-            cartWeight: values.cartWeight,
-            cartWeightBy: values.cartWeightBy,
+        try {
+            const params = {
+                order_type: values.order_type,
+                service: values.serviceId,
+                products: values.products,
+                customer: values.customer,
+                status: values.status,
+                payment: values.payment,
+                delivery_agent: values.delivery_agent,
+                cartTotal: values.cartTotal,
+                cartWeight: values.cartWeight,
+                cartWeightBy: values.cartWeightBy,
+            };
+            if (values.payment === 'Via Store (Payment Gateway)') {
+                const initialResponse = await postData('/order/addorupdaterazorpay', params);
+
+                console.log('response', initialResponse);
+
+                const options = {
+                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                    amount: initialResponse?.amount_due,
+                    currency: "INR",
+                    name: BrandName,
+                    description: "Test Transaction",
+                    image: "https://example.com/your_logo",
+                    order_id: initialResponse?.razorpayOrder?.id,
+                    handler: async function (response: any) {
+                        console.log('rajooor pay', response);
+                        toast.loading('Processing Payment');
+                        const post1 = await postData('/order/addorupdate', params);
+                        const orderid = post1?.order?._id;
+                        const customer_id = post1?.order?.customer;
+                        const newResponse = { ...response, orderid, customer_id, params };
+                        const post2 = await postData('/order/save', newResponse);
+                        toast.success('Payment Successful');
+                        router.push('/orders')
+                        console.log(post2);
+                        // Handle success or failure of the payment
+                    },
+                    prefill: {
+                        name: CustomerData?.fullName,
+                        email: CustomerData?.email,
+                        contact: CustomerData?.mobileNumber,
+                    },
+                    notes: {
+                        address: "Razorpay Corporate Office",
+                    },
+                    theme: {
+                        color: "#2E3190",
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            alert("dismissed");
+                        },
+                        animation: "slide",
+                    },
+                } as any;
+
+                const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
+                rzp1.open();
+
+
+            } else if (values.payment === 'Via Store (Cash)') {
+                const response = await postData('/order/addorupdate', params);
+                const orderid = response?.order?._id;
+                const newParam = { ...params, orderid };
+                const response2 = await postData('/order/saveOffline', newParam);
+                router.push('/orders')
+                toast.success('Order Created Successfully');
+
+            }
+
+
+            // Do not set isLoading to false until the payment handler completes
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+            toast.error('Error occurred while processing the order');
         }
-
-        const initialResponse = await postData('/order/addorupdate', params)
-
-        console.log('response', initialResponse)
-
-        const orderid = initialResponse?.order?._id
-
-        const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-            amount: initialResponse?.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            currency: "INR",
-            name: BrandName,
-            description: "Test Transaction",
-            image: "https://example.com/your_logo",
-            order_id: initialResponse?.razorpayOrder?.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
-            handler: function (response: any) {
-                console.log('rajooor pay', response);
-                const newResponse = { ...response, orderid }
-                console.log('newResponse', newResponse)
-                const reply = postData('/order/save', newResponse)
-                console.log(reply)
-                // alert(response.razorpay_payment_id);
-                // alert(response.razorpay_order_id);
-                // alert(response.razorpay_signature);
-                // instance.payments.fetch(paymentId)
-            },
-            prefill: {
-                name: CustomerData?.fullName,
-                email: CustomerData?.email,
-                contact: CustomerData?.mobileNumber,
-            },
-            notes: {
-                address: "Razorpay Corporate Office",
-            },
-            theme: {
-                color: "#2E3190",
-                // backdrop_color: "#2E3190"
-            },
-            modal: {
-                ondismiss: function () {
-                    alert("dismissed");
-                },
-                animation: "slide",
-            },
-            // callback_url: 'https://example.com/your_redirect_url',
-
-
-        } as any;
-
-        const rzp1 = typeof window !== 'undefined' ? new Razorpay(options) : null as any;
-        rzp1.open();
-
-
-        setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Order created successfully')
-        }, 3000) // remove this timeout and add submit logic
-
     }
-
-
-
-
-
-
 
     const AddProductQunatity = (value: string, e: React.MouseEvent<HTMLButtonElement>, price: any) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent checkbox
@@ -246,24 +253,10 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
     };
 
-    const calculatePriceByWeight = () => {
-        //logic to calculate price by weight
-        if (weightBy === 'kg') {
 
-            const priceperkg = 50;
-            const price = (form.watch("cartWeight") ?? 0) * priceperkg;
-            setCartTotal(price);
-        } else {
-            const priceperkg = 0.05;
-            const price = (form.watch("cartWeight") ?? 0) * priceperkg;
-            setCartTotal(price);
-        }
-
-
-    }
 
     const handleSelectChange = (value: string, rate: any) => {
-        if (form.watch("order_type") === 'Laundry per pair') {
+        if (form.watch("order_type") === 'Laundry per piece') {
             //reset the cart to empty if the order type is changed
 
 
@@ -307,7 +300,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
     const RemoveProductQunatity = (value: string, rate: any) => {
-        if (form.watch("order_type") === 'Laundry per pair') {
+        if (form.watch("order_type") === 'Laundry per piece') {
 
             if (selectedItems[value]?.quantity === 1) {
                 setProductQuantity(1);
@@ -356,7 +349,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
     };
 
     React.useEffect(() => {
-        if (form.watch("order_type") === 'Laundry per pair') {
+        if (form.watch("order_type") === 'Laundry per piece') {
 
             const updateCartTotal = () => {
 
@@ -372,9 +365,36 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
         } else {
             console.log("products", form.watch("products"))
             console.log("selectedItems", selectedItems)
-            calculatePriceByWeight()
+            const calculatePriceByWeight = () => {
+                //logic to calculate price by weight
+                if (weightBy === 'kg') {
+
+
+                    const price = (form.watch("cartWeight") ?? 0) * pricePerKg;
+                    setCartTotal(price);
+                } else {
+
+                    const price = (form.watch("cartWeight") ?? 0) * pricePerKg / 100;
+                    setCartTotal(price);
+                }
+
+
+            }
+            calculatePriceByWeight();
         }
-    }, [selectedItems, cartTotal, weight, weightBy, form, calculatePriceByWeight])
+    }, [selectedItems, cartTotal, weight, weightBy, form, pricePerKg])
+
+    React.useEffect(() => {
+        setPricePerKg(services?.filter((service: any) => service._id == form.watch("serviceId"))[0]?.laundryByKG?.price)
+        // setPricePerKg(services?.find((service: any) => service._id == form.watch("serviceId"))?.laundryByKG?.price)
+
+
+        const ppk = services.find((service: any) => {
+            service._id == form.watch("serviceId")
+        })?.laundryByKG?.price
+
+        console.log("pricePerKg", ppk)
+    }, [form, form.watch("serviceId"), pricePerKg, services])
 
     const CustomerData = AllData.find((data) => data._id === form.watch("customer"))
 
@@ -407,33 +427,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                 <form onSubmit={form.handleSubmit(onSubmit)} className=" grid grid-cols-1 gap-3">
                     <div className={`grid grid-cols-${gap} gap-3`}>
-                        <FormField
-                            name="order_type"
-                            control={form.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="fullname"> Select Order Type</FormLabel>
-                                    <Select {...field} onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select Order Type" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="Laundry by kg">Laundry by kg</SelectItem>
-                                            <SelectItem value="Laundry per pair">Laundry per pair</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormDescription>
-                                        Please select the order type from the dropdown
 
-                                    </FormDescription>
-                                    <FormMessage />
-
-                                </FormItem>
-
-                            )}
-                        />
                         <FormField
                             name="serviceId"
                             control={form.control}
@@ -467,6 +461,34 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                             )}
                         />
                         <FormField
+                            name="order_type"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="fullname"> Select Order Type</FormLabel>
+                                    <Select {...field} onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select Order Type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.active === true && <SelectItem value="Laundry per piece">Laundry per piece</SelectItem>}
+                                            {services?.find((service) => service._id === form.watch('serviceId'))?.laundryByKG?.active === true && <SelectItem value="Laundry by kg">Laundry by kg</SelectItem>}
+
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>
+                                        Please select the order type from the dropdown
+
+                                    </FormDescription>
+                                    <FormMessage />
+
+                                </FormItem>
+
+                            )}
+                        />
+                        <FormField
                             name="customer"
                             control={form.control}
                             render={({ field }) => (
@@ -486,7 +508,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                     {field.value
                                                         ? AllData.find(
                                                             (data) => data._id === field.value
-                                                        )?.email
+                                                        )?.mobileNumber + " (" + AllData.find(
+                                                            (data) => data._id === field.value
+                                                        )?.fullName + ")"
                                                         : "Select Customer"}
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
@@ -513,13 +537,13 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                 <CommandGroup>
                                                     {AllData.map((data) => (
                                                         <CommandItem
-                                                            value={data._id}
-                                                            key={data.email}
+                                                            value={data.mobileNumber}
+                                                            key={data.mobileNumber}
                                                             onSelect={() => {
                                                                 form.setValue("customer", data._id)
                                                             }}
                                                         >
-                                                            {data.email}
+                                                            {data.mobileNumber} {data.fullName}
                                                             <CheckIcon
                                                                 className={cn(
                                                                     "ml-auto h-4 w-4",
@@ -619,7 +643,9 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem disabled value="Via Store (Cash/Card/UPI)">Via Store (Cash/Card/UPI)</SelectItem>
+                                            <SelectItem value="Via Store (Payment Gateway)">Via Store (Payment Gateway)</SelectItem>
+                                            <SelectItem value="Via Store (Cash)">Via Store (Cash)</SelectItem>
+
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -692,7 +718,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
                                                         <div className="grid gap-4 py-4">
-                                                            {form.watch("order_type") === 'Laundry per pair' && services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.items.map((value: any, index: number) => {
+                                                            {form.watch("order_type") === 'Laundry per piece' && services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.items.map((value: any, index: number) => {
                                                                 return (
                                                                     <DropdownMenuCheckboxItem
                                                                         onSelect={(e) => e.preventDefault()}
@@ -705,7 +731,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                     >
 
                                                                         <div>
-                                                                            {value.product_name} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.priceperpair * selectedItems[value._id]?.quantity || value.priceperpair}`}
+                                                                            {value.product_name} {form.watch("order_type") === 'Laundry per piece' && `- ₹${value.priceperpair * selectedItems[value._id]?.quantity || value.priceperpair}`}
                                                                         </div>
                                                                         <div className="flex gap-2 items-center justify-end">
                                                                             <Button onClick={() => RemoveProductQunatity(value._id, value.priceperpair)} variant="outline">-</Button>
@@ -717,7 +743,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                     </DropdownMenuCheckboxItem>
                                                                 );
                                                             })}
-                                                            {form.watch("order_type") !== 'Laundry per pair' &&
+                                                            {form.watch("order_type") !== 'Laundry per piece' &&
                                                                 <div>
                                                                     <div className="flex flex-col gap-2 p-2 ">
                                                                         <div className="flex gap-2 items-center">
@@ -729,7 +755,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                                                                                         <FormLabel htmlFor="weightInput"> Total Calculated Weight</FormLabel>
 
-                                                                                        <Input {...field} id="weightInput" value={field.value} onChange={(e) => { handleWeightChange(e); calculatePriceByWeight() }} placeholder="Enter Total Weight" type="number"
+                                                                                        <Input {...field} id="weightInput" value={field.value} onChange={(e) => { handleWeightChange(e); }} placeholder="Enter Total Weight" type="number"
 
                                                                                             min={1} max={100} />
                                                                                         <Select defaultValue="kg" onValueChange={(value) => handleWeightByChange(value)}>
@@ -753,16 +779,16 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
                                                                         <Separator className="my-2" orientation="horizontal" />
                                                                         <div>
                                                                             <Heading className=" text-xl" title="Select Items" />
-                                                                            {services?.find((service) => service._id === form.watch('serviceId'))?.laundryPerPair?.items.map((value: any, index: number) => {
+                                                                            {services?.find((service) => service._id === form.watch('serviceId'))?.laundryByKG?.items.map((value: any, index: number) => {
                                                                                 return (
                                                                                     <div className="flex my-2 justify-center flex-col " key={index}>
 
                                                                                         <div className="flex items-center  gap-2">
                                                                                             <Checkbox
                                                                                                 checked={isOptionSelected(value._id)}
-                                                                                                onCheckedChange={() => handleSelectChange(value._id, value.priceperpair)}
+                                                                                                onCheckedChange={() => handleSelectChange(value._id, value.priceperkg)}
                                                                                             />
-                                                                                            {value.product_name} {form.watch("order_type") === 'Laundry per pair' && `- ₹${value.priceperpair * selectedItems[value.title]?.quantity || value.priceperpair}`}
+                                                                                            {value.product_name}
                                                                                         </div>
 
 
@@ -832,7 +858,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
             <Separator orientation="horizontal" />
             <div>
                 <div className={`grid grid-cols-${gap === 3 ? '2' : '1'}  gap-2`}>
-                    {form.watch("order_type") === 'Laundry per pair' &&
+                    {form.watch("order_type") === 'Laundry per piece' &&
                         Object.keys(selectedItems).length > 0 && <Card className="w-full">
                             <CardHeader>
                                 Selected Items for Order
@@ -930,7 +956,7 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
                                                     <TableCell>{form.watch("cartWeight")} {form.watch("cartWeightBy") === 'kg' ? 'kg' : 'grams'}</TableCell>
 
-                                                    <TableCell className="text-left">₹{priceperkg}</TableCell>
+                                                    <TableCell className="text-left">₹{pricePerKg}</TableCell>
                                                     <TableCell className="text-left">₹{cartTotal}</TableCell>
 
                                                     <TableCell className="text-left"><Button onClick={() => {
@@ -968,7 +994,8 @@ export function NewOrderForm({ className, gap, ...props }: NewOrderFormProps) {
 
 
 
-                                                        <TableCell className="text-left">{key}</TableCell>
+                                                        <TableCell>{services?.find((service) => service._id === form.watch('serviceId'))?.laundryByKG?.items.find((value: any) => value._id === key)?.product_name}</TableCell>
+
 
 
                                                         <TableCell className="text-left"><Button onClick={() => {

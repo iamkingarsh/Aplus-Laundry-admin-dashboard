@@ -24,8 +24,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { ScrollArea } from "../ui/scroll-area"
 import { set } from "date-fns"
-import { fetchData } from "@/axiosUtility/api"
-import { useRouter } from "next/router"
+import { fetchData,postData } from "@/axiosUtility/api"
+import { useRouter } from "next/navigation"
 // import { LaundrtProducts as Items } from "@/app/(routes)/products/page"
 
 
@@ -49,9 +49,11 @@ const formSchema = z.object({
 })
 
 export function EditServiceForm({ className, data, gap, ...props }: EditServiceFormProps) {
+    const router = useRouter();
+
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [LaundryProducts, setLaundryProducts] = React.useState([]) as any[]
-    // const router = useRouter()
+   
 
     console.log(data, 'data')
     const form = useForm<z.infer<typeof formSchema>>({
@@ -109,74 +111,67 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
             laundrybykg: data?.laundryByKG.active === true ? "Activated" : "Deactivated",
             laundryperpair: data?.laundryPerPair.active === true ? "Activated" : "Deactivated",
             laundrybykgprice: data?.laundryByKG?.price.toString(),
+            // Reset laundrybykg_items and laundryperpair_items separately
             laundryitems: {
-                laundrybykg_items: data?.laundryByKG.items.map((item: any) => item),
-                laundryperpair_items: data?.laundryPerPair.items.map((item: any) => item),
+                laundrybykg_items: data?.laundryByKG?.items.map((item: any) => item) || [],
+                laundryperpair_items: data?.laundryPerPair?.items.map((item: any) => item) || [],
             }
-            // {
-            //     "laundryPerPair": {
-            //         "active": true,
-            //         "items": [
-            //             {
-            //                 "_id": "65aa69011bb672959354aad9",
-            //                 "product_name": "shirts",
-            //                 "category": {
-            //                     "_id": "65a51ddb9c904bad1780eda5",
-            //                     "title": "men",
-            //                     "__v": 0
-            //                 },
-            //                 "active": true,
-            //                 "priceperpair": "70",
-            //                 "__v": 0
-            //             },
-            //             {
-            //                 "_id": "65aa69091bb672959354aae4",
-            //                 "product_name": "pant",
-            //                 "category": {
-            //                     "_id": "65a51ddb9c904bad1780eda5",
-            //                     "title": "men",
-            //                     "__v": 0
-            //                 },
-            //                 "active": true,
-            //                 "priceperpair": "70",
-            //                 "__v": 0
-            //             }
-            //         ]
-            //     },
-            //     "laundryByKG": {
-            //         "active": false,
-            //         "price": 0,
-            //         "items": []
-            //     },
-            //     "_id": "65ab94c2fe884bef62ac94b0",
-            //     "serviceTitle": "Hello ",
-            //     "__v": 0
-            // }
         });
+
+        const selectedLPKItems = data?.laundryByKG.items.map((item: any) => item._id) ?? [];
+    setSelectedItemsForLPK(selectedLPKItems);
+
+    const selectedLPPItems = data?.laundryPerPair.items.map((item: any) => item._id) ?? [];
+    setSelectedItemsForLPP(selectedLPPItems);
     }, [data]);
+    
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        console.log(values)
+        console.log('valuesvaluesvaluesvalues65465465465465',values)
         setIsLoading(true)
         console.log(values)
 
+        try {
+            const update_data = {
+                id:data._id,
+                serviceTitle: values?.title,
+                laundryPerPair: {
+                    active: values.laundryperpair === "Activated",
+                    items: values.laundryitems.laundryperpair_items
+                },
+                laundryByKG: {
+                    active: values.laundrybykg === "Activated",
+                    price: values.laundrybykgprice ? parseFloat(values.laundrybykgprice) : 0,
+                    items: values.laundryitems.laundrybykg_items
+                }
+            };
+
+            const response = postData('/service/addorupdate', update_data);
+            console.log('API Response:', response);
+
+            setIsLoading(false);
+            toast.success('Item created successfully');
+            // Optionally, you can redirect the user or perform other actions upon successful submission.
+            router.push('/services');
+        } catch (error) {
+            console.error('Error creating Item:', error);
+            setIsLoading(false);
+            toast.error('Error creating Item');
+        }
+
         setTimeout(() => {
-            setIsLoading(false)
-            toast.success('Customer created successfully')
+            setIsLoading(false) 
         }, 3000) // remove this timeout and add submit logic
 
     }
 
-    console.log('selectedItemsForLPKsgsdgd', data?.laundryByKG.items.map((item: any) => item._id) ?? [])
 
     const SelectedItemsForLPK = data?.laundryByKG.items.map((item: any) => item._id) ?? []
     const SelectedItemsForLPP = data?.laundryPerPair.items.map((item: any) => item._id) ?? []
 
     const [selectedItemsForLPK, setSelectedItemsForLPK] = React.useState<any>([]);
     const [selectedItemsForLPP, setSelectedItemsForLPP] = React.useState<any>([]);
-
-    console.log('selectedItemsForLPK', selectedItemsForLPK)
 
     const isOptionSelected = (value: string, laundrytype: string): any => {
         return laundrytype === "laundrybykg" ? selectedItemsForLPK?.includes(value) : selectedItemsForLPP.includes(value);
@@ -230,7 +225,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
                                             id="title"
                                             type="text"
                                             autoComplete="off"
-                                            disabled={isLoading}
+                                            disabled
                                             {...field}
                                             placeholder="eg. Laundry"
                                         />
@@ -532,7 +527,7 @@ export function EditServiceForm({ className, data, gap, ...props }: EditServiceF
                                                                                     </div>
                                                                                     <div className="flex gap-2 items-center justify-end">
 
-                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundrybykg")} onCheckedChange={() => handleSelectChange(product._id, "laundrybykg")} id="laundrybykg" />
+                                                                                        <Switch className="data-[state=checked]:bg-green-500" checked={isOptionSelected(product._id, "laundryperpair")} onCheckedChange={() => handleSelectChange(product._id, "laundryperpair")} id="laundryperpair" />
                                                                                     </div>
                                                                                 </div>)
                                                                             }

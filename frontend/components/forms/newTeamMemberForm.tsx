@@ -73,14 +73,22 @@ export function NewTeamMemberForm({ className, gap, ...props }: NewTeamMemberFor
         // Add submit logic here
         try {
 
-            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+            // Convert values to lowercase
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
                 return acc;
             }, {});
 
             const data = {
                 ...lowercaseValues,
-
+                address: [{
+                    // addressType: 'Home',
+                    location: values.address,
+                    pincode: values.pincode,
+                    coordinates: {
+                        coordinates: null,
+                    }
+                }]
             };
 
             const response = await postData('/auth/register', data);

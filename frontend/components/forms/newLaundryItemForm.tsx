@@ -81,10 +81,13 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
         setIsLoading(true)
         try {
 
-            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
-                return acc;
-            }, {});
+               // Convert values to lowercase
+const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+    const value = values[key as keyof typeof values];
+    acc[key] = typeof value === 'string' ? value.toLowerCase() : value;
+    return acc;
+}, {});
+
 
             const response = await postData('/product/adorupdate', lowercaseValues);
             console.log('API Response:', response);
@@ -141,21 +144,20 @@ export function NewLaundryItemForm({ className, gap, ...props }: NewLaundryItemF
                                     <Popover>
                                         <PopoverTrigger {...field} defaultValue={field.value} asChild>
                                             <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    role="combobox"
-                                                    className={cn(
-                                                        "w-full justify-between",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value
-                                                        ? categories.find(
-                                                            (data: any) => data._id === field.value
-                                                        )?.title
-                                                        : "Select Category"}
-                                                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                </Button>
+                                            <Button
+    variant="outline"
+    role="combobox"
+    className={cn(
+        "w-full justify-between",
+        !field.value && "text-muted-foreground"
+    )}
+>
+    {field.value
+        ? (categories.find((data: any) => data._id === field.value) as any)?.title
+        : "Select Category"}
+    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+</Button>
+
                                             </FormControl>
                                         </PopoverTrigger>
                                         <PopoverContent side="right" className="w-full p-0">

@@ -1,6 +1,6 @@
 import express from 'express';
 // <<<<<<< mujahed
-import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, getallTeamMembers, sendOTPforMobileverification, verifymobileotp, getUserById, deletebyid, getCurrentUserById, getCurrentUser, addOrUpdateAddress, deleteAddress, } from '../controllers/auth.js';
+import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, getallTeamMembers, sendOTPforMobileverification, verifymobileotp, getUserById, deletebyid, getCurrentUserById, getCurrentUser, addOrUpdateAddress, deleteAddress, sendOTPforAdminVerification, updateUser, } from '../controllers/auth.js';
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 // =======
 // import { signin, sendOTPforverification, verifyotp, register, getAllCustomers, getAlldeliveryagent, deletebyid, getUserById, getallTeamMembers ,} from '../controllers/auth.js';
@@ -8,11 +8,12 @@ import { adminAuthenticateToken, authenticateToken } from '../middleware/authTok
 // >>>>>>> master
 const router = express.Router();
 router.post("/register", register)
+router.post("/updateUser",updateUser)
 router.post("/signin", signin)
 router.post("/emailOtpSend", sendOTPforverification);
 router.post("/mobileOtpSend", sendOTPforMobileverification);
 
-router.post("/adminEmailOtpSend", sendOTPforverification);
+router.post("/adminEmailOtpSend", sendOTPforAdminVerification);
 router.post("/emailOtpVerify", verifyotp);
 router.post("/mobileOtpVerify", verifymobileotp);
 

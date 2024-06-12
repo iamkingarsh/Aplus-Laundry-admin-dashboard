@@ -18,285 +18,309 @@ export default function Page() {
 
     const getTransactionData = async () => {
         try {
-            const res = await fetchData('/transaction/getall')
-            const transactions = res.transactions
-            console.log(transactions)
-            setTransactionData(transactions)
+            const res = await fetchData('/transaction/getall');
+            const transactions = res.transactions.map((transaction: any) => {
+                console.log('transactiontransactiontransaction', transaction)
+                const createdAtDate = new Date(transaction.created_at);
+                const formattedDate = createdAtDate.toLocaleDateString(); // Adjust the formatting as needed
+
+                return {
+                    id: transaction._id,
+                    payment_id: transaction.payment_id || 0,
+                    status: transaction.status,
+                    source: {
+                        id: transaction.customer_id,
+                        payer_name: transaction?.customer_id?.fullName || "",
+                        payer_account: transaction.vpa || "0",
+                        payer_ifsc: '', // You need to provide the appropriate value for this field
+                        mode: transaction.method,
+                        entity: transaction.entity,
+                        bank_reference: transaction.razorpay_order_id, // or any other appropriate field
+                    },
+                    amount: transaction.amount * 100,
+                    credit: transaction.amount || 0, // Ensure to handle cases where credit might be missing
+                    debit: transaction.debit || 0, // Ensure to handle cases where debit might be missing
+                    created_at: formattedDate,
+                };
+            });
+            setTransactionData(transactions);
+
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+
 
     useEffect(() => {
         getTransactionData()
         console.log('tykty', transactionData)
     }, [])
 
-    const TransactionData = [
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 90000,
-            "currency": "INR",
-            "credit": 90000,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000001",
-            "entity": "transaction",
-            "account_number": "1121431121541121",
-            "amount": 400,
-            "currency": "INR",
-            "credit": 400,
-            "debit": 0,
-            "balance": 10000000,
-            "source": {
-                "id": "bt_00000000000001",
-                "entity": "bank_transfer",
-                "payer_name": "Saurav Kumar",
-                "payer_account": "6543266545411243",
-                "payer_ifsc": "UTIB0000002",
-                "mode": "NEFT",
-                "bank_reference": "AXIR000000000001",
-                "amount": 400
-            },
-            "created_at": 1545125568
-        },
-        {
-            "id": "txn_00000000000003",
-            "entity": "transaction",
-            "account_number": "7878780080316316",
-            "amount": 200,
-            "currency": "INR",
-            "credit": 0,
-            "debit": 200,
-            "balance": 9000000,
-            "source": {
-                "id": "pout_00000000000001",
-                "entity": "payout",
-                "fund_account_id": "fa_00000000000001",
-                "amount": 200,
-                "payer_name": "Mujahed",
-                "notes": {
-                    "notes_key_1": "Tea, Earl Grey, Hot",
-                    "notes_key_2": "Tea, Earl Grey… decaf."
-                },
-                "fees": 3,
-                "tax": 1,
-                "status": "processed",
-                "utr": "000000000001",
-                "mode": "NEFT",
-                "created_at": 1545224066,
-                "fee_type": null
-            },
-            "created_at": 1545224066
-        },
-        {
-            "id": "txn_00000000000003",
-            "entity": "transaction",
-            "account_number": "7878780080316316",
-            "amount": 200,
-            "currency": "INR",
-            "credit": 0,
-            "debit": 20000,
-            "balance": 9000000,
-            "source": {
-                "id": "pout_00000000000001",
-                "entity": "payout",
-                "fund_account_id": "fa_00000000000001",
-                "amount": 20000,
-                "payer_name": "Mujahed",
-                "notes": {
-                    "notes_key_1": "Tea, Earl Grey, Hot",
-                    "notes_key_2": "Tea, Earl Grey… decaf."
-                },
-                "fees": 3,
-                "tax": 1,
-                "status": "processed",
-                "utr": "000000000001",
-                "mode": "NEFT",
-                "created_at": 1545224066,
-                "fee_type": null
-            },
-            "created_at": 1545224066
-        },
-        {
-            "id": "txn_00000000000003",
-            "entity": "transaction",
-            "account_number": "7878780080316316",
-            "amount": 200,
-            "currency": "INR",
-            "credit": 0,
-            "debit": 20000,
-            "balance": 9000000,
-            "source": {
-                "id": "pout_00000000000001",
-                "entity": "payout",
-                "fund_account_id": "fa_00000000000001",
-                "amount": 20000,
-                "payer_name": "Mujahed",
-                "notes": {
-                    "notes_key_1": "Tea, Earl Grey, Hot",
-                    "notes_key_2": "Tea, Earl Grey… decaf."
-                },
-                "fees": 3,
-                "tax": 1,
-                "status": "processed",
-                "utr": "000000000001",
-                "mode": "NEFT",
-                "created_at": 1545224066,
-                "fee_type": null
-            },
-            "created_at": 1545224066
-        },
-        {
-            "id": "txn_00000000000003",
-            "entity": "transaction",
-            "account_number": "7878780080316316",
-            "amount": 200,
-            "currency": "INR",
-            "credit": 0,
-            "debit": 200,
-            "balance": 9000000,
-            "source": {
-                "id": "pout_00000000000001",
-                "entity": "payout",
-                "fund_account_id": "fa_00000000000001",
-                "amount": 200,
-                "payer_name": "Mujahed",
-                "notes": {
-                    "notes_key_1": "Tea, Earl Grey, Hot",
-                    "notes_key_2": "Tea, Earl Grey… decaf."
-                },
-                "fees": 3,
-                "tax": 1,
-                "status": "processed",
-                "utr": "000000000001",
-                "mode": "NEFT",
-                "created_at": 1545224066,
-                "fee_type": null
-            },
-            "created_at": 1545224066
-        },
-    ] as any
+    // const TransactionData = [
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 90000,
+    //         "currency": "INR",
+    //         "credit": 90000,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000001",
+    //         "entity": "transaction",
+    //         "account_number": "1121431121541121",
+    //         "amount": 400,
+    //         "currency": "INR",
+    //         "credit": 400,
+    //         "debit": 0,
+    //         "balance": 10000000,
+    //         "source": {
+    //             "id": "bt_00000000000001",
+    //             "entity": "bank_transfer",
+    //             "payer_name": "Saurav Kumar",
+    //             "payer_account": "6543266545411243",
+    //             "payer_ifsc": "UTIB0000002",
+    //             "mode": "NEFT",
+    //             "bank_reference": "AXIR000000000001",
+    //             "amount": 400
+    //         },
+    //         "created_at": 1545125568
+    //     },
+    //     {
+    //         "id": "txn_00000000000003",
+    //         "entity": "transaction",
+    //         "account_number": "7878780080316316",
+    //         "amount": 200,
+    //         "currency": "INR",
+    //         "credit": 0,
+    //         "debit": 200,
+    //         "balance": 9000000,
+    //         "source": {
+    //             "id": "pout_00000000000001",
+    //             "entity": "payout",
+    //             "fund_account_id": "fa_00000000000001",
+    //             "amount": 200,
+    //             "payer_name": "Mujahed",
+    //             "notes": {
+    //                 "notes_key_1": "Tea, Earl Grey, Hot",
+    //                 "notes_key_2": "Tea, Earl Grey… decaf."
+    //             },
+    //             "fees": 3,
+    //             "tax": 1,
+    //             "status": "processed",
+    //             "utr": "000000000001",
+    //             "mode": "NEFT",
+    //             "created_at": 1545224066,
+    //             "fee_type": null
+    //         },
+    //         "created_at": 1545224066
+    //     },
+    //     {
+    //         "id": "txn_00000000000003",
+    //         "entity": "transaction",
+    //         "account_number": "7878780080316316",
+    //         "amount": 200,
+    //         "currency": "INR",
+    //         "credit": 0,
+    //         "debit": 20000,
+    //         "balance": 9000000,
+    //         "source": {
+    //             "id": "pout_00000000000001",
+    //             "entity": "payout",
+    //             "fund_account_id": "fa_00000000000001",
+    //             "amount": 20000,
+    //             "payer_name": "Mujahed",
+    //             "notes": {
+    //                 "notes_key_1": "Tea, Earl Grey, Hot",
+    //                 "notes_key_2": "Tea, Earl Grey… decaf."
+    //             },
+    //             "fees": 3,
+    //             "tax": 1,
+    //             "status": "processed",
+    //             "utr": "000000000001",
+    //             "mode": "NEFT",
+    //             "created_at": 1545224066,
+    //             "fee_type": null
+    //         },
+    //         "created_at": 1545224066
+    //     },
+    //     {
+    //         "id": "txn_00000000000003",
+    //         "entity": "transaction",
+    //         "account_number": "7878780080316316",
+    //         "amount": 200,
+    //         "currency": "INR",
+    //         "credit": 0,
+    //         "debit": 20000,
+    //         "balance": 9000000,
+    //         "source": {
+    //             "id": "pout_00000000000001",
+    //             "entity": "payout",
+    //             "fund_account_id": "fa_00000000000001",
+    //             "amount": 20000,
+    //             "payer_name": "Mujahed",
+    //             "notes": {
+    //                 "notes_key_1": "Tea, Earl Grey, Hot",
+    //                 "notes_key_2": "Tea, Earl Grey… decaf."
+    //             },
+    //             "fees": 3,
+    //             "tax": 1,
+    //             "status": "processed",
+    //             "utr": "000000000001",
+    //             "mode": "NEFT",
+    //             "created_at": 1545224066,
+    //             "fee_type": null
+    //         },
+    //         "created_at": 1545224066
+    //     },
+    //     {
+    //         "id": "txn_00000000000003",
+    //         "entity": "transaction",
+    //         "account_number": "7878780080316316",
+    //         "amount": 200,
+    //         "currency": "INR",
+    //         "credit": 0,
+    //         "debit": 200,
+    //         "balance": 9000000,
+    //         "source": {
+    //             "id": "pout_00000000000001",
+    //             "entity": "payout",
+    //             "fund_account_id": "fa_00000000000001",
+    //             "amount": 200,
+    //             "payer_name": "Mujahed",
+    //             "notes": {
+    //                 "notes_key_1": "Tea, Earl Grey, Hot",
+    //                 "notes_key_2": "Tea, Earl Grey… decaf."
+    //             },
+    //             "fees": 3,
+    //             "tax": 1,
+    //             "status": "processed",
+    //             "utr": "000000000001",
+    //             "mode": "NEFT",
+    //             "created_at": 1545224066,
+    //             "fee_type": null
+    //         },
+    //         "created_at": 1545224066
+    //     },
+    // ] as any
 
 
 
@@ -320,7 +344,7 @@ export default function Page() {
                     bulkDeleteTitle='Are you sure you want to delete these Coupons?'
                     bulkDeleteDescription='This will delete the selected Coupons, and they will not be recoverable.'
                     bulkDeleteToastMessage='Selected Coupons Deleted Successfully'
-                    searchKey='amount' columns={columns} data={TransactionData} />
+                    searchKey='amount' columns={columns} data={transactionData} />
 
 
             </div>

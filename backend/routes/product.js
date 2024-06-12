@@ -1,3 +1,4 @@
+ 
 // productController.js
 
   import {
@@ -6,6 +7,7 @@
         updateProductActiveStatus,
         deleteProductById,
         deleteProductByIds,
+        getProductById,
       } from '../controllers/product.js';
 import { authenticateToken } from '../middleware/authToken.js';
 import express from 'express';
@@ -15,8 +17,8 @@ import express from 'express';
   productRouter.post('/adorupdate', authenticateToken, createOrUpdateProduct);
   
   // Route for getting all products with categories
-  productRouter.get('/getall', authenticateToken, getAllProductsWithCategories);
-  productRouter.get('/getid/:id', authenticateToken, getAllProductsWithCategories);
+  productRouter.get('/getall', getAllProductsWithCategories);
+  productRouter.get('/getid/:productId', getProductById);
 
   
   // Route for updating the active status of a product
@@ -29,3 +31,4 @@ import express from 'express';
   
   export default productRouter;
   
+ 

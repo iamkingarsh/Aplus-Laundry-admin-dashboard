@@ -1,5 +1,6 @@
 import express from 'express';
  
+ 
  // Adjust the path based on your project structure
 import { adminAuthenticateToken, authenticateToken } from '../middleware/authToken.js';
 import {
@@ -28,3 +29,4 @@ categoryRouter.delete('/ids', adminAuthenticateToken, deleteCategoriesByIds);
 
 
 export default categoryRouter;
+ 

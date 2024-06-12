@@ -1,13 +1,18 @@
+"use client"; // Add this directive at the top of the file
 import Heading from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { AllData } from '../page';
-import { Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
+// import { AllData } from '../page';
+import { Copy, Mail, MapPin, Pencil, Phone, Pin, User } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { AllOrdersData } from '../../orders/page';
+import React, { useEffect } from 'react';
+import api, { fetchData } from '../../../../axiosUtility/api'
+import toast from 'react-hot-toast';
+
+// import { AllOrdersData } from '../../orders/page';
 
 interface Props {
     params: {
@@ -17,52 +22,85 @@ interface Props {
 }
 
 
-const customerDetails = [
+// const customerDetails = [
 
-    AllData[0].status = 'Active',
-    AllData[0].emailVerified = true,
-    AllData[0].mobileVerified = true,
-    AllData[0].city = 'Hyderabad',
-    AllData[0].pincode = '500050',
-    AllData[0].state = 'Telangana',
-    AllData[0].orders = [
-        {
-            order_id: '#a2855',
+//     AllData[0].status = 'Active',
+//     AllData[0].emailVerified = true,
+//     AllData[0].mobileVerified = true,
+//     AllData[0].city = 'Hyderabad',
+//     AllData[0].pincode = '500050',
+//     AllData[0].state = 'Telangana',
+//     AllData[0].orders = [
+//         {
+//             order_id: '#a2855',
 
-        },
-        {
+//         },
+//         {
 
-            order_id: '#fa725',
-
-
-        },
-        {
-            order_id: '#ee055',
-
-        },
-        {
-            order_id: '#0a133',
+//             order_id: '#fa725',
 
 
-        }
-    ]
-]
-const customerData = { ...AllData[0], ...customerDetails };
+//         },
+//         {
+//             order_id: '#ee055',
+
+//         },
+//         {
+//             order_id: '#0a133',
 
 
-const orderIDs = customerData.orders.map((order: any) => order.order_id)
+//         }
+//     ]
+// ]
+// const customerData = { ...AllData[0], ...customerDetails };
+
+
 
 
 
 
 
 export default function CustomerPage({ params }: Props) {
+
+    const [customerData, setCustomerData] = React.useState<any>(null);
+
+    const [AllOrdersData, setAllOrdersData] = React.useState<any>(null);
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    const getData = async () => {
+        try {
+            const result1 = await fetchData(`/order/getuserorders/${params.customerid}`);
+            const result = await fetchData(`/auth/id/${params.customerid}`);
+
+            console.log("result1", result1.orders, AllOrdersData)
+
+            setCustomerData(result.user);
+            setAllOrdersData(result1.orders)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const orderIDs = AllOrdersData?.map((order: any) => order.order_id)
+
     return (
         <div className='w-full space-y-2 h-full flex p-6 flex-col'>
             <div className="topbar w-full flex justify-between">
                 <div>
-                    <Heading className='leading-tight' title={`Customer Details - ${customerData.fullname}`} />
-                    <p className='text-muted-foreground text-sm'>Customer ID: {params.customerid}</p>
+                    <Heading className='leading-tight' title={`Customer Details - ${customerData?.fullName}`} />
+                    <div className='flex gap-2 items-center'>
+                        <p className='text-muted-foreground text-sm'>Customer ID: {customerData?.customerId}</p>
+                        <Copy
+                            onClick={() => {
+                                navigator.clipboard.writeText(customerData?.customerId)
+                                toast.success('Customer ID Copied to Clipboard')
+                            }
+                            }
+                            className='w-4 h-4 cursor-pointer' />
+                    </div>
                 </div>
                 <Link href={`/customers/edit/${params.customerid}`}>
                     <Button variant='default'>Edit Customer Details <Pencil className='w-4 ml-2' /></Button>
@@ -84,12 +122,12 @@ export default function CustomerPage({ params }: Props) {
                                     <User className='w-6 h-6 mr-3' />
                                     <div className="flex flex-col">
                                         <span className="text-muted-foreground  text-sm">Name</span>
-                                        <span className="text-md">{customerData.fullname}</span>
+                                        <span className="text-md">{customerData?.fullName}</span>
                                     </div>
                                 </div>
                                 <Avatar className='w-8  border-muted border-2 h-8 mr-2'>
-                                    <AvatarImage src={customerData.profilepic} alt="@shadcn" />
-                                    <AvatarFallback>{customerData.fullname[0]}</AvatarFallback>
+                                    <AvatarImage src={customerData?.profilepic} alt="@shadcn" />
+                                    <AvatarFallback>{customerData?.fullName[0]}</AvatarFallback>
                                 </Avatar>
                             </div>
                             <Separator orientation='horizontal' />
@@ -100,7 +138,7 @@ export default function CustomerPage({ params }: Props) {
                                     <span className="text-muted-foreground  text-sm">Email</span>
                                     <div className='flex gap-2'>
 
-                                        <Link href={`mailto:${customerData.email}`} className="text-md">{customerData.email}</Link> {customerData.emailVerified === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary" >Unverified</Badge>}
+                                        <Link href={`mailto:${customerData?.email}`} className="text-md">{customerData?.email}</Link> {customerData?.emailVerified === true ? <Badge className='ml-2' variant="secondary" >Unverified</Badge> : <Badge className='ml-2' variant="default" >Verified</Badge>}
                                     </div>
                                 </div>
                             </div>
@@ -112,39 +150,41 @@ export default function CustomerPage({ params }: Props) {
                                     <span className=" text-muted-foreground  text-sm">Mobile</span>
                                     <div className='flex gap-2'>
 
-                                        <Link href={`tel:${customerData.mobile}`} className="text-md">{customerData.mobile}</Link>
-                                        {customerData.mobile === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>}
+                                        <Link href={`tel:${customerData?.mobileNumber}`} className="text-md">{customerData?.mobileNumber}</Link>
+                                        {/* {customerData?.mobileNumber === true ? <Badge className='ml-2' variant="default" >Verified</Badge> : <Badge className='ml-2' variant="secondary"  >Unverified</Badge>} */}
+                                        {customerData?.mobileNumber === true ? <Badge className='ml-2' variant="secondary"  >Unverified</Badge> : <Badge className='ml-2' variant="default" >Verified</Badge>}
+
                                     </div>
                                 </div>
                             </div>
                             <Separator orientation='horizontal' />
-
-                            <div className='flex items-start'>
-                                <MapPin className='w-6 h-6 mr-3' />
-                                <div className='flex flex-col gap-2'>
-                                    <div className="flex flex-col">
-                                        <span className=" text-muted-foreground  text-sm">Address</span>
-                                        <Link href={``} className="text-md">{customerData.address}</Link>
-
-                                    </div>
-                                    <div className='flex gap-6'>
-
+                            {customerData?.address[0] && (
+                                <div className='flex items-start'>
+                                    <MapPin className='w-6 h-6 mr-3' />
+                                    <div className='flex flex-col gap-2'>
                                         <div className="flex flex-col">
-                                            <span className=" text-muted-foreground  text-sm">City</span>
-                                            <Link href={``} className="text-md">{customerData.city}</Link>
-
+                                            <span className="text-muted-foreground text-sm">Address</span>
+                                            <Link href={``} className="text-md">{customerData.address[0].location}</Link>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <span className=" text-muted-foreground  text-sm">State</span>
-                                            <Link href={``} className="text-md">{customerData.state}</Link>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className=" text-muted-foreground  text-sm">Pincode</span>
-                                            <Link href={``} className="text-md">{customerData.pincode}</Link>
+                                        <div className='flex gap-6'>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">City</span>
+                                                <Link href={``} className="text-md">Ongole</Link>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">State</span>
+                                                <Link href={``} className="text-md">Andhra Pradesh</Link>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-muted-foreground text-sm">Pincode</span>
+                                                <Link href={``} className="text-md">{customerData.address[0].pincode}</Link>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
+
+
                         </div>
 
 
@@ -164,9 +204,9 @@ export default function CustomerPage({ params }: Props) {
                         <CardContent>
 
                             {
-                                AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)
+                                AllOrdersData?.filter((order: any) => orderIDs.includes(order?.order_id)
                                 ).slice(0, 5).map((order: any, index: number) => (
-                                    <Card key={index} className='flex justify-between p-2 px-4 my-2 items-center'>
+                                    <Card key={index} className='flex justify-between p-2 px-4 my-2 items-center gap-2'>
 
 
                                         <div className='flex items-center'>
@@ -179,7 +219,8 @@ export default function CustomerPage({ params }: Props) {
 
                                         <div className="flex flex-col">
                                             <span className="text-muted-foreground  text-sm">Order Date</span>
-                                            <span className="text-sm">{order.order_date}</span>
+                                            <span className="text-sm">{new Date(order.orderDate).toLocaleDateString()}</span>
+
                                         </div>
                                         <div className="flex flex-col ml-4">
                                             <span className="text-muted-foreground  text-sm">Order Status</span>
@@ -208,7 +249,7 @@ export default function CustomerPage({ params }: Props) {
 
                             }
                             <CardFooter className='flex justify-center items-center gap-2'>
-                                <span className='text-sm text-center'>Showing recent {AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length > 5 ? '5 ' : AllOrdersData.filter((order: any) => orderIDs.includes(order.order_id)).length} orders of {customerData.fullname}</span>
+                                <span className='text-sm text-center'>Showing recent {AllOrdersData?.filter((order: any) => orderIDs.includes(order.order_id)).length > 5 ? '5 ' : AllOrdersData?.filter((order: any) => orderIDs.includes(order.order_id)).length} orders of {customerData?.fullName}</span>
                             </CardFooter>
                         </CardContent>
 
@@ -222,6 +263,14 @@ export default function CustomerPage({ params }: Props) {
     )
 }
 
-export { customerData }
+
+
+
+
+
+
+
+
+
 
 

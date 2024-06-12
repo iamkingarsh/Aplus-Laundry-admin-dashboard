@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-const AuthCheck = ({ children }) => {
+const AuthCheck = ({ children }:any) => {
   const router = useRouter();
 
   useEffect(() => {

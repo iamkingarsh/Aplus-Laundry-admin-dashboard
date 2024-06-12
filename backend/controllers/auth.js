@@ -12,11 +12,102 @@ import {
 } from "../config/sendMail.js";
 import { sendVerificationCode } from "../config/sendSms.js";
 import axios from 'axios'
+import unirest from 'unirest'
+import { stringify } from "qs";
+// var unirest = require("unirest");
 
+
+// export const register = async (req, res, next) => {
+//   const {
+//     id,
+//     fullName,
+//     mobileNumber,
+//     role,
+//     email,
+//     customerType,
+//     address,
+//     profileImg,
+//     pincode
+//   } = req.body;
+
+//   // Initialize userFields object
+//   const userFields = {};
+
+//   // Add fields if they exist in the request body
+//   if (fullName) userFields.fullName = fullName;
+//   if (profileImg) userFields.profileImg = profileImg;
+//   if (role) userFields.role = role;
+//   if (email) userFields.email = email;
+//   if (customerType) userFields.customerType = customerType;
+//   if (address) userFields.address = address;
+//   if (pincode) userFields.pincode = pincode;
+
+//   // Only include mobileNumber if it is provided and not null
+//   if (mobileNumber !== undefined && mobileNumber !== null) {
+//     userFields.mobileNumber = mobileNumber;
+// console.log('hi1')
+
+//   }
+
+//   try {
+// console.log('hi2')
+
+// if (id) {
+//   // Find the existing user
+//   const existingUser = await User.findById(id);
+//   if (!existingUser) {
+//     return res.status(404).json({ message: "User not found" });
+//   }
+
+//   // Remove fields that should not be updated
+//   delete userFields.customerId;
+//   delete userFields.subscription_id;
+
+//   // Update only the provided fields
+//   Object.assign(existingUser, userFields);
+
+//   // Save the updated user
+//   const updatedUser = await existingUser.save();
+
+//   // Respond with success message and token
+//   return res.status(200).json({ message: "User updated "});
+// }
+//     // Check if email is provided
+//     if (email) {
+//       const existingUserByEmail = await User.findOne({ email });
+//       if (existingUserByEmail) {
+//         return res.status(409).json({ message: "User already exists", user: existingUserByEmail });
+//       }
+//     }
+
+//     // Check if mobile number is provided
+//     if (mobileNumber !== undefined && mobileNumber !== null) {
+//       const existingUserByMobile = await User.findOne({ mobileNumber });
+//       if (existingUserByMobile) {
+//         return res.status(409).json({ message: "User already exists", user: existingUserByMobile });
+//       }
+//     }
+
+//     // Create a new user if ID is not provided
+//     const newUserFields = {
+//       ...userFields,
+//       customerId: role === 'customer' ? `APL-${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}` : undefined
+//     };
+//     const newUser = new User(newUserFields);
+//     await newUser.save();
+
+//     // Respond with success message
+//     res.status(200).json({
+//       ok: true,
+//       message: "New user created",
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const register = async (req, res, next) => {
   const {
-    id,
     fullName,
     mobileNumber,
     role,
@@ -38,35 +129,13 @@ export const register = async (req, res, next) => {
   if (customerType) userFields.customerType = customerType;
   if (address) userFields.address = address;
   if (pincode) userFields.pincode = pincode;
-  console.log('hcfbvhhhhjbfhhj11');
 
   // Only include mobileNumber if it is provided and not null
   if (mobileNumber !== undefined && mobileNumber !== null) {
     userFields.mobileNumber = mobileNumber;
   }
-  console.log('hcfbvhhhhjbfhhj2');
 
   try {
-    if (id) {
-      // Update user if ID is provided
-      const updatedUser = await User.findByIdAndUpdate(id, { $set: userFields }, { new: true });
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      const token = jwt.sign({
-        id: updatedUser._id,
-        role: updatedUser.role,
-      }, process.env.JWT_SECRETKEY);
-
-      return res.cookie('accessToken', token, {
-        httpOnly: true
-      }).status(200).json({
-        message: "User updated",
-        user: token
-      });
-    }
-    console.log('hcfbvhhhhjbfhhj3');
-
     // Check if email is provided
     if (email) {
       const existingUserByEmail = await User.findOne({ email });
@@ -82,11 +151,13 @@ export const register = async (req, res, next) => {
         return res.status(409).json({ message: "User already exists", user: existingUserByMobile });
       }
     }
-    console.log('hcfbvhhhhjbfhhj4');
 
-    // Create a new user if ID is not provided
-    const newUser = new User(userFields);
-    console.log('hcfbvhhhhjbfhhj5',newUser,userFields);
+    // Create a new user
+    const newUserFields = {
+      ...userFields,
+      customerId: role === 'customer' ? `APL-${role.slice(0, 3).toUpperCase()}${new Date().getFullYear().toString().slice(2, 4)}${Math.floor(1000 + Math.random() * 9000)}` : undefined
+    };
+    const newUser = new User(newUserFields);
     await newUser.save();
 
     // Respond with success message
@@ -101,7 +172,33 @@ export const register = async (req, res, next) => {
 
 
 
-  
+export const updateUser = async (req, res, next) => {
+  const { id } = req.body;
+  const userFieldsToUpdate = { ...req.body };
+  delete userFieldsToUpdate.id; // Remove the 'id' field from the update object
+
+  try {
+    // Find the existing user
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update only the provided fields
+    Object.assign(existingUser, userFieldsToUpdate);
+
+    // Save the updated user
+    const updatedUser = await existingUser.save();
+
+    // Respond with success message and token
+    return res.status(200).json({ message: "User updated " });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
 
 
 
@@ -153,6 +250,58 @@ export const signin = async (req, res, next) => {
 //   }
 // };
 
+export const sendOTPforAdminVerification = async (req, res) => {
+  try {
+    let user = req.body;
+    console.log('req', req.body);
+    const email = user.email;
+
+    const validEmailUser = await User.findOne({ email });
+    //uncomment this comment`
+    if (!validEmailUser || !['owner', 'admin'].includes(validEmailUser.role)) {
+      return res.status(403).json({
+        msg: "User not authorized",
+        ok: false
+      });
+    }
+
+    let OTP = Math.floor(Math.random() * 900000) + 100000;
+
+    console.log("OTP is generated", OTP);
+
+    // Create a new UserOTP instance
+    let otp = new UserOTP({
+      email: email,
+      otp: OTP,
+      createdAt: new Date(),
+      expireAt: new Date() + 86400000,
+    });
+
+    console.log("OTP is about to be saved");
+
+    // Save the OTP to the database
+    await otp.save();
+
+    console.log("OTP is saved in the database");
+
+    console.log('email email', email);
+    // Continue with other operations, such as sending an email
+    await emailVerificationEmail(email, OTP, validEmailUser.fullName);
+
+    // Send the response
+    res.status(200).send({
+      ok: true,
+      msg: "email sent"
+    });
+  } catch (error) {
+    console.error("Error in sendOTPforverification:", error);
+    res.status(500).send({
+      msg: error.message
+    });
+  }
+};
+
+
 export const sendOTPforverification = async (req, res) => {
   try {
     let user = req.body;
@@ -188,9 +337,10 @@ export const sendOTPforverification = async (req, res) => {
     console.log("OTP is saved in the database");
 
 
+
     console.log('email email', email);
     // Continue with other operations, such as sending an email
-    emailVerificationEmail(email, OTP);
+    await emailVerificationEmail(email, OTP, validEmailUser.fullName);
 
     // Send the response
     res.status(200).send({
@@ -223,38 +373,55 @@ export const sendOTPforMobileverification = async (req, res) => {
     }
 
 
-    let OTP = Math.floor(Math.random() * 900000) + 100000;
+    // let OTP = Math.floor(Math.random() * 900000) + 100000;
 
-    console.log("OTP is generated", OTP);
+    // console.log("OTP is generated", OTP);
 
     // Create a new UserOTP instance
-    let otp = new UserOTP({
-      mobileNumber: mobileNumber,
-      otp: OTP,
-      createdAt: new Date(),
-      expireAt: new Date() + 86400000,
-    });
+    // let otp = new UserOTP({
+    //   mobileNumber: mobileNumber,
+    //   otp: OTP,
+    //   createdAt: new Date(),
+    //   expireAt: new Date() + 86400000,
+    // });
 
-    console.log("OTP is about to be saved");
+    // console.log("OTP is about to be saved");
 
     // Save the OTP to the database
-    await otp.save();
-    // // Send OTP via 2factor.in API
-    const response = await axios.post(
-      `https://2factor.in/API/V1/f7a67a1f-b7d4-11ee-8cbb-0200cd936042/SMS/${mobileNumber}/${OTP}/GROMER`
-    );
-    // const verification = await sendVerificationCode(`+91${mobileNumber}`);
-    console.log("OTP is saved in the database");
+    // await otp.save();
 
 
-    console.log('mobileNumber mobileNumber', mobileNumber);
-    // Continue with other operations, such as sending an mobileNumber
+    // var req = unirest("POST", "https://www.fast2sms.com/dev/bulkV2");
 
-    // Send the response
-    res.status(200).send({
-      ok: true,
-      msg: "mobileNumber sent"
-    });
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/${mobileNumber}/AUTOGEN/OTP_Template2`,
+      headers: {}
+    };
+
+    axios(config)
+      .then(function (response) {
+        console.log('res' + stringify(response.data));
+        if (response.data.Status === "Success") {
+          return res.status(200).send({
+            ok: true,
+            msg: "mobileNumber sent",
+            data: response.data
+          });
+        }
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+
+
+
+
+
   } catch (error) {
     console.error("Error in sendOTPforverification:", error);
     res.status(500).send({
@@ -306,21 +473,22 @@ export const verifyotp = async (req, res) => {
     const currentTime = new Date();
     const createdAt = new Date(matchingOTP.createdAt);
     const timeDifference = currentTime - createdAt;
+    //uncomment this comment`
 
     // Check if the time difference is more than 15 minutes (900,000 milliseconds)
-    if (timeDifference > 900000) {
-      // Delete OTP records for the user's email
-      await UserOTP.deleteMany({
-        email: email
-      });
+    // if (timeDifference > 900000) {
+    //   // Delete OTP records for the user's email
+    //   await UserOTP.deleteMany({
+    //     email: email
+    //   });
 
-      return res
-        .status(402)
-        .send({
-          msg: "Your OTP has expired, can't verify",
-          ok: false
-        });
-    }
+    //   return res
+    //     .status(402)
+    //     .send({
+    //       msg: "Your OTP has expired, can't verify",
+    //       ok: false
+    //     });
+    // }
 
     // Update user's emailVerified status
     const validEmailUser = await User.findOne({
@@ -349,7 +517,7 @@ export const verifyotp = async (req, res) => {
     await UserOTP.deleteMany({
       email: email
     });
-    emailVerificationSuccess(email)
+    await emailVerificationSuccess(email)
     res.status(200).send({
       msg: "Email verified",
       ok: true,
@@ -381,81 +549,133 @@ export const verifymobileotp = async (req, res) => {
       otp
     } = req.body;
 
-    // Find OTP records for the user's mobileNumber
-    const databaseotp = await UserOTP.find({
-      mobileNumber: mobileNumber
-    });
+    // // Find OTP records for the user's mobileNumber
+    // const databaseotp = unirest('GET', `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/VERIFY3/${mobileNumber}/${otp}`)
+    //   .end(async function (res) {
+    //     if (res.error) throw new Error(res.error);
+    //     console.log("test" + res.raw_body);
 
-    if (!databaseotp || databaseotp.length === 0) {
-      return res.status(404).send({
-        msg: "No OTP records found",
-        ok: false
-      });
-    }
+    //     const matchingOTP = res.raw_body.Details === "OTP Matched";
 
-    // Check if the provided OTP matches any of the OTP records
-    const matchingOTP = databaseotp.find((record) => record.otp == otp);
 
-    if (!matchingOTP) {
-      return res.status(401).send({
-        msg: "Wrong OTP!",
-        ok: false
-      });
-    }
 
-    // Calculate the time difference
-    const currentTime = new Date();
-    const createdAt = new Date(matchingOTP.createdAt);
-    const timeDifference = currentTime - createdAt;
 
-    // Check if the time difference is more than 15 minutes (900,000 milliseconds)
-    if (timeDifference > 900000) {
-      // Delete OTP records for the user's mobileNumber
-      await otp.deleteMany({
-        mobileNumber: mobileNumber
-      });
+    //     // Update user's mobileNumberVerified status
+    //     const validmobileNumberUser = await User.findOne({
+    //       mobileNumber
+    //     });
+    //     console.log(mobileNumber, validmobileNumberUser)
+    //     if (!validmobileNumberUser) {
+    //       return res.status(404).send({
+    //         msg: "User not found",
+    //         ok: false
+    //       });
+    //     }
 
-      return res
-        .status(402)
-        .send({
-          msg: "Your OTP has expired, can't verify",
-          ok: false
-        });
-    }
+    //     if (matchingOTP) {
+    //       // Include user ID and role in the JWT token payload
+    //       const tokenPayload = {
+    //         id: validmobileNumberUser._id,
+    //         role: validmobileNumberUser.role,
+    //       };
 
-    // Update user's mobileNumberVerified status
-    const validmobileNumberUser = await User.findOne({
-      mobileNumber
-    });
-    console.log(mobileNumber, validmobileNumberUser)
-    if (!validmobileNumberUser) {
-      return res.status(404).send({
-        msg: "User not found",
-        ok: false
-      });
-    }
+    //       const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
+    //       res.cookie('accessToken', Token, {
+    //         httpOnly: true
+    //       });
 
-    // Include user ID and role in the JWT token payload
-    const tokenPayload = {
-      id: validmobileNumberUser._id,
-      role: validmobileNumberUser.role,
+    //       // Delete OTP records for the user's mobileNumber
+
+    //       // emailVerificationSuccess(email)
+    //       return res.status(200).send({
+    //         msg: "Mobile Number verified",
+    //         ok: true,
+    //         token: Token
+    //       });
+    //     }
+    //   })
+
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://2factor.in/API/V1/7d3208f4-0209-11ef-8cbb-0200cd936042/SMS/VERIFY3/${mobileNumber}/${otp}`,
+      headers: {}
     };
 
-    const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
-    res.cookie('accessToken', Token, {
-      httpOnly: true
-    });
+    axios(config)
+      .then(async function (response) {
+        console.log(JSON.stringify(response.data));
+        if (response.data.Status === "Success") {
+          const validMobileNumber = await User.findOne({
+            mobileNumber
+          });
+          console.log(mobileNumber, validMobileNumber)
+          if (!validMobileNumber) {
+            return res.status(404).send({
+              msg: "User not found",
+              ok: false
+            });
+          }
 
-    // Delete OTP records for the user's mobileNumber
-    await UserOTP.deleteMany({
-      mobileNumber: mobileNumber
-    });
-    // emailVerificationSuccess(email)
-    res.status(200).send({
-      msg: "Mobile Number verified",
-      ok: true,
-      token: Token
-    });
+          // Include user ID and role in the JWT token payload
+          const tokenPayload = {
+            id: validMobileNumber._id,
+            role: validMobileNumber.role,
+          };
+
+          const Token = jwt.sign(tokenPayload, process.env.JWT_SECRETKEY);
+          res.cookie('accessToken', Token, {
+            httpOnly: true
+          });
+
+          return res.status(200).send({
+            ok: true,
+            msg: "mobileNumber Verified",
+            data: response.data,
+            token: Token
+          });
+        }
+        if (response.data.Status === "Error") {
+          return res.status(401).send({
+            ok: false,
+            msg: "Wrong OTP!",
+            data: response.data
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        // return res.status(500).send({
+        //   msg: error.message
+        // });
+        if (error) throw new Error(error);
+      });
+
+
+
+    // Check if the provided OTP matches any of the OTP records
+
+
+    // Calculate the time difference
+    // const currentTime = new Date();
+    // const createdAt = new Date(matchingOTP.createdAt);
+    // const timeDifference = currentTime - createdAt;
+
+    // Check if the time difference is more than 15 minutes (900,000 milliseconds)
+    // if (timeDifference > 900000) {
+    //   // Delete OTP records for the user's mobileNumber
+    //   await otp.deleteMany({
+    //     mobileNumber: mobileNumber
+    //   });
+
+    //   return res
+    //     .status(402)
+    //     .send({
+    //       msg: "Your OTP has expired, can't verify",
+    //       ok: false
+    //     });
+    // }
+
   } catch (error) {
     console.error(error);
     res.status(500).send({
@@ -604,9 +824,9 @@ export const getCurrentUser = async (req, res, next) => {
 export const addOrUpdateAddress = async (req, res) => {
   try {
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);
 
-    const userId = decodedToken.id;  
+    const userId = decodedToken.id;
 
     const { addressId, addressType, location, coordinates, city, pincode } = req.body;
 
@@ -625,7 +845,7 @@ export const addOrUpdateAddress = async (req, res) => {
     }
 
     const existingAddress = user.address.id(addressId);
-    
+
     if (existingAddress) {
       // Update only specific fields (e.g., location, coordinates)
       existingAddress.location = location;
@@ -650,9 +870,9 @@ export const addOrUpdateAddress = async (req, res) => {
 export const deleteAddress = async (req, res) => {
   try {
     const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);  
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRETKEY);
 
-    const userId = decodedToken.id;  
+    const userId = decodedToken.id;
     const { addressId } = req.params;
 
     const user = await User.findById(userId);

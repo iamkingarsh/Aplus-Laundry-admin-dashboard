@@ -5,11 +5,12 @@ import { Badge, BadgeIndianRupee, BoxIcon, CogIcon, FrameIcon, GroupIcon, Indian
 const BrandName = "APlus Laundry"
 
 const brandColors = {
-    pending: 'bg-yellow-500 text-white',
-    processing: 'bg-blue-500 text-white',
-    delivered: 'bg-green-500 text-white',
-    cancelled: 'bg-red-500 text-white',
-    onway: 'bg-purple-500 text-white',
+    Schedled_Pickup: 'bg-yellow-500 text-white',
+    Picked_Up: 'bg-blue-500 text-white',
+    Reached_to_the_hub: 'bg-green-500 text-white',
+    Laundry_in_Process: 'bg-red-500 text-white',
+    Out_for_Delivery: 'bg-purple-500 text-white',
+    Delivered: 'bg-green-500 text-white',
     default: 'bg-primary dark:bg-primary-dark  text-white dark:text-black',
 
 }
@@ -396,25 +397,22 @@ const Services = [
 
 const OrdersStatuses = [
     {
-        title: 'onhold',
+        title: 'Scheduled Pickup',
     },
     {
-        title: 'processing',
+        title: 'Picked Up',
     },
     {
-        title: 'pending',
+        title: 'Reached to the hub',
     },
     {
-        title: 'picked',
+        title: 'Laundry in Process',
     },
     {
-        title: 'onway',
+        title: 'Out for Delivery',
     },
     {
-        title: 'delivered',
-    },
-    {
-        title: 'cancelled',
+        title: 'Delivered',
     },
 ]
 

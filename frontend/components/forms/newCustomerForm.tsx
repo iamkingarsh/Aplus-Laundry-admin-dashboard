@@ -42,25 +42,10 @@ const formSchema = z.object({
 
 })
 
-const formSchemaOtp = z.object({
-    otp: z.string().min(6).max(6,
-        { message: " OTP must be 6 characters long" }
-    ),
-
-})
 
 export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormProps) {
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
-
-
-    const subscription = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('subscription') === "false" ? false : true
-
     const router = useRouter()
-
-
-
-
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -68,13 +53,10 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
             country: "India",
             state: "Andhra Pradesh",
             city: "Ongole",
-            customerType: subscription === false ? "nonsubscriber" : "subscriber",
+            customerType: "nonsubscriber",
         },
 
     })
-
-
-
 
 
 
@@ -82,17 +64,29 @@ export function NewCustomerForm({ className, gap, ...props }: NewCustomerFormPro
         // Add submit logic here
         try {
 
-            const lowercaseValues = Object.keys(values).reduce((acc: any, key: any) => {
-                acc[key] = typeof values[key] === 'string' ? values[key].toLowerCase() : values[key];
+            // Convert values to lowercase
+            const lowercaseValues = Object.keys(values).reduce((acc: any, key: string) => {
+                acc[key] = typeof values[key as keyof typeof values] === 'string' ? values[key as keyof typeof values].toLowerCase() : values[key as keyof typeof values];
                 return acc;
             }, {});
 
             const data = {
                 ...lowercaseValues,
+                customerType: 'nonsubscriber',
+                address: {
+                    addressType: 'home',
+                    location: values.address,
+                    pincode: values.pincode,
+                    coordinates: {
+                        coordinates: null,
+                    }
+                },
                 role: 'customer'
             };
 
+
             const response = await postData('/auth/register', data);
+            // const response2 = await postData(`/auth/editAddress`, data)
             console.log('API Response:', response);
 
             setIsLoading(false);

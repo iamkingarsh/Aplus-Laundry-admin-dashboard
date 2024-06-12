@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { IndianRupeeIcon, ShoppingBagIcon, Users } from 'lucide-react'
 import RecentOrders from '@/components/recent-orders'
-import { DatePickerWithRange } from '@/components/date-range'
+// import { DatePickerWithRange } from '@/components/date-range.d'
 import checkIfOwner from '@/utils/checkIfOwner'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { fetchData } from '@/axiosUtility/api'
+import { DatePickerWithRange } from '@/components/date-range'
 
 
 
@@ -81,10 +82,10 @@ export default function Page() {
     const StatsData = [
         {
             title: 'Total Revenue',
-            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue / 100 + totalSubscriptionRevenue / 100),
+            stat: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue + totalSubscriptionRevenue),
             // statPrefix: '₹',
             icon: <IndianRupeeIcon />,
-            desc: '+180.1% from last month',
+            desc: `${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue)} from orders and ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSubscriptionRevenue)} from subscriptions`,
             href: '/revenue'
         },
         {
@@ -92,7 +93,7 @@ export default function Page() {
             stat: ordersData?.length,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month',
+            desc: `You made ${ordersData?.length} orders so far`,
             href: '/orders'
         },
         {
@@ -100,7 +101,7 @@ export default function Page() {
             stat: totalSubscribers,
             statPrefix: '+',
             icon: <Users />,
-            desc: '+180.1% from last month',
+            desc: `You made  ${totalSubscribers} subscribers so far`,
             href: '/customers'
         },
         {
@@ -108,7 +109,7 @@ export default function Page() {
             stat: totalSubscriberOrders,
             statPrefix: '+',
             icon: <ShoppingBagIcon />,
-            desc: '+180.1% from last month',
+            desc: `You made ${totalSubscriberOrders} orders so far`,
             href: '/customers'
         },
     ]
@@ -125,7 +126,7 @@ export default function Page() {
                 <div className="topbar w-full flex justify-between">
                     <Heading className='leading-tight' title='Dashboard' />
                     <div className='flex gap-2'>
-                        <DatePickerWithRange />
+                        {/* <DatePickerWithRange /> */}
                         <CreateNew />
                     </div>
                 </div>
@@ -154,7 +155,7 @@ export default function Page() {
                             <CardHeader>
                                 <div className='flex flex-col gap-0'>
                                     <Heading className='text-xl' title='Overview' />
-                                    <p className='text-muted-foreground text-sm'>You Made ₹ 2300 in the last 30 days</p>
+                                    <p className='text-muted-foreground text-sm'>You Made {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue + totalSubscriptionRevenue)} so far!</p>
                                 </div>
                             </CardHeader>
                             <CardContent>
@@ -168,7 +169,7 @@ export default function Page() {
                             <div className='flex gap-0 justify-between items-center'>
                                 <div className='flex flex-col gap-0'>
                                     <Heading className='text-xl' title='Recent Orders' />
-                                    <p className='text-muted-foreground text-sm'>You Made 30 Orders in the last 30 days</p>
+                                    <p className='text-muted-foreground text-sm'>You Made {ordersData?.length} orders so far! </p>
                                 </div>
                                 <Link href="/orders">
                                     <Button variant='link'>View All</Button>

@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+ 
 import mongoose from 'mongoose';
 
 
@@ -81,7 +82,7 @@ export const getProductById = async (req, res) => {
 
         console.log('Product:', product);
         return res.status(200).json({
-            product: product[0], // Send only the first element as a single object
+            product: product, // Send only the first element as a single object
             ok: true
         });
     } catch (error) {
@@ -216,4 +217,4 @@ export const deleteProductByIds = async (req, res) => {
             error: 'Internal Server Error',
         });
     }
-};
+}; 

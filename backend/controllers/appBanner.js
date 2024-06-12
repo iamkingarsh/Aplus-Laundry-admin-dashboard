@@ -1,7 +1,6 @@
 import AppBanner from "../models/appBanner.js";
 import mongoose from 'mongoose';
 
-
 export const createOrUpdateAppBanner = async (req, res) => {
     try {
         const {
@@ -10,7 +9,7 @@ export const createOrUpdateAppBanner = async (req, res) => {
             banner_description,
             banner_image
         } = req.body;
-console.log('req.body',req.body)
+        console.log('req.body', req.body)
         const existingAppBanner = await AppBanner.findById(id);
 
         if (existingAppBanner) {
@@ -45,7 +44,6 @@ console.log('req.body',req.body)
     }
 };
 
-
 export const getAllAppBanners = async (req, res) => {
     try {
         const appBanners = await AppBanner.find();
@@ -61,7 +59,6 @@ export const getAllAppBanners = async (req, res) => {
         });
     }
 };
-
 
 export const getAppBannerById = async (req, res) => {
     try {
@@ -93,26 +90,26 @@ export const getAppBannerById = async (req, res) => {
 
 export const deleteAppBannerById = async (req, res) => {
     try {
-      const { id } = req.params;
-  
-      // Find and remove the app banner by ID
-      const deletedAppBanner = await AppBanner.findOneAndDelete({ _id: id });
-  
-      if (!deletedAppBanner) {
-        return res.status(404).json({ message: 'AppBanner not found', ok: false });
-      }
-  
-      return res.status(200).json({ message: 'AppBanner deleted successfully', ok: true });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal Server Error', ok: false });
-    }
-  };
+        const { id } = req.params;
 
-  export const deleteAppBannerByIds = async (req, res) => {
+        // Find and remove the app banner by ID
+        const deletedAppBanner = await AppBanner.findOneAndDelete({ _id: id });
+
+        if (!deletedAppBanner) {
+            return res.status(404).json({ message: 'AppBanner not found', ok: false });
+        }
+
+        return res.status(200).json({ message: 'AppBanner deleted successfully', ok: true });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error', ok: false });
+    }
+};
+
+export const deleteAppBannerByIds = async (req, res) => {
     console.log(req.body)
     try {
-        const appBannerIds  = req.body;
+        const appBannerIds = req.body;
 
         if (!appBannerIds || !Array.isArray(appBannerIds) || appBannerIds.length === 0) {
             return res.status(400).json({

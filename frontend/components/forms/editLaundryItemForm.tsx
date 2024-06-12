@@ -81,9 +81,9 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Add submit logic here
-        console.log('categories categories categories',categories.find(
-            (data) => data.title === values.category
-        )?._id)
+        // console.log('categories categories categories',categories.find(
+        //     (data:any) => data.title === values.category
+        // )?._id)
  
         setIsLoading(true)
         const editData = async() =>{
@@ -93,11 +93,15 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
                 );
               
             
+                const category = categories.find((data: any) => data.title === lowercaseValues.category) as { _id: string } | undefined;
+                const categoryId = category ? category._id : null;
                 const payload = {
                     ...lowercaseValues,
-                    category: categories.find((data) => data.title === lowercaseValues.category)?._id,
-                    id: laundryItemData?._id,
-                  };
+                    category: categoryId,
+                    id: laundryItemData ? laundryItemData._id : null,
+                };
+                
+                
                   
                 console.log('payload',payload)
                 const response =  await postData('/product/adorupdate', payload);
@@ -109,7 +113,8 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
               } catch (error) {
                 console.error('Error creating/updating category:', error);
                 setIsLoading(false);
-                toast.error(`Error creating/updating category: ${error.message}`);
+                toast.error(`Error creating/updating category: ${(error as Error).message}`);
+
               }
         }
        
@@ -175,11 +180,10 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
                                                         !field.value && "text-muted-foreground"
                                                     )}
                                                 >
-                                                    {field.value
-                                                        ? categories.find(
-                                                            (data) => data.title === field.value
-                                                        )?.title
-                                                        : "Select Category"}
+                                                  {field.value
+    ? (categories.find((data: any) => data.title === field.value) as { title: string } | undefined)?.title
+    : "Select Category"}
+
                                                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </FormControl>
@@ -203,7 +207,7 @@ export function EditLaundryItemForm({ className, laundryItemData, gap, ...props 
 
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {categories.map((data) => (
+                                                    {categories.map((data:any) => (
                                                         <CommandItem
                                                             value={data.title}
                                                             key={data.title}
